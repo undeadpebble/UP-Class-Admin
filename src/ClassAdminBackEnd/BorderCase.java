@@ -9,7 +9,7 @@ public class BorderCase {
 	 * @return
 	 */
 	public boolean isBorderCase(MarkEntity markE){
-		if((markE.mark < highVal) && (markE.mark > lowVal)){
+		if((markE.getMark() < highVal) && (markE.getMark() > lowVal)){
 			return true;
 		}
 		
