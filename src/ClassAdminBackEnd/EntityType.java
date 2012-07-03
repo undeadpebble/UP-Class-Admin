@@ -4,8 +4,8 @@ import java.util.Date;
 import java.util.LinkedList;
 
 public class EntityType {
-	LinkedList<String> fields;
 	String name;
+	LinkedList<String> fields;
 	LinkedList<Format> formatting;
 	LinkedList<BorderCase> borderCasing;
 	LinkedList<MarkEntity> entityList;
@@ -13,4 +13,8 @@ public class EntityType {
 	Date date;
 	Boolean[] visibleFields;
 	Boolean isVisible; 
+	
+	public EntityType(String n){
+		name = n;
+	}
 }

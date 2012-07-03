@@ -5,8 +5,9 @@ public class BorderCase {
 	Double highVal;
 	
 	/**
-	 * @param markE
-	 * @return
+	 * Returns if the MarkEntity is a borderCase or not
+	 * @param markEntity
+	 * @return boolean
 	 */
 	public boolean isBorderCase(MarkEntity markE){
 		if((markE.getMark() < highVal) && (markE.getMark() > lowVal)){
