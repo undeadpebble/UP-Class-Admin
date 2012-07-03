@@ -7,9 +7,11 @@ public class testMain
 	public static void main(String[] args) 
 	{
 		CsvImport c = new CsvImport();
-		c.fileExists("test.csv");
-		ArrayList CSV =  c.recordData();
-		c.print(CSV);
+		if(c.fileExists("test.csv"))
+		{
+			ArrayList CSV =  c.recordData();
+			c.print(CSV);
+		}
 		
 	}
 }

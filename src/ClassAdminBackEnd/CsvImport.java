@@ -36,7 +36,7 @@ public class CsvImport
 	
 	public ArrayList recordData()
 	{
-		ArrayList data = new ArrayList(2);
+		ArrayList data = new ArrayList();
 		ArrayList headers = null;
 		ArrayList records = null;
 		try
@@ -45,13 +45,17 @@ public class CsvImport
 			if(reader.readHeaders())
 			{
 				int headerCount = reader.getHeaderCount();
+				
 				headers = new ArrayList(headerCount);
+				//System.out.println(headerCount);
 	
 				for(int i =0; i <headerCount; i++)
 				{
 					headers.add(reader.getHeader(i));
+					//System.out.print(reader.getHeader(i) + "\t");
 				}
 				data.add(headers);
+				//System.out.println();
 				records = new ArrayList();
 	
 				try
@@ -59,19 +63,24 @@ public class CsvImport
 					while (reader.readRecord())
 					{
 						ArrayList record = new ArrayList(headerCount);
+						//String ss = "";
 						for(int i = 0; i < headerCount; i++)
 						{
 							try
 							{
 								String s = reader.get(i);
 								record.add(s);
+								//ss+=s+"\t";
+							
 							}
 							catch(IOException e)
 							{
 								e.printStackTrace();
 							}
 						}
+						//System.out.println(ss);
 						records.add(record);
+						//System.out.println("record added");
 						record = null;
 					}
 				}
@@ -80,32 +89,50 @@ public class CsvImport
 					e.printStackTrace();
 				}
 				data.add(records);
+				//System.out.println("adds records");
 				
 				headers = null;
 				records = null;
+				//System.out.println("SUCCESS");
 				
 				return data;
 			}
 			else
 			{
-				//no headers in file;
+			//	System.out.println("ELSE");
 			}
 		}
 		catch (IOException e)
 		{
+//			System.out.println("FAIL");
 			e.printStackTrace();
 		}
-
+		//System.out.println("FAIL2");
 		return data;
 
 	}
 	public void print(ArrayList in)
 	{
-		ArrayList headers = new ArrayList(in.indexOf(0));
-		ArrayList recors = new ArrayList(in.indexOf(1));
-		for(int i = 0; i < headers.size(); i++)
+
+		ArrayList headers = (ArrayList)in.get(0);
+		ArrayList records = (ArrayList)in.get(1);
+
+		for (int j = 0; j < headers.size(); j++)
 		{
-			System.out.print(headers.indexOf(i) + "\t");
+			System.out.print(headers.get(j).toString() + "\t");
+		}
+		System.out.println();
+
+		for(int i = 0; i < records.size(); i++)
+		{
+			ArrayList record = (ArrayList)records.get(i);
+
+			for (int j = 0; j < record.size(); j++)
+			{
+				System.out.print(record.get(j).toString() + "\t");
+			}
+			System.out.println();
+			
 		}
 	}
 }
