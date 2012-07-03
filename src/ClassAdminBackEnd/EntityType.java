@@ -15,6 +15,6 @@ public class EntityType {
 	Boolean isVisible; 
 	
 	public EntityType(String n){
-		name = n;
+		name = n;		
 	}
 }

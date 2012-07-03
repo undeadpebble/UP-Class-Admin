@@ -13,6 +13,7 @@ public class EntityTypeFactory {
 
 			BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
 			String name = bufferRead.readLine();
+			
 
 			eT = new EntityType(name);
 
