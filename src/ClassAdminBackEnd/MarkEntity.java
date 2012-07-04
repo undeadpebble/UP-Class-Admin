@@ -1,5 +1,6 @@
 package ClassAdminBackEnd;
 
+import java.util.Date;
 import java.util.LinkedList;
 
 public class MarkEntity {
@@ -8,8 +9,24 @@ public class MarkEntity {
 	private LinkedList<Double> subEntityWeight = new LinkedList<Double>();
 	private Boolean isLeaf;
 	private EntityDetails details;
-	private Boolean absent;
 	private double mark;
+
+	/**
+	 * @param parentEntity
+	 * @param subEntity
+	 * @param subEntityWeight
+	 * @param isLeaf
+	 * @param details
+	 * @param mark
+	 */
+	public MarkEntity(MarkEntity parentEntity,
+			Boolean isLeaf,
+			EntityDetails details, double mark) {
+		this.parentEntity = parentEntity;
+		this.isLeaf = isLeaf;
+		this.details = details;
+		this.mark = mark;
+	}
 
 	/**
 	 * @return the parentEntity
@@ -95,26 +112,13 @@ public class MarkEntity {
 		this.details = details;
 	}
 
-	/**
-	 * @return the absent
-	 */
-	public Boolean getAbsent() {
-		return absent;
-	}
-
-	/**
-	 * @param absent the absent to set
-	 */
-	public void setAbsent(Boolean absent) {
-		this.absent = absent;
-	}
 
 	/**
 	 * @return 
 	 * @throws AbsentException
 	 */
-	protected double calcMark() throws Exception{
-		if(absent){
+	public double calcMark() throws Exception{
+		if(this.details.getAbsentExcuse() == true || this.details.getType().getDate().after(new Date())){
 			throw new AbsentException();
 		}
 		else
