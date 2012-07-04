@@ -5,7 +5,20 @@ import java.util.LinkedList;
 public class Global {
 	private MarkEntity head;
 	private LinkedList<MarkEntity> selected;
+	private LinkedList<EntityType> entityTypes;
 	private LinkedList<GraphType> graphTypes;
+	private static Global instance;
+	private Global(){
+		
+	
+	}
+	
+	public static Global getGlobal(){
+		if (instance == null)
+			instance = new Global();
+		
+		return instance;
+	}
 	
 	public MarkEntity getHead() {
 		return head;
