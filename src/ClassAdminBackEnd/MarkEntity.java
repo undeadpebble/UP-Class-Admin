@@ -135,8 +135,12 @@ public class MarkEntity {
 					}
 
 				}
+				
 				if(wTotal == 0)
-				this.mark=mTotal/wTotal;
+					this.mark=0;
+				else
+					this.mark=mTotal/wTotal;
+				
 				return this.mark;
 			}
 
