@@ -39,4 +39,12 @@ public class Global {
 		this.graphTypes = graphTypes;
 	}
 
+	private LinkedList<EntityType> getEntityTypes() {
+		return entityTypes;
+	}
+
+	private void setEntityTypes(LinkedList<EntityType> entityTypes) {
+		this.entityTypes = entityTypes;
+	}
+
 }
