@@ -6,10 +6,10 @@ public class testMain
 {
 	public static void main(String[] args) 
 	{
-		CsvImport c = new CsvImport();
-		if(c.fileExists("test.csv"))
+		XslImport c = new XslImport();
+		if(c.fileExists("C:/Users/Marco/Downloads/test.xsl"))
 		{
-			ArrayList csv =  c.recordData();
+/*			ArrayList csv =  c.recordData();
 			//c.print(csv);
 			ArrayList h,rs,r;
 			h = c.getHeaders(csv);
@@ -19,9 +19,9 @@ public class testMain
 			r = c.getRecord(csv, 4);
 			//c.printRecord(r);
 			System.out.println(c.getRecordFieldValue(csv,0 , 0));
-			
-		
+*/
+
 		}
-		
+
 	}
 }
