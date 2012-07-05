@@ -1,0 +1,118 @@
+<html dir='ltr' lang='en'>
+<!-- Copyright (c) 2000, 2011, Oracle and/or its affiliates. All rights reserved. -->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><body><table border='1' cellpadding='3' cellspacing='0'>
+<tr>
+<th>Emplid</th><th>Last Name</th><th>Name Inititals</th><th>Title</th><th>Email Address</th><th>Mobile Phone</th><th>Grade Basis</th><th>Units</th><th>Program and Plan</th><th>Level</th><th>Class Section</th><th>clickUP_Umfundi_Ref</th><th>Umfundi_Load_Data</th><th>ID</th></tr>
+<tr>
+<td>04329694</td>
+<td>Barnard</td>
+<td>PS (Paul)</td>
+<td>Mr</td>
+<td>u04329694@tuks.co.za</td>
+<td>0825648835</td>
+<td>Graded</td>
+<td>32.00</td>
+<td>BEng (Hons) - 
+Control Engineering</td>
+<td>Final</td>
+<td>E100</td>
+<td>u04329694</td>
+<td>u04329694;BARNARD PS MR</td>
+<td>=&quot;8504015126082&quot;</td>
+<tr>
+<td>12366537</td>
+<td>Brown</td>
+<td>RP (Robert)</td>
+<td>Mr</td>
+<td>u12366537@tuks.co.za</td>
+<td>0825632885</td>
+<td>Graded</td>
+<td>32.00</td>
+<td>BEng (Hons) - 
+Control Engineering</td>
+<td>Final</td>
+<td>E100</td>
+<td>u12366537</td>
+<td>u12366537;BROWN RP MR</td>
+<td>=&quot;8611025034089&quot;</td>
+<tr>
+<td>13001559</td>
+<td>Claassens</td>
+<td>SD (Samuel)</td>
+<td>Mr</td>
+<td>Send E-mail</td>
+<td>0824435868</td>
+<td>Graded</td>
+<td>32.00</td>
+<td>BEng (Hons) - 
+Control Engineering</td>
+<td>Final</td>
+<td>E100</td>
+<td>u13001559</td>
+<td>u13001559;CLAASSENS SD MR</td>
+<td>=&quot;8403225028081&quot;</td>
+<tr>
+<td>28037660</td>
+<td>Jacobs</td>
+<td>E (Eben)</td>
+<td>Mr</td>
+<td>u28037660@tuks.co.za</td>
+<td>0824993920</td>
+<td>Graded</td>
+<td>32.00</td>
+<td>BEng (Hons) - 
+Control Engineering</td>
+<td>Final</td>
+<td>E100</td>
+<td>u28037660</td>
+<td>u28037660;JACOBS E MR</td>
+<td>=&quot;8906305052086&quot;</td>
+<tr>
+<td>27524893</td>
+<td>Matsebula</td>
+<td>TT (Tsembelani)</td>
+<td>Mr</td>
+<td>u27524893@tuks.co.za</td>
+<td>0788100183</td>
+<td>Graded</td>
+<td>32.00</td>
+<td>BEng (Hons) - 
+Control Engineering</td>
+<td>Final</td>
+<td>E100</td>
+<td>u27524893</td>
+<td>u27524893;MATSEBULA TT MR</td>
+<td>=&quot;40113586&quot;</td>
+<tr>
+<td>10308301</td>
+<td>Nkoghe Eyeghe</td>
+<td>N (Norbertin)</td>
+<td>Mr</td>
+<td>u10308301@tuks.co.za</td>
+<td>0798566709</td>
+<td>Graded</td>
+<td>32.00</td>
+<td>BSc(Hons): Appl Sci - 
+Control</td>
+<td>Final</td>
+<td>E100</td>
+<td>u10308301</td>
+<td>u10308301;NKOGHE EYEGHE N MR</td>
+<td>=&quot;8BC056884&quot;</td>
+<tr>
+<td>27105572</td>
+<td>Ramatsoma</td>
+<td>MS (Mafeni)</td>
+<td>Mr</td>
+<td>u27105572@tuks.co.za</td>
+<td>0738206987</td>
+<td>Graded</td>
+<td>32.00</td>
+<td>BEng (Hons) - 
+Control Engineering</td>
+<td>Final</td>
+<td>E100</td>
+<td>u27105572</td>
+<td>u27105572;RAMATSOMA MS MR</td>
+<td>=&quot;8912235412085&quot;</td>
+</table></body></html>
