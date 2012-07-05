@@ -122,7 +122,8 @@ public class MarkEntity {
 
 			if (wTotal != 0)
 				this.mark = mTotal / wTotal;
-
+			else
+				this.mark = mTotal;
 			return this.mark;
 		}
 

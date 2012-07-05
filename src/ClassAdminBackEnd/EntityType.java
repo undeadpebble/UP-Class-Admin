@@ -123,11 +123,9 @@ public class EntityType {
 	}
 
 	public LinkedList<String> getFieldDefaults() {
+		if(fieldDefaults==null)
+			fieldDefaults = new LinkedList<String>();
 		return fieldDefaults;
-	}
-
-	public void setFieldDefaults(LinkedList<String> fieldDefaults) {
-		this.fieldDefaults = fieldDefaults;
 	}
 
 	public Double getDefaultWeight() {
