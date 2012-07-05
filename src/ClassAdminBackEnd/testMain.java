@@ -18,7 +18,7 @@ public class testMain
 			//c.printRecords(rs);
 			r = c.getRecord(csv, 4);
 			//c.printRecord(r);
-			System.out.println(c.getRecordFieldValue(csv, 3, 0));
+			System.out.println(c.getRecordFieldValue(csv,0 , 0));
 			
 		
 		}

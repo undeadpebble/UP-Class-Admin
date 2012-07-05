@@ -3,6 +3,8 @@ package ClassAdminBackEnd;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Date;
+import java.util.LinkedList;
 
 public class EntityTypeFactory {
 	public EntityType makeEntityType(){
@@ -16,6 +18,8 @@ public class EntityTypeFactory {
 			
 
 			eT = new EntityType(name);
+			eT.setIndex(Global.getGlobal().getActiveProject().getEntityTypes().size());
+			Global.getGlobal().getActiveProject().getEntityTypes().add(eT);
 
 			return eT;
 		}
@@ -24,5 +28,15 @@ public class EntityTypeFactory {
 		}
 
 		return null;
+	}
+	
+	public EntityType makeEntityTypeCSV(String name, Boolean isTextField){
+		
+		EntityType eT = new EntityType(name,null, null, null, null, null, null, isTextField, null, true, 0.0);
+		eT.setIndex(Global.getGlobal().getActiveProject().getEntityTypes().size());
+		Global.getGlobal().getActiveProject().getEntityTypes().add(eT);
+		
+		return eT;
+		
 	}
 }

@@ -1,6 +1,6 @@
 package ClassAdminBackEnd;
 
-public class GraphType {
+public abstract class GraphType {
 	private String name;
 	private int numberOfFields;	
 	

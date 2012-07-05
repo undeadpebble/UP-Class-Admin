@@ -3,13 +3,22 @@ package ClassAdminBackEnd;
 import java.util.LinkedList;
 
 public class Global {
-	private MarkEntity head;
-	private LinkedList<MarkEntity> selected;
-	private LinkedList<EntityType> entityTypes;
+	private LinkedList<Project> projects;
+	private int activeProjectIndex = 0;
+
 	private LinkedList<GraphType> graphTypes;
 	private static Global instance;
+	
+	/**
+	 * Creates the singleton object that contains all the program data.
+	 * Creates the graphType instances for drawing different types of graphs.
+	 */
 	private Global(){
+		projects = new LinkedList<Project>();
+		projects.add(new Project());
 		
+		graphTypes = new LinkedList<GraphType>();
+		//instantiate all the graphTypes
 	
 	}
 	
@@ -20,31 +29,25 @@ public class Global {
 		return instance;
 	}
 	
-	public MarkEntity getHead() {
-		return head;
-	}
-	public void setHead(MarkEntity head) {
-		this.head = head;
-	}
-	public LinkedList<MarkEntity> getSelected() {
-		return selected;
-	}
-	public void setSelected(LinkedList<MarkEntity> selected) {
-		this.selected = selected;
-	}
+	
 	public LinkedList<GraphType> getGraphTypes() {
 		return graphTypes;
 	}
-	public void setGraphTypes(LinkedList<GraphType> graphTypes) {
-		this.graphTypes = graphTypes;
+
+	public LinkedList<Project> getProjects() {
+		return projects;
 	}
 
-	private LinkedList<EntityType> getEntityTypes() {
-		return entityTypes;
+	public int getActiveProjectIndex() {
+		return activeProjectIndex;
 	}
 
-	private void setEntityTypes(LinkedList<EntityType> entityTypes) {
-		this.entityTypes = entityTypes;
+	public void setActiveProjectIndex(int activeProjectIndex) {
+		this.activeProjectIndex = activeProjectIndex;
+	}
+	public Project getActiveProject(){
+		return projects.get(activeProjectIndex);
+		
 	}
 
 }
