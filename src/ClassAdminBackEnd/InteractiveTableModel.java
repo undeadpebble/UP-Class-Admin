@@ -5,9 +5,6 @@ import java.util.Collection;
 import java.util.Vector;
 import javax.swing.table.AbstractTableModel;
 
-import twbp.AudioRecord;
-
-
 public class InteractiveTableModel extends AbstractTableModel {
     public static final int TITLE_INDEX = 0;
     public static final int ARTIST_INDEX = 1;
@@ -79,7 +76,7 @@ public class InteractiveTableModel extends AbstractTableModel {
     }*/
 
     public Object getValueAt(int row, int column) {
-        AudioRecord record = (AudioRecord)dataVector.get(row);
+        /*AudioRecord record = (AudioRecord)dataVector.get(row);
         switch (column) {
             case TITLE_INDEX:
                return record.getTitle();
@@ -89,11 +86,12 @@ public class InteractiveTableModel extends AbstractTableModel {
                return record.getAlbum();
             default:
                return new Object();
-        }
+        }*/
+    	return null;
     }
 
     public void setValueAt(Object value, int row, int column) {
-        AudioRecord record = (AudioRecord)dataVector.get(row);
+       /* AudioRecord record = (AudioRecord)dataVector.get(row);
         switch (column) {
             case TITLE_INDEX:
                record.setTitle((String)value);
@@ -107,7 +105,7 @@ public class InteractiveTableModel extends AbstractTableModel {
             default:
                System.out.println("invalid index");
         }
-        fireTableCellUpdated(row, column);
+        fireTableCellUpdated(row, column);*/
     }
 
     public int getRowCount() {
@@ -119,7 +117,7 @@ public class InteractiveTableModel extends AbstractTableModel {
     }
 
     public boolean hasEmptyRow() {
-        if (dataVector.size() == 0) return false;
+        /*if (dataVector.size() == 0) return false;
         AudioRecord audioRecord = (AudioRecord)dataVector.get(dataVector.size() - 1);
         if (audioRecord.getTitle().trim().equals("") &&
            audioRecord.getArtist().trim().equals("") &&
@@ -127,11 +125,12 @@ public class InteractiveTableModel extends AbstractTableModel {
         {
            return true;
         }
-        else return false;
+        else return false;*/
+    	return false;
     }
 
     public void addEmptyRow() {
-        dataVector.add(new AudioRecord());
+        //dataVector.add(new AudioRecord());
         fireTableRowsInserted(
            dataVector.size() - 1,
            dataVector.size() - 1);
