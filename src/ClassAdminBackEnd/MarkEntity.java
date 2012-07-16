@@ -24,6 +24,25 @@ public class MarkEntity {
 		this.mark = mark;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("MarkEntity [subEntity=");
+		builder.append(subEntity);
+		builder.append(", subEntityWeight=");
+		builder.append(subEntityWeight);
+		builder.append(", details=");
+		builder.append(details);
+		builder.append(", mark=");
+		builder.append(mark);
+		builder.append("]");
+		
+		return builder.toString();
+	}
+
 	/**
 	 * @return the parentEntity
 	 */

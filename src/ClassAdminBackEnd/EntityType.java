@@ -1,5 +1,6 @@
 package ClassAdminBackEnd;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
 
@@ -15,6 +16,38 @@ public class EntityType {
 	private Date date;
 	
 	private Boolean isVisible; 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("EntityType [name=");
+		builder.append(name);
+		builder.append(", fields=");
+		builder.append(fields);
+		builder.append(", visibleFields=");
+		builder.append(Arrays.toString(visibleFields));
+		builder.append(", fieldDefaults=");
+		builder.append(fieldDefaults);
+		builder.append(", formatting=");
+		builder.append(formatting);
+		builder.append(", borderCasing=");
+		builder.append(borderCasing);
+		builder.append(", isTextField=");
+		builder.append(isTextField);
+		builder.append(", date=");
+		builder.append(date);
+		builder.append(", isVisible=");
+		builder.append(isVisible);
+		builder.append(", defaultWeight=");
+		builder.append(defaultWeight);
+		builder.append(", index=");
+		builder.append(index);
+		builder.append("]");
+		return builder.toString();
+	}
+
 	private Double defaultWeight;
 	private int index;
 	

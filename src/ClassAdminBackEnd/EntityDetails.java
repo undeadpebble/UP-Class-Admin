@@ -30,6 +30,27 @@ public class EntityDetails {
 		this.textColor = textColor;
 		this.absentExcuse = absentExcuse;
 	}
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("EntityDetails [type=");
+		builder.append(type.getIndex());
+		builder.append(", fields=");
+		builder.append(fields);
+		builder.append(", Picture=");
+		builder.append(Picture);
+		builder.append(", highlightColor=");
+		builder.append(highlightColor);
+		builder.append(", textColor=");
+		builder.append(textColor);
+		builder.append(", absentExcuse=");
+		builder.append(absentExcuse);
+		builder.append("]");
+		return builder.toString();
+	}
 	public EntityType getType() {
 		return type;
 	}
