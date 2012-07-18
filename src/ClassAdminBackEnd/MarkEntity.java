@@ -4,11 +4,14 @@ import java.util.Date;
 import java.util.LinkedList;
 
 public class MarkEntity {
+
+
 	private MarkEntity parentEntity;
 	private LinkedList<MarkEntity> subEntity = new LinkedList<MarkEntity>();
 	private LinkedList<Double> subEntityWeight = new LinkedList<Double>();
 	private EntityDetails details;
 	private double mark;
+	private int rowFollowCount;
 
 	/**
 	 * @param parentEntity
@@ -22,6 +25,7 @@ public class MarkEntity {
 		this.parentEntity = parentEntity;
 		this.details = details;
 		this.mark = mark;
+		rowFollowCount = 0;
 	}
 
 	/* (non-Javadoc)
@@ -41,6 +45,27 @@ public class MarkEntity {
 		builder.append("]");
 		
 		return builder.toString();
+	}
+
+	/**
+	 * @return the rowFollowCount
+	 */
+	public int getRowFollowCount() {
+		return rowFollowCount;
+	}
+
+	/**
+	 * @param rowFollowCount
+	 */
+	public void setRowFollowCount(int rowFollowCount) {
+		this.rowFollowCount = rowFollowCount;
+	}
+	
+	/**
+	 * increases the rowFollowCount
+	 */
+	public void increaseRowFollowCount(){
+		this.rowFollowCount++;
 	}
 
 	/**
@@ -147,4 +172,37 @@ public class MarkEntity {
 		}
 
 	}
+	
+	public String[] getHeaders(){
+		String heads = this.getHeadersString();
+		
+		LinkedList<String> str = new LinkedList<String>();
+		
+		while(heads.contains("*/*/*")){
+			str.add(heads.substring(0, heads.indexOf("*/*/*")-1));
+
+			heads = heads.substring(heads.indexOf("*/*/*")+5);
+		}
+		
+		String[] headers = new String[str.size()];
+		
+		for(int x = 0; x < str.size();x++){
+				headers[x] = str.get(x);
+		}
+		
+		return headers;
+			
+	}
+	
+	public String getHeadersString(){
+		String str = this.getDetails().getType().getName();
+		
+		for(int x = 0; x < this.subEntity.size();x++){
+			str = str + "*/*/*" + this.subEntity.get(x).getHeaders();
+		}
+		
+		
+		return str;
+	}
+	
 }
