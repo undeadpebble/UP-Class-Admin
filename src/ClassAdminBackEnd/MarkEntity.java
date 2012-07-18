@@ -4,11 +4,14 @@ import java.util.Date;
 import java.util.LinkedList;
 
 public class MarkEntity {
+
+
 	private MarkEntity parentEntity;
 	private LinkedList<MarkEntity> subEntity = new LinkedList<MarkEntity>();
 	private LinkedList<Double> subEntityWeight = new LinkedList<Double>();
 	private EntityDetails details;
 	private double mark;
+	private int rowFollowCount;
 
 	/**
 	 * @param parentEntity
@@ -22,6 +25,7 @@ public class MarkEntity {
 		this.parentEntity = parentEntity;
 		this.details = details;
 		this.mark = mark;
+		rowFollowCount = 0;
 	}
 
 	/* (non-Javadoc)
@@ -41,6 +45,27 @@ public class MarkEntity {
 		builder.append("]");
 		
 		return builder.toString();
+	}
+
+	/**
+	 * @return the rowFollowCount
+	 */
+	public int getRowFollowCount() {
+		return rowFollowCount;
+	}
+
+	/**
+	 * @param rowFollowCount
+	 */
+	public void setRowFollowCount(int rowFollowCount) {
+		this.rowFollowCount = rowFollowCount;
+	}
+	
+	/**
+	 * increases the rowFollowCount
+	 */
+	public void increaseRowFollowCount(){
+		this.rowFollowCount++;
 	}
 
 	/**
@@ -147,4 +172,33 @@ public class MarkEntity {
 		}
 
 	}
+	
+	public String[] getHeaders(){
+		/*int max = -1;
+		int maxe =-1;
+		for(int x =0; x < subEntity.size();x++){
+			if(subEntity.get(x).getRowFollowCount() > max){
+				max = subEntity.get(x).getRowFollowCount();
+				maxe = x;
+			}
+		}*/
+		String heads = subEntity.get(0).getHeadersString();		
+		//System.out.println(heads);
+		
+		//System.out.print(heads);
+		String[] s = heads.split("bn f3hjjm3734n  5f6 34h 35g635 346n34f f g46345f");
+		return s; 
+			
+	}
+	
+	public String getHeadersString(){
+		String str = this.getDetails().getType().getName();
+		
+		for(int x = 0; x < this.subEntity.size();x++){
+			str = str + "bn f3hjjm3734n  5f6 34h 35g635 346n34f f g46345f" + this.subEntity.get(x).getHeadersString();
+		}
+		
+		return str;
+	}
+	
 }

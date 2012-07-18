@@ -2,8 +2,10 @@ package ClassAdminBackEnd;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.Vector;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.text.html.parser.Entity;
 
 public class InteractiveTableModel extends AbstractTableModel {
     public static final int TITLE_INDEX = 0;
@@ -26,6 +28,39 @@ public class InteractiveTableModel extends AbstractTableModel {
         records = csv.getRecords(temp);
         
         dataVector = new Vector();
+    }
+    
+    /**
+     * @param ent
+     * @param head
+     * 
+     * adds the counters to the nodes that you want to put into the spreadsheet
+     */
+    public void addCounters(MarkEntity ent, MarkEntity head){
+    	ent.increaseRowFollowCount();
+    		
+    	
+    	MarkEntity temp = ent;
+    	
+    	while(temp != head){
+    		temp = temp.getParentEntity();
+    		temp.increaseRowFollowCount();
+    	}
+    	
+    	LinkedList<MarkEntity> temp2 = ent.getSubEntity();
+    	
+    	for(int x = 0; x < temp2.size();x++){
+    		addCounters(temp2.get(x), head);
+    	}
+    	
+    	
+    }
+    
+    public String[] getHeaders(MarkEntity ent){
+    	String[] headers = new String[ent.getRowFollowCount()];
+    	
+    	
+    	return headers;
     }
     
     public class csvRecord{
