@@ -3,6 +3,16 @@ package ClassAdminBackEnd;
 import java.util.ArrayList;
 
 public class FileHandler {
+	public String toBinaryString(String str){
+		StringBuilder builder = new StringBuilder();
+		for(int i = 0;i<str.length();++i){
+			builder.append(Integer.toBinaryString(str.charAt(i)));
+		}
+		
+		return builder.toString();
+	}
+	
+	
 	public void openFile(String filename) throws UnsupportedFileTypeException {
 		CsvImport fileReader;
 		Global glob = Global.getGlobal();
