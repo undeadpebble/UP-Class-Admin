@@ -191,7 +191,7 @@ public class MarkEntity {
 			
 	}
 	
-	public String getHeadersString(){
+	private String getHeadersString(){
 		String str = this.getDetails().getType().getName();
 		
 		for(int x = 0; x < this.subEntity.size();x++){
@@ -201,4 +201,50 @@ public class MarkEntity {
 		return str;
 	}
 	
+	
+	public String[][] getData(){
+		/*int max = -1;
+		int maxe =-1;
+		for(int x =0; x < subEntity.size();x++){
+			if(subEntity.get(x).getRowFollowCount() > max){
+				max = subEntity.get(x).getRowFollowCount();
+				maxe = x;
+			}
+		}*/
+				
+		//System.out.println(heads);
+		
+		//System.out.print(heads);
+		
+		String[][] sData = new String[subEntity.size()][]; 
+		
+		for(int x = 0; x < subEntity.size();x++){
+			String heads = subEntity.get(0).getDataString();
+			System.out.println(heads);
+			
+			String[] s = heads.split("qwerpoiu");
+			
+			sData[x] = s;
+		}
+		
+		
+		return sData; 
+			
+	}
+	
+	private String getDataString(){
+		String str;
+		
+		if(this.getDetails().getType().getIsTextField() == true){
+			str = Double.toString(this.getMark());	
+		}
+		else
+			str = Double.toString(this.getMark());	
+		
+		for(int x = 0; x < this.subEntity.size();x++){
+			str = str + "qwerpoiu" + this.subEntity.get(x).getDataString();
+		}
+		
+		return str;
+	}
 }
