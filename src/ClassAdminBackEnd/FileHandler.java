@@ -31,6 +31,7 @@ public class FileHandler {
 			ArrayList csv = fileReader.recordData();
 			headers = fileReader.getHeaders(csv);
 			record = fileReader.getRecordFieldValue(csv, 0, 0);
+			
 			// create entity types
 			for (int i = 0; i < headers.size(); ++i) {
 				record = fileReader.getRecordFieldValue(csv, 0, i);
@@ -38,7 +39,7 @@ public class FileHandler {
 					Integer.parseInt(record);
 					if (record.length() > 4) {
 						eTFactory.makeEntityTypeCSV((String) headers.get(i),
-								true);
+								true).getFields().add((String) headers.get(i));
 
 					} else {
 						eTFactory.makeEntityTypeCSV((String) headers.get(i),
@@ -46,7 +47,7 @@ public class FileHandler {
 
 					}
 				} catch (NumberFormatException e) {
-					eTFactory.makeEntityTypeCSV((String) headers.get(i), true);
+					eTFactory.makeEntityTypeCSV((String) headers.get(i), true).getFields().add((String) headers.get(i));
 
 				}
 
