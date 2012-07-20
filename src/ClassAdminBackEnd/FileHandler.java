@@ -2,13 +2,11 @@ package ClassAdminBackEnd;
 
 import java.util.ArrayList;
 
-
 public class FileHandler {
 	/**
 	 * @param str
 	 * @return
 	 */
-	
 
 	public void openFile(String filename) throws UnsupportedFileTypeException {
 		CsvImport fileReader;
@@ -33,6 +31,7 @@ public class FileHandler {
 			ArrayList csv = fileReader.recordData();
 			headers = fileReader.getHeaders(csv);
 			record = fileReader.getRecordFieldValue(csv, 0, 0);
+			// create entity types
 			for (int i = 0; i < headers.size(); ++i) {
 				record = fileReader.getRecordFieldValue(csv, 0, i);
 				try {
@@ -52,11 +51,25 @@ public class FileHandler {
 				}
 
 			}
+			// create MarkEntities
 			int numRecords = fileReader.getRecords(csv).size();
 			for (int r = 0; r < numRecords; ++r) {
+				// make parent for row
 				MarkEntity parent = mEFactory.makeEntity(glob
 						.getActiveProject().getEntityTypes().get(1), glob
 						.getActiveProject().getHead());
+				record = fileReader.getRecordFieldValue(csv, r, 0);
+				if (glob.getActiveProject().getEntityTypes().get(1)
+						.getIsTextField() == true) {
+					parent.getDetails().getFields().add(record);
+				} else {
+					try {
+						parent.setMark(Integer.parseInt(record));
+					} catch (NumberFormatException e) {
+						parent.setMark(0);
+					}
+				}
+
 				for (int f = 1; f < headers.size(); ++f) {
 					record = fileReader.getRecordFieldValue(csv, r, f);
 					EntityType fieldType = glob.getActiveProject()

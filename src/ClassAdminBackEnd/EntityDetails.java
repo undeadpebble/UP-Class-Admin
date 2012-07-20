@@ -42,10 +42,6 @@ public class EntityDetails {
 		builder.append(fields);
 		builder.append(", Picture=");
 		builder.append(Picture);
-		builder.append(", highlightColor=");
-		builder.append(highlightColor);
-		builder.append(", textColor=");
-		builder.append(textColor);
 		builder.append(", absentExcuse=");
 		builder.append(absentExcuse);
 		builder.append("]");
@@ -58,11 +54,11 @@ public class EntityDetails {
 		this.type = type;
 	}
 	public LinkedList<String> getFields() {
+		if(fields == null)
+			fields = new LinkedList<String>();
 		return fields;
 	}
-	public void setFields(LinkedList<String> fields) {
-		this.fields = fields;
-	}
+
 	public String getPicture() {
 		return Picture;
 	}
