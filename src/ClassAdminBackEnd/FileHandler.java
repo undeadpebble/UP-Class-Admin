@@ -2,17 +2,14 @@ package ClassAdminBackEnd;
 
 import java.util.ArrayList;
 
+
 public class FileHandler {
-	public String toBinaryString(String str){
-		StringBuilder builder = new StringBuilder();
-		for(int i = 0;i<str.length();++i){
-			builder.append(Integer.toBinaryString(str.charAt(i)));
-		}
-		
-		return builder.toString();
-	}
+	/**
+	 * @param str
+	 * @return
+	 */
 	
-	
+
 	public void openFile(String filename) throws UnsupportedFileTypeException {
 		CsvImport fileReader;
 		Global glob = Global.getGlobal();
@@ -43,15 +40,15 @@ public class FileHandler {
 					if (record.length() > 4) {
 						eTFactory.makeEntityTypeCSV((String) headers.get(i),
 								true);
-						System.out.println("text field");
+
 					} else {
 						eTFactory.makeEntityTypeCSV((String) headers.get(i),
 								false);
-						System.out.println("int field");
+
 					}
 				} catch (NumberFormatException e) {
 					eTFactory.makeEntityTypeCSV((String) headers.get(i), true);
-					System.out.println("text field");
+
 				}
 
 			}
