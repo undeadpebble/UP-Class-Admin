@@ -23,10 +23,10 @@ public class Project {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("Project [head=");
-		builder.append(head);
-		builder.append(", entityTypes=");
+		builder.append("Project [entityTypes=");
 		builder.append(entityTypes);
+		builder.append(", head=");
+		builder.append(head);
 		builder.append("]");
 		return builder.toString();
 	}

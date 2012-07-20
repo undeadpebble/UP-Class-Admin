@@ -4,6 +4,29 @@ public class BorderCase {
 	private Double lowVal;
 	private Double highVal;
 	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("BorderCase [lowVal=");
+		builder.append(lowVal);
+		builder.append(", highVal=");
+		builder.append(highVal);
+		builder.append("]");
+		return builder.toString();
+	}
+
+	/**
+	 * @param lowVal
+	 * @param highVal
+	 */
+	public BorderCase(Double lowVal, Double highVal) {
+		this.lowVal = lowVal;
+		this.highVal = highVal;
+	}
+
 	public Double getLowVal() {
 		return lowVal;
 	}

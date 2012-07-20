@@ -34,14 +34,16 @@ public class MarkEntity {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("MarkEntity [subEntity=");
-		builder.append(subEntity);
-		builder.append(", subEntityWeight=");
-		builder.append(subEntityWeight);
+		
+		
+		builder.append("MarkEntity [mark=");
+		builder.append(mark);
 		builder.append(", details=");
 		builder.append(details);
-		builder.append(", mark=");
-		builder.append(mark);
+		builder.append(", subEntityWeight=");
+		builder.append(subEntityWeight);
+		builder.append(", subEntity=");
+		builder.append(subEntity);
 		builder.append("]");
 		
 		return builder.toString();

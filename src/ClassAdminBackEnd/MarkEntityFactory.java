@@ -22,6 +22,7 @@ public class MarkEntityFactory {
 			parent.getSubEntity().add(entity);
 			parent.getSubEntityWeight().add(entype.getDefaultWeight());
 		}
+		entype.getEntityList().add(entity);
 		return entity;
 	}
 }
