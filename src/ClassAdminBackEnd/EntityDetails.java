@@ -1,7 +1,6 @@
 package ClassAdminBackEnd;
 
 import java.awt.Color;
-import java.awt.Image;
 import java.util.Date;
 import java.util.LinkedList;
 
@@ -30,6 +29,13 @@ public class EntityDetails {
 		this.textColor = textColor;
 		this.absentExcuse = absentExcuse;
 	}
+	public EntityDetails(int type){
+		this.type = Global.getGlobal().getActiveProject().getEntityTypes().get(type);
+		this.fields = null;
+		this.highlightColor = null;
+		this.textColor = null;
+		this.absentExcuse = null;
+	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
@@ -39,9 +45,9 @@ public class EntityDetails {
 		builder.append("EntityDetails [type=");
 		builder.append(type.getIndex());
 		builder.append(", fields=");
-		builder.append(fields);
+		builder.append(pdatImport.linkedListToString(fields));
 		builder.append(", Picture=");
-		builder.append(Picture);
+		builder.append("\""+Picture+"\"");
 		builder.append(", absentExcuse=");
 		builder.append(absentExcuse);
 		builder.append("]");

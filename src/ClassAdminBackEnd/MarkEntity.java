@@ -27,6 +27,11 @@ public class MarkEntity {
 		this.mark = mark;
 		rowFollowCount = 0;
 	}
+	public MarkEntity(EntityDetails details, double mark){
+		this.details = details;
+		this.mark = mark;
+		rowFollowCount = 0;
+	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()

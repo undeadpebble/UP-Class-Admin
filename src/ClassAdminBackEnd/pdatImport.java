@@ -1,5 +1,6 @@
 package ClassAdminBackEnd;
 
+import java.awt.Color;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
@@ -9,9 +10,43 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.Array;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.LinkedList;
+import Pdat.Pdat;
+
+import Pdat.Pdat;
 
 public class pdatImport {
 
+	public static String arrayToString(String[] arr){
+		StringBuilder result = new StringBuilder();
+		result.append("[");
+		if(arr.length > 0){
+			result.append("\""+arr[0]+"\"");
+		}
+		for(int x = 1;x<arr.length;++x){
+			result.append(", "+"\""+arr[x]+"\"");
+		}
+		result.append("]");
+		return result.toString();
+	}
+	
+	public static String linkedListToString(LinkedList<String> arr){
+		StringBuilder result = new StringBuilder();
+		result.append("[");
+		if(arr.size() > 0){
+			result.append("\""+arr.get(0)+"\"");
+		}
+		for(int x = 1;x<arr.size();++x){
+			result.append(", "+"\""+arr.get(x)+"\"");
+		}
+		result.append("]");
+		return result.toString();
+	}
+	
 	/**
 	 * Write a byte array to the given file. Writing binary data is
 	 * significantly simpler than reading it.
@@ -33,9 +68,10 @@ public class pdatImport {
 		}
 	}
 
-	String read(String aInputFileName) {
-
-		File file = new File(aInputFileName);
+	void read(String aInputFileName) {
+		String[] args = {aInputFileName};
+		Pdat.main(args);
+		/*File file = new File(aInputFileName);
 		byte[] result = new byte[(int) file.length()];
 		try {
 			InputStream input = null;
@@ -55,7 +91,7 @@ public class pdatImport {
 				 * the above style is a bit tricky: it places bytes into the
 				 * 'result' array; 'result' is an output parameter; the while
 				 * loop usually has a single iteration only.
-				 */
+				 *//*
 
 			} finally {
 
@@ -69,7 +105,7 @@ public class pdatImport {
 		StringBuilder builder = new StringBuilder();
 		for(int x = 0;x<result.length;++x)
 			builder.append((char)result[x]);
-		return builder.toString();
+		return builder.toString();*/
 	}
 
 	public String toBinaryString(String str) {
@@ -94,14 +130,41 @@ public class pdatImport {
 
 
 //-----------------------------------------------------------------------------------
-// parsing code
+// parsing Assist Code
 
-private void Project(){
+public static Date ParseDate(String date){
+	SimpleDateFormat sdf = new SimpleDateFormat();
+	
+	try{
+		return sdf.parse(date.replace('"', ' ').trim());
+	}
+	catch(ParseException e){
+		return null;
+	}
+}
+
+public static void MarkEntity(){
+	LinkedList<Boolean> tempBoolList = new LinkedList<Boolean>();
+	tempBoolList.add(true);
+	Boolean[] b = (Boolean[])tempBoolList.toArray();
+	double g = Double.parseDouble("1.0");
+	
+	EntityType ent = new EntityType("test");
+	ent.setVisibleFields(pdatImport.toBoolArray(tempBoolList));
 	
 }
 
-private void MarkEntity(){
-	
+public static Boolean[] toBoolArray(LinkedList<Boolean> boolArr){
+	Boolean[] array = new Boolean[boolArr.size()];
+	for(int x = 0;x<boolArr.size();++x){
+		array[x] = boolArr.get(x);
+	}
+	return array;
 }
+
+// end parsing assist code
+
+
+
 }
 

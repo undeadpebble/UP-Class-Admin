@@ -30,7 +30,7 @@ public class Format {
 		builder.append(", highlightColor=");
 		builder.append(highlightColor);
 		builder.append(", description=");
-		builder.append(description);
+		builder.append("\""+description+"\"");
 		builder.append("]");
 		return builder.toString();
 	}

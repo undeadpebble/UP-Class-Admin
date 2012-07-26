@@ -23,21 +23,21 @@ public class EntityType {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("EntityType [name=");
-		builder.append(name);
+		builder.append("\""+name+"\"");
 		builder.append(", fields=");
-		builder.append(fields);
+		builder.append(pdatImport.linkedListToString(fields));
 		builder.append(", visibleFields=");
 		builder.append(Arrays.toString(visibleFields));
 		builder.append(", fieldDefaults=");
-		builder.append(fieldDefaults);
+		builder.append(pdatImport.linkedListToString(this.getFieldDefaults()));
 		builder.append(", formatting=");
-		builder.append(formatting);
+		builder.append(this.getFormatting());
 		builder.append(", borderCasing=");
-		builder.append(borderCasing);
+		builder.append(this.getBorderCasing());
 		builder.append(", isTextField=");
 		builder.append(isTextField);
 		builder.append(", date=");
-		builder.append(date);
+		builder.append("\""+date+"\"");
 		builder.append(", isVisible=");
 		builder.append(isVisible);
 		builder.append(", defaultWeight=");
