@@ -209,20 +209,56 @@ public class MarkEntity {
 	}
 	
 	
-	public String[][] getData(){
-		/*int max = -1;
-		int maxe =-1;
-		for(int x =0; x < subEntity.size();x++){
-			if(subEntity.get(x).getRowFollowCount() > max){
-				max = subEntity.get(x).getRowFollowCount();
-				maxe = x;
-			}
-		}*/
-				
-		//System.out.println(heads);
+
+	
+	/*public LinkedList<MarkEntity> getHeadersLinkedList(){
+		LinkedList<MarkEntity> lEntity = new LinkedList<MarkEntity>();
 		
-		//System.out.print(heads);
+		lEntity.add(this);
 		
+		for(int x = 0; x < this.subEntity.size();x++){
+			this.subEntity.get(x).getLinkedListData(lEntity);
+		}
+		
+		return lEntity;
+	}
+	
+	
+	private void getLinkedListData(LinkedList<MarkEntity> lEntity){		
+		lEntity.add(this);
+		
+		for(int x = 0; x < this.subEntity.size();x++){
+			this.subEntity.get(x).getLinkedListData(lEntity);
+		}
+			
+	}*/
+	
+	public LinkedList<LinkedList<MarkEntity>> getDataLinkedList(){
+		LinkedList<LinkedList<MarkEntity>> linkLinkEntity = new LinkedList<LinkedList<MarkEntity>>();
+		
+		for(int x = 0; x < subEntity.size();x++){
+			subEntity.get(x).addDataToLinkedList(linkLinkEntity.get(x));
+		}
+		
+		return linkLinkEntity;
+	}
+	
+	private void addDataToLinkedList(LinkedList<MarkEntity> linkLinkEntity){
+		linkLinkEntity.add(this);
+		for(int x = 0; x < subEntity.size();x++){
+			subEntity.get(x).addDataToLinkedList(linkLinkEntity);
+		}
+	}
+	
+	public String getValue(){
+		if(this.getDetails().getType().getIsTextField() == true){
+			return this.getDetails().getFields().get(0);	
+		}
+		else
+			return Double.toString(this.getMark());	
+	}
+	
+	public String[][] getData(){		
 		String[][] sData = new String[subEntity.size()][]; 
 		
 		for(int x = 0; x < subEntity.size();x++){
@@ -243,7 +279,7 @@ public class MarkEntity {
 		String str;
 		
 		if(this.getDetails().getType().getIsTextField() == true){
-			str = this.getDetails().getFields().get(0);	
+			str = Double.toString(this.getMark());	
 		}
 		else
 			str = Double.toString(this.getMark());	
