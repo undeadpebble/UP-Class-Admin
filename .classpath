@@ -8,5 +8,8 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/GraphicsUtilities"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/SwingX"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Timing Framework2"/>
+	<classpathentry kind="lib" path="lib/Filters.jar"/>
+	<classpathentry kind="lib" path="lib/swingx-1.6.jar"/>
+	<classpathentry kind="lib" path="lib/timingframework-1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
