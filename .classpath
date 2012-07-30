@@ -4,5 +4,9 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="lib" path="lib/javacsv.jar"/>
 	<classpathentry kind="lib" path="lib/jxl.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Filters"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/GraphicsUtilities"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/SwingX"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Timing Framework2"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
