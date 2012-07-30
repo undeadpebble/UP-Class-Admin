@@ -30,7 +30,7 @@ public class EntityTypeFactory {
 		return null;
 	}
 	
-	public EntityType makeEntityTypeCSV(String name, Boolean isTextField){
+	public EntityType makeEntityTypeFileImport(String name, Boolean isTextField){
 		
 		EntityType eT = new EntityType(name,null, null, null, null, null, null, isTextField, null, true, 0.0);
 		eT.setIndex(Global.getGlobal().getActiveProject().getEntityTypes().size());

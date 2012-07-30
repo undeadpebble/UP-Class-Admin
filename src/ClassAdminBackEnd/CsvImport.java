@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import com.csvreader.CsvReader;
 
-public class CsvImport {
+public class CsvImport extends FileImport{
 
 	CsvReader reader;
 
@@ -17,7 +17,7 @@ public class CsvImport {
 	}
 
 	// checks if file exists
-	public boolean fileExists(String in) {
+	public Boolean fileExists(String in) {
 		try {
 			reader = new CsvReader(in);
 			return true;
