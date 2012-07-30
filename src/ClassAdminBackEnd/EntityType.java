@@ -25,7 +25,7 @@ public class EntityType {
 		builder.append("EntityType [name=");
 		builder.append("\""+name+"\"");
 		builder.append(", fields=");
-		builder.append(pdatImport.linkedListToString(fields));
+		builder.append(pdatImport.linkedListToString(this.getFields()));
 		builder.append(", visibleFields=");
 		builder.append(Arrays.toString(visibleFields));
 		builder.append(", fieldDefaults=");

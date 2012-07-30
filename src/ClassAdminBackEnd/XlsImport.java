@@ -12,7 +12,7 @@ import jxl.Workbook;
 import jxl.read.biff.BiffException;
 import jxl.read.biff.WorkbookParser;
 
-public class XlsImport {
+public class XlsImport extends FileImport{
 
 	File reader;
 	Workbook w;
@@ -23,7 +23,7 @@ public class XlsImport {
 
 	}
 
-	public boolean fileExists(String in) {
+	public Boolean fileExists(String in) {
 		try {
 			reader = new File(in);
 			createWorkbook(reader);

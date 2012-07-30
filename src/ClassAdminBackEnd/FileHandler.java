@@ -24,8 +24,10 @@ public class FileHandler {
 		if (filename.substring(filename.indexOf('.')).contains("csv")) {
 			openCSV(filename);
 		} else if (filename.substring(filename.indexOf('.')).contains("pdat")) {
-			pdatImport PI = new pdatImport();
-			PI.read(filename);
+			openPdat(filename);
+
+		} else if (filename.substring(filename.indexOf('.')).contains("xls")) {
+			openXls(filename);
 
 		} else
 			throw new UnsupportedFileTypeException();
@@ -125,6 +127,23 @@ public class FileHandler {
 					}
 				}
 			}
+		}
+	}
+	private void openPdat(String filename){
+		pdatImport PI = new pdatImport();
+		PI.read(filename);
+	}
+	
+	private void openXls(String filename){
+		FileImport fileReader;
+		fileReader = new XlsImport();
+		ArrayList headers;
+
+		if (fileReader.fileExists(filename)) {
+			ArrayList recordArray = fileReader.recordData();
+			headers = fileReader.getHeaders(recordArray);
+			createEntitieTypes(headers, recordArray, fileReader);
+			createMarkEntities(headers, recordArray, fileReader);
 		}
 	}
 
