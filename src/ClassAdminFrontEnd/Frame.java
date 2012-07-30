@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -12,6 +14,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.text.BadLocationException;
 
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.painter.CompoundPainter;
@@ -19,20 +24,21 @@ import org.jdesktop.swingx.painter.GlossPainter;
 import org.jdesktop.swingx.painter.MattePainter;
 import org.jdesktop.swingx.painter.PinstripePainter;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 public class Frame extends JFrame {
 
 	private JPanel contentPane;
 	private JXPanel navBar;
 	private ReflectionButton btnImport;
+	private File file;
 
-	/**
-	 * Launch the application.
-	 */
+	
 	public static void main(String[] args) {
 		
 		try {
@@ -41,7 +47,9 @@ public class Frame extends JFrame {
 				if ("Nimbus".equals(info.getName())) {
 					javax.swing.UIManager.setLookAndFeel(info.getClassName());
 					UIManager.put("nimbusBase", new Color(0x2B2B2B));
-					 UIManager.put("Menu.background", new Color(0x2B2B2B));
+					UIManager.put("Menu.background", new Color(0x2B2B2B));
+					UIManager.put("background", new Color(0x171717));
+					UIManager.put("control", new Color(0x171717));
 					break;
 				}
 			}
@@ -157,7 +165,15 @@ public class Frame extends JFrame {
 		btnImport.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-								
+				try {
+					openFile();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (BadLocationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}				
 			}
 		});
 		
@@ -175,4 +191,33 @@ public class Frame extends JFrame {
 	    navBar.setBackgroundPainter(new CompoundPainter(matte, gloss));
 	    
 	}
+	
+	public void openFile() throws IOException, BadLocationException
+    {
+        
+        //set the file extentions that may be chosen
+        FileFilter pdatFilter = new FileNameExtensionFilter("Pdat", "pdat");
+        FileFilter csvFilter = new FileNameExtensionFilter("csv", "csv");
+        
+        //Create a file chooser
+        final JFileChooser filechooser = new JFileChooser();
+        //remove the "All Files" type
+        filechooser.setAcceptAllFileFilterUsed(false);
+        //add the filter to the file chooser
+        filechooser.addChoosableFileFilter(pdatFilter);
+        filechooser.addChoosableFileFilter(csvFilter);
+        
+        //shows the dialog, return value specifies file
+        int returnVal = filechooser.showOpenDialog(this);
+        
+        //if the chosen file is valid
+        if (returnVal == JFileChooser.APPROVE_OPTION) 
+        {
+            file = filechooser.getSelectedFile();
+        } 
+        else 
+        {
+            //JOptionPane.showMessageDialog(this, "Open file was cancelled." , "Open Cancelled", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
 }

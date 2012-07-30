@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<eclipse-userlibraries version="2">
+    <library name="GraphicsUtilities" systemlibrary="false">
+        <archive path="C:/Users/Clara/Downloads/de.huxhorn.sulky.swing-0.9.8.jar"/>
+    </library>
+</eclipse-userlibraries>
