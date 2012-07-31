@@ -12,7 +12,7 @@ import jxl.Workbook;
 import jxl.read.biff.BiffException;
 import jxl.read.biff.WorkbookParser;
 
-public class XlsImport extends FileImport{
+public class XlsImport extends FileImport {
 
 	File reader;
 	Workbook w;
@@ -63,52 +63,73 @@ public class XlsImport extends FileImport{
 		ArrayList headers = null;
 		ArrayList records = null;
 
-		if(sheet == null)
-		{
-			System.out.println("No sheet selected -- selecting first sheet");
+		if (sheet == null) {
+			System.out
+					.println("No sheet selected -- selecting first sheet for import data");
 			sheet = w.getSheet(0);
 		}
-		if(headerLine == -1)
-		{
-			System.out.println("No headerline selected -- selecting first line");
+		if (headerLine == -1) {
+			System.out
+					.println("No headerline selected -- selecting first line for headers");
 			headerLine = 0;
 		}
-		
+
 		headers = new ArrayList();// get headers
 		for (int i = 0; i < sheet.getColumns(); i++) {
 			Cell cell = sheet.getCell(i, headerLine);
-			headers.add(cell.getContents());
-			//System.out.println(cell.getContents());
+			headers.add(cell.getContents()); // get header contents and add to
+												// header arraylist
 			cell = null;
 		}
-		data.add(headers);
+		data.add(headers); // add headers to all data
 
 		records = new ArrayList(); // get records
 		for (int j = headerLine + 1; j < sheet.getRows(); j++) {
 			ArrayList record = new ArrayList();
 			for (int i = 0; i < sheet.getColumns(); i++) {
 				Cell cell = sheet.getCell(i, j);
-				String pp = cell.getContents();
+				String pp = cell.getContents(); // get and add cell contents to
+												// record
 				record.add(pp);
-				//System.out.print(pp + '\t');
 			}
-			records.add(record);
+			records.add(record); // add record to records arraylist
 			record = null;
-			 //System.out.println();
 		}
-		data.add(records);
+		data.add(records); // add records to all data
 		records = null;
 
 		return data;
 	}
 
-	public void printSheet() {
-		for (int j = 0; j < sheet.getColumns(); j++) {
-			for (int i = 0; i < sheet.getRows(); i++) {
-				Cell cell = sheet.getCell(j, i);
+	public void printAllSheets() {
+		Sheet s = null;
+		int sheet = -1;
+		int sheetcount = w.getNumberOfSheets();
+
+		for (int k = 0; k < sheetcount; k++) { // loop through sheets
+			sheet = k + 1;
+			s = w.getSheet(k);
+			System.out.println("SHEET " + sheet);
+			for (int j = 0; j < s.getRows(); j++) { // loop through rows
+				for (int i = 0; i < s.getColumns(); i++) { // loop through
+															// columns
+					Cell cell = s.getCell(i, j);
+					System.out.print(cell.getContents() + "\t");
+				}
+				System.out.println(); // end of record
+			}
+			System.out.println(); // end of sheet
+		}
+	}
+
+	public void printSheet(int sheet) {
+		Sheet s = w.getSheet(sheet); // select sheet to be printed
+		for (int j = 0; j < s.getRows(); j++) { // loop through rows
+			for (int i = 0; i < s.getColumns(); i++) { // loop through columns
+				Cell cell = s.getCell(i, j);
 				System.out.print(cell.getContents() + "\t");
 			}
-			System.out.println();
+			System.out.println(); // end of record
 		}
 	}
 
@@ -142,10 +163,10 @@ public class XlsImport extends FileImport{
 	{
 		ArrayList records = (ArrayList) arr.get(1); // get records arraylist
 		ArrayList record = (ArrayList) records.get(recordIndex); // get
-		// specified
-		// record in
-		// records
-		// arraylist
+																	// specified
+																	// record in
+																	// records
+																	// arraylist
 		String field = (String) record.get(fieldIndex); // get specified field
 		// in record
 		return field;
