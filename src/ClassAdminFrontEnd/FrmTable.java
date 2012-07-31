@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.LinkedList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -21,6 +22,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
+import ClassAdminBackEnd.MarkEntity;
 import ClassAdminBackEnd.TableCellListener;
 
 public class FrmTable extends JPanel{
@@ -30,11 +32,11 @@ public class FrmTable extends JPanel{
     private JTextField txtField1;
     private JTextField txtField2;
 
-    public FrmTable(String[] headers, String[][] data) {
+    public FrmTable(String[] headers, LinkedList<LinkedList<MarkEntity>> data) {
         createGUI(headers,data);
     }
 
-    private void createGUI(String[] headers, String[][] data) {
+    private void createGUI(String[] headers, LinkedList<LinkedList<MarkEntity>> data) {
         setLayout(new BorderLayout());
         JScrollPane pane = new JScrollPane();
         
@@ -97,8 +99,15 @@ public class FrmTable extends JPanel{
         	obj[x] = headers[x];
         }*/
         
+        Object[][] temp = new Object[data.size()][data.get(0).size()];
         
-        tableModel = new DefaultTableModel((Object[][])data,(Object[])headers);
+        for(int x = 0; x < data.size();x++){
+        	for(int y = 0; y < data.get(0).size(); y++){
+        		temp[x][y] = data.get(x).get(y).getValue();
+        	}
+        }
+        
+        tableModel = new DefaultTableModel(temp,(Object[])headers);
         table.setModel(tableModel);
       
         btnAdd.addActionListener(new ActionListener(){
