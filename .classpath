@@ -11,5 +11,7 @@
 	<classpathentry kind="lib" path="lib/Filters.jar"/>
 	<classpathentry kind="lib" path="lib/swingx-1.6.jar"/>
 	<classpathentry kind="lib" path="lib/timingframework-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/jcommon-1.0.17.jar"/>
+	<classpathentry kind="lib" path="lib/jfreechart-1.0.14.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
