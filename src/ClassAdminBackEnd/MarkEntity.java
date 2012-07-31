@@ -236,7 +236,7 @@ public class MarkEntity {
 	public LinkedList<LinkedList<MarkEntity>> getDataLinkedList(){
 		LinkedList<LinkedList<MarkEntity>> linkLinkEntity = new LinkedList<LinkedList<MarkEntity>>();
 		
-		for(int x = 0; x < subEntity.size();x++){
+		for(int x = 0; x < this.getSubEntity().size();x++){
 			this.getSubEntity().get(x).addDataToLinkedList(linkLinkEntity.get(x));
 		}
 		
@@ -245,7 +245,7 @@ public class MarkEntity {
 	
 	private void addDataToLinkedList(LinkedList<MarkEntity> linkLinkEntity){
 		linkLinkEntity.add(this);
-		for(int x = 0; x < subEntity.size();x++){
+		for(int x = 0; x < this.getSubEntity().size();x++){
 			this.getSubEntity().get(x).addDataToLinkedList(linkLinkEntity);
 		}
 	}
