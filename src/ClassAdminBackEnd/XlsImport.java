@@ -16,8 +16,8 @@ public class XlsImport extends FileImport{
 
 	File reader;
 	Workbook w;
-	Sheet sheet;
-	int headerLine = 0;
+	Sheet sheet = null;
+	int headerLine = -1;
 
 	public XlsImport() {
 
@@ -63,11 +63,22 @@ public class XlsImport extends FileImport{
 		ArrayList headers = null;
 		ArrayList records = null;
 
+		if(sheet == null)
+		{
+			System.out.println("No sheet selected -- selecting first sheet");
+			sheet = w.getSheet(0);
+		}
+		if(headerLine == -1)
+		{
+			System.out.println("No headerline selected -- selecting first line");
+			headerLine = 0;
+		}
+		
 		headers = new ArrayList();// get headers
 		for (int i = 0; i < sheet.getColumns(); i++) {
 			Cell cell = sheet.getCell(i, headerLine);
 			headers.add(cell.getContents());
-			// System.out.println(cell.getContents());
+			//System.out.println(cell.getContents());
 			cell = null;
 		}
 		data.add(headers);
