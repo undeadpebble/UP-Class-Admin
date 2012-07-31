@@ -23,7 +23,7 @@ import javax.swing.table.DefaultTableModel;
 
 import ClassAdminBackEnd.TableCellListener;
 
-public class FrmTable extends JFrame{
+public class FrmTable extends JPanel{
     private JTable table;
     private JButton btnAdd;
     private DefaultTableModel tableModel;

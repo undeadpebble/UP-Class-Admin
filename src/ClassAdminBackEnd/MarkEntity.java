@@ -264,7 +264,7 @@ public class MarkEntity {
 		
 		for(int x = 0; x < subEntity.size();x++){
 			String heads = subEntity.get(x).getDataString();
-			System.out.println(heads);
+			//System.out.println(heads);
 			
 			String[] s = heads.split("qwerpoiu");
 			
@@ -280,7 +280,7 @@ public class MarkEntity {
 		String str;
 		
 		if(this.getDetails().getType().getIsTextField() == true){
-			str = Double.toString(this.getMark());	
+			str = this.getDetails().getFields().get(0);	
 		}
 		else
 			str = Double.toString(this.getMark());	
