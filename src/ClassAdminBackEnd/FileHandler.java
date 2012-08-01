@@ -146,5 +146,35 @@ public class FileHandler {
 			createMarkEntities(headers, recordArray, fileReader);
 		}
 	}
+	
+	public void saveFile(String filename) throws UnsupportedFileTypeException{
+		if (filename.substring(filename.indexOf('.')).contains("csv")) {
+			saveCSV(filename);
+		} else if (filename.substring(filename.indexOf('.')).contains("pdat")) {
+			savePdat(filename);
+
+		} else if (filename.substring(filename.indexOf('.')).contains("xls")) {
+			saveXls(filename);
+
+		} else
+			throw new UnsupportedFileTypeException();
+	}
+
+	private void saveCSV(String filename) {
+		CsvExport exporter = new CsvExport();
+		exporter.write(filename);
+		
+	}
+
+	private void savePdat(String filename) {
+		pdatImport exporter = new pdatImport();
+		exporter.write(filename);
+		
+	}
+
+	private void saveXls(String filename) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

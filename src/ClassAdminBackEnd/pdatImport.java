@@ -51,7 +51,8 @@ public class pdatImport {
 	 * Write a byte array to the given file. Writing binary data is
 	 * significantly simpler than reading it.
 	 */
-	void write(byte[] aInput, String aOutputFileName) {
+	void write(String aOutputFileName) {
+		byte[] aInput = Global.getGlobal().getActiveProject().toString().getBytes();
 		try {
 			OutputStream output = null;
 			try {
