@@ -106,7 +106,7 @@ public class FileHandler {
 				parent.getDetails().getFields().add(record);
 			} else {
 				try {
-					parent.setMark(Integer.parseInt(record));
+					parent.setMark(Double.parseDouble(record));
 				} catch (NumberFormatException e) {
 					parent.setMark(0);
 				}
@@ -121,7 +121,7 @@ public class FileHandler {
 					mE.getDetails().getFields().add(record);
 				} else {
 					try {
-						mE.setMark(Integer.parseInt(record));
+						mE.setMark(Double.parseDouble(record));
 					} catch (NumberFormatException e) {
 						mE.setMark(0);
 					}
