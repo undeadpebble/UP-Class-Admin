@@ -35,7 +35,6 @@ public class EntityTypeFactory {
 		EntityType eT = new EntityType(name,null, null, null, null, null, null, isTextField, null, true, 0.0);
 		eT.setIndex(Global.getGlobal().getActiveProject().getEntityTypes().size());
 		Global.getGlobal().getActiveProject().getEntityTypes().add(eT);
-		
 		return eT;
 		
 	}
