@@ -64,8 +64,8 @@ public class FileHandler {
 		for (int i = 0; i < headers.size(); ++i) {
 			String record = fileReader.getRecordFieldValue(recordArray, 0, i);
 			try {
-				Integer.parseInt(record);
-				if (record.length() > 4) {
+				double dub = Double.parseDouble(record);
+				if (dub > 1000) {
 					eTFactory
 							.makeEntityTypeFileImport((String) headers.get(i),
 									true).getFields()
