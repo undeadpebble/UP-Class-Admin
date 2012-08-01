@@ -92,7 +92,7 @@ import java.awt.event.MouseMotionListener;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-import oefen.ScatterChart;
+//import oefen.ScatterChart;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartMouseEvent;
@@ -285,10 +285,10 @@ System.out.println("Hello");
 	}
 	public static void main(String[] args) {
 
-		Window demo = new ScatterChart("Scatter Plot Demo");
+	/*	Window demo = new ScatterChart("Scatter Plot Demo");
 		demo.pack();
 		RefineryUtilities.centerFrameOnScreen(demo);
-		demo.setVisible(true);
+		demo.setVisible(true);*/
 
 	}
 

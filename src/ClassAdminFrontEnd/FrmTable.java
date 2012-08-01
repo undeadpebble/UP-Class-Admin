@@ -81,11 +81,11 @@ public class FrmTable extends JPanel{
 				int viewRow = table.getSelectedRow();
                 if (viewRow < 0) {
                     //Selection got filtered away.
-                    System.out.println("");
+                   // System.out.println("");
                 } else {
                     int modelRow = 
                         table.convertRowIndexToModel(viewRow);
-                    System.out.println(String.format("Selected Row in view: %d. " +"Selected Row in model: %d.", viewRow, modelRow));
+                    //System.out.println(String.format("Selected Row in view: %d. " +"Selected Row in model: %d.", viewRow, modelRow));
                 }
 			}
 			
