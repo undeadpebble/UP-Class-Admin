@@ -53,14 +53,14 @@ public class FrmTable extends JPanel{
             System.out.println("Column: " + tcl.getColumn());
             System.out.println("Old   : " + tcl.getOldValue());
             System.out.println("New   : " + tcl.getNewValue());*/
+            
         	if(tcl.getOldValue()  != tcl.getNewValue()){
-	        	if(data.get(tcl.getColumn()).get(tcl.getRow()).getDetails().getType().getIsTextField()){
-	        		data.get(tcl.getColumn()).get(tcl.getRow()).getDetails().setValue((String)tcl.getNewValue());
+	        	if(data.get(tcl.getRow()).get(tcl.getColumn()).getDetails().getType().getIsTextField()){
+	        		data.get(tcl.getRow()).get(tcl.getColumn()).getDetails().setValue((String)tcl.getNewValue());
 	        	}
 	        	else{
 	        		try{
-	        			data.get(tcl.getColumn()).get(tcl.getRow()).setMark((Double.parseDouble((String)tcl.getNewValue())));
-	        			
+	        			data.get(tcl.getRow()).get(tcl.getColumn()).setMark((Double.parseDouble((String)tcl.getNewValue())));
 	        		}
 	        		catch (Exception ex) {
 						table.setValueAt(tcl.getOldValue(),  tcl.getRow(),  tcl.getColumn());
