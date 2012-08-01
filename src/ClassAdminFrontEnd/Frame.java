@@ -7,6 +7,7 @@ import java.awt.event.ComponentListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -16,6 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
@@ -97,31 +99,31 @@ public class Frame extends JFrame {
 	 */
 	public Frame() {
 
-		//create file handler
+		// create file handler
 		fileHandler = FileHandler.get();
-		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1131, 708);
 
-		//create top menu bar
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 1131, 650);
+
+		// create top menu bar
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 
-		//create menu
+		// create menu
 		JMenu mnFile = new JMenu("File");
 		menuBar.add(mnFile);
 
-		//create menu items
+		// create menu items
 		JMenuItem mntmNew = new JMenuItem("New");
 		mnFile.add(mntmNew);
-		
-		//create gradient background panel
+
+		// create gradient background panel
 		contentPane = new GradientPanel(new Color(0x878787),
 				new Color(0x242424), this.getWidth(), this.getHeight());
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 
-		//create bottom navigation bar
+		// create bottom navigation bar
 		navBar = new JXPanel();
 		navBar.setBounds(0, 574, 1115, 84);
 		setupPainters();
@@ -129,7 +131,7 @@ public class Frame extends JFrame {
 		contentPane.add(navBar);
 		navBar.setLayout(null);
 
-		//add navigation bar labels
+		// add navigation bar labels
 		ShadowLabel lblImport = new ShadowLabel("Import", 12);
 		lblImport.setBounds(33, 64, 36, 17);
 		navBar.add(lblImport);
@@ -150,14 +152,14 @@ public class Frame extends JFrame {
 		lblSave.setBounds(392, 64, 36, 17);
 		navBar.add(lblSave);
 
-		//create tabbedPane
+		// create tabbedPane
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(54, 50, 948, 474);
+		tabbedPane.setBounds(54, 50, 948, 400);
 		contentPane.add(tabbedPane);
-		
-		//add navigation bar buttons
+
+		// add navigation bar buttons
 		try {
-			
+
 			btnImport = new ReflectionButton(ImageIO.read(getClass()
 					.getResource("Import.png")));
 			btnImport.setBounds(20, 11, 67, 73);
@@ -186,14 +188,12 @@ public class Frame extends JFrame {
 			btnSave.setBounds(382, 13, 67, 73);
 			navBar.add(btnSave);
 
-				
-
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		//import button mouselistener
+
+		// import button mouselistener
 		btnImport.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
@@ -209,7 +209,7 @@ public class Frame extends JFrame {
 			}
 		});
 
-		//export button mouselistener
+		// export button mouselistener
 		btnExport.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
@@ -222,18 +222,16 @@ public class Frame extends JFrame {
 			}
 		});
 
-		//frame resize listener to put nav bar at bottom of frame on resize
+		// frame resize listener to put nav bar at bottom of frame on resize
 		this.addComponentListener(new ComponentListener() {
 
 			@Override
 			public void componentHidden(ComponentEvent arg0) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void componentMoved(ComponentEvent arg0) {
-				// TODO Auto-generated method stub
 
 			}
 
@@ -247,14 +245,13 @@ public class Frame extends JFrame {
 
 			@Override
 			public void componentShown(ComponentEvent arg0) {
-				// TODO Auto-generated method stub
 
 			}
 		});
 
 	}
 
-	//bottom nav bar background painter
+	// bottom nav bar background painter
 	private void setupPainters() {
 		GlossPainter gloss = new GlossPainter();
 
@@ -272,8 +269,6 @@ public class Frame extends JFrame {
 		// Create a file chooser
 		filechooser = new JFileChooser();
 
-		filechooser.setBackground(Color.red);
-		filechooser.setForeground(Color.red);
 		// remove the "All Files" type
 		// filechooser.setAcceptAllFileFilterUsed(false);
 		// add the filter to the file chooser
@@ -287,18 +282,19 @@ public class Frame extends JFrame {
 			file = filechooser.getSelectedFile();
 			try {
 				fileHandler.openFile(file.getAbsolutePath());
-				table = new FrmTable(Global.getGlobal().getActiveProject().getHead().getHeaders(),Global.getGlobal().getActiveProject().getHead().getDataLinkedList());
-				
+				//create table on panel
+				table = new FrmTable(Global.getGlobal().getActiveProject()
+						.getHead().getHeaders(), Global.getGlobal()
+						.getActiveProject().getHead().getDataLinkedList());
+				//put panel with table on a new tab
 				tabbedPane.addTab(file.getName(), table);
-
 				
 			} catch (UnsupportedFileTypeException e) {
-				// TODO Auto-generated catch block
+				JOptionPane.showMessageDialog(this, "File Error", "Error retrieving file!", JOptionPane.ERROR_MESSAGE);
 				e.printStackTrace();
 			}
 		} else {
-			// JOptionPane.showMessageDialog(this, "Open file was cancelled." ,
-			// "Open Cancelled", JOptionPane.INFORMATION_MESSAGE);
+
 		}
 	}
 
@@ -306,12 +302,13 @@ public class Frame extends JFrame {
 
 		File file;
 		// set the file extentions that may be chosen
-		FileFilter filter = new FileNameExtensionFilter("Text files", "txt",
-				"TXT", "log");
+		FileFilter filter = new FileNameExtensionFilter(
+				"Supported files types: pdat, csv", "pdat", "csv");
+
 		// Create a file chooser
 		final JFileChooser filechooser = new JFileChooser();
 		// remove the "All Files" type
-		//filechooser.setAcceptAllFileFilterUsed(false);
+		// filechooser.setAcceptAllFileFilterUsed(false);
 		// add the filter to the file chooser
 		filechooser.addChoosableFileFilter(filter);
 
@@ -322,10 +319,8 @@ public class Frame extends JFrame {
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			file = filechooser.getSelectedFile();
 			
-
 		} else {
-			// JOptionPane.showMessageDialog(this, "Open file was cancelled." ,
-			// "Open Cancelled", JOptionPane.INFORMATION_MESSAGE);
+
 		}
 	}
 }
