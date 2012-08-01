@@ -318,7 +318,12 @@ public class Frame extends JFrame {
 		// if the chosen file is valid
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			file = filechooser.getSelectedFile();
-			
+			try {
+				FileHandler.get().saveFile(file.getAbsolutePath());
+			} catch (UnsupportedFileTypeException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} else {
 
 		}
