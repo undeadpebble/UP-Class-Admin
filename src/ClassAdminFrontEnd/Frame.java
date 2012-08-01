@@ -30,6 +30,7 @@ import org.jdesktop.swingx.painter.GlossPainter;
 import org.jdesktop.swingx.painter.MattePainter;
 
 import ClassAdminBackEnd.FileHandler;
+import ClassAdminBackEnd.Global;
 import ClassAdminBackEnd.UnsupportedFileTypeException;
 
 public class Frame extends JFrame {
@@ -41,6 +42,8 @@ public class Frame extends JFrame {
 	private FileHandler fileHandler;
 	private JFileChooser filechooser;
 	private JFrame frame = this;
+	private FrmTable table;
+	private JTabbedPane tabbedPane;
 
 	public static void main(String[] args) {
 
@@ -147,6 +150,11 @@ public class Frame extends JFrame {
 		lblSave.setBounds(392, 64, 36, 17);
 		navBar.add(lblSave);
 
+		//create tabbedPane
+		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.setBounds(54, 50, 948, 474);
+		contentPane.add(tabbedPane);
+		
 		//add navigation bar buttons
 		try {
 			
@@ -178,15 +186,7 @@ public class Frame extends JFrame {
 			btnSave.setBounds(382, 13, 67, 73);
 			navBar.add(btnSave);
 
-			JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-			tabbedPane.setBounds(54, 50, 948, 474);
-			contentPane.add(tabbedPane);
-
-			JPanel spreadsheet = new JPanel();
-			tabbedPane.addTab("Spreadsheet", spreadsheet);
-
-			JPanel graph = new JPanel();
-			tabbedPane.addTab("Graph", graph);
+				
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -286,7 +286,12 @@ public class Frame extends JFrame {
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			file = filechooser.getSelectedFile();
 			try {
-				fileHandler.openFile(file.getName());
+				fileHandler.openFile(file.getAbsolutePath());
+				table = new FrmTable(Global.getGlobal().getActiveProject().getHead().getHeaders(),Global.getGlobal().getActiveProject().getHead().getDataLinkedList());
+				
+				tabbedPane.addTab(file.getName(), table);
+
+				
 			} catch (UnsupportedFileTypeException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -316,6 +321,7 @@ public class Frame extends JFrame {
 		// if the chosen file is valid
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			file = filechooser.getSelectedFile();
+			
 
 		} else {
 			// JOptionPane.showMessageDialog(this, "Open file was cancelled." ,
