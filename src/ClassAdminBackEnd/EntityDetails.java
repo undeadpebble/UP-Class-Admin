@@ -90,4 +90,8 @@ public class EntityDetails {
 		this.absentExcuse = absentExcuse;
 	}
 	
+	public void setValue(String newValue){
+		fields.set(0, newValue);
+	}
+	
 }
