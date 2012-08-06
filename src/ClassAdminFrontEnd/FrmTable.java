@@ -42,6 +42,7 @@ public class FrmTable extends JPanel {
 		JScrollPane pane = new JScrollPane();
 
 		table = new JTable();
+		table.setAutoCreateRowSorter(true);
 
 		Action action = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
