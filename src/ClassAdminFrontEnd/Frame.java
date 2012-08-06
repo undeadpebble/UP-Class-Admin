@@ -2,6 +2,7 @@ package ClassAdminFrontEnd;
 
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Insets;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseAdapter;
@@ -14,6 +15,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -47,6 +49,7 @@ public class Frame extends JFrame {
 	private FrmTable table;
 	private JTabbedPane tabbedPane;
 	private File currentFilePath;
+	private int tabCount = 0;
 
 	public static void main(String[] args) {
 
@@ -292,7 +295,15 @@ public class Frame extends JFrame {
 						.getHead().getHeaders(), Global.getGlobal()
 						.getActiveProject().getHead().getDataLinkedList());
 				//put panel with table on a new tab
+				
+				
 				tabbedPane.addTab(file.getName(), table);
+			//	JButton closeButton = new JButton("x");
+				
+			//	tabbedPane.setTabComponentAt(0, closeButton);
+				
+		//		tabbedPane.setTabComponentAt(tabCount, new TabButton(file.getName(),tabbedPane) );
+				tabCount++;
 				
 			} catch (UnsupportedFileTypeException e) {
 				JOptionPane.showMessageDialog(this, "File Error", "Error retrieving file!", JOptionPane.ERROR_MESSAGE);
@@ -338,4 +349,39 @@ public class Frame extends JFrame {
 
 		}
 	}
+	
+public class TabButton extends JPanel{
+	    
+		private JTabbedPane tpane; 
+		private JButton closeButton;
+		private TabButton tabButton = this;
+		
+		public TabButton(String _label, JTabbedPane tpane_){
+
+		
+			tpane = tpane_;
+	        //super(new FlowLayout());
+			JLabel label = new JLabel(_label);
+			label.setOpaque(false);
+	        add(label);
+	        JButton closeButton = new JButton("X");
+	        closeButton.setMargin(new Insets(0,0,0,0));
+	        add(closeButton);
+	        
+	        closeButton.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mousePressed(MouseEvent arg0) {
+					System.out.println("index:"+tpane.indexOfTabComponent(tabButton));
+					tpane.remove(tpane.indexOfTabComponent(tabButton));
+					System.out.println("index:"+tpane.indexOfTabComponent(tabButton));
+				}
+			});
+	        
+		}
+	}
+	
+	
+	
 }
+
+
