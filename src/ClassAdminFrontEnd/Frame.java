@@ -46,6 +46,7 @@ public class Frame extends JFrame {
 	private JFrame frame = this;
 	private FrmTable table;
 	private JTabbedPane tabbedPane;
+	private File currentFilePath;
 
 	public static void main(String[] args) {
 
@@ -268,7 +269,9 @@ public class Frame extends JFrame {
 
 		// Create a file chooser
 		filechooser = new JFileChooser();
-
+		if (currentFilePath != null) {
+			filechooser.setCurrentDirectory(currentFilePath);
+		}
 		// remove the "All Files" type
 		// filechooser.setAcceptAllFileFilterUsed(false);
 		// add the filter to the file chooser
@@ -280,7 +283,9 @@ public class Frame extends JFrame {
 		// if the chosen file is valid
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			file = filechooser.getSelectedFile();
+			currentFilePath = filechooser.getSelectedFile();
 			try {
+				
 				fileHandler.openFile(file.getAbsolutePath());
 				//create table on panel
 				table = new FrmTable(Global.getGlobal().getActiveProject()
@@ -306,7 +311,11 @@ public class Frame extends JFrame {
 				"Supported files types: pdat, csv", "pdat", "csv");
 
 		// Create a file chooser
-		final JFileChooser filechooser = new JFileChooser();
+		filechooser = new JFileChooser();
+		if (currentFilePath != null) {
+			filechooser.setCurrentDirectory(currentFilePath);
+		}
+		currentFilePath = filechooser.getSelectedFile();	
 		// remove the "All Files" type
 		// filechooser.setAcceptAllFileFilterUsed(false);
 		// add the filter to the file chooser
@@ -318,6 +327,7 @@ public class Frame extends JFrame {
 		// if the chosen file is valid
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			file = filechooser.getSelectedFile();
+			
 			try {
 				FileHandler.get().saveFile(file.getAbsolutePath());
 			} catch (UnsupportedFileTypeException e) {
