@@ -11,12 +11,12 @@ public class MarkEntityFactory {
 	 * @param parent
 	 * @return
 	 */
-	public MarkEntity makeEntity(EntityType entype, MarkEntity parent) {
+	public SuperEntity makeEntity(EntityType entype, SuperEntity parent) {
 		LinkedList<String> fields = new LinkedList<String>();
 		for (int i = 0; i < entype.getFieldDefaults().size(); ++i) {
 			fields.add(entype.getFieldDefaults().get(i));
 		}
-		MarkEntity entity = new MarkEntity(parent, new EntityDetails(entype,
+		SuperEntity entity = new SuperEntity(parent, new EntityDetails(entype,
 				fields, Color.WHITE, Color.BLACK, false), 0);
 		if (parent != null) {
 			parent.getSubEntity().add(entity);

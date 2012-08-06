@@ -21,7 +21,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
-import ClassAdminBackEnd.MarkEntity;
+import ClassAdminBackEnd.SuperEntity;
 import ClassAdminBackEnd.TableCellListener;
 
 public class FrmTable extends JPanel {
@@ -30,9 +30,9 @@ public class FrmTable extends JPanel {
 	private DefaultTableModel tableModel;
 	private JTextField txtField1;
 	private JTextField txtField2;
-	LinkedList<LinkedList<MarkEntity>> data;
+	LinkedList<LinkedList<SuperEntity>> data;
 
-	public FrmTable(String[] headers, LinkedList<LinkedList<MarkEntity>> data) {
+	public FrmTable(String[] headers, LinkedList<LinkedList<SuperEntity>> data) {
 		this.data = data;
 		createGUI(headers);
 	}

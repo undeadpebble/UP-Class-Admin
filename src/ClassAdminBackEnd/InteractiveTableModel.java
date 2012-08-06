@@ -36,18 +36,18 @@ public class InteractiveTableModel extends AbstractTableModel {
      * 
      * adds the counters to the nodes that you want to put into the spreadsheet
      */
-    public void addCounters(MarkEntity ent, MarkEntity head){
+    public void addCounters(SuperEntity ent, SuperEntity head){
     	ent.increaseRowFollowCount();
     		
     	
-    	MarkEntity temp = ent;
+    	SuperEntity temp = ent;
     	
     	while(temp != head){
     		temp = temp.getParentEntity();
     		temp.increaseRowFollowCount();
     	}
     	
-    	LinkedList<MarkEntity> temp2 = ent.getSubEntity();
+    	LinkedList<SuperEntity> temp2 = ent.getSubEntity();
     	
     	for(int x = 0; x < temp2.size();x++){
     		addCounters(temp2.get(x), head);
@@ -56,7 +56,7 @@ public class InteractiveTableModel extends AbstractTableModel {
     	
     }
     
-    public String[] getHeaders(MarkEntity ent){
+    public String[] getHeaders(SuperEntity ent){
     	String[] headers = new String[ent.getRowFollowCount()];
     	
     	

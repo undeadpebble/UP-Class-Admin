@@ -57,7 +57,7 @@ public class FileHandler {
 		glob.getActiveProject().getEntityTypes().clear();
 		eTFactory.makeEntityTypeFileImport("File", true);
 
-		MarkEntity mE = mEFactory.makeEntity(glob.getActiveProject()
+		SuperEntity mE = mEFactory.makeEntity(glob.getActiveProject()
 				.getEntityTypes().get(0), null);
 		glob.getActiveProject().setHead(mE);
 		// create entity types
@@ -96,7 +96,7 @@ public class FileHandler {
 		int numRecords = fileReader.getRecords(recordArray).size();
 		for (int r = 0; r < numRecords; ++r) {
 			// make parent for row
-			MarkEntity parent = mEFactory
+			SuperEntity parent = mEFactory
 					.makeEntity(
 							glob.getActiveProject().getEntityTypes().get(1),
 							glob.getActiveProject().getHead());
@@ -116,7 +116,7 @@ public class FileHandler {
 				record = fileReader.getRecordFieldValue(recordArray, r, f);
 				EntityType fieldType = glob.getActiveProject().getEntityTypes()
 						.get(f + 1);
-				MarkEntity mE = mEFactory.makeEntity(fieldType, parent);
+				SuperEntity mE = mEFactory.makeEntity(fieldType, parent);
 				if (fieldType.getIsTextField() == true) {
 					mE.getDetails().getFields().add(record);
 				} else {

@@ -11,7 +11,7 @@ public class EntityType {
 	private LinkedList<String> fieldDefaults;
 	private LinkedList<Format> formatting;
 	private LinkedList<BorderCase> borderCasing;
-	private LinkedList<MarkEntity> entityList;
+	private LinkedList<SuperEntity> entityList;
 	private Boolean isTextField;
 	private Date date;
 	
@@ -71,7 +71,7 @@ public class EntityType {
 	public EntityType(String name, LinkedList<String> fields,Boolean[] visibleFields,
 			LinkedList<String> fieldDefaults, LinkedList<Format> formatting,
 			LinkedList<BorderCase> borderCasing,
-			LinkedList<MarkEntity> entityList, Boolean isTextField, Date date,
+			LinkedList<SuperEntity> entityList, Boolean isTextField, Date date,
 			Boolean isVisible, Double defaultWeight) {
 		this.name = name;
 		this.fields = fields;
@@ -116,9 +116,9 @@ public class EntityType {
 	}
 
 
-	public LinkedList<MarkEntity> getEntityList() {
+	public LinkedList<SuperEntity> getEntityList() {
 		if (entityList == null)
-			entityList = new LinkedList<MarkEntity>();
+			entityList = new LinkedList<SuperEntity>();
 		return entityList;
 	}
 

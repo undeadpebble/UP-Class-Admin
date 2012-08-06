@@ -16,7 +16,7 @@ import java.util.LinkedList;
  */
 public class CsvExport {
 	void write(String aOutputFileName) {
-		LinkedList<LinkedList<MarkEntity>> lListME = Global.getGlobal().getActiveProject().getHead().getDataLinkedList();
+		LinkedList<LinkedList<SuperEntity>> lListME = Global.getGlobal().getActiveProject().getHead().getDataLinkedList();
 		
 		String[] headers = Global.getGlobal().getActiveProject().getHead().getHeaders();
 		String out = headers[0];

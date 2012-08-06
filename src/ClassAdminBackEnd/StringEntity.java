@@ -1,9 +1,6 @@
 package ClassAdminBackEnd;
 
-import java.util.Date;
-import java.util.LinkedList;
-
-public class MarkEntity extends SuperEntity{
+public class StringEntity extends SuperEntity{
 	public String getValue(){
 		//TODO
 		return "";
@@ -12,6 +9,5 @@ public class MarkEntity extends SuperEntity{
 	private Double doMarkMath(){
 		//TODO
 	}
-
 	
 }
