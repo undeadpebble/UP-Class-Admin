@@ -3,6 +3,8 @@ package ClassAdminFrontEnd;
 import javax.swing.*;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
@@ -20,7 +22,9 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 
+import ClassAdminBackEnd.Global;
 import ClassAdminBackEnd.MarkEntity;
 import ClassAdminBackEnd.TableCellListener;
 
@@ -31,6 +35,7 @@ public class FrmTable extends JPanel {
 	private JTextField txtField1;
 	private JTextField txtField2;
 	LinkedList<LinkedList<MarkEntity>> data;
+	private LinkedList<Integer> selected = new LinkedList<Integer>();
 
 	public FrmTable(String[] headers, LinkedList<LinkedList<MarkEntity>> data) {
 		this.data = data;
@@ -40,9 +45,6 @@ public class FrmTable extends JPanel {
 	private void createGUI(String[] headers) {
 		setLayout(new BorderLayout());
 		JScrollPane pane = new JScrollPane();
-
-		table = new JTable();
-		table.setAutoCreateRowSorter(true);
 
 		Action action = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
@@ -75,6 +77,39 @@ public class FrmTable extends JPanel {
 				}
 			}
 		};
+		
+		Object[][] temp = new Object[data.size()][data.get(0).size()];
+		
+		Global.getGlobal().getActiveProject().getSelected().add(data.get(0).get(0));
+		Global.getGlobal().getActiveProject().getSelected().add(data.get(10).get(0));
+
+		for (int x = 0; x < data.size(); x++) {
+			for (int y = 0; y < data.get(0).size(); y++) {
+				temp[x][y] = data.get(x).get(y).getValue();
+			}
+		}
+		
+		table = new JTable(){
+			public Component prepareRenderer(TableCellRenderer renderer,int Index_row, int Index_col) {
+				Component comp = super.prepareRenderer(renderer, Index_row, Index_col);
+				//even index, selected or not selected
+				if (Global.getGlobal().getActiveProject().getSelected().contains(table.getValueAt(Index_row, Index_col))) {
+					comp.setBackground(Color.green);
+				}else {
+					comp.setBackground(Color.white);
+				}
+				
+				if(isCellSelected(Index_row, Index_col)){
+					comp.setBackground(Color.lightGray);
+				}
+				/*else {
+					comp.setBackground(Color.white);
+				}*/
+				return comp;
+			}
+		};
+
+		table.setAutoCreateRowSorter(true);
 
 		TableCellListener tcl = new TableCellListener(table, action);
 
@@ -87,14 +122,8 @@ public class FrmTable extends JPanel {
 					public void valueChanged(ListSelectionEvent arg0) {
 						int viewRow = table.getSelectedRow();
 						if (viewRow < 0) {
-							// Selection got filtered away.
-							// System.out.println("");
 						} else {
-							int modelRow = table
-									.convertRowIndexToModel(viewRow);
-							// System.out.println(String.format("Selected Row in view: %d. "
-							// +"Selected Row in model: %d.", viewRow,
-							// modelRow));
+							int modelRow = table.convertRowIndexToModel(viewRow);
 						}
 					}
 
@@ -119,30 +148,25 @@ public class FrmTable extends JPanel {
 		add(eastPanel, BorderLayout.EAST);
 		add(pane, BorderLayout.CENTER);
 
-		/*
-		 * Object[] obj = new Object[headers.length]; for(int x = 0; x <
-		 * headers.length;x++){ obj[x] = headers[x]; }
-		 */
-
-		Object[][] temp = new Object[data.size()][data.get(0).size()];
-
-		for (int x = 0; x < data.size(); x++) {
-			for (int y = 0; y < data.get(0).size(); y++) {
-				temp[x][y] = data.get(x).get(y).getValue();
-			}
-		}
-
 		tableModel = new DefaultTableModel(temp, (Object[]) headers);
 		table.setModel(tableModel);
 
 		btnAdd.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int count = tableModel.getRowCount() + 1;
+				table.repaint();
+				/*int count = tableModel.getRowCount() + 1;
 				tableModel.addRow(new Object[] { txtField1.getText(),
-						txtField1.getText() });
+						txtField1.getText() });*/
+				System.out.println(data.get(1).get(0).getValue());
+				System.out.println(table.getValueAt(1, 0));
+				System.out.println(table.getModel().getValueAt(1, 0));
+				
+				table.getModel().getValueAt(0, 0).
 			}
 		});
+		
+		
 	}
 
 	public class InteractiveTableModelListener implements TableModelListener {
@@ -153,6 +177,7 @@ public class FrmTable extends JPanel {
 				System.out.println("row: " + row + " column: " + column);
 				table.setColumnSelectionInterval(column + 1, column + 1);
 				table.setRowSelectionInterval(row, row);
+				table.repaint();
 			}
 		}
 	}
