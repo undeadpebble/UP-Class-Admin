@@ -49,7 +49,7 @@ public class Frame extends JFrame {
 	private FrmTable table;
 	private JTabbedPane tabbedPane;
 	private File currentFilePath;
-	private int tabCount = 0;
+	private int tabCount = -1;
 
 	public static void main(String[] args) {
 
@@ -275,8 +275,7 @@ public class Frame extends JFrame {
 		if (currentFilePath != null) {
 			filechooser.setCurrentDirectory(currentFilePath);
 		}
-		// remove the "All Files" type
-		// filechooser.setAcceptAllFileFilterUsed(false);
+
 		// add the filter to the file chooser
 		filechooser.addChoosableFileFilter(fileFilter);
 
@@ -298,12 +297,8 @@ public class Frame extends JFrame {
 				
 				
 				tabbedPane.addTab(file.getName(), table);
-			//	JButton closeButton = new JButton("x");
 				
-			//	tabbedPane.setTabComponentAt(0, closeButton);
-				
-		//		tabbedPane.setTabComponentAt(tabCount, new TabButton(file.getName(),tabbedPane) );
-				tabCount++;
+				tabbedPane.setTabComponentAt(tabCount, new TabButton(file.getName(),tabbedPane,tabCount));
 				
 			} catch (UnsupportedFileTypeException e) {
 				JOptionPane.showMessageDialog(this, "File Error", "Error retrieving file!", JOptionPane.ERROR_MESSAGE);
@@ -327,8 +322,7 @@ public class Frame extends JFrame {
 			filechooser.setCurrentDirectory(currentFilePath);
 		}
 		currentFilePath = filechooser.getSelectedFile();	
-		// remove the "All Files" type
-		// filechooser.setAcceptAllFileFilterUsed(false);
+		
 		// add the filter to the file chooser
 		filechooser.addChoosableFileFilter(filter);
 
@@ -342,46 +336,12 @@ public class Frame extends JFrame {
 			try {
 				FileHandler.get().saveFile(file.getAbsolutePath());
 			} catch (UnsupportedFileTypeException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} else {
 
 		}
 	}
-	
-public class TabButton extends JPanel{
-	    
-		private JTabbedPane tpane; 
-		private JButton closeButton;
-		private TabButton tabButton = this;
-		
-		public TabButton(String _label, JTabbedPane tpane_){
-
-		
-			tpane = tpane_;
-	        //super(new FlowLayout());
-			JLabel label = new JLabel(_label);
-			label.setOpaque(false);
-	        add(label);
-	        JButton closeButton = new JButton("X");
-	        closeButton.setMargin(new Insets(0,0,0,0));
-	        add(closeButton);
-	        
-	        closeButton.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mousePressed(MouseEvent arg0) {
-					System.out.println("index:"+tpane.indexOfTabComponent(tabButton));
-					tpane.remove(tpane.indexOfTabComponent(tabButton));
-					System.out.println("index:"+tpane.indexOfTabComponent(tabButton));
-				}
-			});
-	        
-		}
-	}
-	
-	
-	
 }
-
+	
 
