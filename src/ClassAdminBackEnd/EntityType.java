@@ -58,13 +58,13 @@ public class EntityType {
 	/**
 	 * @param name
 	 * @param fields
+	 * @param visibleFields
 	 * @param fieldDefaults
 	 * @param formatting
 	 * @param borderCasing
 	 * @param entityList
 	 * @param isTextField
 	 * @param date
-	 * @param visibleFields
 	 * @param isVisible
 	 * @param defaultWeight
 	 */

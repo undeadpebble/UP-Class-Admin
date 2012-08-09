@@ -31,12 +31,14 @@ public class FrmTable extends JPanel{
     private DefaultTableModel tableModel;
     private JTextField txtField1;
     private JTextField txtField2;
+    LinkedList<LinkedList<MarkEntity>> data;
 
     public FrmTable(String[] headers, LinkedList<LinkedList<MarkEntity>> data) {
-        createGUI(headers,data);
+    	this.data = data;
+        createGUI(headers);
     }
 
-    private void createGUI(String[] headers, LinkedList<LinkedList<MarkEntity>> data) {
+    private void createGUI(String[] headers) {
         setLayout(new BorderLayout());
         JScrollPane pane = new JScrollPane();
         
@@ -45,13 +47,27 @@ public class FrmTable extends JPanel{
         Action action = new AbstractAction()
         {
             public void actionPerformed(ActionEvent e)
-            {
-                TableCellListener tcl = (TableCellListener)e.getSource();
-                System.out.println("Row   : " + tcl.getRow());
-                System.out.println("Column: " + tcl.getColumn());
-                System.out.println("Old   : " + tcl.getOldValue());
-                System.out.println("New   : " + tcl.getNewValue());
-            }
+        {
+            TableCellListener tcl = (TableCellListener)e.getSource();
+            /*System.out.println("Row   : " + tcl.getRow());
+            System.out.println("Column: " + tcl.getColumn());
+            System.out.println("Old   : " + tcl.getOldValue());
+            System.out.println("New   : " + tcl.getNewValue());*/
+            
+        	if(tcl.getOldValue()  != tcl.getNewValue()){
+	        	if(data.get(tcl.getRow()).get(tcl.getColumn()).getDetails().getType().getIsTextField()){
+	        		data.get(tcl.getRow()).get(tcl.getColumn()).getDetails().setValue((String)tcl.getNewValue());
+	        	}
+	        	else{
+	        		try{
+	        			data.get(tcl.getRow()).get(tcl.getColumn()).setMark((Double.parseDouble((String)tcl.getNewValue())));
+	        		}
+	        		catch (Exception ex) {
+						table.setValueAt(tcl.getOldValue(),  tcl.getRow(),  tcl.getColumn());
+					}
+	        	}
+        	}
+        }
         };
 
         TableCellListener tcl = new TableCellListener(table, action);
@@ -65,11 +81,11 @@ public class FrmTable extends JPanel{
 				int viewRow = table.getSelectedRow();
                 if (viewRow < 0) {
                     //Selection got filtered away.
-                    System.out.println("");
+                   // System.out.println("");
                 } else {
                     int modelRow = 
                         table.convertRowIndexToModel(viewRow);
-                    System.out.println(String.format("Selected Row in view: %d. " +"Selected Row in model: %d.", viewRow, modelRow));
+                    //System.out.println(String.format("Selected Row in view: %d. " +"Selected Row in model: %d.", viewRow, modelRow));
                 }
 			}
 			

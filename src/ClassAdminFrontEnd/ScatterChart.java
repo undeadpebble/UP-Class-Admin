@@ -288,8 +288,13 @@ System.out.println("Hello");
 	/*	Window demo = new ScatterChart("Scatter Plot Demo");
 		demo.pack();
 		RefineryUtilities.centerFrameOnScreen(demo);
+<<<<<<< HEAD
 		demo.setVisible(true);
 	*/
+
+		//demo.setVisible(true);
+
+
 	}
 
 }
