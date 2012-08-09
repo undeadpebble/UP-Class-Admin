@@ -2,13 +2,8 @@ package ClassAdminFrontEnd;
 
 import java.awt.Color;
 import java.awt.EventQueue;
-import java.awt.Insets;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -50,6 +45,56 @@ public class Frame extends JFrame {
 	private JTabbedPane tabbedPane;
 	private File currentFilePath;
 	private int tabCount = -1;
+
+	public class TabButton extends JPanel {
+
+		private String text;
+		private JLabel label;
+		private JLabel button;
+		private TabButton tabbutton = this;
+
+		public TabButton(String _text) {
+			
+			//create label with file name for tab
+			text = _text;
+			label = new JLabel(text);
+			add(label);
+			
+			//create close button
+			button = new JLabel("x");
+			button.setBorder(new EmptyBorder(1,1,1,1));
+			add(button);
+			button.setForeground(Color.white);
+			
+			//set this panel with label and close button to transparent
+			this.setOpaque(false);
+			this.setBorder(null);
+			
+			//close tab action
+			button.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mousePressed(MouseEvent e) {
+					tabbedPane.remove(tabbedPane.indexOfTabComponent(tabbutton));
+					tabCount--;
+				}
+				
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					button.setForeground(Color.darkGray);
+				}
+				
+				@Override
+				public void mouseExited(MouseEvent e) {
+					button.setForeground(Color.white);
+				}
+				
+			});
+		}
+
+		
+		
+		
+	}
 
 	public static void main(String[] args) {
 
@@ -157,7 +202,7 @@ public class Frame extends JFrame {
 		navBar.add(lblSave);
 
 		// create tabbedPane
-		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane = new JTabbedPane();
 		tabbedPane.setBounds(54, 50, 948, 400);
 		contentPane.add(tabbedPane);
 
@@ -287,21 +332,21 @@ public class Frame extends JFrame {
 			file = filechooser.getSelectedFile();
 			currentFilePath = filechooser.getSelectedFile();
 			try {
-				
+
 				fileHandler.openFile(file.getAbsolutePath());
-				//create table on panel
+				// create table on panel
 				table = new FrmTable(Global.getGlobal().getActiveProject()
 						.getHead().getHeaders(), Global.getGlobal()
 						.getActiveProject().getHead().getDataLinkedList());
-				//put panel with table on a new tab
 				
-				
+				// put panel with table on a new tab
 				tabbedPane.addTab(file.getName(), table);
-				
-				tabbedPane.setTabComponentAt(tabCount, new TabButton(file.getName(),tabbedPane,tabCount));
-				
+				tabCount++;
+				tabbedPane.setTabComponentAt(tabCount,new TabButton(file.getName()));
+
 			} catch (UnsupportedFileTypeException e) {
-				JOptionPane.showMessageDialog(this, "File Error", "Error retrieving file!", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, "File Error",
+						"Error retrieving file!", JOptionPane.ERROR_MESSAGE);
 				e.printStackTrace();
 			}
 		} else {
@@ -321,8 +366,8 @@ public class Frame extends JFrame {
 		if (currentFilePath != null) {
 			filechooser.setCurrentDirectory(currentFilePath);
 		}
-		currentFilePath = filechooser.getSelectedFile();	
-		
+		currentFilePath = filechooser.getSelectedFile();
+
 		// add the filter to the file chooser
 		filechooser.addChoosableFileFilter(filter);
 
@@ -332,7 +377,7 @@ public class Frame extends JFrame {
 		// if the chosen file is valid
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			file = filechooser.getSelectedFile();
-			
+
 			try {
 				FileHandler.get().saveFile(file.getAbsolutePath());
 			} catch (UnsupportedFileTypeException e) {
@@ -343,5 +388,3 @@ public class Frame extends JFrame {
 		}
 	}
 }
-	
-
