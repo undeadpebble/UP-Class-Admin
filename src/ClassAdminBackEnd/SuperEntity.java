@@ -10,7 +10,6 @@ public class SuperEntity {
 	private SuperEntity parentEntity;
 	private LinkedList<SuperEntity> subEntity = new LinkedList<SuperEntity>();
 	private LinkedList<Double> subEntityWeight = new LinkedList<Double>();
-	private EntityDetails details;
 	private double mark;
 	private int rowFollowCount = 0;
 	private EntityType type;
@@ -112,8 +111,6 @@ public class SuperEntity {
 		
 		builder.append("MarkEntity [mark=");
 		builder.append(mark);
-		builder.append(", details=");
-		builder.append(details);
 		builder.append(", subEntityWeight=");
 		builder.append(subEntityWeight);
 		builder.append(", subEntity=");
@@ -189,20 +186,17 @@ public class SuperEntity {
 	/**
 	 * @return the details
 	 */
-	public EntityDetails getDetails() {
-		return details;
+	public SuperEntity getDetails() {
+		return this;
 	}
 
 	/**
 	 * @param details
 	 *            the details to set
 	 */
-	public void setDetails(EntityDetails details) {
-		this.details = details;
-	}
 	
 	private Boolean isAbsent(){
-		return this.details.getType().getDate() != null && this.details.getType().getDate().after(new Date());
+		return this.getType().getDate() != null && this.getType().getDate().after(new Date());
 	}
 	
 	private Double doMarkMath(){

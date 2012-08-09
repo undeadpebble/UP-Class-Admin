@@ -168,7 +168,7 @@ public class Parser {
 		} else SynErr(50);
 		Expect(comma_Sym);
 		Expect(headequal_Sym);
-		MarkEntity head = MarkEntity();
+		SuperEntity head = SuperEntity();
 		Global.getGlobal().getActiveProject().setHead(head);
 		Expect(rbrack_Sym);
 	}
@@ -285,8 +285,8 @@ public class Parser {
 		Expect(rbrack_Sym);
 	}
 
-	static MarkEntity MarkEntity() {
-		MarkEntity returnValue;
+	static SuperEntity SuperEntity() {
+		SuperEntity returnValue;
 		Expect(MarkEntity_Sym);
 		Expect(lbrack_Sym);
 		Expect(markequal_Sym);
@@ -294,7 +294,7 @@ public class Parser {
 		Expect(comma_Sym);
 		Expect(detailsequal_Sym);
 		EntityDetails enDetails = EntityDetails();
-		returnValue = new MarkEntity(enDetails,mark);
+		returnValue = new SuperEntity(enDetails,mark);
 		Expect(comma_Sym);
 		Expect(subEntityWeightequal_Sym);
 		Expect(lbrack_Sym);
@@ -316,12 +316,12 @@ public class Parser {
 		if (la.kind == rbrack_Sym) {
 			Get();
 		} else if (la.kind == MarkEntity_Sym) {
-			MarkEntity child = MarkEntity();
+			SuperEntity child = SuperEntity();
 			returnValue.getSubEntity().add(child);
 			child.setParentEntity(returnValue);
 			while (la.kind == comma_Sym) {
 				Get();
-				child = MarkEntity();
+				child = SuperEntity();
 				returnValue.getSubEntity().add(child);
 				child.setParentEntity(returnValue);
 			}

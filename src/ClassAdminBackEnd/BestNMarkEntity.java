@@ -2,10 +2,9 @@ package ClassAdminBackEnd;
 
 public class BestNMarkEntity extends MarkEntity{
 
-	Integer N;
-	public BestNMarkEntity(EntityType type, SuperEntity parentEntity,
-			double mark, Integer N) {
-		super(type, parentEntity, mark);
+	int N;
+	public BestNMarkEntity(EntityType type, SuperEntity parentEntity, int N) {
+		super(type, parentEntity);
 		this.N = N;
 		// TODO Auto-generated constructor stub
 	}
@@ -13,12 +12,35 @@ public class BestNMarkEntity extends MarkEntity{
 	private Double doMarkMath() throws AbsentException{
 		double mTotal = 0;
 		double wTotal = 0;
+		double nthLargest = Double.MAX_VALUE;
+		double wnthLargest = 0;
+		int ofN = 0;
+		double m ;
+		double w;
 		Boolean hasval = false;
 		for (int i = 0; i < this.getSubEntity().size(); ++i) {
 			try {
-				mTotal += this.getSubEntity().get(i).calcMark()
+				m = this.getSubEntity().get(i).calcMark()
 						* this.getSubEntityWeight().get(i);
-				wTotal += this.getSubEntityWeight().get(i);
+				w =  this.getSubEntityWeight().get(i);
+				if(ofN < N){
+					mTotal += m;
+					wTotal += w;
+					if(m<nthLargest){
+						nthLargest = m;
+						wnthLargest = w;
+					}
+				} else if(nthLargest < m){
+					mTotal -= nthLargest;
+					wTotal -= wnthLargest;
+					
+					nthLargest = m;
+					wnthLargest = w;
+					
+					mTotal += nthLargest;
+					wTotal += wnthLargest;
+				}
+				
 				hasval = true;
 			} catch (Exception e) {
 			}

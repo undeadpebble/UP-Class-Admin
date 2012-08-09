@@ -10,11 +10,11 @@ import java.util.LinkedList;
  *
  */
 public class Project {
-	private MarkEntity head;
-	private LinkedList<MarkEntity> selected;
+	private SuperEntity head;
+	private LinkedList<SuperEntity> selected;
 	private LinkedList<EntityType> entityTypes;
 	
-	public MarkEntity getHead() {
+	public SuperEntity getHead() {
 		return head;
 	}
 	/* (non-Javadoc)
@@ -30,12 +30,12 @@ public class Project {
 		builder.append("]");
 		return builder.toString();
 	}
-	public void setHead(MarkEntity head) {
-		this.head = head;
+	public void setHead(SuperEntity mE) {
+		this.head = mE;
 	}
-	public LinkedList<MarkEntity> getSelected() {
+	public LinkedList<SuperEntity> getSelected() {
 		if(selected==null)
-			selected = new LinkedList<MarkEntity>();
+			selected = new LinkedList<SuperEntity>();
 		return selected;
 	}
 	public LinkedList<EntityType> getEntityTypes() {
