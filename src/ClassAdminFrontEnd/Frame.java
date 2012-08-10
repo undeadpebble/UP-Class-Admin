@@ -45,7 +45,10 @@ public class Frame extends JFrame {
 	private JTabbedPane tabbedPane;
 	private File currentFilePath;
 	private int tabCount = -1;
+	private int navBarHeight;
+	private int navBarSpace;
 	
+	private String currentOs;
 	private static String MAC_OS = "MAC";
 	private static String WIN_OS = "WINDOWS";
 
@@ -150,6 +153,14 @@ public class Frame extends JFrame {
 
 		//determine os
 		determineOS();
+		if (currentOs == "MAC_OS")
+		{
+			setupMac();
+		}
+		else if ((currentOs == "WIN_OS") || (currentOs ==  null))
+		{
+			setupWindows();
+		}
 		
 		// create file handler
 		fileHandler = FileHandler.get();
@@ -177,7 +188,8 @@ public class Frame extends JFrame {
 
 		// create bottom navigation bar
 		navBar = new JXPanel();
-		navBar.setBounds(0, 574, 1115, 84);
+		navBar.setBounds(0, contentPane.getHeight() - navBarHeight - navBarSpace, getWidth(), navBarHeight);
+	
 		setupPainters();
 		contentPane.setLayout(null);
 		contentPane.add(navBar);
@@ -290,7 +302,7 @@ public class Frame extends JFrame {
 			@Override
 			public void componentResized(ComponentEvent arg0) {
 				navBar.setBounds(0,
-						frame.getHeight() - navBar.getHeight() - 60,
+						frame.getHeight() - navBar.getHeight()-navBarSpace,
 						frame.getWidth(), navBar.getHeight());
 
 			}
@@ -301,6 +313,16 @@ public class Frame extends JFrame {
 			}
 		});
 
+	}
+
+	private void setupWindows() {
+		navBarHeight = 84;
+		navBarSpace = 60;
+	}
+
+	private void setupMac() {
+		navBarHeight = 84;
+		navBarSpace = 45;		
 	}
 
 	// bottom nav bar background painter
@@ -393,15 +415,14 @@ public class Frame extends JFrame {
 	
 	public void determineOS() {
 		String currentOs = System.getProperty("os.name").toUpperCase();
-	    if( currentOs.contains(MAC_OS)){
+	    if(currentOs.contains("MAC")){
 	        currentOs = MAC_OS;
 	    }
-	    else if( currentOs.contains(WIN_OS) ){
+	    else if( currentOs.contains("WINDOWS") ){
 	        currentOs = WIN_OS;
 	    }
 	    else{
 	        currentOs = null;
 	    }
-	    System.out.println("CurrentOS: "+currentOs);
 	}
 }
