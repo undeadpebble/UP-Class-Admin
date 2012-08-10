@@ -45,6 +45,9 @@ public class Frame extends JFrame {
 	private JTabbedPane tabbedPane;
 	private File currentFilePath;
 	private int tabCount = -1;
+	
+	private static String MAC_OS = "MAC";
+	private static String WIN_OS = "WINDOWS";
 
 	public class TabButton extends JPanel {
 
@@ -103,7 +106,6 @@ public class Frame extends JFrame {
 					.getInstalledLookAndFeels()) {
 				if ("Nimbus".equals(info.getName())) {
 					javax.swing.UIManager.setLookAndFeel(info.getClassName());
-					// UIManager.put("nimbusBase", new Color(0x2B2B2B));
 					UIManager.put("nimbusBase", new Color(0x7A7A7A));
 					UIManager.put("nimbusSelectionBackground", new Color(
 							0x171717));
@@ -112,8 +114,6 @@ public class Frame extends JFrame {
 					UIManager
 							.put("DesktopIcon.background", new Color(0x171717));
 					UIManager.put("nimbusLightBackground", new Color(0xE3E3E3));
-
-					// UIManager.put("control", new Color(0x171717));
 
 					break;
 				}
@@ -148,6 +148,9 @@ public class Frame extends JFrame {
 	 */
 	public Frame() {
 
+		//determine os
+		determineOS();
+		
 		// create file handler
 		fileHandler = FileHandler.get();
 
@@ -386,5 +389,19 @@ public class Frame extends JFrame {
 		} else {
 
 		}
+	}
+	
+	public void determineOS() {
+		String currentOs = System.getProperty("os.name").toUpperCase();
+	    if( currentOs.contains(MAC_OS)){
+	        currentOs = MAC_OS;
+	    }
+	    else if( currentOs.contains(WIN_OS) ){
+	        currentOs = WIN_OS;
+	    }
+	    else{
+	        currentOs = null;
+	    }
+	    System.out.println("CurrentOS: "+currentOs);
 	}
 }
