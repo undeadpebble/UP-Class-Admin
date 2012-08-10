@@ -153,11 +153,12 @@ public class Frame extends JFrame {
 
 		//determine os
 		determineOS();
-		if (currentOs == "MAC_OS")
+		if (currentOs == MAC_OS)
 		{
 			setupMac();
+			
 		}
-		else if ((currentOs == "WIN_OS") || (currentOs ==  null))
+		else if ((currentOs == WIN_OS) || (currentOs ==  null))
 		{
 			setupWindows();
 		}
@@ -197,23 +198,23 @@ public class Frame extends JFrame {
 
 		// add navigation bar labels
 		ShadowLabel lblImport = new ShadowLabel("Import", 12);
-		lblImport.setBounds(33, 64, 36, 17);
+		lblImport.setBounds(33, 64, 42, 17);
 		navBar.add(lblImport);
 
 		ShadowLabel lblExport = new ShadowLabel("Export", 12);
-		lblExport.setBounds(121, 64, 36, 17);
+		lblExport.setBounds(121, 64, 42, 17);
 		navBar.add(lblExport);
 
 		ShadowLabel lblChart = new ShadowLabel("Charts", 12);
-		lblChart.setBounds(205, 64, 36, 17);
+		lblChart.setBounds(205, 64, 42, 17);
 		navBar.add(lblChart);
 
 		ShadowLabel lblStudents = new ShadowLabel("Students", 12);
-		lblStudents.setBounds(297, 64, 59, 17);
+		lblStudents.setBounds(297, 64, 54, 17);
 		navBar.add(lblStudents);
 
 		ShadowLabel lblSave = new ShadowLabel("Save", 12);
-		lblSave.setBounds(392, 64, 36, 17);
+		lblSave.setBounds(392, 64, 42, 17);
 		navBar.add(lblSave);
 
 		// create tabbedPane
@@ -414,7 +415,7 @@ public class Frame extends JFrame {
 	}
 	
 	public void determineOS() {
-		String currentOs = System.getProperty("os.name").toUpperCase();
+		currentOs = System.getProperty("os.name").toUpperCase();
 	    if(currentOs.contains("MAC")){
 	        currentOs = MAC_OS;
 	    }
