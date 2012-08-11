@@ -1,12 +1,16 @@
 package ClassAdminFrontEnd;
 
 import java.awt.Color;
-import java.awt.EventQueue;
-import java.awt.event.*;
+import java.awt.Component;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -14,17 +18,20 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.text.BadLocationException;
 
 import org.jdesktop.swingx.JXPanel;
+import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.painter.CompoundPainter;
 import org.jdesktop.swingx.painter.GlossPainter;
 import org.jdesktop.swingx.painter.MattePainter;
@@ -39,6 +46,7 @@ public class Frame extends JFrame {
 	private JXPanel navBar;
 	private ReflectionButton btnImport;
 	private ReflectionButton btnExport;
+	private ReflectionButton btnStudents;
 	private FileHandler fileHandler;
 	private JFileChooser filechooser;
 	private JFrame frame = this;
@@ -48,7 +56,7 @@ public class Frame extends JFrame {
 	private int tabCount = -1;
 	private int navBarHeight;
 	private int navBarSpace;
-	
+
 	private static String currentOs;
 	private static String MAC_OS = "MAC";
 	private static String WIN_OS = "WINDOWS";
@@ -61,65 +69,59 @@ public class Frame extends JFrame {
 		private TabButton tabbutton = this;
 
 		public TabButton(String _text) {
-			
-			//create label with file name for tab
+
+			// create label with file name for tab
 			text = _text;
 			label = new JLabel(text);
 			add(label);
-			
-			//create close button
+
+			// create close button
 			button = new JLabel("x");
-		//	button.setBorder(new EmptyBorder(1,1,1,1));
+			// button.setBorder(new EmptyBorder(1,1,1,1));
 			add(button);
 			button.setForeground(Color.white);
-			
-			//set this panel with label and close button to transparent
+
+			// set this panel with label and close button to transparent
 			this.setOpaque(false);
 			this.setBorder(null);
-			
-			//close tab action
+
+			// close tab action
 			button.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mousePressed(MouseEvent e) {
 					tabbedPane.remove(tabbedPane.indexOfTabComponent(tabbutton));
 					tabCount--;
-					//if (tabCount == -1)
-						//contentPane.remove(tabbedPane);
+					// if (tabCount == -1)
+					// contentPane.remove(tabbedPane);
 				}
-				
+
 				@Override
 				public void mouseEntered(MouseEvent e) {
 					button.setForeground(Color.darkGray);
 				}
-				
+
 				@Override
 				public void mouseExited(MouseEvent e) {
 					button.setForeground(Color.white);
 				}
-				
+
 			});
 		}
 	}
-
-	
 
 	/**
 	 * Create the frame.
 	 */
 	public Frame() {
 
-		//determine os
+		// determine os
 		determineOS();
-		if (currentOs == MAC_OS)
-		{
+		if (currentOs == MAC_OS) {
 			setupMac();
-			
-		}
-		else if ((currentOs == WIN_OS) || (currentOs ==  null))
-		{
+		} else if ((currentOs == WIN_OS) || (currentOs == null)) {
 			setupWindows();
 		}
-		
+
 		// create file handler
 		fileHandler = FileHandler.get();
 
@@ -146,8 +148,9 @@ public class Frame extends JFrame {
 
 		// create bottom navigation bar
 		navBar = new JXPanel();
-		navBar.setBounds(0, contentPane.getHeight() - navBarHeight - navBarSpace, getWidth(), navBarHeight);
-	
+		navBar.setBounds(0, contentPane.getHeight() - navBarHeight
+				- navBarSpace, getWidth(), navBarHeight);
+
 		setupPainters();
 		contentPane.setLayout(null);
 		contentPane.add(navBar);
@@ -174,7 +177,6 @@ public class Frame extends JFrame {
 		lblSave.setBounds(392, 64, 42, 17);
 		navBar.add(lblSave);
 
-
 		// add navigation bar buttons
 		try {
 
@@ -188,7 +190,6 @@ public class Frame extends JFrame {
 			btnExport.setBounds(105, 11, 67, 73);
 			navBar.add(btnExport);
 
-			JButton btnStudents;
 			btnStudents = new ReflectionButton(ImageIO.read(getClass()
 					.getResource("Students.png")));
 			btnStudents.setBounds(289, 11, 67, 73);
@@ -240,6 +241,15 @@ public class Frame extends JFrame {
 			}
 		});
 
+		// export students mouselistener
+		btnStudents.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				studentsView();
+			}
+
+		});
+
 		// frame resize listener to put nav bar at bottom of frame on resize
 		this.addComponentListener(new ComponentListener() {
 
@@ -255,9 +265,8 @@ public class Frame extends JFrame {
 
 			@Override
 			public void componentResized(ComponentEvent arg0) {
-				navBar.setBounds(0,
-						frame.getHeight() - navBar.getHeight()-navBarSpace,
-						frame.getWidth(), navBar.getHeight());
+				navBar.setBounds(0, frame.getHeight() - navBar.getHeight()
+						- navBarSpace, frame.getWidth(), navBar.getHeight());
 
 			}
 
@@ -276,7 +285,7 @@ public class Frame extends JFrame {
 
 	private void setupMac() {
 		navBarHeight = 84;
-		navBarSpace = 23;		
+		navBarSpace = 23;
 	}
 
 	// bottom nav bar background painter
@@ -310,33 +319,7 @@ public class Frame extends JFrame {
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			file = filechooser.getSelectedFile();
 			currentFilePath = filechooser.getSelectedFile();
-			try {
-
-				fileHandler.openFile(file.getAbsolutePath());
-				// create table on panel
-				table = new FrmTable(Global.getGlobal().getActiveProject()
-						.getHead().getHeaders(), Global.getGlobal()
-						.getActiveProject().getHead().getDataLinkedList());
-				
-				
-				// create tabbedPane
-				if (tabbedPane == null) {
-					tabbedPane = new JTabbedPane();
-					tabbedPane.setBounds(54, 50, 948, 400);
-					contentPane.add(tabbedPane);
-				}
-				
-				
-				// put panel with table on a new tab
-				tabbedPane.addTab(file.getName(), table);
-				tabCount++;
-				tabbedPane.setTabComponentAt(tabCount,new TabButton(file.getName()));
-
-			} catch (UnsupportedFileTypeException e) {
-				JOptionPane.showMessageDialog(this, "File Error",
-						"Error retrieving file!", JOptionPane.ERROR_MESSAGE);
-				e.printStackTrace();
-			}
+			createTab(file);
 		} else {
 
 		}
@@ -375,17 +358,105 @@ public class Frame extends JFrame {
 
 		}
 	}
-	
+
+	// function to determine OS that is currently running
 	public static void determineOS() {
 		currentOs = System.getProperty("os.name").toUpperCase();
-	    if(currentOs.contains("MAC")){
-	        currentOs = MAC_OS;
-	    }
-	    else if( currentOs.contains("WINDOWS") ){
-	        currentOs = WIN_OS;
-	    }
-	    else{
-	        currentOs = null;
-	    }
+		if (currentOs.contains("MAC")) {
+			currentOs = MAC_OS;
+		} else if (currentOs.contains("WINDOWS")) {
+			currentOs = WIN_OS;
+		} else {
+			currentOs = null;
+		}
+	}
+
+	// create a new Tab when a new file is imported
+	public void createTab(File file) {
+		try {
+			fileHandler.openFile(file.getAbsolutePath());
+		} catch (UnsupportedFileTypeException e) {
+			e.printStackTrace();
+		}
+		// create table on panel
+		table = new FrmTable(Global.getGlobal().getActiveProject().getHead()
+				.getHeaders(), Global.getGlobal().getActiveProject().getHead()
+				.getDataLinkedList());
+
+		// create tabbedPane
+		if (tabbedPane == null) {
+			tabbedPane = new JTabbedPane();
+			tabbedPane.setBounds(54, 50, 948, 400);
+			contentPane.add(tabbedPane);
+		}
+
+		// put panel with table on a new tab
+		tabbedPane.addTab(file.getName(), table);
+		tabCount++;
+		tabbedPane.setTabComponentAt(tabCount, new TabButton(file.getName()));
+	}
+
+	// create students table
+	private void studentsView() {
+		
+		MyTableModel model = new MyTableModel();
+		JXTable studentsTable = new JXTable(model) {
+			public Component prepareRenderer(TableCellRenderer renderer,
+					int Index_row, int Index_col) {
+				Component comp = super.prepareRenderer(renderer, Index_row,
+						Index_col);
+				// even index, selected or not selected
+				if (Index_row % 2 == 0 && !isCellSelected(Index_row, Index_col)) {
+					comp.setBackground(Color.lightGray);
+				} else {
+					comp.setBackground(Color.white);
+				}
+				return comp;
+			}
+		};
+		studentsTable.setBounds(54, 50, 948, 400);
+		studentsTable.setGridColor(Color.black);
+		contentPane.add(studentsTable);
+		
+		 studentsTable.getSelectedRow();
+
+		
+
+		
+
+	//	table.setRowHeight(80);
+	//	table.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer());
+		JScrollPane pane = new JScrollPane(table);
+
+		studentsTable.setModel(model);
+	}
+
+	class MyTableModel extends AbstractTableModel {
+		public Object getValueAt(int row, int column) {
+			return "" + (row * column);
+		}
+
+		public int getColumnCount() {
+			return 4;
+		}
+
+		public int getRowCount() {
+			return 5;
+		}
+
+	}
+
+	class ImageRenderer extends DefaultTableCellRenderer {
+		JLabel lbl = new JLabel();
+
+		ImageIcon icon = new ImageIcon(getClass().getResource("Chart.png"));
+
+		public Component getTableCellRendererComponent(JTable table,
+				Object value, boolean isSelected, boolean hasFocus, int row,
+				int column) {
+			lbl.setText((String) value);
+			lbl.setIcon(icon);
+			return lbl;
+		}
 	}
 }
