@@ -35,12 +35,6 @@ public class SuperEntity {
 		return fields;
 	}
 	/**
-	 * @param fields the fields to set
-	 */
-	public void setFields(LinkedList<String> fields) {
-		this.fields = fields;
-	}
-	/**
 	 * @return the picture
 	 */
 	public String getPicture() {
@@ -307,6 +301,10 @@ public class SuperEntity {
 	public String getValue(){
 		//TODO
 		return "";
+	}
+	
+	public void setValue(String str){
+		this.setMark(Double.parseDouble(str));
 	}
 	
 	public String[][] getData(){		

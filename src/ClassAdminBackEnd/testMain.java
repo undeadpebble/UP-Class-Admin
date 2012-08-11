@@ -29,33 +29,31 @@ public class testMain
 			if(c.fileExists("test.csv"))
 			{
 				ArrayList arr = c.recordData();
+=======
+>>>>>>> refs/remotes/origin/louis
 
+<<<<<<< HEAD
 				c.printHeaders(c.getHeaders(arr));
 				c.printRecords(c.getRecords(arr));
 				c.print(arr);
 			}
 			
 		}*/
+
 		
 		FileHandler fh = FileHandler.get();
 		
 		try {
+
 			fh.openFile("test.csv");
+
 		} catch (UnsupportedFileTypeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		//System.out.println(Global.getGlobal().getActiveProject().toString());
 		
-		JFrame temp = new JFrame();
-		temp.setVisible(true);
-		temp.setSize(800, 800);
-		
-		FrmTable test = new FrmTable(Global.getGlobal().getActiveProject().getHead().getHeaders(), Global.getGlobal().getActiveProject().getHead().getDataLinkedList());
-		temp.add(test);
-		
-		
-		test.repaint();
-		
+
+
 	}
 }

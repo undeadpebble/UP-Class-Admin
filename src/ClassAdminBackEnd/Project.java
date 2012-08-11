@@ -30,8 +30,10 @@ public class Project {
 		builder.append("]");
 		return builder.toString();
 	}
-	public void setHead(SuperEntity mE) {
-		this.head = mE;
+
+	public void setHead(SuperEntity head) {
+		this.head = head;
+
 	}
 	public LinkedList<SuperEntity> getSelected() {
 		if(selected==null)

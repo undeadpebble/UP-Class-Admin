@@ -1,5 +1,6 @@
 package ClassAdminBackEnd;
 
+
 public class MarkEntity extends SuperEntity{
 
 
@@ -8,16 +9,21 @@ public class MarkEntity extends SuperEntity{
 		// TODO Auto-generated constructor stub
 	}
 
+
 	public String getValue(){
-		//TODO
+		
+
 		return Double.toString(this.getMark());
+
 	}
 	
-	public void setValue(String newValue){
-		this.getFields().set(0, newValue);
-	}
 	private Double doMarkMath() throws AbsentException{
 		return this.getMark();
 	}
-}
+
 	
+
+
+	
+}
+

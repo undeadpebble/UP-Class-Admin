@@ -168,7 +168,11 @@ public class Parser {
 		} else SynErr(50);
 		Expect(comma_Sym);
 		Expect(headequal_Sym);
+<<<<<<< HEAD
 		SuperEntity head = SuperEntity();
+=======
+		SuperEntity head = MarkEntity();
+>>>>>>> refs/remotes/origin/louis
 		Global.getGlobal().getActiveProject().setHead(head);
 		Expect(rbrack_Sym);
 	}
@@ -285,7 +289,11 @@ public class Parser {
 		Expect(rbrack_Sym);
 	}
 
+<<<<<<< HEAD
 	static SuperEntity SuperEntity() {
+=======
+	static SuperEntity MarkEntity() {
+>>>>>>> refs/remotes/origin/louis
 		SuperEntity returnValue;
 		Expect(MarkEntity_Sym);
 		Expect(lbrack_Sym);
@@ -316,7 +324,11 @@ public class Parser {
 		if (la.kind == rbrack_Sym) {
 			Get();
 		} else if (la.kind == MarkEntity_Sym) {
+<<<<<<< HEAD
 			SuperEntity child = SuperEntity();
+=======
+			SuperEntity child = MarkEntity();
+>>>>>>> refs/remotes/origin/louis
 			returnValue.getSubEntity().add(child);
 			child.setParentEntity(returnValue);
 			while (la.kind == comma_Sym) {

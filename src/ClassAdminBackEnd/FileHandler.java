@@ -58,6 +58,7 @@ public class FileHandler {
 
 		SuperEntity mE = new SuperEntity(glob.getActiveProject()
 				.getEntityTypes().get(0), 0);
+
 		glob.getActiveProject().setHead(mE);
 		// create entity types
 		for (int i = 0; i < headers.size(); ++i) {
@@ -94,7 +95,9 @@ public class FileHandler {
 		int numRecords = fileReader.getRecords(recordArray).size();
 		for (int r = 0; r < numRecords; ++r) {
 			// make parent for row
+
 			SuperEntity parent = new SuperEntity(
+
 							glob.getActiveProject().getEntityTypes().get(1),
 							glob.getActiveProject().getHead(), 0);
 			String record = fileReader.getRecordFieldValue(recordArray, r, 0);
@@ -113,7 +116,9 @@ public class FileHandler {
 				record = fileReader.getRecordFieldValue(recordArray, r, f);
 				EntityType fieldType = glob.getActiveProject().getEntityTypes()
 						.get(f + 1);
+
 				SuperEntity mE = new SuperEntity(fieldType, parent, 0);
+
 				if (fieldType.getIsTextField() == true) {
 					mE.getDetails().getFields().add(record);
 				} else {

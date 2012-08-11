@@ -1,6 +1,7 @@
 package ClassAdminBackEnd;
 
 public class StringEntity extends SuperEntity{
+
 	public StringEntity(EntityType type, SuperEntity parentEntity, String text) {
 		super(type, parentEntity, 0);
 		this.getFields().add(text);
@@ -14,11 +15,14 @@ public class StringEntity extends SuperEntity{
 	}
 	
 	public void setValue(String newValue){
-		if(this.getFields().size()==0){
-			
-		}
 		this.getFields().set(0, newValue);
+	}
 
+
+	
+	private Double doMarkMath() throws AbsentException{
+		//TODO
+		throw new AbsentException();
 	}
 	
 }

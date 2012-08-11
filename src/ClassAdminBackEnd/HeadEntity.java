@@ -1,6 +1,7 @@
 package ClassAdminBackEnd;
 
 public class HeadEntity extends SuperEntity{
+
 	
 
 	public HeadEntity(EntityType type, double mark) {
@@ -12,4 +13,5 @@ public class HeadEntity extends SuperEntity{
 		//TODO
 		return "";
 	}
+	
 }
