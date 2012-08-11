@@ -18,6 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -48,7 +49,7 @@ public class Frame extends JFrame {
 	private int navBarHeight;
 	private int navBarSpace;
 	
-	private String currentOs;
+	private static String currentOs;
 	private static String MAC_OS = "MAC";
 	private static String WIN_OS = "WINDOWS";
 
@@ -68,7 +69,7 @@ public class Frame extends JFrame {
 			
 			//create close button
 			button = new JLabel("x");
-			button.setBorder(new EmptyBorder(1,1,1,1));
+		//	button.setBorder(new EmptyBorder(1,1,1,1));
 			add(button);
 			button.setForeground(Color.white);
 			
@@ -82,6 +83,8 @@ public class Frame extends JFrame {
 				public void mousePressed(MouseEvent e) {
 					tabbedPane.remove(tabbedPane.indexOfTabComponent(tabbutton));
 					tabCount--;
+					//if (tabCount == -1)
+						//contentPane.remove(tabbedPane);
 				}
 				
 				@Override
@@ -96,55 +99,9 @@ public class Frame extends JFrame {
 				
 			});
 		}
-
-		
-		
-		
 	}
 
-	public static void main(String[] args) {
-
-		try {
-			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager
-					.getInstalledLookAndFeels()) {
-				if ("Nimbus".equals(info.getName())) {
-					javax.swing.UIManager.setLookAndFeel(info.getClassName());
-					UIManager.put("nimbusBase", new Color(0x7A7A7A));
-					UIManager.put("nimbusSelectionBackground", new Color(
-							0x171717));
-					UIManager.put("Menu.background", new Color(0x2B2B2B));
-					UIManager.put("background", new Color(0x171717));
-					UIManager
-							.put("DesktopIcon.background", new Color(0x171717));
-					UIManager.put("nimbusLightBackground", new Color(0xE3E3E3));
-
-					break;
-				}
-			}
-		} catch (ClassNotFoundException ex) {
-			java.util.logging.Logger.getLogger(Frame.class.getName()).log(
-					java.util.logging.Level.SEVERE, null, ex);
-		} catch (InstantiationException ex) {
-			java.util.logging.Logger.getLogger(Frame.class.getName()).log(
-					java.util.logging.Level.SEVERE, null, ex);
-		} catch (IllegalAccessException ex) {
-			java.util.logging.Logger.getLogger(Frame.class.getName()).log(
-					java.util.logging.Level.SEVERE, null, ex);
-		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(Frame.class.getName()).log(
-					java.util.logging.Level.SEVERE, null, ex);
-		}
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Frame frame = new Frame();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	
 
 	/**
 	 * Create the frame.
@@ -217,10 +174,6 @@ public class Frame extends JFrame {
 		lblSave.setBounds(392, 64, 42, 17);
 		navBar.add(lblSave);
 
-		// create tabbedPane
-		tabbedPane = new JTabbedPane();
-		tabbedPane.setBounds(54, 50, 948, 400);
-		contentPane.add(tabbedPane);
 
 		// add navigation bar buttons
 		try {
@@ -323,7 +276,7 @@ public class Frame extends JFrame {
 
 	private void setupMac() {
 		navBarHeight = 84;
-		navBarSpace = 45;		
+		navBarSpace = 23;		
 	}
 
 	// bottom nav bar background painter
@@ -364,6 +317,15 @@ public class Frame extends JFrame {
 				table = new FrmTable(Global.getGlobal().getActiveProject()
 						.getHead().getHeaders(), Global.getGlobal()
 						.getActiveProject().getHead().getDataLinkedList());
+				
+				
+				// create tabbedPane
+				if (tabbedPane == null) {
+					tabbedPane = new JTabbedPane();
+					tabbedPane.setBounds(54, 50, 948, 400);
+					contentPane.add(tabbedPane);
+				}
+				
 				
 				// put panel with table on a new tab
 				tabbedPane.addTab(file.getName(), table);
@@ -414,7 +376,7 @@ public class Frame extends JFrame {
 		}
 	}
 	
-	public void determineOS() {
+	public static void determineOS() {
 		currentOs = System.getProperty("os.name").toUpperCase();
 	    if(currentOs.contains("MAC")){
 	        currentOs = MAC_OS;
