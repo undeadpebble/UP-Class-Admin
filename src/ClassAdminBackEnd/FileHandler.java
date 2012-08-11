@@ -23,9 +23,6 @@ public class FileHandler {
 
 		if (filename.substring(filename.indexOf('.')).contains("csv")) {
 			openCSV(filename);
-		} else if (filename.substring(filename.indexOf('.')).contains("pdat")) {
-			openPdat(filename);
-
 		} else if (filename.substring(filename.indexOf('.')).contains("xls")) {
 			openXls(filename);
 
@@ -131,10 +128,6 @@ public class FileHandler {
 			}
 		}
 	}
-	private void openPdat(String filename){
-		pdatImport PI = new pdatImport();
-		PI.read(filename);
-	}
 	
 	private void openXls(String filename){
 		FileImport fileReader;
@@ -152,9 +145,6 @@ public class FileHandler {
 	public void saveFile(String filename) throws UnsupportedFileTypeException{
 		if (filename.substring(filename.indexOf('.')).contains("csv")) {
 			saveCSV(filename);
-		} else if (filename.substring(filename.indexOf('.')).contains("pdat")) {
-			savePdat(filename);
-
 		} else if (filename.substring(filename.indexOf('.')).contains("xls")) {
 			saveXls(filename);
 
@@ -168,11 +158,6 @@ public class FileHandler {
 		
 	}
 
-	private void savePdat(String filename) {
-		pdatImport exporter = new pdatImport();
-		exporter.write(filename);
-		
-	}
 
 	private void saveXls(String filename) {
 		// TODO Auto-generated method stub

@@ -36,23 +36,7 @@ public class EntityDetails {
 		this.textColor = null;
 		this.absentExcuse = null;
 	}
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("EntityDetails [type=");
-		builder.append(type.getIndex());
-		builder.append(", fields=");
-		builder.append(pdatImport.linkedListToString(fields));
-		builder.append(", Picture=");
-		builder.append("\""+Picture+"\"");
-		builder.append(", absentExcuse=");
-		builder.append(absentExcuse);
-		builder.append("]");
-		return builder.toString();
-	}
+
 	public EntityType getType() {
 		return type;
 	}
