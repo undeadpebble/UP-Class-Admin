@@ -87,7 +87,21 @@ public class SuperEntity {
 		this.type = type;
 		this.parentEntity = parentEntity;
 		this.mark = mark;
+		parentEntity.getSubEntity().add(this);
+		parentEntity.getSubEntityWeight().add(this.getType().getDefaultWeight());
 
+	}
+	
+	public SuperEntity(SuperEntity replacedEntity){
+		this.type = replacedEntity.getType();
+		this.parentEntity = replacedEntity.getParentEntity();
+		this.mark = replacedEntity.getMark();
+		this.fields = replacedEntity.getFields();
+		this.subEntity = replacedEntity.getSubEntity();
+		this.subEntityWeight = replacedEntity.getSubEntityWeight();
+		int index = replacedEntity.getParentEntity().getSubEntity().indexOf(replacedEntity);
+		replacedEntity.getParentEntity().getSubEntity().set(index, this);
+		replacedEntity.getParentEntity().getSubEntityWeight().set(index, this.getType().getDefaultWeight());
 	}
 	public SuperEntity(EntityType type, double mark){
 		this.type = type;

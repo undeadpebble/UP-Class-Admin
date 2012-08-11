@@ -8,6 +8,12 @@ public class StringEntity extends SuperEntity{
 		
 		// TODO Auto-generated constructor stub
 	}
+	
+	public StringEntity(SuperEntity replacedEntity, String text){
+		super(replacedEntity);
+		this.getFields().add(text);
+
+	}
 
 	public String getValue(){
 		//TODO

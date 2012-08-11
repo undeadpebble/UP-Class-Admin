@@ -9,7 +9,7 @@ public class LeafMarkEntity extends SuperEntity{
 	}
 	
 	public LeafMarkEntity(SuperEntity replacedEntity) {
-		super(replacedEntity.getType(), replacedEntity.getParentEntity(), replacedEntity.getMark());
+		super(replacedEntity);
 		// TODO Auto-generated constructor stub
 	}
 

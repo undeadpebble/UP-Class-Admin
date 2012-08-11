@@ -8,6 +8,19 @@ public class MarkEntity extends SuperEntity{
 		super(type, parentEntity, 0);
 		// TODO Auto-generated constructor stub
 	}
+	
+	
+
+
+	/**
+	 * @param replacedEntity
+	 */
+	public MarkEntity(SuperEntity replacedEntity) {
+		super(replacedEntity);
+		// TODO Auto-generated constructor stub
+	}
+
+
 
 
 	public String getValue(){

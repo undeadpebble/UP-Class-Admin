@@ -117,9 +117,10 @@ public class FileHandler {
 				SuperEntity mE = new SuperEntity(fieldType, parent, 0);
 
 				if (fieldType.getIsTextField() == true) {
-					mE.getDetails().getFields().add(record);
+					mE = new StringEntity(mE, record);
 				} else {
 					try {
+						mE = new MarkEntity(mE);
 						mE.setMark(Double.parseDouble(record));
 					} catch (NumberFormatException e) {
 						mE.setMark(0);
@@ -161,6 +162,10 @@ public class FileHandler {
 
 	private void saveXls(String filename) {
 		// TODO Auto-generated method stub
+		
+	}
+	
+	private void openPDat(String filename){
 		
 	}
 
