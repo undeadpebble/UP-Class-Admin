@@ -11,24 +11,19 @@ public class StringEntity extends SuperEntity{
 	
 	public StringEntity(SuperEntity replacedEntity, String text){
 		super(replacedEntity);
-		this.getFields().add(text);
-
+		if(this.getFields().size() == 0)
+			this.getFields().add(text);
 	}
+	
 
 	public String getValue(){
 		//TODO
-		return "";
+			return this.getFields().get(0);
 	}
 	
 	public void setValue(String newValue){
 		this.getFields().set(0, newValue);
 	}
 
-
-	
-	private Double doMarkMath() throws AbsentException{
-		//TODO
-		throw new AbsentException();
-	}
 	
 }

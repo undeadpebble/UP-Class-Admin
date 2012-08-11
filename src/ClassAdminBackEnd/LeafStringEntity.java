@@ -10,4 +10,8 @@ public class LeafStringEntity extends StringEntity{
 	private Boolean isAbsent(){
 		return true;
 	}
+	
+	public SuperEntity unLeaf(){
+		return new StringEntity(this, this.getFields().get(0));
+	}
 }

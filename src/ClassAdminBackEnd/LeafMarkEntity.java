@@ -1,10 +1,10 @@
 package ClassAdminBackEnd;
 
-public class LeafMarkEntity extends SuperEntity{
+public class LeafMarkEntity extends MarkEntity{
 
 
 	public LeafMarkEntity(EntityType type, SuperEntity parentEntity, double mark) {
-		super(type, parentEntity, mark);
+		super(type, parentEntity);
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -15,5 +15,9 @@ public class LeafMarkEntity extends SuperEntity{
 
 	private Double doMarkMath() throws AbsentException{
 		return this.getMark();
+	}
+	
+	public SuperEntity unLeaf(){
+		return new MarkEntity(this);
 	}
 }

@@ -3,6 +3,7 @@ package ClassAdminBackEnd;
 import java.util.ArrayList;
 
 public class FileHandler {
+	final double LARGEST_MARK_VALUE = 1000;
 	/**
 	 * @param str
 	 * @return
@@ -53,7 +54,7 @@ public class FileHandler {
 		glob.getActiveProject().getEntityTypes().clear();
 		eTFactory.makeEntityTypeFileImport("File", true);
 
-		SuperEntity mE = new SuperEntity(glob.getActiveProject()
+		SuperEntity mE = new HeadEntity(glob.getActiveProject()
 				.getEntityTypes().get(0), 0);
 
 		glob.getActiveProject().setHead(mE);
@@ -62,7 +63,7 @@ public class FileHandler {
 			String record = fileReader.getRecordFieldValue(recordArray, 0, i);
 			try {
 				double dub = Double.parseDouble(record);
-				if (dub > 1000) {
+				if (dub > LARGEST_MARK_VALUE) {
 					eTFactory
 							.makeEntityTypeFileImport((String) headers.get(i),
 									true).getFields()
@@ -86,7 +87,6 @@ public class FileHandler {
 	private void createMarkEntities(ArrayList headers, ArrayList recordArray,
 			FileImport fileReader) {
 		Global glob = Global.getGlobal();
-		EntityTypeFactory eTFactory = new EntityTypeFactory();
 
 		// create MarkEntities
 		int numRecords = fileReader.getRecords(recordArray).size();
@@ -100,9 +100,10 @@ public class FileHandler {
 			String record = fileReader.getRecordFieldValue(recordArray, r, 0);
 			if (glob.getActiveProject().getEntityTypes().get(1)
 					.getIsTextField() == true) {
-				parent.getDetails().getFields().add(record);
+				parent = new StringEntity(parent,record);
 			} else {
 				try {
+					parent= new LeafMarkEntity(parent);
 					parent.setMark(Double.parseDouble(record));
 				} catch (NumberFormatException e) {
 					parent.setMark(0);
@@ -120,7 +121,7 @@ public class FileHandler {
 					mE = new StringEntity(mE, record);
 				} else {
 					try {
-						mE = new MarkEntity(mE);
+						mE = new LeafMarkEntity(mE);
 						mE.setMark(Double.parseDouble(record));
 					} catch (NumberFormatException e) {
 						mE.setMark(0);

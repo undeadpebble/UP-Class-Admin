@@ -85,10 +85,10 @@ public class SuperEntity {
 	
 	public SuperEntity(EntityType type, SuperEntity parentEntity, double mark) {
 		this.type = type;
-		this.parentEntity = parentEntity;
+		this.parentEntity = parentEntity.unLeaf();
 		this.mark = mark;
-		parentEntity.getSubEntity().add(this);
-		parentEntity.getSubEntityWeight().add(this.getType().getDefaultWeight());
+		this.parentEntity.getSubEntity().add(this);
+		this.parentEntity.getSubEntityWeight().add(this.getType().getDefaultWeight());
 
 	}
 	
@@ -207,6 +207,10 @@ public class SuperEntity {
 		return this.getType().getDate() != null && this.getType().getDate().after(new Date());
 	}
 	
+	public SuperEntity unLeaf(){
+		return this;
+	}
+	
 	private Double doMarkMath(){
 		double mTotal = 0;
 		double wTotal = 0;
@@ -240,6 +244,7 @@ public class SuperEntity {
 		}
 
 	}
+	
 	
 	public String[] getHeaders(){
 		/*int max = -1;
