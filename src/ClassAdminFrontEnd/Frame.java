@@ -2,6 +2,8 @@ package ClassAdminFrontEnd;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseAdapter;
@@ -122,11 +124,26 @@ public class Frame extends JFrame {
 			setupWindows();
 		}
 
+		//set size
+		setSize(1131,650);
+		
+		// Get the size of the screen
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		 
+		// Determine the new location of the window
+		int w = getSize().width;
+		int h = getSize().height;
+		int x = (dim.width-w)/2;
+		int y = (dim.height-h)/2;
+		 
+		// Move the window
+		setLocation(x, y);
+		
 		// create file handler
 		fileHandler = FileHandler.get();
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1131, 650);
+		
 
 		// create top menu bar
 		JMenuBar menuBar = new JMenuBar();
