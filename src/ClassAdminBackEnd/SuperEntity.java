@@ -9,11 +9,11 @@ public class SuperEntity {
 
 	private SuperEntity parentEntity;
 	private LinkedList<SuperEntity> subEntity = new LinkedList<SuperEntity>();
-	private LinkedList<Double> subEntityWeight = new LinkedList<Double>();
+	private double weight;
 	private double mark;
 	private int rowFollowCount = 0;
 	private EntityType type;
-	private LinkedList<String> fields;
+	private String field = "";
 	/**
 	 * @return the type
 	 */
@@ -33,10 +33,12 @@ public class SuperEntity {
 	/**
 	 * @return the fields
 	 */
-	public LinkedList<String> getFields() {
-		if(fields == null)
-			fields = new LinkedList<String>();
-		return fields;
+	public String getField() {
+		return field;
+	}
+	
+	public void setField(String field){
+		this.field=field;
 	}
 	/**
 	 * @return the picture
@@ -102,7 +104,7 @@ public class SuperEntity {
 		
 		this.parentEntity = replacedEntity.getParentEntity();
 		this.mark = replacedEntity.getMark();
-		this.fields = replacedEntity.getFields();
+		this.field = replacedEntity.getField();
 		this.subEntity = replacedEntity.getSubEntity();
 		this.subEntityWeight = replacedEntity.getSubEntityWeight();
 		int index = replacedEntity.getParentEntity().getSubEntity().indexOf(replacedEntity);

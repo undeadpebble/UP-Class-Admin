@@ -31,9 +31,9 @@ public class CsvExport {
 				if(!lListME.get(x).get(y).getDetails().getType().getIsTextField()){
 					out +=lListME.get(x).get(y).getMark()+",";
 				}
+				else{
 				
-				for(int z = 0;z<lListME.get(x).get(y).getDetails().getFields().size();++z){
-					out+=lListME.get(x).get(y).getDetails().getFields().get(z)+",";
+					out+=lListME.get(x).get(y).getDetails().getField()+",";
 				}
 			}
 			out=out.substring(0, out.length()-1);

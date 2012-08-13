@@ -6,9 +6,9 @@ import java.util.LinkedList;
 
 public class EntityType {
 	private String name;
-	private LinkedList<String> fields;
+	private String field;
 	private Boolean[] visibleFields;
-	private LinkedList<String> fieldDefaults;
+	private String fieldDefault;
 	private LinkedList<Format> formatting;
 	private LinkedList<BorderCase> borderCasing;
 	private LinkedList<SuperEntity> entityList;
@@ -40,14 +40,14 @@ public class EntityType {
 	 * @param isVisible
 	 * @param defaultWeight
 	 */
-	public EntityType(String name, LinkedList<String> fields,Boolean[] visibleFields,
-			LinkedList<String> fieldDefaults, LinkedList<Format> formatting,
+	public EntityType(String name, String field,Boolean[] visibleFields,
+			String fieldDefault, LinkedList<Format> formatting,
 			LinkedList<BorderCase> borderCasing,
 			LinkedList<SuperEntity> entityList, Boolean isTextField, Date date,
 			Boolean isVisible, Double defaultWeight) {
 		this.name = name;
-		this.fields = fields;
-		this.fieldDefaults = fieldDefaults;
+		this.field = field;
+		this.fieldDefault = fieldDefault;
 		this.formatting = formatting;
 		this.borderCasing = borderCasing;
 		this.entityList = entityList;
@@ -66,10 +66,13 @@ public class EntityType {
 		this.name = name;
 	}
 
-	public LinkedList<String> getFields() {
-		if(fields == null)
-			fields = new LinkedList<String>();
-		return fields;
+	public String getField() {
+
+		return field;
+	}
+	
+	public void setField(String field){
+		this.field = field;
 	}
 
 
@@ -127,10 +130,12 @@ public class EntityType {
 		this.isVisible = isVisible;
 	}
 
-	public LinkedList<String> getFieldDefaults() {
-		if(fieldDefaults==null)
-			fieldDefaults = new LinkedList<String>();
-		return fieldDefaults;
+	public String getFieldDefault() {
+		return fieldDefault;
+	}
+	
+	public void setFieldDefault(String fieldDefault){
+		this.fieldDefault = fieldDefault;
 	}
 
 	public Double getDefaultWeight() {

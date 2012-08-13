@@ -52,7 +52,7 @@ public class FileHandler {
 		Global glob = Global.getGlobal();
 		EntityTypeFactory eTFactory = new EntityTypeFactory();
 		glob.getActiveProject().getEntityTypes().clear();
-		eTFactory.makeEntityTypeFileImport("File", true);
+		eTFactory.makeEntityTypeFileImport("Project", true);
 
 		SuperEntity mE = new HeadEntity(glob.getActiveProject()
 				.getEntityTypes().get(0), 0);
@@ -66,8 +66,7 @@ public class FileHandler {
 				if (dub > LARGEST_MARK_VALUE) {
 					eTFactory
 							.makeEntityTypeFileImport((String) headers.get(i),
-									true).getFields()
-							.add((String) headers.get(i));
+									true).setField((String) headers.get(i));
 
 				} else {
 					eTFactory.makeEntityTypeFileImport((String) headers.get(i),
@@ -77,7 +76,7 @@ public class FileHandler {
 			} catch (NumberFormatException e) {
 				eTFactory
 						.makeEntityTypeFileImport((String) headers.get(i), true)
-						.getFields().add((String) headers.get(i));
+						.setField((String) headers.get(i));
 
 			}
 

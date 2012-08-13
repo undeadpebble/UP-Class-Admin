@@ -16,6 +16,6 @@ public class LeafStringEntity extends StringEntity{
 	}
 	
 	public SuperEntity unLeaf(){
-		return new StringEntity(this, this.getFields().get(0));
+		return new StringEntity(this, this.getField());
 	}
 }
