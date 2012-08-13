@@ -46,6 +46,7 @@ public class Frame extends JFrame {
 	private JXPanel navBar;
 	private ReflectionButton btnImport;
 	private ReflectionButton btnExport;
+	private ReflectionButton btnChart;
 	private ReflectionButton btnStudents;
 	private FileHandler fileHandler;
 	private JFileChooser filechooser;
@@ -195,7 +196,7 @@ public class Frame extends JFrame {
 			btnStudents.setBounds(289, 11, 67, 73);
 			navBar.add(btnStudents);
 
-			JButton btnChart;
+			//JButton btnChart;
 			btnChart = new ReflectionButton(ImageIO.read(getClass()
 					.getResource("Chart.png")));
 			btnChart.setBounds(194, 11, 67, 73);
@@ -249,7 +250,15 @@ public class Frame extends JFrame {
 			}
 
 		});
+		
+		btnChart.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				System.out.println("asd");
+				ScatterPlotFrame x = new ScatterPlotFrame();
+			}
 
+		});
 		// frame resize listener to put nav bar at bottom of frame on resize
 		this.addComponentListener(new ComponentListener() {
 
