@@ -1,81 +1,11 @@
-STUDENTE NR,NAAM,JAARPUNT,EKSAMEN PUNT,FINALE PUNT,HER/SPES,TAAL,EKSAMENSENTRUM,AANBIEDMODUS,REGISTRASIE-PERIODE,TAALVOORKEUR,STUDIERIGTING,EMAIL,SELFOON
-2927733,ASSIS MEPD MS,0,0,0,0,E,100,V,S01,E,BSc(Hons): Toeg.Wet.: Beheer,s29277338@tuks.co.za,799285728
-2541977,BALENI PJ MS,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s25419774@tuks.co.za,764222684
-2719227,BASSETT SK MR,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s27192271@tuks.co.za,724639508
-2706977,BEANGSTROM SG MR,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s27069771@tuks.co.za,828113057
-2724289,BOTHA F MNR,0,0,0,0,A,100,V,S01,A,BIng: (Chemiese Ingenieurswese),s27242898@tuks.co.za,825756548
-2409408,BRANDERS JJ MR,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s24094082@tuks.co.za,837182227
-2703183,BURGER M MEJ,0,0,0,0,A,100,V,S01,A,BIng: (Chemiese Ingenieurswese),s27031838@tuks.co.za,732476822
-2336601,BUYS J MEJ,0,0,0,0,A,100,V,S01,A,BIng: (Chemiese Ingenieurswese),s23366011@tuks.co.za,835666316
-2529175,CALITZ EN MISS,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s25291752@tuks.co.za,836609301
-2700041,CRAWFORD TM MR,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s27000410@tuks.co.za,764483498
-2611274,DELPORT JS MNR,0,0,0,0,A,100,V,S01,A,BIng: (Chemiese Ingenieurswese),s26112745@tuks.co.za,825551372
-2611828,DLAMINI LT MR,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s26118280@tuks.co.za,767047209
-2525775,DU PLESSIS J MR,0,0,0,0,A,100,V,S01,A,BIng: (Chemiese Ingenieurswese),s25257758@tuks.co.za,722665557
-2608876,DU TOIT A ME,0,0,0,0,A,100,V,S01,A,BIng: (Chemiese Ingenieurswese),s26088763@tuks.co.za,837596954
-2701679,FOURIE M MEJ,0,0,0,0,A,100,V,S01,A,BIng: (Chemiese Ingenieurswese),s27016791@tuks.co.za,722988370
-2602330,GERSBACH LA MNR,0,0,0,0,A,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s26023301@tuks.co.za,724439392
-2600352,GOUWS N MEJ,0,0,0,0,A,100,V,S01,A,BIng: (Chemiese Ingenieurswese),s26003521@tuks.co.za,729901376
-2649010,GROBBELAAR TS MR,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s26490103@tuks.co.za,833434264
-2702835,GROBLER ABL MNR,0,0,0,0,A,100,V,S01,A,BIng: (Chemiese Ingenieurswese),s27028357@tuks.co.za,825618486
-2622468,HAGGARD EL MEJ,0,0,0,0,A,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s26224683@tuks.co.za,829224753
-2503535,HANSEN ML MNR,0,0,0,0,A,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s25035356@tuks.co.za,725350889
-2602220,JANSE VAN RENSBURG C MISS,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s26022207@tuks.co.za,728365236
-2720751,KHOSA TL MISS,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s27207511@tuks.co.za,733210919
-2602068,KOEGELENBERG GJ MNR,0,0,0,0,A,100,V,S01,A,BIng: (Chemiese Ingenieurswese),s26020689@tuks.co.za,836633142
-2609036,KRUGER HJ MR,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s26090369@tuks.co.za,726720818
-2602194,KRUGER SA MNR,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s26021944@tuks.co.za,722020269
-2648060,LEGODI WM MR,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s26480604@tuks.co.za,783595489
-2709191,LEIPOLDT WJ MNR,0,0,0,0,A,100,V,S01,A,BIng: (Chemiese Ingenieurswese),s27091912@tuks.co.za,846254034
-2625346,LEKHULENE MA MR,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s26253462@tuks.co.za,820624953
-2621162,LOMBARD JJD MNR,0,0,0,0,A,100,V,S01,A,BIng: (Chemiese Ingenieurswese),s26211620@tuks.co.za,825660211
-2723971,MAGORO LM MR,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s27239714@tuks.co.za,764129820
-2525271,MAGWENTSHU N MR,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s25252713@tuks.co.za,738233698
-2749737,MAHLATHI CD MR,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s27497373@tuks.co.za,727458512
-2735199,MAMBA PT MR,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s27351999@tuks.co.za,768481789
-2518225,MANYISI D MR,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s25182252@tuks.co.za,833735359
-2614054,MAPHUTHA MP MISS,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s26140544@tuks.co.za,768451731
-2625794,MARAIS L MEJ,0,0,0,0,E,100,V,S01,A,BIng: (Chemiese Ingenieurswese),s26257948@tuks.co.za,744111592
-2623674,MASEKO T MISS,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s26236746@tuks.co.za,766261891
-2708773,MATAMELA MO MISS,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s27087736@tuks.co.za,739254397
-2752489,MATSEBULA TT MR,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s27524893@tuks.co.za,788100183
-2601538,MERCKEL RD MR,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s26015383@tuks.co.za,834574215
-2504023,MESO NN MISS,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s25040236@tuks.co.za,826712515
-2603522,MHLONYANE S MR,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s26035228@tuks.co.za,793028139
-2338355,MKHIZE SS MR,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s23383552@tuks.co.za,725094939
-2524693,MOTHUPI LS MS,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s25246934@tuks.co.za,792277564
-2500771,MWALE RJ MR,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s25007719@tuks.co.za,766021470
-2510407,NEL M MEJ,0,0,0,0,A,100,V,S01,A,BIng: (Chemiese Ingenieurswese),s25104072@tuks.co.za,827071203
-2639020,NGOASHENG MM MR,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s26390206@tuks.co.za,848247719
-1030830,NKOGHE EYEGHE N MR,0,0,0,0,E,100,V,S01,E,BSc(Hons): Toeg.Wet.: Beheer,s10308301@tuks.co.za,798566709
-2542333,NOKO LG MR,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s25423330@tuks.co.za,738141255
-2546951,NTULI MA MR,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s25469518@tuks.co.za,742194551
-2613954,OHIKU ME MISS,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s26139546@tuks.co.za,838975373
-2622396,OOSTHUIZEN HL MNR,0,0,0,0,A,100,V,S01,A,BIng: (Chemiese Ingenieurswese),s26223962@tuks.co.za,822917729
-2710597,PIETERSE D MEJ,0,0,0,0,A,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s27105972@tuks.co.za,845064034
-2633200,PRINSLOO DPJ MNR,0,0,0,0,A,100,V,S01,A,BIng: (Chemiese Ingenieurswese),s26332002@tuks.co.za,796934976
-2505885,READER RB MNR,0,0,0,0,A,100,V,S01,A,BIng: (Chemiese Ingenieurswese),s25058852@tuks.co.za,741318726
-2503337,RILEY DG MNR,0,0,0,0,A,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s25033370@tuks.co.za,721505120
-2611960,ROBERTS PPP MNR,0,0,0,0,A,100,V,S01,A,BIng: (Chemiese Ingenieurswese),s26119600@tuks.co.za,842087070
-2629168,ROBUS CLL MNR,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s26291682@tuks.co.za,725005470
-2532113,SCHOEMAN JPA MNR,0,0,0,0,A,100,V,S01,A,BIng: (Chemiese Ingenieurswese),s25321138@tuks.co.za,722413990
-2503295,SCHULTZ RR MR,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s25032951@tuks.co.za,726591230
-2726417,SINDANE ZP MISS,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s27264174@tuks.co.za,828109588
-2622648,SIVANANNAN A MR,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s26226482@tuks.co.za,825360516
-2534341,STOLS CR MNR,0,0,0,0,A,100,V,S01,A,BIng: (Chemiese Ingenieurswese),s25343417@tuks.co.za,820422278
-2602322,STRYDOM AA MNR,0,0,0,0,A,100,V,S01,A,BIng: (Chemiese Ingenieurswese),s26023220@tuks.co.za,727508329
-2728875,TRANSELL MM MR,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s27288758@tuks.co.za,840823085
-2625880,TSOTETSI CT MISS,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s26258804@tuks.co.za,738945231
-2707273,VALENTIN GR MNR,0,0,0,0,A,100,V,S01,A,BIng: (Chemiese Ingenieurswese),s27072739@tuks.co.za,823324243
-2505973,VAN DEN BERG A MR,0,0,0,0,A,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s25059735@tuks.co.za,827762619
-2428218,VAN DER BERG J MNR,0,0,0,0,A,100,V,S01,A,BIng: (Chemiese Ingenieurswese),s24282180@tuks.co.za,822272647
-2725969,VAN DER WESTHUIZEN F MNR,0,0,0,0,A,100,V,S01,A,BIng: (Chemiese Ingenieurswese),s27259693@tuks.co.za,832562339
-2702403,VAN JAARSVELDT MJ MNR,0,0,0,0,A,100,V,S01,A,BIng: (Chemiese Ingenieurswese),s27024033@tuks.co.za,823125455
-2707127,VAN LAAR JH MNR,0,0,0,0,A,100,V,S01,A,BIng: (Chemiese Ingenieurswese),s27071279@tuks.co.za,741387417
-2605504,VAN RENSBURG LM MNR,0,0,0,0,A,100,V,S01,A,BIng: (Chemiese Ingenieurswese),s26055041@tuks.co.za,724179770
-2606450,VAN SCHALKWYK R MNR,0,0,0,0,A,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s26064503@tuks.co.za,825537834
-2718363,VARTY RN MR,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s27183638@tuks.co.za,844038911
-2707291,VELDMAN V MNR,0,0,0,0,A,100,V,S01,A,BIng: (Chemiese Ingenieurswese),s27072917@tuks.co.za,833849936
-2619778,VENTER HP MR,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s26197783@tuks.co.za,833577636
-2723565,VOSLOO SE MR,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s27235654@tuks.co.za,727120466
-2523163,YAPI L MR,0,0,0,0,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s25231635@tuks.co.za,728362372
+STUDENTE NR,NAAM,JAARPUNT,TAAL,EKSAMENSENTRUM,AANBIEDMODUS,REGISTRASIE-PERIODE,TAALVOORKEUR,STUDIERIGTING,EMAIL,SELFOON
+2927733,ASSIS MEPD MS,1,E,100,V,S01,E,BSc(Hons): Toeg.Wet.: Beheer,s29277338@tuks.co.za,799285728
+2541977,BALENI PJ MS,2,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s25419774@tuks.co.za,764222684
+2719227,BASSETT SK MR,3,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s27192271@tuks.co.za,724639508
+2706977,BEANGSTROM SG MR,4,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s27069771@tuks.co.za,828113057
+2724289,BOTHA F MNR,5,A,100,V,S01,A,BIng: (Chemiese Ingenieurswese),s27242898@tuks.co.za,825756548
+2409408,BRANDERS JJ MR,6,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s24094082@tuks.co.za,837182227
+2703183,BURGER M MEJ,7,A,100,V,S01,A,BIng: (Chemiese Ingenieurswese),s27031838@tuks.co.za,732476822
+2336601,BUYS J MEJ,8,A,100,V,S01,A,BIng: (Chemiese Ingenieurswese),s23366011@tuks.co.za,835666316
+2529175,CALITZ EN MISS,9,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s25291752@tuks.co.za,836609301
+2700041,CRAWFORD TM MR,10,E,100,V,S01,E,BIng: (Chemiese Ingenieurswese),s27000410@tuks.co.za,764483498

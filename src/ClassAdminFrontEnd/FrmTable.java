@@ -88,7 +88,7 @@ public class FrmTable extends JPanel {
 		Object[][] temp = new Object[data.size()][data.get(0).size()];
 		
 		project.getSelected().add(data.get(0).get(0));
-		project.getSelected().add(data.get(10).get(0));
+		project.getSelected().add(data.get(2).get(0));
 
 		for (int x = 0; x < data.size(); x++) {
 			for (int y = 0; y < data.get(0).size(); y++) {
@@ -100,7 +100,9 @@ public class FrmTable extends JPanel {
 			public Component prepareRenderer(TableCellRenderer renderer,int Index_row, int Index_col) {
 				Component comp = super.prepareRenderer(renderer, Index_row, Index_col);
 				//even index, selected or not selected
-				if (project.getSelected().contains(table.getValueAt(Index_row, Index_col))) {
+				
+				
+				if (project.getSelected().contains(data.get(table.getRowSorter().convertRowIndexToView(Index_col)).get(Index_col))) {
 					comp.setBackground(Color.green);
 				}else {
 					comp.setBackground(Color.white);
@@ -115,7 +117,6 @@ public class FrmTable extends JPanel {
 				return comp;
 			}
 		};
-
 		table.setAutoCreateRowSorter(true);
 
 		TableCellListener tcl = new TableCellListener(table, action);
@@ -162,14 +163,14 @@ public class FrmTable extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				table.repaint();
-				/*int count = tableModel.getRowCount() + 1;
+				int count = tableModel.getRowCount() + 1;
 				tableModel.addRow(new Object[] { txtField1.getText(),
-						txtField1.getText() });*/
-				System.out.println(data.get(1).get(0).getValue());
+						txtField1.getText() });
+				/*System.out.println(data.get(1).get(0).getValue());
 				System.out.println(table.getValueAt(1, 0));
 				System.out.println(table.getModel().getValueAt(1, 0));
 				
-				table.getModel().getValueAt(0, 0);
+				table.getModel().getValueAt(0, 0);*/
 			}
 		});
 		
