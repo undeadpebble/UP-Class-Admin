@@ -267,7 +267,9 @@ public class Frame extends JFrame {
 			public void componentResized(ComponentEvent arg0) {
 				navBar.setBounds(0, frame.getHeight() - navBar.getHeight()
 						- navBarSpace, frame.getWidth(), navBar.getHeight());
-
+				if (tabbedPane != null)
+					tabbedPane.setBounds(30, 30, frame.getWidth() - 80,
+							frame.getHeight() - 50 - navBar.getHeight() - 50);
 			}
 
 			@Override
@@ -386,7 +388,7 @@ public class Frame extends JFrame {
 		// create tabbedPane
 		if (tabbedPane == null) {
 			tabbedPane = new JTabbedPane();
-			tabbedPane.setBounds(54, 50, 948, 400);
+			tabbedPane.setBounds(30, 30, frame.getWidth() - 80,	frame.getHeight() - navBar.getHeight() - 120);
 			contentPane.add(tabbedPane);
 		}
 
@@ -398,7 +400,7 @@ public class Frame extends JFrame {
 
 	// create students table
 	private void studentsView() {
-		
+
 		MyTableModel model = new MyTableModel();
 		JXTable studentsTable = new JXTable(model) {
 			public Component prepareRenderer(TableCellRenderer renderer,
@@ -411,7 +413,7 @@ public class Frame extends JFrame {
 				} else {
 					comp.setBackground(Color.white);
 				}
-				
+
 				if (isCellSelected(Index_row, Index_col)) {
 					comp.setBackground(Color.red);
 				}
@@ -421,15 +423,12 @@ public class Frame extends JFrame {
 		studentsTable.setBounds(54, 50, 948, 400);
 		studentsTable.setGridColor(Color.black);
 		contentPane.add(studentsTable);
-		
-		 studentsTable.getSelectedRow();
 
-		
+		studentsTable.getSelectedRow();
 
-		
-
-	//	table.setRowHeight(80);
-	//	table.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer());
+		// table.setRowHeight(80);
+		// table.getColumnModel().getColumn(0).setCellRenderer(new
+		// ImageRenderer());
 		JScrollPane pane = new JScrollPane(table);
 
 		studentsTable.setModel(model);
