@@ -159,14 +159,14 @@ public class FrmTable extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				table.repaint();
-				/*int count = tableModel.getRowCount() + 1;
+				int count = tableModel.getRowCount() + 1;
 				tableModel.addRow(new Object[] { txtField1.getText(),
-						txtField1.getText() });*/
-				System.out.println(data.get(1).get(0).getValue());
+						txtField1.getText() });
+				/*System.out.println(data.get(1).get(0).getValue());
 				System.out.println(table.getValueAt(1, 0));
 				System.out.println(table.getModel().getValueAt(1, 0));
 				
-				table.getModel().getValueAt(0, 0);
+				table.getModel().getValueAt(0, 0);*/
 			}
 		});
 		

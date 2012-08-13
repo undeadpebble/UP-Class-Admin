@@ -7,6 +7,10 @@ public class LeafStringEntity extends StringEntity{
 		// TODO Auto-generated constructor stub
 	}
 
+	public LeafStringEntity(SuperEntity replacedEntity, String text) {
+		super(replacedEntity, text);
+	}
+
 	private Boolean isAbsent(){
 		return true;
 	}

@@ -41,12 +41,12 @@ public class FileHandler {
 		if (fileReader.fileExists(filename)) {
 			ArrayList recordArray = fileReader.recordData();
 			headers = fileReader.getHeaders(recordArray);
-			createEntitieTypes(headers, recordArray, fileReader);
+			createEntityTypes(headers, recordArray, fileReader);
 			createMarkEntities(headers, recordArray, fileReader);
 		}
 	}
 
-	private void createEntitieTypes(ArrayList headers, ArrayList recordArray,
+	private void createEntityTypes(ArrayList headers, ArrayList recordArray,
 			FileImport fileReader) {
 		// header entity
 		Global glob = Global.getGlobal();
@@ -118,7 +118,7 @@ public class FileHandler {
 				SuperEntity mE = new SuperEntity(fieldType, parent, 0);
 
 				if (fieldType.getIsTextField() == true) {
-					mE = new StringEntity(mE, record);
+					mE = new LeafStringEntity(mE, record);
 				} else {
 					try {
 						mE = new LeafMarkEntity(mE);
@@ -139,7 +139,7 @@ public class FileHandler {
 		if (fileReader.fileExists(filename)) {
 			ArrayList recordArray = fileReader.recordData();
 			headers = fileReader.getHeaders(recordArray);
-			createEntitieTypes(headers, recordArray, fileReader);
+			createEntityTypes(headers, recordArray, fileReader);
 			createMarkEntities(headers, recordArray, fileReader);
 		}
 	}

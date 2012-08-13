@@ -24,7 +24,11 @@ public class SuperEntity {
 	 * @param type the type to set
 	 */
 	public void setType(EntityType type) {
+		if(this.type != null){
+			this.type.getEntityList().remove(this);
+		}
 		this.type = type;
+		this.type.getEntityList().add(this);
 	}
 	/**
 	 * @return the fields
@@ -84,7 +88,7 @@ public class SuperEntity {
 	 */
 	
 	public SuperEntity(EntityType type, SuperEntity parentEntity, double mark) {
-		this.type = type;
+		this.setType(type);
 		this.parentEntity = parentEntity.unLeaf();
 		this.mark = mark;
 		this.parentEntity.getSubEntity().add(this);
@@ -93,7 +97,9 @@ public class SuperEntity {
 	}
 	
 	public SuperEntity(SuperEntity replacedEntity){
-		this.type = replacedEntity.getType();
+		this.setType(replacedEntity.getType());
+		replacedEntity.getType().getEntityList().remove(replacedEntity);
+		
 		this.parentEntity = replacedEntity.getParentEntity();
 		this.mark = replacedEntity.getMark();
 		this.fields = replacedEntity.getFields();
@@ -104,7 +110,7 @@ public class SuperEntity {
 		replacedEntity.getParentEntity().getSubEntityWeight().set(index, this.getType().getDefaultWeight());
 	}
 	public SuperEntity(EntityType type, double mark){
-		this.type = type;
+		this.setType(type);
 		this.mark = mark;
 
 	}
