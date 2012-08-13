@@ -354,4 +354,27 @@ public class SuperEntity {
 		
 		return str;
 	}
+	
+	public LinkedList<SuperEntity> getColumn(LinkedList<LinkedList<SuperEntity>> data,int kolumn){
+		return(data.get(kolumn));
+	}
+	
+	public String[] getNumberHeaders(){
+		LinkedList<SuperEntity> list = this.getHeadersLinkedList();
+		LinkedList<String> strlst = new LinkedList<String>();
+		
+		for(int x = 0; x < list.size(); x++){
+			if(!list.get(x).getType().getIsTextField()){
+				strlst.add(list.get(x).getValue());
+			}
+		}
+		
+		String[] str = new String[strlst.size()];
+		
+		for(int x = 0; x < strlst.size(); x++){
+			str[x] = strlst.get(x);
+		}
+		
+		return(str);
+	}
 }
