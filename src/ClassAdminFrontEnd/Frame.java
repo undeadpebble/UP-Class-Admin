@@ -411,6 +411,10 @@ public class Frame extends JFrame {
 				} else {
 					comp.setBackground(Color.white);
 				}
+				
+				if (isCellSelected(Index_row, Index_col)) {
+					comp.setBackground(Color.red);
+				}
 				return comp;
 			}
 		};
