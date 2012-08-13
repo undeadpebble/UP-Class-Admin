@@ -277,8 +277,8 @@ public class SuperEntity {
 	
 
 	
-	/*public LinkedList<MarkEntity> getHeadersLinkedList(){
-		LinkedList<MarkEntity> lEntity = new LinkedList<MarkEntity>();
+	public LinkedList<SuperEntity> getHeadersLinkedList(){
+		LinkedList<SuperEntity> lEntity = new LinkedList<SuperEntity>();
 		
 		lEntity.add(this);
 		
@@ -290,14 +290,14 @@ public class SuperEntity {
 	}
 	
 	
-	private void getLinkedListData(LinkedList<MarkEntity> lEntity){		
+	private void getLinkedListData(LinkedList<SuperEntity> lEntity){		
 		lEntity.add(this);
 		
 		for(int x = 0; x < this.subEntity.size();x++){
 			this.subEntity.get(x).getLinkedListData(lEntity);
 		}
 			
-	}*/
+	}
 	
 	public LinkedList<LinkedList<SuperEntity>> getDataLinkedList(){
 		LinkedList<LinkedList<SuperEntity>> linkLinkEntity = new LinkedList<LinkedList<SuperEntity>>();
