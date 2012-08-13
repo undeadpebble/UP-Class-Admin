@@ -27,6 +27,7 @@ import javax.swing.table.TableCellRenderer;
 
 import ClassAdminBackEnd.Global;
 
+import ClassAdminBackEnd.Project;
 import ClassAdminBackEnd.SuperEntity;
 import ClassAdminBackEnd.TableCellListener;
 
@@ -37,12 +38,14 @@ public class FrmTable extends JPanel {
 	private JTextField txtField1;
 	private JTextField txtField2;
 	LinkedList<LinkedList<SuperEntity>> data;
+	Project project;
 
 	private LinkedList<Integer> selected = new LinkedList<Integer>();
 
 
-	public FrmTable(String[] headers, LinkedList<LinkedList<SuperEntity>> data) {
+	public FrmTable(String[] headers, LinkedList<LinkedList<SuperEntity>> data, Project project) {
 		this.data = data;
+		this.project = project;
 		createGUI(headers);
 	}
 
@@ -84,8 +87,8 @@ public class FrmTable extends JPanel {
 		
 		Object[][] temp = new Object[data.size()][data.get(0).size()];
 		
-		Global.getGlobal().getActiveProject().getSelected().add(data.get(0).get(0));
-		Global.getGlobal().getActiveProject().getSelected().add(data.get(10).get(0));
+		project.getSelected().add(data.get(0).get(0));
+		project.getSelected().add(data.get(10).get(0));
 
 		for (int x = 0; x < data.size(); x++) {
 			for (int y = 0; y < data.get(0).size(); y++) {
@@ -97,7 +100,7 @@ public class FrmTable extends JPanel {
 			public Component prepareRenderer(TableCellRenderer renderer,int Index_row, int Index_col) {
 				Component comp = super.prepareRenderer(renderer, Index_row, Index_col);
 				//even index, selected or not selected
-				if (Global.getGlobal().getActiveProject().getSelected().contains(table.getValueAt(Index_row, Index_col))) {
+				if (project.getSelected().contains(table.getValueAt(Index_row, Index_col))) {
 					comp.setBackground(Color.green);
 				}else {
 					comp.setBackground(Color.white);
