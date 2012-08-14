@@ -90,7 +90,77 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 				
 			});
 			
+			JButton switchlinksx = new JButton(">");
+			switchlinksx.addMouseListener(new MouseListener() {
+				
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mousePressed(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseExited(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					xascb.setSelectedIndex(xascb.getSelectedIndex()-1);
+					
+				}
+			});
 			
+			JButton switchregsx = new JButton(">");
+			switchregsx.addMouseListener(new MouseListener() {
+				
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mousePressed(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseExited(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					xascb.setSelectedIndex(xascb.getSelectedIndex()+1);
+					
+				}
+			});
+			
+			
+			
+		
 			JLabel lblNewLabel_1 = new JLabel("Y-axis");
 			
 			final JComboBox yascb = new JComboBox();
@@ -106,6 +176,75 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 				        chartpanel.getChart().getXYPlot().clearAnnotations();
 				}
 				
+			});
+			
+			
+			JButton switchlinksy = new JButton(">");
+			switchlinksy.addMouseListener(new MouseListener() {
+				
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mousePressed(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseExited(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					yascb.setSelectedIndex(yascb.getSelectedIndex()-1);
+					
+				}
+			});
+			
+			JButton switchregsy = new JButton(">");
+			switchregsy.addMouseListener(new MouseListener() {
+				
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mousePressed(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseExited(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					yascb.setSelectedIndex(yascb.getSelectedIndex()+1);
+					
+				}
 			});
 			
 			
@@ -193,8 +332,13 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 		    content.add(chartpanel);
 		    content.add(lblNewLabel);
 		    content.add(xascb);
+		    content.add(switchlinksx);
+		    content.add(switchregsx);
 		    content.add(lblNewLabel_1);
 		    content.add(yascb);
+		    content.add(switchlinksy);
+		    content.add(switchregsy
+		    		);
 		    content.add(rotate);
 		    content.add(extractPic);
 		   
