@@ -73,15 +73,16 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 				        
 				        XYSeriesCollection dataset = new XYSeriesCollection();
 
-						XYSeries series = new XYSeries("Scatter");
+						XYSeries q= new XYSeries("Scatter");
 						for (int i = 0; i < 100; i++) {
 							final float x = i;
-							series.add(x, Math.random() * 100);
+							q.add(x, Math.random() * 100);
 
 						}
 
-						dataset.addSeries(series);
+						dataset.addSeries(q);
 						 chartpanel.getChart().getXYPlot().setDataset(dataset);
+						 nuweChart.setDatasetmain(dataset);
 						System.out.println(diedata.get(0).get(0).getMark());
 						System.out.println(diedata.get(0).get(2));
 				

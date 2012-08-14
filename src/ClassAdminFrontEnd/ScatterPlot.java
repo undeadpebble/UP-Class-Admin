@@ -50,6 +50,10 @@ public class ScatterPlot {
 	{
 		
 	}
+	public void setDatasetmain(XYDataset x)
+	{
+		datasetMain = x;
+	}
 	public JFreeChart createScatter(String title,final XYDataset chartdata,String xas,String yas)
 	{
 		chart = ChartFactory.createScatterPlot(
