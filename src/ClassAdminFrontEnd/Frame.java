@@ -164,11 +164,17 @@ public class Frame extends JFrame {
 		setContentPane(contentPane);
 
 		// create bottom navigation bar
+		/*
 		navBar = new JXPanel();
 		navBar.setBounds(0, contentPane.getHeight() - navBarHeight
 				- navBarSpace, getWidth(), navBarHeight);
-
 		setupPainters();
+		*/
+		
+		navBar = new FadePanel(true);
+		navBar.setBounds(0, contentPane.getHeight() - navBarHeight
+				- navBarSpace, getWidth(), navBarHeight);
+			
 		contentPane.setLayout(null);
 		contentPane.add(navBar);
 		navBar.setLayout(null);
@@ -287,6 +293,7 @@ public class Frame extends JFrame {
 				if (tabbedPane != null)
 					tabbedPane.setBounds(30, 30, frame.getWidth() - 80,
 							frame.getHeight() - 50 - navBar.getHeight() - 50);
+				((FadePanel) navBar).fadeIn();
 			}
 
 			@Override
@@ -307,13 +314,6 @@ public class Frame extends JFrame {
 		navBarSpace = 23;
 	}
 
-	// bottom nav bar background painter
-	private void setupPainters() {
-		GlossPainter gloss = new GlossPainter();
-
-		MattePainter matte = new MattePainter(new Color(0x242424));
-		navBar.setBackgroundPainter(new CompoundPainter(matte, gloss));
-	}
 
 	public void openFile() throws IOException, BadLocationException {
 

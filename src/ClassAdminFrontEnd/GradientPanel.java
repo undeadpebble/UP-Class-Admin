@@ -40,8 +40,6 @@ public class GradientPanel extends JPanel{
         g2.setPaint(p);
         g2.fillRect(0, 0, getWidth(), getHeight()); 
         g2.setPaint(oldPaint); 
-        
-        
        
     }
 }
