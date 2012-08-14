@@ -11,6 +11,10 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import javax.naming.PartialResultException;
 import javax.swing.AbstractAction;
@@ -300,7 +304,7 @@ public class TreeView extends Display {
 			e.printStackTrace();
 		}
 
-        LinkedList<SuperEntity> s =  Global.getGlobal().getActiveProject().getHead().getDataLinkedList().get(0);
+        LinkedList<SuperEntity> s =  Global.getGlobal().getActiveProject().getHead().getDataLinkedList().get(20);
         int size = s.size();
 
 		Table nodes = null;
@@ -316,16 +320,40 @@ public class TreeView extends Display {
         
         str+= "<attribute name = \"name\" value= \""+s.get(0).getValue() + "\" />";
 
-        for(int i = 1; i < size; i++)
+        for(int i = 2; i < size; i++)
         {
-        	str += "<attribute name = \"name\" value= \""+s.get(i).getValue() + "\" />";
+        	str += "<leaf><attribute name = \"name\" value= \""+s.get(i).getMark() + "\" /></leaf>";
         	
         }
         
-        str += "</tree>";
+        str += "</branch></tree>";
+        try{
+        	  // Create file 
+        	  FileWriter fstream = new FileWriter("out.xml");
+        	  BufferedWriter out = new BufferedWriter(fstream);
+        	  out.write(str);
+        	  //Close the output stream
+        	  out.close();
+        	  }catch (Exception e){//Catch exception if any
+        	  System.err.println("Error: " + e.getMessage());
+        	  }
         
+        Tree t = null;
+        try {
+            t = (Tree)new TreeMLReader().readGraph("out.xml");
+        } catch ( Exception e ) {
+            e.printStackTrace();
+            System.exit(1);
+        }
         
-        
+        	  File f1 = new File("out.xml");
+        	  boolean success = f1.delete();
+        	  if (!success){
+        	  System.out.println("Deletion failed.");
+        	  System.exit(0);
+        	  }else{
+        	  System.out.println("File deleted.");
+        	    }
         
         
         
@@ -345,7 +373,7 @@ public class TreeView extends Display {
 */
                 
         // create a new treemap
-        final TreeView tview = new TreeView(tree, label);
+        final TreeView tview = new TreeView(t, label);
         tview.setBackground(BACKGROUND);
         tview.setForeground(FOREGROUND);
         
