@@ -7,6 +7,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseAdapter;
 import java.util.LinkedList;
 
 import javax.swing.JButton;
@@ -27,6 +29,7 @@ import javax.swing.table.TableCellRenderer;
 
 import ClassAdminBackEnd.Global;
 
+import ClassAdminBackEnd.Project;
 import ClassAdminBackEnd.SuperEntity;
 import ClassAdminBackEnd.TableCellListener;
 
@@ -37,12 +40,14 @@ public class FrmTable extends JPanel {
 	private JTextField txtField1;
 	private JTextField txtField2;
 	LinkedList<LinkedList<SuperEntity>> data;
+	Project project;
 
 	private LinkedList<Integer> selected = new LinkedList<Integer>();
 
 
-	public FrmTable(String[] headers, LinkedList<LinkedList<SuperEntity>> data) {
+	public FrmTable(String[] headers, LinkedList<LinkedList<SuperEntity>> data, Project project) {
 		this.data = data;
+		this.project = project;
 		createGUI(headers);
 	}
 
@@ -84,8 +89,10 @@ public class FrmTable extends JPanel {
 		
 		Object[][] temp = new Object[data.size()][data.get(0).size()];
 		
-		Global.getGlobal().getActiveProject().getSelected().add(data.get(0).get(0));
-		Global.getGlobal().getActiveProject().getSelected().add(data.get(10).get(0));
+		
+		for(int x = 0; x < data.get(1).size();x++){
+			project.getSelected().add(data.get(1).get(x));
+		}
 
 		for (int x = 0; x < data.size(); x++) {
 			for (int y = 0; y < data.get(0).size(); y++) {
@@ -97,23 +104,45 @@ public class FrmTable extends JPanel {
 			public Component prepareRenderer(TableCellRenderer renderer,int Index_row, int Index_col) {
 				Component comp = super.prepareRenderer(renderer, Index_row, Index_col);
 				//even index, selected or not selected
-				if (Global.getGlobal().getActiveProject().getSelected().contains(table.getValueAt(Index_row, Index_col))) {
-					comp.setBackground(Color.green);
-				}else {
-					comp.setBackground(Color.white);
-				}
+				
+				if (project.getSelected().contains(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col))) {
+					int[] intTest = table.getSelectedRows();
+					boolean temp = false;
+					
+					for(int x = 0; x < intTest.length; x++){
+						if(intTest[x]==convertRowIndexToModel(Index_row)){
+							temp = true;
+						}
+					}
+					if(intTest.length > 0){
+						if(!temp){
+							project.getSelected().remove(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col));
+							comp.setBackground(Color.white);
+						}
+					}
+						else{
+							comp.setBackground(Color.green);
+							table.addRowSelectionInterval(Index_row, Index_row);
+						}
+					}
+					else {
+						comp.setBackground(Color.white);
+					}
 				
 				if(isCellSelected(Index_row, Index_col)){
-					comp.setBackground(Color.lightGray);
+					comp.setBackground(Color.green);
+					project.getSelected().add(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col));
 				}
+				
 				/*else {
 					comp.setBackground(Color.white);
 				}*/
 				return comp;
 			}
 		};
-
 		table.setAutoCreateRowSorter(true);
+		
+		
 
 		TableCellListener tcl = new TableCellListener(table, action);
 
@@ -138,6 +167,10 @@ public class FrmTable extends JPanel {
 
 		btnAdd = new JButton("Add");
 		eastPanel.add(btnAdd);
+		
+		JButton btnView = new JButton("View student");
+		eastPanel.add(btnView);
+		
 		JPanel northPanel = new JPanel();
 
 		txtField1 = new JTextField();
@@ -159,18 +192,25 @@ public class FrmTable extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				table.repaint();
-				/*int count = tableModel.getRowCount() + 1;
+				int count = tableModel.getRowCount() + 1;
 				tableModel.addRow(new Object[] { txtField1.getText(),
-						txtField1.getText() });*/
-				System.out.println(data.get(1).get(0).getValue());
-				System.out.println(table.getValueAt(1, 0));
-				System.out.println(table.getModel().getValueAt(1, 0));
+						txtField1.getText() });
+
 				
-				table.getModel().getValueAt(0, 0);
+				//table.getColumnModel().removeColumn(table.getColumnModel().getColumn(1));
 			}
 		});
 		
-		
+		btnView.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				table.repaint();
+				table.getSelectedRow();
+				
+				//table.getColumnModel().removeColumn(table.getColumnModel().getColumn(1));
+			}
+		});
+			
 	}
 
 	public class InteractiveTableModelListener implements TableModelListener {

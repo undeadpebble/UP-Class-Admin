@@ -45,6 +45,7 @@ public class Global {
 	public void setActiveProjectIndex(int activeProjectIndex) {
 		this.activeProjectIndex = activeProjectIndex;
 	}
+	
 	public Project getActiveProject(){
 		return projects.get(activeProjectIndex);
 		
