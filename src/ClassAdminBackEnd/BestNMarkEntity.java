@@ -20,9 +20,10 @@ public class BestNMarkEntity extends MarkEntity{
 		Boolean hasval = false;
 		for (int i = 0; i < this.getSubEntity().size(); ++i) {
 			try {
+				w =  this.getSubEntity().get(i).getWeight();
 				m = this.getSubEntity().get(i).calcMark()
-						* this.getSubEntityWeight().get(i);
-				w =  this.getSubEntityWeight().get(i);
+						* w;
+				
 				if(ofN < N){
 					mTotal += m;
 					wTotal += w;

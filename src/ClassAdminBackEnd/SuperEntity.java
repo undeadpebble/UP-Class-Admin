@@ -94,7 +94,7 @@ public class SuperEntity {
 		this.parentEntity = parentEntity.unLeaf();
 		this.mark = mark;
 		this.parentEntity.getSubEntity().add(this);
-		this.parentEntity.getSubEntityWeight().add(this.getType().getDefaultWeight());
+		this.weight = this.getType().getDefaultWeight();
 
 	}
 	
@@ -106,10 +106,9 @@ public class SuperEntity {
 		this.mark = replacedEntity.getMark();
 		this.field = replacedEntity.getField();
 		this.subEntity = replacedEntity.getSubEntity();
-		this.subEntityWeight = replacedEntity.getSubEntityWeight();
+		this.weight = replacedEntity.getWeight();
 		int index = replacedEntity.getParentEntity().getSubEntity().indexOf(replacedEntity);
 		replacedEntity.getParentEntity().getSubEntity().set(index, this);
-		replacedEntity.getParentEntity().getSubEntityWeight().set(index, this.getType().getDefaultWeight());
 	}
 	public SuperEntity(EntityType type, double mark){
 		this.setType(type);
@@ -117,24 +116,6 @@ public class SuperEntity {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		
-		
-		builder.append("MarkEntity [mark=");
-		builder.append(mark);
-		builder.append(", subEntityWeight=");
-		builder.append(subEntityWeight);
-		builder.append(", subEntity=");
-		builder.append(subEntity);
-		builder.append("]");
-		
-		return builder.toString();
-	}
 
 	/**
 	 * @return the rowFollowCount
@@ -178,10 +159,13 @@ public class SuperEntity {
 	/**
 	 * @return the subEntityWeight
 	 */
-	public LinkedList<Double> getSubEntityWeight() {
-		if(this.subEntityWeight == null)
-			this.subEntityWeight = new LinkedList<Double>();
-		return subEntityWeight;
+	public double getWeight() {
+		
+		return weight;
+	}
+	
+	public void setWeight(double weight){
+		this.weight = weight;
 	}
 
 	/**
@@ -219,19 +203,27 @@ public class SuperEntity {
 		return this;
 	}
 	
-	private Double doMarkMath(){
+	private Double doMarkMath() throws AbsentException{
 		double mTotal = 0;
 		double wTotal = 0;
+		Boolean hasval = false;
 		for (int i = 0; i < subEntity.size(); ++i) {
 			try {
 				mTotal += subEntity.get(i).calcMark()
-						* subEntityWeight.get(i);
-				wTotal += subEntityWeight.get(i);
+						* subEntity.get(i).getWeight();
+				wTotal += subEntity.get(i).getWeight();
+				
+				hasval = true;
 			} catch (Exception e) {
 			}
 
 		}
 
+		
+		if(!hasval){
+			throw new AbsentException();
+		}
+		
 		if (wTotal != 0)
 			return mTotal / wTotal;
 		else
