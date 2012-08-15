@@ -10,6 +10,14 @@ import org.tmatesoft.sqljet.core.table.ISqlJetTransaction;
 import org.tmatesoft.sqljet.core.table.SqlJetDb;
 
 public class PDatExport {
+	final String ENTITY_TYPE_TABLE = "EntityType";
+	final String ENTITY_TABLE = "Entity";
+	final String BEST_N_ENTITY_TABLE = "BestNEntity";
+	final String STRING_ENTITY_TABLE = "StringEntity";
+	final String IMG_ENTITY_TABLE = "ImageEntity";
+	final String FORMAT_TABLE = "ImageEntity";
+	final String BORDERCASE_TABLE = "ImageEntity";
+	
 	public void exportFile(Project project, String filename) throws SqlJetException{
 		File dbFile = new File(filename);
         dbFile.delete();
@@ -29,8 +37,32 @@ public class PDatExport {
         db.beginTransaction(SqlJetTransactionMode.WRITE);
         try {
         	//create tables
-        	String createTableQuery = "CREATE TABLE " + "etc";
-        	//TODO
+        	String createTableQuery = "CREATE TABLE " + ENTITY_TYPE_TABLE
+        			+"()";
+        	db.createTable(createTableQuery);
+        	
+        	createTableQuery = "CREATE TABLE " + ENTITY_TABLE
+        			+"()";
+        	db.createTable(createTableQuery);
+        	
+        	createTableQuery = "CREATE TABLE " + BEST_N_ENTITY_TABLE
+        			+"()";
+        	db.createTable(createTableQuery);
+        	
+        	createTableQuery = "CREATE TABLE " + STRING_ENTITY_TABLE
+        			+"()";
+        	db.createTable(createTableQuery);
+        	
+        	createTableQuery = "CREATE TABLE " + IMG_ENTITY_TABLE
+        			+"()";
+        	db.createTable(createTableQuery);
+        	
+        	createTableQuery = "CREATE TABLE " + FORMAT_TABLE
+        			+"()";
+        	db.createTable(createTableQuery);
+        	
+        	createTableQuery = "CREATE TABLE " + BORDERCASE_TABLE
+        			+"()";
         	db.createTable(createTableQuery);
         	
         } finally {
