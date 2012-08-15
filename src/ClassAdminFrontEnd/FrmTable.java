@@ -207,7 +207,6 @@ public class FrmTable extends JPanel {
 				table.repaint();
 				table.getSelectedRow();
 				
-				
 				//table.getColumnModel().removeColumn(table.getColumnModel().getColumn(1));
 			}
 		});
