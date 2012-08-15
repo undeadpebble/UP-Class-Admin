@@ -13,6 +13,8 @@ public class Project {
 	private SuperEntity head;
 	private LinkedList<SuperEntity> selected;
 	private LinkedList<EntityType> entityTypes;
+	private LinkedList<SuperEntity> treeViewSelected;
+	
 	
 	public SuperEntity getHead() {
 		return head;
@@ -31,6 +33,15 @@ public class Project {
 		return builder.toString();
 	}
 
+	public void setTreeViewSelected(LinkedList<SuperEntity> superEntity)
+	{
+		treeViewSelected = superEntity;
+	}
+	public LinkedList<SuperEntity> getTreeViewSelected()
+	{
+		return treeViewSelected;
+	}
+	
 	public void setHead(SuperEntity head) {
 		this.head = head;
 
