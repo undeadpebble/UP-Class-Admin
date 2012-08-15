@@ -9,6 +9,7 @@ public class BestNMarkEntity extends MarkEntity{
 		// TODO Auto-generated constructor stub
 	}
 	
+	@SuppressWarnings("unused")
 	private Double doMarkMath() throws AbsentException{
 		double mTotal = 0;
 		double wTotal = 0;
