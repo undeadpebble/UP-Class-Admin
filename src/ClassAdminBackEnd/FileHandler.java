@@ -66,7 +66,7 @@ public class FileHandler {
 				if (dub > LARGEST_MARK_VALUE) {
 					eTFactory
 							.makeEntityTypeFileImport((String) headers.get(i),
-									true).setField((String) headers.get(i));
+									true).setName((String) headers.get(i));
 
 				} else {
 					eTFactory.makeEntityTypeFileImport((String) headers.get(i),
@@ -76,7 +76,7 @@ public class FileHandler {
 			} catch (NumberFormatException e) {
 				eTFactory
 						.makeEntityTypeFileImport((String) headers.get(i), true)
-						.setField((String) headers.get(i));
+						.setName((String) headers.get(i));
 
 			}
 

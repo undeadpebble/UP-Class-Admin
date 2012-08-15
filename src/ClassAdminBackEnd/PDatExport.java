@@ -15,8 +15,10 @@ public class PDatExport {
 	final String BEST_N_ENTITY_TABLE = "BestNEntity";
 	final String STRING_ENTITY_TABLE = "StringEntity";
 	final String IMG_ENTITY_TABLE = "ImageEntity";
-	final String FORMAT_TABLE = "ImageEntity";
-	final String BORDERCASE_TABLE = "ImageEntity";
+	final String BETWEEN_FORMAT_TABLE = "BetweenFormat";
+	final String LESS_THAN_FORMAT_TABLE = "LessThanFormat";
+	final String GREATER_THAN_FORMAT_TABLE = "GreaterThanFormat";
+	final String BORDERCASE_TABLE = "BorderCase";
 	
 	public void exportFile(Project project, String filename) throws SqlJetException{
 		File dbFile = new File(filename);
@@ -37,35 +39,61 @@ public class PDatExport {
         db.beginTransaction(SqlJetTransactionMode.WRITE);
         try {
         	//create tables
-        	String createTableQuery = "CREATE TABLE " + ENTITY_TYPE_TABLE
-        			+"()";
+        	String createTableQuery = "CREATE TABLE " + ENTITY_TYPE_TABLE +
+        			"(typeID int NOT NULL PRIMARY KEY," +
+        			"name varchar(255) ," +
+        			"isText Boolean," +
+        			"date Date," +
+        			"defaultWeight float," +
+        			")";
         	db.createTable(createTableQuery);
         	
-        	createTableQuery = "CREATE TABLE " + ENTITY_TABLE
-        			+"()";
+        	createTableQuery = "CREATE TABLE " + ENTITY_TABLE + "(" +
+        			"entityID int NOT NULL PRIMARY KEY," +
+        			"parentID int ," +
+        			")";
         	db.createTable(createTableQuery);
         	
-        	createTableQuery = "CREATE TABLE " + BEST_N_ENTITY_TABLE
-        			+"()";
+        	createTableQuery = "CREATE TABLE " + BEST_N_ENTITY_TABLE + "(" +
+        			"N int,"+
+        			")";
         	db.createTable(createTableQuery);
         	
-        	createTableQuery = "CREATE TABLE " + STRING_ENTITY_TABLE
-        			+"()";
+        	createTableQuery = "CREATE TABLE " + STRING_ENTITY_TABLE + "(" +
+        			"field varchar(1000),"+
+        			")";
         	db.createTable(createTableQuery);
         	
-        	createTableQuery = "CREATE TABLE " + IMG_ENTITY_TABLE
-        			+"()";
+        	createTableQuery = "CREATE TABLE " + IMG_ENTITY_TABLE + "(" +
+        			"address varchar(1000),"+
+        			")";
         	db.createTable(createTableQuery);
         	
-        	createTableQuery = "CREATE TABLE " + FORMAT_TABLE
-        			+"()";
+        	createTableQuery = "CREATE TABLE " + GREATER_THAN_FORMAT_TABLE + "(" +
+        			"typeID int ," +
+        			
+        			")";
+        	db.createTable(createTableQuery);
+        	createTableQuery = "CREATE TABLE " + LESS_THAN_FORMAT_TABLE + "(" +
+        			"typeID int ," +
+        			
+        			")";
+        	db.createTable(createTableQuery);
+        	createTableQuery = "CREATE TABLE " + BETWEEN_FORMAT_TABLE + "(" +
+        			"typeID int ," +
+        			
+        			")";
         	db.createTable(createTableQuery);
         	
-        	createTableQuery = "CREATE TABLE " + BORDERCASE_TABLE
-        			+"()";
+        	createTableQuery = "CREATE TABLE " + BORDERCASE_TABLE + "(" +
+        			"typeID int ," +
+        			")";
         	db.createTable(createTableQuery);
         	
-        } finally {
+        }catch (Exception e) {
+				e.printStackTrace();
+			}
+        finally {
             db.commit();
         }
         
