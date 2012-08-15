@@ -20,6 +20,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
+import ClassAdminBackEnd.EntityType;
 import ClassAdminBackEnd.Global;
 import ClassAdminBackEnd.SuperEntity;
 
@@ -32,18 +33,20 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 		 JFrame f = new JFrame("ScatterPlot");
 		   final Container content = f.getContentPane();
 		    f.setSize(550, 500);
-		    
-		    XYSeriesCollection dataset = new XYSeriesCollection();
+		    final LinkedList<LinkedList<SuperEntity>> diedata = Global.getGlobal().getActiveProject().getHead().getDataLinkedList();
+		    final XYSeriesCollection dataset = new XYSeriesCollection();
 
 			XYSeries series = new XYSeries("Scatter");
-			for (int i = 0; i < 100; i++) {
-				final float x = i;
-				series.add(x, Math.random() * 100);
 
+			for(int q= 0 ;q < diedata.get(0).size()-1;q++)
+			{
+				series.add(diedata.get(2).get(q).getMark(), diedata.get(7).get(q).getMark());
+				System.out.println(diedata.get(2).get(q).getMark() + " " + diedata.get(7).get(q).getMark());
 			}
+			
 
 			dataset.addSeries(series);
-			String[] kolom=Global.getGlobal().getActiveProject().getHead().getHeaders();
+			String[] kolom=Global.getGlobal().getActiveProject().getHead().getNumberHeaders();
 			
 			String xas =kolom[0];
 			String yas =kolom[1];
@@ -56,10 +59,10 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 			final JComboBox xascb = new JComboBox();
 		
 		
-		LinkedList<SuperEntity> headers =Global.getGlobal().getActiveProject().getHead().getHeadersLinkedList();
+		LinkedList<EntityType> headers =Global.getGlobal().getActiveProject().getHead().getHeadersLinkedList();
 	
 		
-		final LinkedList<LinkedList<SuperEntity>> diedata = Global.getGlobal().getActiveProject().getHead().getDataLinkedList();
+		 
 		
 			xascb.setModel(new DefaultComboBoxModel(kolom));
 			xascb.addActionListener( new ActionListener(){
@@ -69,23 +72,22 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 					 JComboBox cb = (JComboBox)e.getSource();
 				        String axis = (String)cb.getSelectedItem();
 				        chartpanel.getChart().getXYPlot().getDomainAxis().setLabel(axis);
-				 		
+				 
 				        chartpanel.getChart().getXYPlot().clearAnnotations();
+				      /*  dataset = new XYSeriesCollection();
+				        XYSeries series = new XYSeries("Scatter");
 				        
-				        XYSeriesCollection dataset = new XYSeriesCollection();
-
-						XYSeries q= new XYSeries("Scatter");
-						for (int i = 0; i < 100; i++) {
-							final float x = i;
-							q.add(x, Math.random() * 100);
-
+						for(int q= 0 ;q < diedata.get(0).size()-1;q++)
+						{
+							series.add(diedata.get(2).get(q).getMark(), diedata.get(7).get(q).getMark());
+							
 						}
+						
 
-						dataset.addSeries(q);
+						dataset.addSeries(series);*/
 						 chartpanel.getChart().getXYPlot().setDataset(dataset);
 						 nuweChart.setDatasetmain(dataset);
-						System.out.println(diedata.get(0).get(0).getMark());
-						System.out.println(diedata.get(0).get(2));
+						
 				
 				}
 				
@@ -120,7 +122,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 				
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					if(xascb.getSelectedIndex()>1)
+					if(xascb.getSelectedIndex()>=1)
 					xascb.setSelectedIndex(xascb.getSelectedIndex()-1);
 					
 				}
@@ -212,7 +214,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 				
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					if(yascb.getSelectedIndex() >1)
+					if(yascb.getSelectedIndex() >=1)
 					yascb.setSelectedIndex(yascb.getSelectedIndex()-1);
 					
 				}

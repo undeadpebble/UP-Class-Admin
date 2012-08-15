@@ -254,7 +254,7 @@ public class Frame extends JFrame {
 		btnChart.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				System.out.println("asd");
+			
 				ScatterPlotFrame x = new ScatterPlotFrame();
 			}
 
