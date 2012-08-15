@@ -94,6 +94,8 @@ public class TreeView extends Display {
     
     private String m_label = "label";
     private int m_orientation = Constants.ORIENT_LEFT_RIGHT;
+    private static LinkedList<SuperEntity> m_superEntity;
+    
     
     public TreeView(Tree t, String label) {
         super(new Visualization());
@@ -223,7 +225,10 @@ public class TreeView extends Display {
     }
     
     // ------------------------------------------------------------------------
-    
+    public void setSuperEntity(LinkedList<SuperEntity> superEntity)
+    {
+    	m_superEntity = superEntity;
+    }
     public void setOrientation(int orientation) {
         NodeLinkTreeLayout rtl 
             = (NodeLinkTreeLayout)m_vis.getAction("treeLayout");
@@ -304,7 +309,10 @@ public class TreeView extends Display {
 			e.printStackTrace();
 		}
 
-        LinkedList<SuperEntity> s =  Global.getGlobal().getActiveProject().getHead().getDataLinkedList().get(20);
+        LinkedList<SuperEntity> s =  m_superEntity;
+        
+        
+        //Global.getGlobal().getActiveProject().getHead().getDataLinkedList().get(20);
         int size = s.size();
 
 		Table nodes = null;
