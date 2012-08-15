@@ -29,6 +29,8 @@ import ClassAdminBackEnd.SuperEntity;
 public class ScatterPlotFrame extends JFrame implements ActionListener {
 	static ChartPanel chartpanel ;
 	static JFreeChart chart;
+    int houerx =0;
+    int houery =0;
 	 public ScatterPlotFrame() {
 		 JFrame f = new JFrame("ScatterPlot");
 		   final Container content = f.getContentPane();
@@ -36,12 +38,22 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 		    final LinkedList<LinkedList<SuperEntity>> diedata = Global.getGlobal().getActiveProject().getHead().getDataLinkedList();
 		    final XYSeriesCollection dataset = new XYSeriesCollection();
 
+		    
+		    for(int k=0; k < diedata.size();k++)
+		    {
+		    	for(int l =0 ;l<diedata.get(0).size();l++)
+		    	{
+		    		System.out.print(diedata.get(k).get(l).getValue()+"\t");
+		    	}
+		    	System.out.println("");
+		    }
+		    
 			XYSeries series = new XYSeries("Scatter");
 
-			for(int q= 0 ;q < diedata.get(0).size()-1;q++)
+			for(int q= 0 ;q < diedata.size()-1;q++)
 			{
-				series.add(diedata.get(2).get(q).getMark(), diedata.get(7).get(q).getMark());
-				System.out.println(diedata.get(2).get(q).getMark() + " " + diedata.get(7).get(q).getMark());
+				series.add(diedata.get(q).get(3).getMark(), diedata.get(q).get(7).getMark());
+				System.out.println(diedata.get(q).get(3).getMark() + " " + diedata.get(q).get(7).getMark());
 			}
 			
 
@@ -59,7 +71,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 			final JComboBox xascb = new JComboBox();
 		
 		
-		LinkedList<EntityType> headers =Global.getGlobal().getActiveProject().getHead().getHeadersLinkedList();
+		final String[] headers =Global.getGlobal().getActiveProject().getHead().getHeaders();
 	
 		
 		 
@@ -72,21 +84,30 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 					 JComboBox cb = (JComboBox)e.getSource();
 				        String axis = (String)cb.getSelectedItem();
 				        chartpanel.getChart().getXYPlot().getDomainAxis().setLabel(axis);
-				 
+				        
 				        chartpanel.getChart().getXYPlot().clearAnnotations();
-				      /*  dataset = new XYSeriesCollection();
+				
+				        for(int s=0;s<headers.length;s++)
+				        {
+				        	if(headers[s].equals( cb.getSelectedItem().toString()))
+				        	{
+				        		houerx = s;
+				        	}
+				       
+				        }
+				        XYSeriesCollection nuwedataset = new XYSeriesCollection();
 				        XYSeries series = new XYSeries("Scatter");
 				        
-						for(int q= 0 ;q < diedata.get(0).size()-1;q++)
+						for(int q= 0 ;q < diedata.size()-1;q++)
 						{
-							series.add(diedata.get(2).get(q).getMark(), diedata.get(7).get(q).getMark());
-							
+							series.add(diedata.get(q).get(houerx).getMark(), diedata.get(q).get(houerx).getMark());
+							//System.out.println(diedata.get(houerx).get(q).getMark() +" "+ diedata.get(houery).get(q).getMark());
 						}
 						
 
-						dataset.addSeries(series);*/
-						 chartpanel.getChart().getXYPlot().setDataset(dataset);
-						 nuweChart.setDatasetmain(dataset);
+						nuwedataset.addSeries(series);
+						 chartpanel.getChart().getXYPlot().setDataset(nuwedataset);
+						 nuweChart.setDatasetmain(nuwedataset);
 						
 				
 				}
@@ -180,6 +201,28 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 				        chartpanel.getChart().getXYPlot().getRangeAxis().setLabel(axis);
 			 			
 				        chartpanel.getChart().getXYPlot().clearAnnotations();
+				        
+				        for(int s=0;s<headers.length;s++)
+				        {
+				        	if(headers[s].equals( cb.getSelectedItem().toString()))
+				        	{
+				        		houery = s;
+				        	}
+				       
+				        }
+				        XYSeriesCollection nuwedataset = new XYSeriesCollection();
+				        XYSeries series = new XYSeries("Scatter");
+				        
+						for(int q= 0 ;q < diedata.size()-1;q++)
+						{
+							series.add(diedata.get(q).get(houerx).getMark(), diedata.get(q).get(houery).getMark());
+							//System.out.println(diedata.get(houerx).get(q).getMark() +" "+ diedata.get(houery).get(q).getMark());
+							
+						}
+						
+						nuwedataset.addSeries(series);
+						 chartpanel.getChart().getXYPlot().setDataset(nuwedataset);
+						 nuweChart.setDatasetmain(nuwedataset);
 				}
 				
 			});
