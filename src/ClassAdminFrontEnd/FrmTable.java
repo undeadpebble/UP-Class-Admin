@@ -210,7 +210,13 @@ public class FrmTable extends JPanel {
 				
 				project.setTreeViewSelected(data.get(table.getSelectedRow()));
 				
-				TreeView.createPanelTreeView("label");
+				JComponent temp = TreeView.createPanelTreeView("label");
+				
+				JFrame frm = new JFrame();
+				frm.setVisible(true);
+				frm.setSize(400,600);
+				frm.add(temp);
+				
 				//table.getColumnModel().removeColumn(table.getColumnModel().getColumn(1));
 			}
 		});
