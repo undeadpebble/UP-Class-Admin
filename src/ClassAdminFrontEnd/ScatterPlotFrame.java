@@ -43,10 +43,10 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 			}
 
 			dataset.addSeries(series);
+			String[] kolom=Global.getGlobal().getActiveProject().getHead().getHeaders();
 			
-			
-			String xas ="";
-			String yas ="";
+			String xas =kolom[0];
+			String yas =kolom[1];
 			final ScatterPlot nuweChart = new ScatterPlot();
 			chart = nuweChart.createScatter("asd", dataset, xas,yas);
 			chartpanel = nuweChart.createPanel();
@@ -54,7 +54,8 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 			JLabel lblNewLabel = new JLabel("X-axis");
 			
 			final JComboBox xascb = new JComboBox();
-		String[] kolom=Global.getGlobal().getActiveProject().getHead().getHeaders();
+		
+		
 		LinkedList<SuperEntity> headers =Global.getGlobal().getActiveProject().getHead().getHeadersLinkedList();
 	
 		
@@ -90,7 +91,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 				
 			});
 			
-			JButton switchlinksx = new JButton(">");
+			JButton switchlinksx = new JButton("<");
 			switchlinksx.addMouseListener(new MouseListener() {
 				
 				@Override
@@ -119,6 +120,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 				
 				@Override
 				public void mouseClicked(MouseEvent e) {
+					if(xascb.getSelectedIndex()>1)
 					xascb.setSelectedIndex(xascb.getSelectedIndex()-1);
 					
 				}
@@ -153,6 +155,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 				
 				@Override
 				public void mouseClicked(MouseEvent e) {
+					if(xascb.getSelectedIndex() < xascb.getItemCount())
 					xascb.setSelectedIndex(xascb.getSelectedIndex()+1);
 					
 				}
@@ -165,6 +168,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 			
 			final JComboBox yascb = new JComboBox();
 			yascb.setModel(new DefaultComboBoxModel(kolom));
+			yascb.setSelectedIndex(1);
 			yascb.addActionListener( new ActionListener(){
 
 				@Override
@@ -179,7 +183,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 			});
 			
 			
-			JButton switchlinksy = new JButton(">");
+			JButton switchlinksy = new JButton("<");
 			switchlinksy.addMouseListener(new MouseListener() {
 				
 				@Override
@@ -208,6 +212,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 				
 				@Override
 				public void mouseClicked(MouseEvent e) {
+					if(yascb.getSelectedIndex() >1)
 					yascb.setSelectedIndex(yascb.getSelectedIndex()-1);
 					
 				}
@@ -242,6 +247,8 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 				
 				@Override
 				public void mouseClicked(MouseEvent e) {
+					
+					if(yascb.getSelectedIndex() < yascb.getItemCount())
 					yascb.setSelectedIndex(yascb.getSelectedIndex()+1);
 					
 				}
@@ -337,8 +344,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 		    content.add(lblNewLabel_1);
 		    content.add(yascb);
 		    content.add(switchlinksy);
-		    content.add(switchregsy
-		    		);
+		    content.add(switchregsy);
 		    content.add(rotate);
 		    content.add(extractPic);
 		   
