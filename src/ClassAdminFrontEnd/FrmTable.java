@@ -167,6 +167,10 @@ public class FrmTable extends JPanel {
 
 		btnAdd = new JButton("Add");
 		eastPanel.add(btnAdd);
+		
+		JButton btnView = new JButton("View student");
+		eastPanel.add(btnView);
+		
 		JPanel northPanel = new JPanel();
 
 		txtField1 = new JTextField();
@@ -187,39 +191,27 @@ public class FrmTable extends JPanel {
 		btnAdd.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				/*table.repaint();
+				table.repaint();
 				int count = tableModel.getRowCount() + 1;
 				tableModel.addRow(new Object[] { txtField1.getText(),
 						txtField1.getText() });
-				/*System.out.println(data.get(1).get(0).getValue());
-				System.out.println(table.getValueAt(1, 0));
-				System.out.println(table.getModel().getValueAt(1, 0));
+
 				
-				table.getModel().getValueAt(0, 0);*/
-				
-				table.getColumnModel().removeColumn(table.getColumnModel().getColumn(1));
+				//table.getColumnModel().removeColumn(table.getColumnModel().getColumn(1));
 			}
 		});
 		
-		/*table.addMouseListener( new MouseAdapter()
-		{
-		    public void mouseReleased(MouseEvent e)
-		    {
-		        if (e.isPopupTrigger())
-		        {
-		            JTable source = (JTable)e.getSource();
-		            int row = source.rowAtPoint( e.getPoint() );
-		            int column = source.columnAtPoint( e.getPoint() );
-
-		            if (! source.isRowSelected(row))
-		                source.changeSelection(row, column, false, false);
-
-		            popup.show(e.getComponent(), e.getX(), e.getY());
-		        }
-		    }
-		});*/
-
-		
+		btnView.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				table.repaint();
+				table.getSelectedRow();
+				
+				
+				//table.getColumnModel().removeColumn(table.getColumnModel().getColumn(1));
+			}
+		});
+			
 	}
 
 	public class InteractiveTableModelListener implements TableModelListener {
