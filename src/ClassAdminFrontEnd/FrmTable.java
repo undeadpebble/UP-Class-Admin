@@ -12,6 +12,7 @@ import java.awt.event.MouseAdapter;
 import java.util.LinkedList;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -207,7 +208,10 @@ public class FrmTable extends JPanel {
 				table.repaint();
 				table.getSelectedRow();
 				
+				project.setTreeViewSelected(data.get(table.getSelectedRow()));
 				//table.getColumnModel().removeColumn(table.getColumnModel().getColumn(1));
+				
+				TreeView.createStudentFrm("name");
 			}
 		});
 			

@@ -4,11 +4,13 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.xml.crypto.dsig.spec.XSLTTransformParameterSpec;
 
 import ClassAdminFrontEnd.Frame;
 import ClassAdminFrontEnd.FrmTable;
+import ClassAdminFrontEnd.TreeView;
 
 import jxl.*;
 public class testMain
@@ -65,6 +67,8 @@ public class testMain
 		
 		fr.add(tble);
 		fr.repaint();
+		
+
 		
 		
 
