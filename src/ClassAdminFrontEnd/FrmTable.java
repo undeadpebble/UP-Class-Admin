@@ -26,6 +26,8 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
+import prefuse.data.Tree;
+
 
 import ClassAdminBackEnd.Global;
 
@@ -205,8 +207,10 @@ public class FrmTable extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				table.repaint();
-				table.getSelectedRow();
 				
+				project.setTreeViewSelected(data.get(table.getSelectedRow()));
+				
+				TreeView.createPanelTreeView("label");
 				//table.getColumnModel().removeColumn(table.getColumnModel().getColumn(1));
 			}
 		});

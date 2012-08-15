@@ -264,9 +264,6 @@ public class SuperEntity {
 		return str;
 	}
 	
-	
-
-	
 	public LinkedList<EntityType> getHeadersLinkedList(){
 		LinkedList<EntityType> lEntity = new LinkedList<EntityType>();
 		
