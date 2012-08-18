@@ -31,7 +31,7 @@ public class FadePanel extends JXPanel {
 		if (backPaint) {
 			GlossPainter gloss = new GlossPainter();
 			//  gloss.setPaint(new Color(1.0f, 1.0f, 1.0f, 0.5f));
-			MattePainter matte = new MattePainter(new Color(0x545454));
+			MattePainter matte = new MattePainter(new Color(0x171717));
 			setBackgroundPainter(new CompoundPainter(matte, gloss));
 		}
 	}

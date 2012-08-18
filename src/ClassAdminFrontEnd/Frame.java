@@ -49,6 +49,7 @@ public class Frame extends JFrame {
 	private ImagePanel containerStudentsTextSub;
 	private ImagePanel containerWorkspaceText;
 	private ImagePanel containerWorkspaceTextSub;
+	private ImagePanel boxChartImage;
 	private JFileChooser filechooser;
 	private JFrame frame = this;
 	private File currentFilePath;
@@ -217,6 +218,10 @@ public class Frame extends JFrame {
 					tabBar.setBounds(0, 0, frame.getWidth(), frame.getHeight());
 					tabBar.setLayout(null);
 				}
+				if (boxChartImage != null){
+					boxChartImage.setBounds(tabBar.getWidth()-70, 15, 50, 40);
+				}
+				
 
 			}
 
@@ -382,7 +387,7 @@ public class Frame extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		
 	}
 
 	public void openFile() throws IOException, BadLocationException {
@@ -454,6 +459,7 @@ public class Frame extends JFrame {
 			tabBar = new FadePanel(false);
 			tabBar.setBounds(0, 0, frame.getWidth(), frame.getHeight());
 			tabBar.setLayout(null);
+			createGraphIcons();
 		}
 		tabBar.add(tabbedPane);
 
@@ -476,5 +482,17 @@ public class Frame extends JFrame {
 		homePanel.fadeIn();
 		workspacePanel.fadeOut();
 		navBar.fadeOut();
+	}
+	
+	public void createGraphIcons() {
+		try {
+			boxChartImage = new ImagePanel(ImageIO.read(getClass().getResource("Histogram.png")), true);
+			boxChartImage.setBounds(tabBar.getWidth()-70, 15, 50, 40);
+			tabBar.add(boxChartImage);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 }
