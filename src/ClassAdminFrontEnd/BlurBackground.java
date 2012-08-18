@@ -47,7 +47,7 @@ public class BlurBackground extends JXPanel{
 
         blurBuffer = GraphicsUtilities.createThumbnailFast(
             blurBuffer, getWidth() / 2);
-        blurBuffer = new GaussianBlurFilter(2).filter(blurBuffer, null);
+        blurBuffer = new GaussianBlurFilter(3).filter(blurBuffer, null);
     }
     
     @Override

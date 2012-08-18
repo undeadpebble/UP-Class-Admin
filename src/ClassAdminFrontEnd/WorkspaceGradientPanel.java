@@ -41,8 +41,8 @@ public class WorkspaceGradientPanel extends JXPanel {
 				RenderingHints.VALUE_ANTIALIAS_ON);
 		
 		float[] x = { 0f, .03f, .3f, 1f };
-		Color[] c = { new Color(0xF7F7F7), new Color(0xD9D9D9),
-				new Color(0xD9D9D9), new Color(0xFFFFFF) };
+		Color[] c = { new Color(0xADADAD), new Color(0x080808),
+				new Color(0x080808), new Color(0x525252) };
 		LinearGradientPaint p = new LinearGradientPaint(new Point(0, 0),
 				new Point(0, getHeight()), x, c);
 
@@ -72,13 +72,12 @@ public class WorkspaceGradientPanel extends JXPanel {
 	
 	public void fadeIn() {
 
-	    
 	    SwingUtilities.invokeLater(new Runnable() {
 	        public void run() {
 	            Animator animator = PropertySetter.createAnimator(
 	                400, WorkspaceGradientPanel.this, "alpha", 1.0f);
 	            animator.setAcceleration(0.2f);
-	            animator.setDeceleration(0.3f);
+	            animator.setDeceleration(0.5f);
 	            animator.addTarget(
 	                new PropertySetter(WorkspaceGradientPanel.this, "alpha", 1.0f));
 	            animator.start();

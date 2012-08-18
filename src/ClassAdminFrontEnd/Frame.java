@@ -1,14 +1,13 @@
 package ClassAdminFrontEnd;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.Point;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.awt.image.BufferedImage;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 
@@ -24,14 +23,9 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.BadLocationException;
 
-import org.jdesktop.swingx.JXPanel;
-
 import ClassAdminBackEnd.FileHandler;
 import ClassAdminBackEnd.Global;
 import ClassAdminBackEnd.UnsupportedFileTypeException;
-
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 
 public class Frame extends JFrame {
@@ -122,9 +116,15 @@ public class Frame extends JFrame {
 	
 	public Frame() {
 
+		//set frame title
+		setTitle("UP Admin");
+		
 		// frame setup
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1200, 700);
+
+		Image icon = Toolkit.getDefaultToolkit().getImage("Logo.png");
+		this.setIconImage(icon);
 
 		// Get the size of the screen
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -152,6 +152,8 @@ public class Frame extends JFrame {
 		
 		setupHomeScreen();
 		setupWorkspaceScreen();
+		
+		fileHandler = FileHandler.get();
 	}
 
 	private void setupWorkspaceScreen() {
@@ -180,6 +182,7 @@ public class Frame extends JFrame {
 
 		// create menu
 		JMenu mnFile = new JMenu("File");
+		mnFile.setForeground(Color.white);
 		menuBar.add(mnFile);
 
 		// create background pane for home screen
@@ -348,11 +351,12 @@ public class Frame extends JFrame {
 		// if the chosen file is valid
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			file = filechooser.getSelectedFile();
+			System.out.println(file.getAbsolutePath());
 			currentFilePath = filechooser.getSelectedFile();
 			homePanel.fadeOut();
 			blur.fadeOut();
 			workspacePanel.fadeIn();
-			// createTab(file);
+			 createTab(file);
 		} else {
 			blur.fadeOut();
 		}
@@ -387,7 +391,7 @@ public class Frame extends JFrame {
 			tabbedPane = new JTabbedPane();
 			tabbedPane.setBounds(30, 30, frame.getWidth() - 80,
 					frame.getHeight() - navBar.getHeight() - 120);
-			contentPane.add(tabbedPane);
+			workspacePanel.add(tabbedPane);
 		}
 
 		// put panel with table on a new tab
