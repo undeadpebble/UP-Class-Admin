@@ -66,12 +66,27 @@ public class FadePanel extends JXPanel {
 		setVisible(true);
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				Animator animator = PropertySetter.createAnimator(400,
+				Animator animator = PropertySetter.createAnimator(800,
 						FadePanel.this, "alpha", 1.0f);
 				animator.setAcceleration(0.2f);
 				animator.setDeceleration(0.3f);
 				animator.addTarget(new PropertySetter(FadePanel.this, "alpha",
 						1.0f));
+				animator.start();
+			}
+		});
+	}
+	
+	public void fadeOut() {
+
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				Animator animator = PropertySetter.createAnimator(400,
+						FadePanel.this, "alpha", 0.0f);
+				animator.setAcceleration(0.2f);
+				animator.setDeceleration(0.3f);
+				animator.addTarget(new PropertySetter(FadePanel.this,
+						"alpha", 0.0f));
 				animator.start();
 			}
 		});

@@ -26,14 +26,15 @@ import javax.swing.text.BadLocationException;
 import ClassAdminBackEnd.FileHandler;
 import ClassAdminBackEnd.Global;
 import ClassAdminBackEnd.UnsupportedFileTypeException;
-
+import org.jdesktop.swingx.JXPanel;
 
 public class Frame extends JFrame {
 
 	private JPanel contentPane;
-	private HomeGradientPanel homePanel;
-	private WorkspaceGradientPanel workspacePanel;
+	private FadePanel homePanel;
+	private FadePanel workspacePanel;
 	private ThreeStopGradientPanel bottomPanel;
+	private BackgroundGradientPanel backgroundPanel;
 	private GradientMenuBar menuBar;
 	private FadePanel navBar;
 	private FadePanel tabBar;
@@ -69,7 +70,6 @@ public class Frame extends JFrame {
 	private static String MAC_OS = "MAC";
 	private static String WIN_OS = "WINDOWS";
 
-	
 	public class TabButton extends JPanel {
 
 		private String text;
@@ -117,12 +117,12 @@ public class Frame extends JFrame {
 			});
 		}
 	}
-	
+
 	public Frame() {
 
-		//set frame title
+		// set frame title
 		setTitle("UP Admin");
-		
+
 		// frame setup
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1200, 700);
@@ -153,60 +153,6 @@ public class Frame extends JFrame {
 		blur = new BlurBackground(this);
 		this.setGlassPane(blur);
 		blur.setBounds(0, 0, getWidth(), getHeight());
-		
-		setupHomeScreen();
-		setupWorkspaceScreen();
-		
-		fileHandler = FileHandler.get();
-	}
-
-	private void setupWorkspaceScreen() {
-		// create background pane for home screen
-		workspacePanel = new WorkspaceGradientPanel();
-		workspacePanel.setSize(getWidth() - HOME_SPACE_RIGHT_X, getHeight()
-				- HOME_SPACE_Y - menuBar.getHeight());
-		workspacePanel.setBounds(HOME_SPACE_LEFT_X, menuBar.getHeight(),
-				workspacePanel.getWidth(), workspacePanel.getHeight());
-		contentPane.add(workspacePanel);
-		workspacePanel.setLayout(null);
-
-		navBar = new FadePanel(true);
-		navBar.setBounds(0, workspacePanel.getHeight() - 40 - 40, getWidth(),
-				80);
-		workspacePanel.add(navBar);
-		navBar.setLayout(null);
-		
-		try {
-			homeButton = new ReflectionButton(ImageIO.read(getClass().getResource("Home.png")));
-			homeButton.setBounds(8,8,68,80);
-			navBar.add(homeButton);
-			
-			homeButton.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mousePressed(MouseEvent arg0) {
-					workspacePanel.fadeOut();
-					homePanel.fadeIn();
-				}
-			});
-			
-			importButton = new ReflectionButton(ImageIO.read(getClass().getResource("Import.png")));
-			importButton.setBounds(84,8,68,80);
-			navBar.add(importButton);
-			
-			exportButton = new ReflectionButton(ImageIO.read(getClass().getResource("Export.png")));
-			exportButton.setBounds(150,8,68,80);
-			navBar.add(exportButton);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		navBar.fadeIn();
-		
-		
-		
-	}
-
-	public void setupHomeScreen() {
 
 		// create menubar
 		menuBar = new GradientMenuBar();
@@ -218,15 +164,6 @@ public class Frame extends JFrame {
 		mnFile.setForeground(Color.white);
 		menuBar.add(mnFile);
 
-		// create background pane for home screen
-		homePanel = new HomeGradientPanel();
-		homePanel.setSize(getWidth() - HOME_SPACE_RIGHT_X, getHeight()
-				- HOME_SPACE_Y - menuBar.getHeight());
-		homePanel.setBounds(HOME_SPACE_LEFT_X, menuBar.getHeight(),
-				homePanel.getWidth(), homePanel.getHeight());
-		contentPane.add(homePanel);
-		homePanel.setLayout(null);
-
 		// create little bottom bar of home screen
 		bottomPanel = new ThreeStopGradientPanel(new Color(0xA1A1A1),
 				new Color(0x696969), new Color(0x000000));
@@ -235,6 +172,118 @@ public class Frame extends JFrame {
 				- HOME_BOTTOM_SPACE_Y, bottomPanel.getWidth(),
 				bottomPanel.getHeight());
 		contentPane.add(bottomPanel);
+
+		backgroundPanel = new BackgroundGradientPanel();
+		backgroundPanel.setSize(getWidth() - HOME_SPACE_RIGHT_X, getHeight()
+				- HOME_SPACE_Y - menuBar.getHeight());
+		backgroundPanel.setBounds(HOME_SPACE_LEFT_X, menuBar.getHeight(),
+				backgroundPanel.getWidth(), backgroundPanel.getHeight());
+		backgroundPanel.setLayout(null);
+		contentPane.add(backgroundPanel);
+
+		setupHomeScreen();
+		setupWorkspaceScreen();
+
+		// frame resize listener to put nav bar at bottom of frame on resize
+		this.addComponentListener(new ComponentListener() {
+
+			@Override
+			public void componentHidden(ComponentEvent arg0) {
+
+			}
+
+			@Override
+			public void componentMoved(ComponentEvent arg0) {
+
+			}
+
+			// resizes components with screen
+			@Override
+			public void componentResized(ComponentEvent arg0) {
+
+				backgroundPanel.setBounds(HOME_SPACE_LEFT_X,
+						menuBar.getHeight(), frame.getWidth()
+								- HOME_SPACE_RIGHT_X, frame.getHeight()
+								- HOME_SPACE_Y - menuBar.getHeight());
+
+				/*
+				 * workspacePanel.setBounds(HOME_SPACE_LEFT_X,
+				 * menuBar.getHeight(), frame.getWidth() - HOME_SPACE_RIGHT_X,
+				 * frame.getHeight() - HOME_SPACE_Y - menuBar.getHeight());
+				 */
+				bottomPanel.setBounds(HOME_SPACE_LEFT_X, frame.getHeight()
+						- HOME_BOTTOM_SPACE_Y, frame.getWidth()
+						- HOME_SPACE_RIGHT_X, 12);
+				menuBar.setBounds(0, 0, getWidth(), 30);
+				/*
+				 * navBar.setBounds(0, workspacePanel.getHeight() - 40 - 40,
+				 * getWidth(), 80); workspacePanel.add(navBar);
+				 */
+			}
+
+			@Override
+			public void componentShown(ComponentEvent arg0) {
+
+			}
+		});
+
+		fileHandler = FileHandler.get();
+	}
+
+	private void setupWorkspaceScreen() {
+		// create background pane for home screen
+		workspacePanel = new FadePanel(false);
+		workspacePanel.setBounds(0, 0, backgroundPanel.getWidth(),
+				backgroundPanel.getHeight());
+		backgroundPanel.add(workspacePanel);
+		workspacePanel.setLayout(null);
+
+		navBar = new FadePanel(true);
+		navBar.setBounds(0, workspacePanel.getHeight() - 40 - 40, getWidth(),
+				80);
+		workspacePanel.add(navBar);
+		navBar.setLayout(null);
+		
+		try {
+			homeButton = new ReflectionButton(ImageIO.read(getClass()
+					.getResource("Home.png")));
+			homeButton.setBounds(8, 8, 68, 80);
+			navBar.add(homeButton);
+
+			homeButton.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mousePressed(MouseEvent arg0) {
+					workspacePanel.fadeOut();
+					homePanel.fadeIn();
+					navBar.fadeOut();
+				}
+			});
+
+			importButton = new ReflectionButton(ImageIO.read(getClass()
+					.getResource("Import.png")));
+			importButton.setBounds(84, 8, 68, 80);
+			navBar.add(importButton);
+
+			exportButton = new ReflectionButton(ImageIO.read(getClass()
+					.getResource("Export.png")));
+			exportButton.setBounds(150, 8, 68, 80);
+			navBar.add(exportButton);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+
+	}
+
+	public void setupHomeScreen() {
+
+		homePanel = new FadePanel(false);
+		homePanel.setBounds(0, 0, backgroundPanel.getWidth(),
+				backgroundPanel.getHeight());
+		backgroundPanel.add(homePanel);
+
+		homePanel.setLayout(null);
 
 		// add title bars
 		try {
@@ -297,51 +346,14 @@ public class Frame extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		// frame resize listener to put nav bar at bottom of frame on resize
-		this.addComponentListener(new ComponentListener() {
-
-			@Override
-			public void componentHidden(ComponentEvent arg0) {
-
-			}
-
-			@Override
-			public void componentMoved(ComponentEvent arg0) {
-
-			}
-
-			// resizes components with screen
-			@Override
-			public void componentResized(ComponentEvent arg0) {
-				homePanel.setBounds(HOME_SPACE_LEFT_X, menuBar.getHeight(),
-						frame.getWidth() - HOME_SPACE_RIGHT_X,
-						frame.getHeight() - HOME_SPACE_Y - menuBar.getHeight());
-				workspacePanel.setBounds(HOME_SPACE_LEFT_X,
-						menuBar.getHeight(), frame.getWidth()
-								- HOME_SPACE_RIGHT_X, frame.getHeight()
-								- HOME_SPACE_Y - menuBar.getHeight());
-				bottomPanel.setBounds(HOME_SPACE_LEFT_X, frame.getHeight()
-						- HOME_BOTTOM_SPACE_Y, frame.getWidth()
-						- HOME_SPACE_RIGHT_X, 12);
-				menuBar.setBounds(0, 0, getWidth(), 30);
-				navBar.setBounds(0, workspacePanel.getHeight() - 40 - 40,
-						getWidth(), 80);
-				workspacePanel.add(navBar);
-
-			}
-
-			@Override
-			public void componentShown(ComponentEvent arg0) {
-
-			}
-		});
 
 		containerWorkspaceText.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				homePanel.fadeOut();
-			//	homePanel.setVisible(false);
+				// homePanel.setVisible(false);
 				workspacePanel.fadeIn();
+				navBar.fadeIn();
 			}
 		});
 
@@ -359,7 +371,7 @@ public class Frame extends JFrame {
 				}
 			}
 		});
-
+		homePanel.fadeIn();
 	}
 
 	public void openFile() throws IOException, BadLocationException {
@@ -387,10 +399,10 @@ public class Frame extends JFrame {
 			file = filechooser.getSelectedFile();
 			System.out.println(file.getAbsolutePath());
 			currentFilePath = filechooser.getSelectedFile();
-			homePanel.fadeOut();
+			// homePanel.fadeOut();
 			blur.fadeOut();
 			workspacePanel.fadeIn();
-			 createTab(file);
+			createTab(file);
 		} else {
 			blur.fadeOut();
 		}
@@ -420,20 +432,20 @@ public class Frame extends JFrame {
 				.getHeaders(), Global.getGlobal().getActiveProject().getHead()
 				.getDataLinkedList());
 
-		// create tabbedPane	
+		// create tabbedPane
 		if (tabbedPane == null) {
 			tabbedPane = new JTabbedPane();
-			tabbedPane.setBounds(5, 5, frame.getWidth() - 80,
-					frame.getHeight() - navBar.getHeight() - 120);
+			tabbedPane.setBounds(5, 5, frame.getWidth() - 80, frame.getHeight()
+					- navBar.getHeight() - 120);
 		}
-		
-		if (tabBar == null){
+
+		if (tabBar == null) {
 			tabBar = new FadePanel(false);
-			tabBar.setBounds(25, 25, frame.getWidth() - 75,
-					frame.getHeight() - navBar.getHeight() - 115);
+			tabBar.setBounds(25, 25, frame.getWidth() - 75, frame.getHeight()
+					- navBar.getHeight() - 115);
 		}
 		tabBar.add(tabbedPane);
-		
+
 		workspacePanel.add(tabBar);
 		tabBar.fadeIn();
 
@@ -442,5 +454,4 @@ public class Frame extends JFrame {
 		tabCount++;
 		tabbedPane.setTabComponentAt(tabCount, new TabButton(file.getName()));
 	}
-
 }

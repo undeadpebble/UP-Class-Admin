@@ -53,7 +53,7 @@ public class ReflectionButton extends JButton implements MouseListener {
 		Graphics2D g2 = (Graphics2D) g;
 		
 		ReflectionRenderer renderer = new ReflectionRenderer();
-		// renderer.setBlurEnabled(true);
+		renderer.setBlurEnabled(true);
 		renderer.setLength(0.5f);
 		
 		if (entered)
