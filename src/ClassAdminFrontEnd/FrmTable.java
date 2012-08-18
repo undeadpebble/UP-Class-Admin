@@ -107,7 +107,7 @@ public class FrmTable extends JPanel {
 				}
 				
 				if (isCellSelected(Index_row, Index_col)) {
-					comp.setBackground(new Color(0x47A1B5));
+					comp.setBackground(new Color(0x42a3b9));
 				}
 				return comp;
 			}
