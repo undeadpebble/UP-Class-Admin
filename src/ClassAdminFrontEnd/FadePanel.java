@@ -10,6 +10,7 @@ import java.awt.Paint;
 import java.awt.RenderingHints;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 import org.jdesktop.animation.timing.Animator;
 import org.jdesktop.animation.timing.interpolation.PropertySetter;
@@ -56,6 +57,8 @@ public class FadePanel extends JXPanel {
 	public void setAlpha(float alpha) {
 		this.alpha = alpha;
 		repaint();
+		 if (alpha == 0.0f)
+	        	setVisible(false);
 	}
 
 	public void fadeIn() {

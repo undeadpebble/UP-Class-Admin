@@ -41,16 +41,16 @@ public class ImagePanel extends JXPanel implements MouseListener{
 				RenderingHints.VALUE_ANTIALIAS_ON);
 		if ((entered) && (highlight))
 		{
-			float[] factors = new float[]  {1.15f, 1.15f, 1.15f, 1.15f};
+			float[] factors = new float[]  {1.2f, 1.2f, 1.2f, 1.2f};
 			float[] offsets = new float[] { 0.0f, 0.0f, 0.0f, 0.0f };
 			RescaleOp op = new RescaleOp(factors,offsets,null);
 			BufferedImage brighter = op.filter(image, null);
 			g2.drawImage(brighter, 0, 0, null);
-			
-			/*BufferedImage highlightImage = image;
+			/*
+			BufferedImage highlightImage = image;
 			GainFilter apply = new GainFilter();
-			apply.setGain(0.3f);
-			apply.setBias(0.7f);
+			apply.setGain(0.6f);
+			apply.setBias(0.8f);
 			highlightImage = apply.filter(highlightImage, null);
 			g2.drawImage(highlightImage, 0, 0, null); */
 		}

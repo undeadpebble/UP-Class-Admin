@@ -36,6 +36,7 @@ public class Frame extends JFrame {
 	private ThreeStopGradientPanel bottomPanel;
 	private GradientMenuBar menuBar;
 	private FadePanel navBar;
+	private FadePanel tabBar;
 	private ReflectionImagePanel container;
 	private ReflectionImagePanel containerRecentDocs;
 	private ReflectionImagePanel containerImportImage;
@@ -55,6 +56,9 @@ public class Frame extends JFrame {
 	private JTabbedPane tabbedPane;
 	private FileHandler fileHandler;
 	private BlurBackground blur;
+	private ReflectionButton homeButton;
+	private ReflectionButton importButton;
+	private ReflectionButton exportButton;
 
 	private final int HOME_SPACE_LEFT_X = 3;
 	private final int HOME_SPACE_Y = 55;
@@ -168,9 +172,38 @@ public class Frame extends JFrame {
 
 		navBar = new FadePanel(true);
 		navBar.setBounds(0, workspacePanel.getHeight() - 40 - 40, getWidth(),
-				78);
+				80);
 		workspacePanel.add(navBar);
 		navBar.setLayout(null);
+		
+		try {
+			homeButton = new ReflectionButton(ImageIO.read(getClass().getResource("Home.png")));
+			homeButton.setBounds(8,8,68,80);
+			navBar.add(homeButton);
+			
+			homeButton.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mousePressed(MouseEvent arg0) {
+					workspacePanel.fadeOut();
+					homePanel.fadeIn();
+				}
+			});
+			
+			importButton = new ReflectionButton(ImageIO.read(getClass().getResource("Import.png")));
+			importButton.setBounds(84,8,68,80);
+			navBar.add(importButton);
+			
+			exportButton = new ReflectionButton(ImageIO.read(getClass().getResource("Export.png")));
+			exportButton.setBounds(150,8,68,80);
+			navBar.add(exportButton);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		navBar.fadeIn();
+		
+		
+		
 	}
 
 	public void setupHomeScreen() {
@@ -292,7 +325,7 @@ public class Frame extends JFrame {
 						- HOME_SPACE_RIGHT_X, 12);
 				menuBar.setBounds(0, 0, getWidth(), 30);
 				navBar.setBounds(0, workspacePanel.getHeight() - 40 - 40,
-						getWidth(), 78);
+						getWidth(), 80);
 				workspacePanel.add(navBar);
 
 			}
@@ -307,6 +340,7 @@ public class Frame extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				homePanel.fadeOut();
+			//	homePanel.setVisible(false);
 				workspacePanel.fadeIn();
 			}
 		});
@@ -386,13 +420,22 @@ public class Frame extends JFrame {
 				.getHeaders(), Global.getGlobal().getActiveProject().getHead()
 				.getDataLinkedList());
 
-		// create tabbedPane
+		// create tabbedPane	
 		if (tabbedPane == null) {
 			tabbedPane = new JTabbedPane();
-			tabbedPane.setBounds(30, 30, frame.getWidth() - 80,
+			tabbedPane.setBounds(5, 5, frame.getWidth() - 80,
 					frame.getHeight() - navBar.getHeight() - 120);
-			workspacePanel.add(tabbedPane);
 		}
+		
+		if (tabBar == null){
+			tabBar = new FadePanel(false);
+			tabBar.setBounds(25, 25, frame.getWidth() - 75,
+					frame.getHeight() - navBar.getHeight() - 115);
+		}
+		tabBar.add(tabbedPane);
+		
+		workspacePanel.add(tabBar);
+		tabBar.fadeIn();
 
 		// put panel with table on a new tab
 		tabbedPane.addTab(file.getName(), table);

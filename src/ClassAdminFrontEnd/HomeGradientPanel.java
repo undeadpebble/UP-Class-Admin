@@ -54,9 +54,6 @@ public class HomeGradientPanel extends JXPanel {
 		g2.setPaint(p);
 		g2.fillRect(0, 0, getWidth(), getHeight());
 		g2.setPaint(oldPaint);
-		if (alpha == 0.0f) {
-			setVisible(false);
-		}
 
 	}
 
@@ -64,7 +61,7 @@ public class HomeGradientPanel extends JXPanel {
 
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				Animator animator = PropertySetter.createAnimator(400,
+				Animator animator = PropertySetter.createAnimator(800,
 						HomeGradientPanel.this, "alpha", 0.0f);
 				animator.setAcceleration(0.2f);
 				animator.setDeceleration(0.3f);
@@ -76,12 +73,12 @@ public class HomeGradientPanel extends JXPanel {
 	}
 
 	public void fadeIn() {
-
+		setVisible(true);
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				Animator animator = PropertySetter.createAnimator(400,
+				Animator animator = PropertySetter.createAnimator(800,
 						HomeGradientPanel.this, "alpha", 1.0f);
-				animator.setAcceleration(0.2f);
+				animator.setAcceleration(0.3f);
 				animator.setDeceleration(0.3f);
 				animator.addTarget(new PropertySetter(HomeGradientPanel.this,
 						"alpha", 1.0f));
@@ -97,6 +94,8 @@ public class HomeGradientPanel extends JXPanel {
 	public void setAlpha(float alpha) {
 		this.alpha = alpha;
 		repaint();
+		 if (alpha == 0.0f)
+	        	setVisible(false);
 	}
 
 	/*
