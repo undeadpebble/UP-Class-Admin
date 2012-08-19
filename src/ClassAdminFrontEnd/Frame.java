@@ -66,6 +66,8 @@ public class Frame extends JFrame {
 	private ReflectionButton importButton;
 	private ReflectionButton exportButton;
 	private FadePanel homeInfoPanel;
+	private FadePanel importInfoPanel;
+	private FadePanel exportInfoPanel;
 
 	private final int HOME_SPACE_LEFT_X = 3;
 	private final int HOME_SPACE_Y = 55;
@@ -239,6 +241,11 @@ public class Frame extends JFrame {
 					scatterplotChartImage.setBounds(tabBar.getWidth() - 140,
 							15, 50, 40);
 				}
+				if (infoPanel != null)
+				{
+					infoPanel.setBounds(0, workspacePanel.getHeight() - 112, getWidth(),43);
+				}
+				
 
 			}
 
@@ -369,7 +376,7 @@ public class Frame extends JFrame {
 		infoPanel.setBounds(0, workspacePanel.getHeight() - 112, getWidth(),43);
 		workspacePanel.add(infoPanel);
 		infoPanel.setLayout(null);
-		
+		infoPanel.fadeIn();
 
 		try {
 			
@@ -385,20 +392,7 @@ public class Frame extends JFrame {
 			importButton.setBounds(84, 8, 68, 80);
 			navBar.add(importButton);
 
-			importButton.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mousePressed(MouseEvent arg0) {
-					try {
-						openFile();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (BadLocationException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			});
+			
 
 			exportButton = new ReflectionButton(ImageIO.read(getClass()
 					.getResource("Export.png")));
@@ -419,7 +413,33 @@ public class Frame extends JFrame {
 			infoBubble.setLayout(null);
 			homeInfoPanel.add(infoBubble);
 			
+			//create import bubbles panel
+			importInfoPanel = new FadePanel(false,200,200);
+			importInfoPanel.setBounds(80, 0, 62, infoPanel.getHeight());
+			importInfoPanel.setLayout(null);
+			infoPanel.add(importInfoPanel);
 			
+			
+			//create import bubble image
+			ImagePanel importBubble = new ImagePanel(ImageIO.read(getClass()
+					.getResource("ImportInfo.png")),false);
+			importBubble.setBounds(0, 0, infoPanel.getWidth(), infoPanel.getHeight());
+			importBubble.setLayout(null);
+			importInfoPanel.add(importBubble);
+			
+			//create export bubbles panel
+			exportInfoPanel = new FadePanel(false,200,200);
+			exportInfoPanel.setBounds(150, 0, 62, infoPanel.getHeight());
+			exportInfoPanel.setLayout(null);
+			infoPanel.add(exportInfoPanel);
+			
+			
+			//create export bubble image
+			ImagePanel exportBubble = new ImagePanel(ImageIO.read(getClass()
+					.getResource("ExportInfo.png")),false);
+			exportBubble.setBounds(0, 0, infoPanel.getWidth(), infoPanel.getHeight());
+			exportBubble.setLayout(null);
+			exportInfoPanel.add(exportBubble);
 			
 			
 			
@@ -430,13 +450,50 @@ public class Frame extends JFrame {
 				}
 				
 				public void mouseEntered(MouseEvent arg0) {
-					infoPanel.fadeIn();
 					homeInfoPanel.fadeIn();
 				}
 				
 				public void mouseExited(MouseEvent arg0) {
-					infoPanel.fadeOut();
 					homeInfoPanel.fadeOut();
+				}
+			});
+			
+			
+			importButton.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mousePressed(MouseEvent arg0) {
+					try {
+						openFile();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (BadLocationException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				
+				public void mouseEntered(MouseEvent arg0) {
+					importInfoPanel.fadeIn();
+				}
+				
+				public void mouseExited(MouseEvent arg0) {
+					importInfoPanel.fadeOut();
+				}
+			});
+			
+			exportButton.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mousePressed(MouseEvent arg0) {
+					
+				}
+				
+				public void mouseEntered(MouseEvent arg0) {
+					exportInfoPanel.fadeIn();
+				}
+				
+				public void mouseExited(MouseEvent arg0) {
+					exportInfoPanel.fadeOut();
 				}
 			});
 		} catch (IOException e) {
