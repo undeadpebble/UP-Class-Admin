@@ -2,6 +2,7 @@ package ClassAdminFrontEnd;
 
 import java.awt.AlphaComposite;
 import java.awt.Composite;
+import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Paint;
@@ -70,7 +71,8 @@ public class ReflectionButton extends JButton implements MouseListener {
 			highlightImage = apply.filter(highlightImage, null);
 			reflection = renderer.appendReflection(highlightImage); 
 			
-			
+			Cursor cursor = new Cursor(Cursor.HAND_CURSOR);
+			this.setCursor(cursor);
 			//using a glow filter
 			/*
 			BufferedImage highlightImage = image;

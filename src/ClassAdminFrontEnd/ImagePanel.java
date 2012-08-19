@@ -1,5 +1,6 @@
 package ClassAdminFrontEnd;
 
+import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -46,6 +47,9 @@ public class ImagePanel extends JXPanel implements MouseListener{
 			RescaleOp op = new RescaleOp(factors,offsets,null);
 			BufferedImage brighter = op.filter(image, null);
 			g2.drawImage(brighter, 0, 0, null);
+			
+			Cursor cursor = new Cursor(Cursor.HAND_CURSOR);
+			this.setCursor(cursor);
 			/*
 			BufferedImage highlightImage = image;
 			GainFilter apply = new GainFilter();
