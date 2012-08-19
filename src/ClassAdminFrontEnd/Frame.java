@@ -50,6 +50,8 @@ public class Frame extends JFrame {
 	private ImagePanel containerWorkspaceText;
 	private ImagePanel containerWorkspaceTextSub;
 	private ImagePanel boxChartImage;
+	private ImagePanel histogramChartImage;
+	private ImagePanel scatterplotChartImage;
 	private JFileChooser filechooser;
 	private JFrame frame = this;
 	private File currentFilePath;
@@ -486,9 +488,17 @@ public class Frame extends JFrame {
 	
 	public void createGraphIcons() {
 		try {
-			boxChartImage = new ImagePanel(ImageIO.read(getClass().getResource("Histogram.png")), true);
-			boxChartImage.setBounds(tabBar.getWidth()-70, 15, 50, 40);
+			boxChartImage = new ImagePanel(ImageIO.read(getClass().getResource("Box.png")), true);
+			boxChartImage.setBounds(tabBar.getWidth()-70, 15, 60, 40);
 			tabBar.add(boxChartImage);
+			
+			histogramChartImage = new ImagePanel(ImageIO.read(getClass().getResource("Histogram.png")), true);
+			histogramChartImage.setBounds(tabBar.getWidth()-105, 15, 50, 40);
+			tabBar.add(histogramChartImage);
+			
+			scatterplotChartImage = new ImagePanel(ImageIO.read(getClass().getResource("Scatterplot.png")), true);
+			scatterplotChartImage.setBounds(tabBar.getWidth()-140, 15, 50, 40);
+			tabBar.add(scatterplotChartImage);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
