@@ -592,7 +592,7 @@ public class Frame extends JFrame {
 		tabCount++;
 		tabbedPane.setTabComponentAt(tabCount, new TabButton(file.getName()));
 		
-		
+		studentPanel.moveIn();
 	}
 
 	/*
@@ -644,17 +644,11 @@ public class Frame extends JFrame {
 	}
 	
 	public void createStudentView(){
-		JLayeredPane lp = new JLayeredPane();
-		lp.setLayer(this, 300);
-		lp.setLayout(null);
-		lp.setBounds(0, 0, 1000, 1000);
-		workspacePanel.add(lp);
-		
+
 		studentPanel = new ShadowPanel();
-		studentPanel.setBounds(0, 0, 500, 500);
-	//	workspacePanel.add(studentPanel);
-		lp.add(studentPanel);
+		studentPanel.setBounds(getWidth(), 20, 500, 500);
+		workspacePanel.add(studentPanel);
 		
-		studentPanel.moveIn();
+	//	workspacePanel.add(studentPanel);
 	}
 }

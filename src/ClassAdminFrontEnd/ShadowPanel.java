@@ -96,13 +96,13 @@ public class ShadowPanel extends JXPanel {
 		setVisible(true);
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				Animator animator = PropertySetter.createAnimator(400,
-						ShadowPanel.this, "location", new Point(16,
+				Animator animator = PropertySetter.createAnimator(1000,
+						ShadowPanel.this, "location", new Point(300,
 								ShadowPanel.this.getY()));
 				animator.setAcceleration(0.2f);
 				animator.setDeceleration(0.3f);
 				animator.addTarget(new PropertySetter(ShadowPanel.this,
-						"location", new Point(500, ShadowPanel.this
+						"location", new Point(300, ShadowPanel.this
 								.getY())));
 				animator.start();
 			}
