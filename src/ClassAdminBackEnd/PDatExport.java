@@ -10,15 +10,17 @@ import org.tmatesoft.sqljet.core.table.ISqlJetTransaction;
 import org.tmatesoft.sqljet.core.table.SqlJetDb;
 
 public class PDatExport {
-	final String ENTITY_TYPE_TABLE = "EntityType";
-	final String ENTITY_TABLE = "Entity";
-	final String BEST_N_ENTITY_TABLE = "BestNEntity";
-	final String STRING_ENTITY_TABLE = "StringEntity";
-	final String IMG_ENTITY_TABLE = "ImageEntity";
-	final String BETWEEN_FORMAT_TABLE = "BetweenFormat";
-	final String LESS_THAN_FORMAT_TABLE = "LessThanFormat";
-	final String GREATER_THAN_FORMAT_TABLE = "GreaterThanFormat";
-	final String BORDERCASE_TABLE = "BorderCase";
+	public static final String ENTITY_TYPE_TABLE = "EntityType";
+	public static final String ENTITY_TABLE = "Entity";
+	public static final String BEST_N_ENTITY_TABLE = "BestNEntity";
+	public static final String STRING_ENTITY_TABLE = "StringEntity";
+	public static final String IMG_ENTITY_TABLE = "ImageEntity";
+	public static final String MARK_ENTITY_TABLE = "MarkEntity";
+	public static final String BETWEEN_FORMAT_TABLE = "BetweenFormat";
+	public static final String LESS_THAN_FORMAT_TABLE = "LessThanFormat";
+	public static final String GREATER_THAN_FORMAT_TABLE = "GreaterThanFormat";
+	public static final String BORDERCASE_TABLE = "BorderCase";
+	
 	
 	public void exportFile(Project project, String filename) throws SqlJetException{
 		File dbFile = new File(filename);
@@ -44,49 +46,64 @@ public class PDatExport {
         			"name varchar(255) ," +
         			"isText Boolean," +
         			"date Date," +
-        			"defaultWeight float," +
+        			"defaultWeight float" +
         			")";
         	db.createTable(createTableQuery);
         	
         	createTableQuery = "CREATE TABLE " + ENTITY_TABLE + "(" +
         			"entityID int NOT NULL PRIMARY KEY," +
         			"parentID int ," +
+        			"typeID int" +
         			")";
         	db.createTable(createTableQuery);
         	
         	createTableQuery = "CREATE TABLE " + BEST_N_ENTITY_TABLE + "(" +
-        			"N int,"+
+        			"entityID int NOT NULL PRIMARY KEY," +
+        			"N int"+
+        			")";
+        	db.createTable(createTableQuery);
+        	
+        	createTableQuery = "CREATE TABLE " + MARK_ENTITY_TABLE + "(" +
+        			"entityID int NOT NULL PRIMARY KEY," +
+        			"mark int"+
         			")";
         	db.createTable(createTableQuery);
         	
         	createTableQuery = "CREATE TABLE " + STRING_ENTITY_TABLE + "(" +
-        			"field varchar(1000),"+
+        			"entityID int NOT NULL PRIMARY KEY," +
+        			"field varchar(1000)"+
         			")";
         	db.createTable(createTableQuery);
         	
         	createTableQuery = "CREATE TABLE " + IMG_ENTITY_TABLE + "(" +
-        			"address varchar(1000),"+
+        			"entityID int NOT NULL PRIMARY KEY," +
+        			"address varchar(1000)"+
         			")";
         	db.createTable(createTableQuery);
         	
         	createTableQuery = "CREATE TABLE " + GREATER_THAN_FORMAT_TABLE + "(" +
         			"typeID int ," +
-        			
+        			"value1 float " +
         			")";
         	db.createTable(createTableQuery);
+        	
         	createTableQuery = "CREATE TABLE " + LESS_THAN_FORMAT_TABLE + "(" +
         			"typeID int ," +
-        			
+        			"value1 float " +
         			")";
         	db.createTable(createTableQuery);
+        	
         	createTableQuery = "CREATE TABLE " + BETWEEN_FORMAT_TABLE + "(" +
         			"typeID int ," +
-        			
+        			"value1 float ," +
+        			"value2 float " +
         			")";
         	db.createTable(createTableQuery);
         	
         	createTableQuery = "CREATE TABLE " + BORDERCASE_TABLE + "(" +
         			"typeID int ," +
+        			"lowval float ," +
+        			"highval float " +
         			")";
         	db.createTable(createTableQuery);
         	
@@ -97,15 +114,7 @@ public class PDatExport {
             db.commit();
         }
         
-        db.beginTransaction(SqlJetTransactionMode.WRITE);
-        try {
-        	//TODO
-        	ISqlJetTable table = db.getTable("table name");
-        	//insert statements
-        	 table.insert("");
-        } finally {
-            db.commit();
-        }
+        project.saveToDB(db);
         
 	}
 	 private static void printRecords(ISqlJetCursor cursor) throws SqlJetException {

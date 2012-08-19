@@ -4,6 +4,11 @@ import java.awt.Color;
 import java.util.Date;
 import java.util.LinkedList;
 
+import org.tmatesoft.sqljet.core.SqlJetException;
+import org.tmatesoft.sqljet.core.SqlJetTransactionMode;
+import org.tmatesoft.sqljet.core.table.ISqlJetTable;
+import org.tmatesoft.sqljet.core.table.SqlJetDb;
+
 public class SuperEntity {
 
 
@@ -353,5 +358,24 @@ public class SuperEntity {
 		}
 		
 		return str;
+	}
+	
+	public int saveToDB(SqlJetDb db, int parentID, PDatIDGenerator idgen) throws SqlJetException{
+		db.beginTransaction(SqlJetTransactionMode.WRITE);
+		int id = idgen.getID();
+        try {
+        	//TODO
+        	ISqlJetTable table = db.getTable(PDatExport.ENTITY_TABLE);
+        	//insert statements
+        	
+        	table.insert(id+", "+parentID+", "+this.type.getID());
+        } finally {
+            db.commit();
+            
+        }
+        for(int x = 0;x<this.getSubEntity().size();++x){
+        	this.getSubEntity().get(x).saveToDB(db, id, idgen);
+        }
+        return id;
 	}
 }

@@ -7,6 +7,8 @@ import java.util.Date;
 import javax.swing.JFrame;
 import javax.xml.crypto.dsig.spec.XSLTTransformParameterSpec;
 
+import org.tmatesoft.sqljet.core.SqlJetException;
+
 import ClassAdminFrontEnd.FrmTable;
 
 import jxl.*;
@@ -52,7 +54,13 @@ public class testMain
 			e.printStackTrace();
 		}
 		//System.out.println(Global.getGlobal().getActiveProject().toString());
-		
+		PDatExport test = new PDatExport();
+		try {
+			test.exportFile(Global.getGlobal().getActiveProject(), "test.pdat");
+		} catch (SqlJetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 
 	}

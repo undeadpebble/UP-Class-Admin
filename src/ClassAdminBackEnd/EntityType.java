@@ -4,6 +4,11 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
 
+import org.tmatesoft.sqljet.core.SqlJetException;
+import org.tmatesoft.sqljet.core.SqlJetTransactionMode;
+import org.tmatesoft.sqljet.core.table.ISqlJetTable;
+import org.tmatesoft.sqljet.core.table.SqlJetDb;
+
 public class EntityType {
 	private String name;
 	private LinkedList<Format> formatting;
@@ -12,7 +17,15 @@ public class EntityType {
 	private Boolean isTextField;
 	private Date date;	 
 	private Double defaultWeight;
+	private int ID;
 	
+	/**
+	 * @return the iD
+	 */
+	public int getID() {
+		return ID;
+	}
+
 	public EntityType(String n){
 		name = n;		
 	}
@@ -96,6 +109,26 @@ public class EntityType {
 
 	public void setDefaultWeight(Double defaultWeight) {
 		this.defaultWeight = defaultWeight;
+	}
+	
+	public void saveToDB(SqlJetDb db, int parentID, PDatIDGenerator idgen) throws SqlJetException{
+		db.beginTransaction(SqlJetTransactionMode.WRITE);
+        try {
+        	//TODO
+        	ISqlJetTable table = db.getTable(PDatExport.ENTITY_TYPE_TABLE);
+        	//insert statements
+        	this.ID = idgen.getID();
+        	table.insert(this.ID+", "+this.name+", "+this.isTextField+", "+this.date+", "+this.defaultWeight);
+        } finally {
+            db.commit();
+            
+        }
+        for(int x = 0;x<this.getBorderCasing().size();++x){
+        	this.getBorderCasing().get(x).saveToDB(db, this.ID, idgen);
+        }
+        for(int x = 0;x<this.getFormatting().size();++x){
+        	this.getFormatting().get(x).saveToDB(db, this.ID, idgen);
+        }
 	}
 
 }

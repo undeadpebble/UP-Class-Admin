@@ -2,6 +2,11 @@ package ClassAdminBackEnd;
 
 import java.awt.Color;
 
+import org.tmatesoft.sqljet.core.SqlJetException;
+import org.tmatesoft.sqljet.core.SqlJetTransactionMode;
+import org.tmatesoft.sqljet.core.table.ISqlJetTable;
+import org.tmatesoft.sqljet.core.table.SqlJetDb;
+
 public class Format {
 	private int priority;
 	private Double value1;
@@ -61,6 +66,10 @@ public class Format {
 	
 	public Boolean evaluate(double mark){
 		return false;
+	}
+	
+	public int saveToDB(SqlJetDb db, int parentID, PDatIDGenerator idgen) throws SqlJetException {
+        return 0;
 	}
 
 }

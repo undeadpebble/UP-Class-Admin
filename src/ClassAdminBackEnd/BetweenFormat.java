@@ -2,6 +2,11 @@ package ClassAdminBackEnd;
 
 import java.awt.Color;
 
+import org.tmatesoft.sqljet.core.SqlJetException;
+import org.tmatesoft.sqljet.core.SqlJetTransactionMode;
+import org.tmatesoft.sqljet.core.table.ISqlJetTable;
+import org.tmatesoft.sqljet.core.table.SqlJetDb;
+
 public class BetweenFormat extends Format {
 	Double value2;
 
@@ -34,5 +39,21 @@ public class BetweenFormat extends Format {
 	public Boolean evaluate(double mark){
 		return (this.getValue1() <= mark && mark <= this.getValue2());
 	}	
+	
+	public int saveToDB(SqlJetDb db, int parentID, PDatIDGenerator idgen) throws SqlJetException {
+
+		db.beginTransaction(SqlJetTransactionMode.WRITE);
+        try {
+        	//TODO
+        	ISqlJetTable table = db.getTable(PDatExport.GREATER_THAN_FORMAT_TABLE);
+        	//insert statements
+        	
+        	table.insert(parentID+", "+this.getValue1()+", "+this.getValue2());
+        } finally {
+            db.commit();
+            
+        }
+        return 0;
+	}
 
 }
