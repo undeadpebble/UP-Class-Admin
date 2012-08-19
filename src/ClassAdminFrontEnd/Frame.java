@@ -15,6 +15,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JMenu;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -34,12 +35,12 @@ public class Frame extends JFrame {
 	private JPanel contentPane;
 	private FadePanel homePanel;
 	private FadePanel workspacePanel;
-	private ThreeStopGradientPanel bottomPanel;
-	private BackgroundGradientPanel backgroundPanel;
-	private GradientMenuBar menuBar;
 	private FadePanel navBar;
 	private FadePanel tabBar;
 	private FadePanel infoPanel;
+	private ThreeStopGradientPanel bottomPanel;
+	private BackgroundGradientPanel backgroundPanel;
+	private GradientMenuBar menuBar;
 	private ReflectionImagePanel container;
 	private ReflectionImagePanel containerRecentDocs;
 	private ReflectionImagePanel containerImportImage;
@@ -68,6 +69,7 @@ public class Frame extends JFrame {
 	private FadePanel homeInfoPanel;
 	private FadePanel importInfoPanel;
 	private FadePanel exportInfoPanel;
+	private ShadowPanel studentPanel;
 
 	private final int HOME_SPACE_LEFT_X = 3;
 	private final int HOME_SPACE_Y = 55;
@@ -245,7 +247,8 @@ public class Frame extends JFrame {
 				{
 					infoPanel.setBounds(0, workspacePanel.getHeight() - 112, getWidth(),43);
 				}
-				
+				if (studentPanel != null)
+				studentPanel.setBounds(0, 0, 500, 500);
 
 			}
 
@@ -377,7 +380,9 @@ public class Frame extends JFrame {
 		workspacePanel.add(infoPanel);
 		infoPanel.setLayout(null);
 		infoPanel.fadeIn();
-
+		
+		createStudentView();
+		
 		try {
 			
 			//create buttons on nav bar and add their respective mouselisteners
@@ -586,6 +591,8 @@ public class Frame extends JFrame {
 		tabbedPane.addTab(file.getName(), table);
 		tabCount++;
 		tabbedPane.setTabComponentAt(tabCount, new TabButton(file.getName()));
+		
+		
 	}
 
 	/*
@@ -634,5 +641,20 @@ public class Frame extends JFrame {
 			e.printStackTrace();
 		}
 
+	}
+	
+	public void createStudentView(){
+		JLayeredPane lp = new JLayeredPane();
+		lp.setLayer(this, 300);
+		lp.setLayout(null);
+		lp.setBounds(0, 0, 1000, 1000);
+		workspacePanel.add(lp);
+		
+		studentPanel = new ShadowPanel();
+		studentPanel.setBounds(0, 0, 500, 500);
+	//	workspacePanel.add(studentPanel);
+		lp.add(studentPanel);
+		
+		studentPanel.moveIn();
 	}
 }

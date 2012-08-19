@@ -98,15 +98,5 @@ public class HomeGradientPanel extends JXPanel {
 	        	setVisible(false);
 	}
 
-	/*
-	 * public void moveOut() {
-	 * 
-	 * setVisible(true); SwingUtilities.invokeLater(new Runnable() { public void
-	 * run() { Animator animator = PropertySetter.createAnimator( 400,
-	 * HomeGradientPanel.this, "location", new Point(16,
-	 * HomeGradientPanel.this.getY())); animator.setAcceleration(0.2f);
-	 * animator.setDeceleration(0.3f); animator.addTarget( new PropertySetter(
-	 * HomeGradientPanel.this, "location", new Point(500,
-	 * HomeGradientPanel.this.getY()))); animator.start(); } }); }
-	 */
+	
 }
