@@ -21,13 +21,15 @@ import org.jdesktop.swingx.painter.MattePainter;
 
 public class FadePanel extends JXPanel {
 
-	private int x;
-	private int y;
 	private float alpha = 0.0f;
+	private int acceleration;
+	private int deceleration;
 
-	public FadePanel(Boolean backPaint) {
+	public FadePanel(Boolean backPaint, int acc, int dec) {
 		setOpaque(false);
 		this.setAlpha(0.0f);
+		acceleration = acc;
+		deceleration = dec;
 		if (backPaint) {
 			GlossPainter gloss = new GlossPainter();
 			//  gloss.setPaint(new Color(1.0f, 1.0f, 1.0f, 0.5f));
@@ -66,7 +68,7 @@ public class FadePanel extends JXPanel {
 		setVisible(true);
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				Animator animator = PropertySetter.createAnimator(800,
+				Animator animator = PropertySetter.createAnimator(acceleration,
 						FadePanel.this, "alpha", 1.0f);
 				animator.setAcceleration(0.2f);
 				animator.setDeceleration(0.3f);
@@ -81,7 +83,7 @@ public class FadePanel extends JXPanel {
 
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				Animator animator = PropertySetter.createAnimator(400,
+				Animator animator = PropertySetter.createAnimator(deceleration,
 						FadePanel.this, "alpha", 0.0f);
 				animator.setAcceleration(0.2f);
 				animator.setDeceleration(0.3f);

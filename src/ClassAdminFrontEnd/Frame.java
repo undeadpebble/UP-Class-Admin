@@ -39,6 +39,7 @@ public class Frame extends JFrame {
 	private GradientMenuBar menuBar;
 	private FadePanel navBar;
 	private FadePanel tabBar;
+	private FadePanel infoPanel;
 	private ReflectionImagePanel container;
 	private ReflectionImagePanel containerRecentDocs;
 	private ReflectionImagePanel containerImportImage;
@@ -64,6 +65,7 @@ public class Frame extends JFrame {
 	private ReflectionButton homeButton;
 	private ReflectionButton importButton;
 	private ReflectionButton exportButton;
+	private FadePanel homeInfoPanel;
 
 	private final int HOME_SPACE_LEFT_X = 3;
 	private final int HOME_SPACE_Y = 55;
@@ -251,7 +253,7 @@ public class Frame extends JFrame {
 
 	public void setupHomeScreen() {
 
-		homePanel = new FadePanel(false);
+		homePanel = new FadePanel(false,800,400);
 		homePanel.setBounds(0, 0, backgroundPanel.getWidth(),
 				backgroundPanel.getHeight());
 		backgroundPanel.add(homePanel);
@@ -348,31 +350,35 @@ public class Frame extends JFrame {
 	}
 
 	private void setupWorkspaceScreen() {
-		// create background pane for home screen
-		workspacePanel = new FadePanel(false);
+		// create background pane for workspace screen
+		workspacePanel = new FadePanel(false,800,400);
 		workspacePanel.setBounds(0, 0, backgroundPanel.getWidth(),
 				backgroundPanel.getHeight());
 		backgroundPanel.add(workspacePanel);
 		workspacePanel.setLayout(null);
 
-		navBar = new FadePanel(true);
+		//create navigation bar
+		navBar = new FadePanel(true,800,400);
 		navBar.setBounds(0, workspacePanel.getHeight() - 40 - 40, getWidth(),
 				80);
 		workspacePanel.add(navBar);
 		navBar.setLayout(null);
+		
+		//create transparent panel on which info bubbles will be shown
+		infoPanel = new FadePanel(false,200,200);
+		infoPanel.setBounds(0, workspacePanel.getHeight() - 112, getWidth(),43);
+		workspacePanel.add(infoPanel);
+		infoPanel.setLayout(null);
+		
 
 		try {
+			
+			//create buttons on nav bar and add their respective mouselisteners
 			homeButton = new ReflectionButton(ImageIO.read(getClass()
 					.getResource("Home.png")));
 			homeButton.setBounds(8, 8, 68, 80);
 			navBar.add(homeButton);
-
-			homeButton.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mousePressed(MouseEvent arg0) {
-					workspaceToHomeTransition();
-				}
-			});
+			
 
 			importButton = new ReflectionButton(ImageIO.read(getClass()
 					.getResource("Import.png")));
@@ -398,6 +404,41 @@ public class Frame extends JFrame {
 					.getResource("Export.png")));
 			exportButton.setBounds(150, 8, 68, 80);
 			navBar.add(exportButton);
+			
+			//create info bubbles panel
+			homeInfoPanel = new FadePanel(false,200,200);
+			homeInfoPanel.setBounds(8, 0, 62, infoPanel.getHeight());
+			homeInfoPanel.setLayout(null);
+			infoPanel.add(homeInfoPanel);
+			
+			
+			//create info bubble image
+			ImagePanel infoBubble = new ImagePanel(ImageIO.read(getClass()
+					.getResource("HomeInfo.png")),false);
+			infoBubble.setBounds(0, 0, infoPanel.getWidth(), infoPanel.getHeight());
+			infoBubble.setLayout(null);
+			homeInfoPanel.add(infoBubble);
+			
+			
+			
+			
+			
+			homeButton.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mousePressed(MouseEvent arg0) {
+					workspaceToHomeTransition();
+				}
+				
+				public void mouseEntered(MouseEvent arg0) {
+					infoPanel.fadeIn();
+					homeInfoPanel.fadeIn();
+				}
+				
+				public void mouseExited(MouseEvent arg0) {
+					infoPanel.fadeOut();
+					homeInfoPanel.fadeOut();
+				}
+			});
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -438,7 +479,9 @@ public class Frame extends JFrame {
 		}
 	}
 
-	// function to determine OS that is currently running
+	/*
+	 * function to determine OS that is currently running
+	 */
 	public static void determineOS() {
 		currentOs = System.getProperty("os.name").toUpperCase();
 		if (currentOs.contains("MAC")) {
@@ -450,7 +493,9 @@ public class Frame extends JFrame {
 		}
 	}
 
-	// create a new Tab when a new file is imported
+	/*
+	 * create a new Tab when a new file is imported
+	 */
 	public void createTab(File file) {
 		try {
 			fileHandler.openFile(file.getAbsolutePath());
@@ -471,7 +516,7 @@ public class Frame extends JFrame {
 
 		// create panel on which tabbedPane will be
 		if (tabBar == null) {
-			tabBar = new FadePanel(false);
+			tabBar = new FadePanel(false,800,400);
 			tabBar.setBounds(0, 0, frame.getWidth(), frame.getHeight());
 			tabBar.setLayout(null);
 			createGraphIcons();
@@ -486,6 +531,10 @@ public class Frame extends JFrame {
 		tabbedPane.setTabComponentAt(tabCount, new TabButton(file.getName()));
 	}
 
+	/*
+	 * Function to simulate transitions from home screen to 
+	 * workspace screen 
+	 */
 	public void homeToWorkspaceTransition() {
 		homePanel.fadeOut();
 		workspacePanel.fadeIn();
@@ -493,12 +542,20 @@ public class Frame extends JFrame {
 		frame.remove(blur);
 	}
 
+	/*
+	 * Function to simulate transitions from workspace screen to 
+	 * home screen 
+	 */
 	public void workspaceToHomeTransition() {
 		homePanel.fadeIn();
 		workspacePanel.fadeOut();
 		navBar.fadeOut();
 	}
 
+	/*
+	 * Function to create graph icons on top of right side of 
+	 * workspace screen 
+	 */
 	public void createGraphIcons() {
 		try {
 			boxChartImage = new ImagePanel(ImageIO.read(getClass().getResource(
