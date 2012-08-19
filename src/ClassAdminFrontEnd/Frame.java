@@ -204,7 +204,8 @@ public class Frame extends JFrame {
 						menuBar.getHeight(), frame.getWidth()
 								- HOME_SPACE_RIGHT_X, frame.getHeight()
 								- HOME_SPACE_Y - menuBar.getHeight());
-				workspacePanel.setBounds(0, 0, backgroundPanel.getWidth(), backgroundPanel.getHeight());
+				workspacePanel.setBounds(0, 0, backgroundPanel.getWidth(),
+						backgroundPanel.getHeight());
 				bottomPanel.setBounds(HOME_SPACE_LEFT_X, frame.getHeight()
 						- HOME_BOTTOM_SPACE_Y, frame.getWidth()
 						- HOME_SPACE_RIGHT_X, 12);
@@ -213,17 +214,28 @@ public class Frame extends JFrame {
 						getWidth(), 80);
 				workspacePanel.add(navBar);
 				if (tabbedPane != null) {
-					tabbedPane.setBounds(20, 20, workspacePanel.getWidth()-40, workspacePanel.getHeight()-40
-							- navBar.getHeight());
+					tabbedPane.setBounds(
+							20,
+							20,
+							workspacePanel.getWidth() - 40,
+							workspacePanel.getHeight() - 40
+									- navBar.getHeight());
 				}
 				if (tabBar != null) {
 					tabBar.setBounds(0, 0, frame.getWidth(), frame.getHeight());
 					tabBar.setLayout(null);
 				}
-				if (boxChartImage != null){
-					boxChartImage.setBounds(tabBar.getWidth()-70, 15, 50, 40);
+				if (boxChartImage != null) {
+					boxChartImage.setBounds(tabBar.getWidth() - 70, 15, 50, 40);
 				}
-				
+				if (histogramChartImage != null) {
+					histogramChartImage.setBounds(tabBar.getWidth() - 105, 15,
+							50, 40);
+				}
+				if (scatterplotChartImage != null) {
+					scatterplotChartImage.setBounds(tabBar.getWidth() - 140,
+							15, 50, 40);
+				}
 
 			}
 
@@ -389,7 +401,7 @@ public class Frame extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	public void openFile() throws IOException, BadLocationException {
@@ -452,8 +464,8 @@ public class Frame extends JFrame {
 		// create tabbedPane
 		if (tabbedPane == null) {
 			tabbedPane = new JTabbedPane();
-			tabbedPane.setBounds(20, 20, workspacePanel.getWidth()-40, workspacePanel.getHeight()-40
-					- navBar.getHeight());
+			tabbedPane.setBounds(20, 20, workspacePanel.getWidth() - 40,
+					workspacePanel.getHeight() - 40 - navBar.getHeight());
 		}
 
 		// create panel on which tabbedPane will be
@@ -485,24 +497,28 @@ public class Frame extends JFrame {
 		workspacePanel.fadeOut();
 		navBar.fadeOut();
 	}
-	
+
 	public void createGraphIcons() {
 		try {
-			boxChartImage = new ImagePanel(ImageIO.read(getClass().getResource("Box.png")), true);
-			boxChartImage.setBounds(tabBar.getWidth()-70, 15, 60, 40);
+			boxChartImage = new ImagePanel(ImageIO.read(getClass().getResource(
+					"Box.png")), true);
+			boxChartImage.setBounds(tabBar.getWidth() - 70, 15, 60, 40);
 			tabBar.add(boxChartImage);
-			
-			histogramChartImage = new ImagePanel(ImageIO.read(getClass().getResource("Histogram.png")), true);
-			histogramChartImage.setBounds(tabBar.getWidth()-105, 15, 50, 40);
+
+			histogramChartImage = new ImagePanel(ImageIO.read(getClass()
+					.getResource("Histogram.png")), true);
+			histogramChartImage.setBounds(tabBar.getWidth() - 105, 15, 50, 40);
 			tabBar.add(histogramChartImage);
-			
-			scatterplotChartImage = new ImagePanel(ImageIO.read(getClass().getResource("Scatterplot.png")), true);
-			scatterplotChartImage.setBounds(tabBar.getWidth()-140, 15, 50, 40);
+
+			scatterplotChartImage = new ImagePanel(ImageIO.read(getClass()
+					.getResource("Scatterplot.png")), true);
+			scatterplotChartImage
+					.setBounds(tabBar.getWidth() - 140, 15, 50, 40);
 			tabBar.add(scatterplotChartImage);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 }
