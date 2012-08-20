@@ -14,4 +14,13 @@ public class LeafStringEntity extends StringEntity{
 	public SuperEntity unLeaf(){
 		return new StringEntity(this, this.getFields().get(0));
 	}
+	public String createTreeFromHead()
+	{
+		String str = "";
+		str += "<leaf>" +
+				"<attribute name = \"name\" value= \"" + this.getValue() + "\" />";
+		str +="</leaf>";
+		return str;
+	}
+
 }

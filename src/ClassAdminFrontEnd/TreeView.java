@@ -87,6 +87,7 @@ public class TreeView extends Display {
 	private static final String tree = "tree";
 	private static final String treeNodes = "tree.nodes";
 	private static final String treeEdges = "tree.edges";
+	static private SuperEntity m_treeHead;
 
 	private LabelRenderer m_nodeRenderer;
 	private EdgeRenderer m_edgeRenderer;
@@ -272,9 +273,9 @@ public class TreeView extends Display {
 
 	// ------------------------------------------------------------------------
 
-	public static void createStudentFrm(String label)
+	public static void createStudentFrm(String label, SuperEntity treeHead)
 	{
-		JComponent treeview = createPanelTreeView(label);
+		JComponent treeview = createPanelTreeView(label, treeHead);
 
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -282,49 +283,31 @@ public class TreeView extends Display {
 		frame.pack();
 		frame.setVisible(true);		
 	}
-/*	public static void main(String argv[]) {
-		String infile = "test.csv";
-		String label = "name";
-		if (argv.length > 1) {
-			infile = argv[0];
-			label = argv[1];
-		}
-		JComponent treeview = createPanelTreeView(label);
 
-		JFrame frame = new JFrame();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setContentPane(treeview);
-		frame.pack();
-		frame.setVisible(true);
-	}*/
-
-	public static JComponent createPanelTreeView(final String label) {
+	public static JComponent createPanelTreeView(final String label, SuperEntity th) {
 		Color BACKGROUND = Color.WHITE;
 		Color FOREGROUND = Color.BLACK;
 
-		LinkedList<SuperEntity> s = Global.getGlobal().getActiveProject().getTreeViewSelected();
+		SuperEntity treeHead = th;
+		//LinkedList<SuperEntity> s = Global.getGlobal().getActiveProject().getTreeViewSelected();
 		
-		int size = s.size();
+		//int size = s.size();
 
 		Table nodes = null;
 		Tree tree = null;
 		Node node = null;
 		Node n;
 		tree = new Tree();
+		
+		
+		
 		String str = "<tree>" + "<declarations>"
 				+ "<attributeDecl name=\"name\" type=\"String\" />"
-				+ "</declarations>" + "<branch>";
+				+ "</declarations>";
 
-		str += "<attribute name = \"name\" value= \"" + s.get(0).getValue()
-				+ "\" />";
+		str += th.createTreeFromHead();
 
-		for (int i = 2; i < 5; i++) {
-			str += "<leaf><attribute name = \"name\" value= \""
-					+ s.get(i).getMark() + "\" /></leaf>";
-
-		}
-
-		str += "</branch></tree>";
+		str += "</tree>";
 		try {
 			// Create file
 			FileWriter fstream = new FileWriter("out.xml");

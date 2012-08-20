@@ -365,4 +365,17 @@ public class SuperEntity {
 		
 		return(str);
 	}
+	
+	public String createTreeFromHead()
+	{
+		String str = "";
+		str += "<branch>" +
+				"<attribute name = \"name\" value= \"" + this.getValue() + "\" />";
+		for (int i = 0; i < this.getSubEntity().size(); i++)
+		{
+			str += this.getSubEntity().get(i).createTreeFromHead();
+		}
+		str +="</branch>";
+		return str;
+	}
 }
