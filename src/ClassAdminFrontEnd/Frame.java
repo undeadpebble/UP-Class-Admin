@@ -645,9 +645,11 @@ public class Frame extends JFrame {
 	
 	public void createStudentView(){
 
+		
 		studentPanel = new ShadowPanel();
 		studentPanel.setBounds(getWidth(), 20, 500, 500);
-		workspacePanel.add(studentPanel);
+		backgroundPanel.setLayer(studentPanel, 300);
+		backgroundPanel.add(studentPanel);
 		
 	//	workspacePanel.add(studentPanel);
 	}

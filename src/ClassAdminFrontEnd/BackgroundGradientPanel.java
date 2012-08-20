@@ -8,9 +8,11 @@ import java.awt.Paint;
 import java.awt.Point;
 import java.awt.RenderingHints;
 
+import javax.swing.JLayeredPane;
+
 import org.jdesktop.swingx.JXPanel;
 
-public class BackgroundGradientPanel extends JXPanel {
+public class BackgroundGradientPanel extends JLayeredPane {
 
 
 	@Override
