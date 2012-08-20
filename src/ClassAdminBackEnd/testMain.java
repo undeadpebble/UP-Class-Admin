@@ -61,38 +61,18 @@ public class testMain
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//System.out.println(Global.getGlobal().getActiveProject().toString());
 
-		PDatExport test = new PDatExport();
-		try {
-			test.exportFile(Global.getGlobal().getActiveProject(), "test.pdat");
-		} catch (SqlJetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-
-		
-		
-		
 		JFrame fr = new JFrame();
 		
 		fr.setVisible(true);
-		fr.setSize(600, 600);
+		fr.setSize(600, 400);
 		
-		/*FrmTable tble = new FrmTable(Global.getGlobal().getActiveProject().getHead().getHeaders(), Global.getGlobal().getActiveProject().getHead().getDataLinkedList(), Global.getGlobal().getActiveProject());
+		FrmTable tble = new FrmTable(Global.getGlobal().getActiveProject().getHead().getHeaders(), Global.getGlobal().getActiveProject().getHead().getDataLinkedList(), Global.getGlobal().getActiveProject());
 		
 		fr.add(tble);
-		fr.repaint();*/
-		EntityTypePanel temp = new EntityTypePanel(Global.getGlobal().getActiveProject());
-		fr.add(temp);
-		
-
-
-		
-
-		
-		
+		fr.repaint();
+		/*EntityTypePanel temp = new EntityTypePanel(Global.getGlobal().getActiveProject());
+		fr.add(temp);*/
 
 	}
 }

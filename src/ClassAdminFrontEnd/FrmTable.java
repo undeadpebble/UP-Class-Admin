@@ -165,12 +165,19 @@ public class FrmTable extends JPanel {
 
 		pane.setViewportView(table);
 		JPanel eastPanel = new JPanel();
+		
+		
+		JButton bordercase = new JButton("Add bordercase");
+		eastPanel.add(bordercase,BorderLayout.SOUTH);
+		
+		eastPanel.setLayout(new BorderLayout());
 
 		btnAdd = new JButton("Add");
-		eastPanel.add(btnAdd);
+		eastPanel.add(btnAdd,BorderLayout.NORTH);
 		
 		JButton btnView = new JButton("View student");
-		eastPanel.add(btnView);
+		eastPanel.add(btnView,BorderLayout.CENTER);
+
 		
 		JPanel northPanel = new JPanel();
 
@@ -191,7 +198,7 @@ public class FrmTable extends JPanel {
 
 		tableModel = new DefaultTableModel(temp, (Object[]) headers);
 		table.setModel(tableModel);
-
+		
 		btnAdd.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -214,6 +221,13 @@ public class FrmTable extends JPanel {
 				tableModel.addRow(new Object[] { txtField1.getText(),txtField1.getText() });
 				table.repaint();
 
+			}
+		});
+		
+		bordercase.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
 			}
 		});
 		
