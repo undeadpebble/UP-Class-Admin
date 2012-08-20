@@ -17,6 +17,7 @@ public class Project {
 	private LinkedList<SuperEntity> selected;
 	private LinkedList<EntityType> entityTypes;
 	
+	
 	public SuperEntity getHead() {
 		return head;
 	}
