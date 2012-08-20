@@ -45,7 +45,6 @@ public class FrmTable extends JPanel {
 
 	private LinkedList<Integer> selected = new LinkedList<Integer>();
 
-
 	public FrmTable(String[] headers, LinkedList<LinkedList<SuperEntity>> data, Project project) {
 		this.data = data;
 		this.project = project;
@@ -53,18 +52,14 @@ public class FrmTable extends JPanel {
 	}
 
 	private void createGUI(String[] headers) {
+		System.out.println(data.get(0).get(3).getType().getIsTextField());
+		
 		setLayout(new BorderLayout());
 		JScrollPane pane = new JScrollPane();
 
 		Action action = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				TableCellListener tcl = (TableCellListener) e.getSource();
-				/*
-				 * System.out.println("Row   : " + tcl.getRow());
-				 * System.out.println("Column: " + tcl.getColumn());
-				 * System.out.println("Old   : " + tcl.getOldValue());
-				 * System.out.println("New   : " + tcl.getNewValue());
-				 */
 
 				if (tcl.getOldValue() != tcl.getNewValue()) {
 					if (data.get(tcl.getRow()).get(tcl.getColumn())
@@ -105,7 +100,7 @@ public class FrmTable extends JPanel {
 			public Component prepareRenderer(TableCellRenderer renderer,int Index_row, int Index_col) {
 				Component comp = super.prepareRenderer(renderer, Index_row, Index_col);
 				//even index, selected or not selected
-				
+				try{
 				if (project.getSelected().contains(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col))) {
 					int[] intTest = table.getSelectedRows();
 					boolean temp = false;
@@ -135,10 +130,12 @@ public class FrmTable extends JPanel {
 					project.getSelected().add(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col));
 				}
 				
-				/*else {
-					comp.setBackground(Color.white);
-				}*/
 				return comp;
+				}
+				catch (Exception e) {
+					// TODO: handle exception
+					return null;
+				}
 			}
 		};
 		table.setAutoCreateRowSorter(true);
@@ -194,20 +191,19 @@ public class FrmTable extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				table.repaint();
 				int count = tableModel.getRowCount() + 1;
-				tableModel.addRow(new Object[] { txtField1.getText(),
-						txtField1.getText() });
-
-				/*System.out.println(data.get(1).get(0).getValue());
-				System.out.println(table.getValueAt(1, 0));
-				System.out.println(table.getModel().getValueAt(1, 0));
-=======
-
->>>>>>> refs/remotes/origin/marko
+				LinkedList<SuperEntity> temp = data.get(0);
+				LinkedList<SuperEntity> newToAdd = new LinkedList<SuperEntity>();
 				
-<<<<<<< HEAD
-				table.getModel().getValueAt(0, 0);*/
-
-				//table.getColumnModel().removeColumn(table.getColumnModel().getColumn(1));
+				for(int x = 0; x < temp.size();x++){
+					//if()
+					SuperEntity tempSuperEntity = new SuperEntity(temp.get(x).getType(),0);
+					newToAdd.add(tempSuperEntity);
+				}
+				
+				data.add(newToAdd);
+				
+				tableModel.addRow(new Object[] { txtField1.getText(),txtField1.getText() });
+				table.repaint();
 
 			}
 		});
@@ -217,8 +213,6 @@ public class FrmTable extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				table.repaint();
 				table.getSelectedRow();
-				
-
 				
 				TreeView.createStudentFrm("name",data.get(table.getSelectedRow()).get(0));
 			}
