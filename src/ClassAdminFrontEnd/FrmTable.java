@@ -140,8 +140,6 @@ public class FrmTable extends JPanel {
 		};
 		table.setAutoCreateRowSorter(true);
 		
-		
-
 		TableCellListener tcl = new TableCellListener(table, action);
 
 		table.addPropertyChangeListener(tcl);
