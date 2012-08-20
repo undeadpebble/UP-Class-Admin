@@ -247,8 +247,8 @@ public class Frame extends JFrame {
 				{
 					infoPanel.setBounds(0, workspacePanel.getHeight() - 112, getWidth(),43);
 				}
-				if (studentPanel != null)
-				studentPanel.setBounds(0, 0, 500, 500);
+				/*if (studentPanel != null)
+				studentPanel.setBounds(0, 0, 500, 500);*/
 
 			}
 
@@ -536,6 +536,8 @@ public class Frame extends JFrame {
 			createTab(file);
 			homeToWorkspaceTransition();
 			tabBar.fadeIn();
+			
+			studentPanel.moveIn();
 		} else {
 			blur.fadeOut();
 		}
@@ -591,8 +593,6 @@ public class Frame extends JFrame {
 		tabbedPane.addTab(file.getName(), table);
 		tabCount++;
 		tabbedPane.setTabComponentAt(tabCount, new TabButton(file.getName()));
-		
-		studentPanel.moveIn();
 	}
 
 	/*
@@ -646,11 +646,11 @@ public class Frame extends JFrame {
 	public void createStudentView(){
 
 		
-		studentPanel = new ShadowPanel();
-		studentPanel.setBounds(getWidth(), 20, 500, 500);
+		studentPanel = new ShadowPanel(getWidth(),0,getWidth()-300,0);
+		studentPanel.setBounds(getWidth(), 0, 500, 500);
 		backgroundPanel.setLayer(studentPanel, 300);
 		backgroundPanel.add(studentPanel);
-		
+		studentPanel.setVisible(false);
 	//	workspacePanel.add(studentPanel);
 	}
 }

@@ -23,10 +23,15 @@ import org.jdesktop.swingx.image.GaussianBlurFilter;
 public class ShadowPanel extends JXPanel {
 
 	private BufferedImage shadow;
-
-	public ShadowPanel() {
+	private int newPosX;
+	private int newPosY;
+	private int oldPosX;
+	private int oldPosY;
+	
+	public ShadowPanel(int oldX, int oldY, int newX, int newY) {
 		setOpaque(false);
-
+		newPosX = newX;
+		newPosY = newY;
 	}
 
 	@Override
@@ -97,16 +102,34 @@ public class ShadowPanel extends JXPanel {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				Animator animator = PropertySetter.createAnimator(1000,
-						ShadowPanel.this, "location", new Point(300,
-								ShadowPanel.this.getY()));
+						ShadowPanel.this, "location", new Point(newPosX,
+								newPosY));
 				animator.setAcceleration(0.2f);
 				animator.setDeceleration(0.3f);
 				animator.addTarget(new PropertySetter(ShadowPanel.this,
-						"location", new Point(300, ShadowPanel.this
-								.getY())));
+						"location", new Point(newPosX,
+								newPosY)));
 				animator.start();
 			}
 		});
 	}
 
+	public void moveOut() {
+
+		setVisible(true);
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				Animator animator = PropertySetter.createAnimator(1000,
+						ShadowPanel.this, "location", new Point(oldPosX,
+								oldPosY));
+				animator.setAcceleration(0.2f);
+				animator.setDeceleration(0.3f);
+				animator.addTarget(new PropertySetter(ShadowPanel.this,
+						"location", new Point(oldPosX,
+								oldPosY)));
+				animator.start();
+			}
+		
+		});
+	}
 }
