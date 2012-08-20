@@ -41,18 +41,18 @@ public class FileHandler {
 		if (fileReader.fileExists(filename)) {
 			ArrayList recordArray = fileReader.recordData();
 			headers = fileReader.getHeaders(recordArray);
-			createEntitieTypes(headers, recordArray, fileReader);
+			createEntityTypes(headers, recordArray, fileReader);
 			createMarkEntities(headers, recordArray, fileReader);
 		}
 	}
 
-	private void createEntitieTypes(ArrayList headers, ArrayList recordArray,
+	private void createEntityTypes(ArrayList headers, ArrayList recordArray,
 			FileImport fileReader) {
 		// header entity
 		Global glob = Global.getGlobal();
 		EntityTypeFactory eTFactory = new EntityTypeFactory();
 		glob.getActiveProject().getEntityTypes().clear();
-		eTFactory.makeEntityTypeFileImport("File", true);
+		eTFactory.makeEntityTypeFileImport("Project", true);
 
 		SuperEntity mE = new HeadEntity(glob.getActiveProject()
 				.getEntityTypes().get(0), 0);
@@ -66,8 +66,7 @@ public class FileHandler {
 				if (dub > LARGEST_MARK_VALUE) {
 					eTFactory
 							.makeEntityTypeFileImport((String) headers.get(i),
-									true).getFields()
-							.add((String) headers.get(i));
+									true).setName((String) headers.get(i));
 
 				} else {
 					eTFactory.makeEntityTypeFileImport((String) headers.get(i),
@@ -77,7 +76,7 @@ public class FileHandler {
 			} catch (NumberFormatException e) {
 				eTFactory
 						.makeEntityTypeFileImport((String) headers.get(i), true)
-						.getFields().add((String) headers.get(i));
+						.setName((String) headers.get(i));
 
 			}
 
@@ -118,7 +117,7 @@ public class FileHandler {
 				SuperEntity mE = new SuperEntity(fieldType, parent, 0);
 
 				if (fieldType.getIsTextField() == true) {
-					mE = new StringEntity(mE, record);
+					mE = new LeafStringEntity(mE, record);
 				} else {
 					try {
 						mE = new LeafMarkEntity(mE);
@@ -139,7 +138,7 @@ public class FileHandler {
 		if (fileReader.fileExists(filename)) {
 			ArrayList recordArray = fileReader.recordData();
 			headers = fileReader.getHeaders(recordArray);
-			createEntitieTypes(headers, recordArray, fileReader);
+			createEntityTypes(headers, recordArray, fileReader);
 			createMarkEntities(headers, recordArray, fileReader);
 		}
 	}

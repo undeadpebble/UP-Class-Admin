@@ -5,6 +5,9 @@ package ClassAdminBackEnd;
 
 import java.util.LinkedList;
 
+import org.tmatesoft.sqljet.core.SqlJetException;
+import org.tmatesoft.sqljet.core.table.SqlJetDb;
+
 /**
  * @author undeadpebble
  *
@@ -13,7 +16,6 @@ public class Project {
 	private SuperEntity head;
 	private LinkedList<SuperEntity> selected;
 	private LinkedList<EntityType> entityTypes;
-	private LinkedList<SuperEntity> treeViewSelected;
 	
 	
 	public SuperEntity getHead() {
@@ -33,15 +35,6 @@ public class Project {
 		return builder.toString();
 	}
 
-	public void setTreeViewSelected(LinkedList<SuperEntity> superEntity)
-	{
-		treeViewSelected = superEntity;
-	}
-	public LinkedList<SuperEntity> getTreeViewSelected()
-	{
-		return treeViewSelected;
-	}
-	
 	public void setHead(SuperEntity head) {
 		this.head = head;
 
@@ -55,5 +48,14 @@ public class Project {
 		if (entityTypes==null)
 			entityTypes = new LinkedList<EntityType>();
 		return entityTypes;
+	}
+	
+	public void saveToDB(SqlJetDb db) throws SqlJetException{
+		PDatIDGenerator idgen = new PDatIDGenerator();
+		for(int x = 0;x<this.getEntityTypes().size();++x){
+			this.getEntityTypes().get(x).saveToDB(db, 0, idgen);
+		}
+		
+		this.head.saveToDB(db, 0, idgen);
 	}
 }

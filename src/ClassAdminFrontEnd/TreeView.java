@@ -87,6 +87,7 @@ public class TreeView extends Display {
 	private static final String tree = "tree";
 	private static final String treeNodes = "tree.nodes";
 	private static final String treeEdges = "tree.edges";
+	static private SuperEntity m_treeHead;
 
 	private LabelRenderer m_nodeRenderer;
 	private EdgeRenderer m_edgeRenderer;
@@ -272,43 +273,41 @@ public class TreeView extends Display {
 
 	// ------------------------------------------------------------------------
 
-	/*
-	 * public static void main(String argv[]) { String infile = "test.csv";
-	 * String label = "name"; if ( argv.length > 1 ) { infile = argv[0]; label =
-	 * argv[1]; } JComponent treeview = createPanelTreeView(label);
-	 * 
-	 * JFrame frame = new JFrame();
-	 * frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	 * frame.setContentPane(treeview); frame.pack(); frame.setVisible(true); }
-	 */
+	public static void createStudentFrm(String label, SuperEntity treeHead)
+	{
+		JComponent treeview = createPanelTreeView(label, treeHead);
 
-	public static JComponent createPanelTreeView(final String label) {
+		JFrame frame = new JFrame();
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setContentPane(treeview);
+		frame.pack();
+		frame.setVisible(true);		
+	}
+
+	public static JComponent createPanelTreeView(final String label, SuperEntity th) {
 		Color BACKGROUND = Color.WHITE;
 		Color FOREGROUND = Color.BLACK;
 
-		LinkedList<SuperEntity> s = Global.getGlobal().getActiveProject().getTreeViewSelected();
-
-		int size = s.size();
+		SuperEntity treeHead = th;
+		//LinkedList<SuperEntity> s = Global.getGlobal().getActiveProject().getTreeViewSelected();
+		
+		//int size = s.size();
 
 		Table nodes = null;
 		Tree tree = null;
 		Node node = null;
 		Node n;
 		tree = new Tree();
+		
+		
+		
 		String str = "<tree>" + "<declarations>"
 				+ "<attributeDecl name=\"name\" type=\"String\" />"
-				+ "</declarations>" + "<branch>";
+				+ "</declarations>";
 
-		str += "<attribute name = \"name\" value= \"" + s.get(0).getValue()
-				+ "\" />";
+		str += th.createTreeFromHead();
 
-		for (int i = 2; i < size; i++) {
-			str += "<leaf><attribute name = \"name\" value= \""
-					+ s.get(i).getMark() + "\" /></leaf>";
-
-		}
-
-		str += "</branch></tree>";
+		str += "</tree>";
 		try {
 			// Create file
 			FileWriter fstream = new FileWriter("out.xml");
@@ -336,20 +335,13 @@ public class TreeView extends Display {
 		} else {
 			System.out.println("File deleted.");
 		}
+		System.out.println(str);
 
+		
 		// create a new treemap
 		final TreeView tview = new TreeView(t, label);
 		tview.setBackground(BACKGROUND);
 		tview.setForeground(FOREGROUND);
-
-		// create a search panel for the tree map
-		JSearchPanel search = new JSearchPanel(tview.getVisualization(),
-				treeNodes, Visualization.SEARCH_ITEMS, label, true, true);
-		search.setShowResultCount(true);
-		search.setBorder(BorderFactory.createEmptyBorder(5, 5, 4, 0));
-		search.setFont(FontLib.getFont("Tahoma", Font.PLAIN, 11));
-		search.setBackground(BACKGROUND);
-		search.setForeground(FOREGROUND);
 
 		final JFastLabel title = new JFastLabel("                 ");
 		title.setPreferredSize(new Dimension(350, 20));
@@ -374,7 +366,7 @@ public class TreeView extends Display {
 		box.add(Box.createHorizontalStrut(10));
 		box.add(title);
 		box.add(Box.createHorizontalGlue());
-		box.add(search);
+		//box.add(search);
 		box.add(Box.createHorizontalStrut(3));
 		box.setBackground(BACKGROUND);
 

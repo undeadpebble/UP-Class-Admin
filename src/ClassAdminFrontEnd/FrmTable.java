@@ -12,6 +12,7 @@ import java.awt.event.MouseAdapter;
 import java.util.LinkedList;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -25,8 +26,6 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
-
-import prefuse.data.Tree;
 
 
 import ClassAdminBackEnd.Global;
@@ -198,8 +197,18 @@ public class FrmTable extends JPanel {
 				tableModel.addRow(new Object[] { txtField1.getText(),
 						txtField1.getText() });
 
+				/*System.out.println(data.get(1).get(0).getValue());
+				System.out.println(table.getValueAt(1, 0));
+				System.out.println(table.getModel().getValueAt(1, 0));
+=======
+
+>>>>>>> refs/remotes/origin/marko
 				
+<<<<<<< HEAD
+				table.getModel().getValueAt(0, 0);*/
+
 				//table.getColumnModel().removeColumn(table.getColumnModel().getColumn(1));
+
 			}
 		});
 		
@@ -207,17 +216,11 @@ public class FrmTable extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				table.repaint();
+				table.getSelectedRow();
 				
-				project.setTreeViewSelected(data.get(table.getSelectedRow()));
+
 				
-				JComponent temp = TreeView.createPanelTreeView("label");
-				
-				JFrame frm = new JFrame();
-				frm.setVisible(true);
-				frm.setSize(400,600);
-				frm.add(temp);
-				
-				//table.getColumnModel().removeColumn(table.getColumnModel().getColumn(1));
+				TreeView.createStudentFrm("name",data.get(table.getSelectedRow()).get(0));
 			}
 		});
 			

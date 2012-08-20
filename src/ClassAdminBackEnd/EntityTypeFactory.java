@@ -18,7 +18,6 @@ public class EntityTypeFactory {
 			
 
 			eT = new EntityType(name);
-			eT.setIndex(Global.getGlobal().getActiveProject().getEntityTypes().size());
 			Global.getGlobal().getActiveProject().getEntityTypes().add(eT);
 
 			return eT;
@@ -32,8 +31,8 @@ public class EntityTypeFactory {
 	
 	public EntityType makeEntityTypeFileImport(String name, Boolean isTextField){
 		
-		EntityType eT = new EntityType(name,null, null, null, null, null, null, isTextField, null, true, 0.0);
-		eT.setIndex(Global.getGlobal().getActiveProject().getEntityTypes().size());
+		EntityType eT = new EntityType(name, null, null, null, isTextField, null, 1.0);
+
 		Global.getGlobal().getActiveProject().getEntityTypes().add(eT);
 		return eT;
 		

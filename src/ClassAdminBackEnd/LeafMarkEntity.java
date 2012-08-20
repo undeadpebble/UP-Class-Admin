@@ -20,4 +20,13 @@ public class LeafMarkEntity extends MarkEntity{
 	public SuperEntity unLeaf(){
 		return new MarkEntity(this);
 	}
+	public String createTreeFromHead()
+	{
+		String str = "";
+		str += "<leaf>" +
+				"<attribute name = \"name\" value= \"" + this.getValue() + "\" />";
+		str +="</leaf>";
+		return str;
+	}
+
 }
