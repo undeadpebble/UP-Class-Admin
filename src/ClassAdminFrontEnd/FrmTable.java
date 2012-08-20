@@ -12,6 +12,7 @@ import java.awt.event.MouseAdapter;
 import java.util.LinkedList;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -27,6 +28,7 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
+import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.MultiSplitLayout.Leaf;
 
 
@@ -40,7 +42,7 @@ import ClassAdminBackEnd.SuperEntity;
 import ClassAdminBackEnd.TableCellListener;
 
 public class FrmTable extends JPanel {
-	private JTable table;
+	private JXTable table;
 	private JButton btnAdd;
 	private DefaultTableModel tableModel;
 	private JTextField txtField1;
@@ -56,9 +58,7 @@ public class FrmTable extends JPanel {
 		createGUI(headers);
 	}
 
-	private void createGUI(String[] headers) {
-		System.out.println(data.get(0).get(3).getType().getIsTextField());
-		
+	private void createGUI(String[] headers) {		
 		setLayout(new BorderLayout());
 		JScrollPane pane = new JScrollPane();
 
@@ -101,7 +101,7 @@ public class FrmTable extends JPanel {
 			}
 		}
 		
-		table = new JTable(){
+		table = new JXTable(){
 			public Component prepareRenderer(TableCellRenderer renderer,int Index_row, int Index_col) {
 				Component comp = super.prepareRenderer(renderer, Index_row, Index_col);
 				//even index, selected or not selected
@@ -181,10 +181,13 @@ public class FrmTable extends JPanel {
 		JLabel lblField2 = new JLabel("Column2   ");
 		txtField1.setPreferredSize(lblField1.getPreferredSize());
 		txtField2.setPreferredSize(lblField2.getPreferredSize());
-
+		
 		add(northPanel, BorderLayout.NORTH);
 		add(eastPanel, BorderLayout.EAST);
 		add(pane, BorderLayout.CENTER);
+		
+		table.setColumnControlVisible(true);
+		table.setHorizontalScrollEnabled(true);
 
 		tableModel = new DefaultTableModel(temp, (Object[]) headers);
 		table.setModel(tableModel);
