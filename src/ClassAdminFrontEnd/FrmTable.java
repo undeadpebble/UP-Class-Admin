@@ -218,10 +218,9 @@ public class FrmTable extends JPanel {
 				table.repaint();
 				table.getSelectedRow();
 				
+
 				
-				//table.getColumnModel().removeColumn(table.getColumnModel().getColumn(1));
-				
-				TreeView.createStudentFrm("name");
+				TreeView.createStudentFrm("name",data.get(table.getSelectedRow()).get(0));
 			}
 		});
 			
