@@ -255,6 +255,7 @@ public class Frame extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 			HistogramFrame x = new HistogramFrame();
+		
 			System.out.println("DAS");
 				//ScatterPlotFrame x = new ScatterPlotFrame();
 			}

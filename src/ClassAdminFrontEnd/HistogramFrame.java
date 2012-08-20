@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.LinkedList;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -29,32 +30,61 @@ import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.statistics.HistogramDataset;
 import org.jfree.data.statistics.HistogramType;
 
-
+import ClassAdminBackEnd.EntityType;
+import ClassAdminBackEnd.Global;
+import ClassAdminBackEnd.SuperEntity;
 
 public class HistogramFrame extends JFrame implements ActionListener {
 	static ChartPanel chartpanel ;
 	static JFreeChart chart;
-	
+	int houerx =0;
 	public HistogramFrame()
 	{
-		JFrame f = new JFrame("Histogram");
-		   final Container content = f.getContentPane();
+			JFrame f = new JFrame("Histogram");
+		    final Container content = f.getContentPane();
 		    f.setSize(550, 600);
 		    
-		    double[] value = new double[100];
-		    for(int q=0;q<100;q++)
-		      value[q]=q;
+		    
+		    final LinkedList<LinkedList<SuperEntity>> diedata = Global.getGlobal()
+					.getActiveProject().getHead().getDataLinkedList();
+		    
+		    
+			final String[] headers = Global.getGlobal().getActiveProject()
+					.getHead().getHeaders();
+			
+			String[] kolom = Global.getGlobal().getActiveProject().getHead()
+					.getNumberHeaders();
+			
+			 final HistogramDataset dataset = new HistogramDataset();
+			 
+			String xas = kolom[0];
+			
+			for (int s = 0; s < headers.length; s++) {
+				if (headers[s].equals(kolom[0])) {
+					houerx = s;
+					System.out.println(headers[s]);
+				}
+
+			}
+			double[] values = new double[diedata.size()];
+			for (int q = 0; q < diedata.size(); q++) {
+			
+				values[q] = diedata.get(q).get(houerx).getMark();
+				System.out.println(values[q]);
+				
+			}
+		    
 		        
-		    final HistogramDataset dataset = new HistogramDataset();
+		   
 		    dataset.setType(HistogramType.FREQUENCY);
 		   
 		    
-		    dataset.addSeries("Histogram", value, 100);
+		    dataset.addSeries("Histogram", values, 10,0,100);
 		  //  dataset.addSeries("Histogram",value,number);
 		    
 		    String plotTitle = "Histogram"; 
-		    String xaxis = "number";
-		    String yaxis = "value"; 
+		    String xaxis = kolom[0];
+		    String yaxis = "Count"; 
 			
 			
 			final Histogram nuweChart = new Histogram();
@@ -63,7 +93,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			NumberAxis rangeAxis = (NumberAxis) chart.getXYPlot().getRangeAxis();
 			
 			((NumberAxis) rangeAxis).setTickUnit(new NumberTickUnit(1));
-			rangeAxis.setRange(0,2);
+			rangeAxis.setRange(0,10);
 		
 			chartpanel = new ChartPanel(chart,500,500,400,400,500,500,true,true,true,true,true,true);
 					
@@ -124,7 +154,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			
 			final JComboBox xascb = new JComboBox();
 			
-			xascb.setModel(new DefaultComboBoxModel(new String[] {"Student nr", "Finale punt", "Eksamen punt"}));
+			xascb.setModel(new DefaultComboBoxModel(kolom));
 			xascb.addActionListener( new ActionListener(){
 
 				@Override
@@ -134,7 +164,26 @@ public class HistogramFrame extends JFrame implements ActionListener {
 				        chartpanel.getChart().getXYPlot().getDomainAxis().setLabel(axis);
 				 		
 				        chartpanel.getChart().getXYPlot().clearAnnotations();
-					
+				        for (int s = 0; s < headers.length; s++) {
+							if (headers[s].equals(cb.getSelectedItem().toString())) {
+								houerx = s;
+							
+							}
+
+						}
+				        
+				        
+				        double[] values = new double[diedata.size()];
+						for (int q = 0; q < diedata.size(); q++) {
+						
+							values[q] = diedata.get(q).get(houerx).getMark();
+							System.out.println(values[q]);
+							
+						}
+						HistogramDataset nuwedataset = new HistogramDataset();
+						nuwedataset.addSeries("Histogram", values, 10,0,100);
+				        chartpanel.getChart().getXYPlot().setDataset(nuwedataset);
+				      
 				}
 				
 			});
@@ -290,7 +339,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 					    }
 				}
 			});
-		    content.setBackground(Color.white);
+		    
 		    content.setLayout(new FlowLayout()); 
 		    content.add(chartpanel);
 		    content.add(lblNewLabel);
@@ -299,6 +348,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			content.add(switchregsx);
 		    content.add(rotate);
 		    content.add(extractPic);
+		    f.setVisible(true);
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
