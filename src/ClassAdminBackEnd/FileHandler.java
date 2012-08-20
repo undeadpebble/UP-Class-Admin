@@ -10,6 +10,8 @@ public class FileHandler {
 	 * @return
 	 */
 	static FileHandler fh;
+	
+	Project project;
 
 	public static FileHandler get() {
 		if (fh == null)
@@ -18,11 +20,11 @@ public class FileHandler {
 	}
 
 	private FileHandler() {
-
+		project = new Project();
 	}
 
-	public void openFile(String filename) throws UnsupportedFileTypeException {
-
+	public void openFile(String filename, Project project) throws UnsupportedFileTypeException {
+		this.project = project;
 		if (filename.substring(filename.indexOf('.')).contains("csv")) {
 			openCSV(filename);
 		} else if (filename.substring(filename.indexOf('.')).contains("xls")) {
@@ -42,28 +44,29 @@ public class FileHandler {
 		if (fileReader.fileExists(filename)) {
 			ArrayList recordArray = fileReader.recordData();
 			headers = fileReader.getHeaders(recordArray);
-			createEntityTypes(headers, recordArray, fileReader);
-			createMarkEntities(headers, recordArray, fileReader);
+			int parentRow = createEntityTypes(headers, recordArray, fileReader);
+			createMarkEntities(parentRow, headers, recordArray, fileReader);
 		}
 	}
 
 	private int createEntityTypes(ArrayList headers, ArrayList recordArray,
 			FileImport fileReader) {
 		// header entity
-		Global glob = Global.getGlobal();
 		int firstStringCol = -1;
 		// EntityTypeFactory eTFactory = new EntityTypeFactory();
-		EntityType parentType = new EntityType("Project", null, true);
-		glob.getGlobal().getActiveProject().setHeadEntityType(parentType);
+		EntityType headType = new EntityType("Project", null, true);
+		project.setHeadEntityType(headType);
 
-		SuperEntity mE = new HeadEntity(glob.getActiveProject()
+		SuperEntity mE = new HeadEntity(project
 				.getHeadEntityType(), 0);
 
-		glob.getActiveProject().setHead(mE);
+		project.setHead(mE);
 		// create entity types
+		
+		EntityType parentType = null;
 
 		LinkedList<EntityType> types = new LinkedList<EntityType>();
-		for (int i = 1; i < headers.size(); ++i) {
+		for (int i = 0; i < headers.size(); ++i) {
 			String record = fileReader.getRecordFieldValue(recordArray, 0, i);
 			EntityType tmp;
 			try {
@@ -74,6 +77,8 @@ public class FileHandler {
 					if(firstStringCol < 0){
 						firstStringCol = i;
 						parentType = tmp;
+					}else{
+						types.add(tmp);
 					}
 				} else {
 					tmp = new EntityType((String) headers.get(i), null, false);
@@ -84,18 +89,24 @@ public class FileHandler {
 				if(firstStringCol < 0){
 					firstStringCol = i;
 					parentType = tmp;
+				}else{
+					types.add(tmp);
 				}
 			}
 
 		}
 		
 		if(parentType == null){
-			//TODO
-		} else{
+			parentType = new EntityType("row", null, true);
+		} 
 			parentType.getSubEntityType().addAll(types);
-			parentType.setParentEntitytype(glob.getActiveProject().getHeadEntityType());
-			glob.getActiveProject().getHeadEntityType().getSubEntityType().add(parentType);
-		}
+			parentType.setParentEntitytype(project.getHeadEntityType());
+			project.getHeadEntityType().getSubEntityType().add(parentType);
+			
+			for(int x = 0;x<parentType.getSubEntityType().size();++x){
+				parentType.getSubEntityType().get(x).setParentEntitytype(parentType);
+			}
+		
 		
 		
 		return firstStringCol;
@@ -103,35 +114,27 @@ public class FileHandler {
 
 	private void createMarkEntities(int parentRowIndex, ArrayList headers, ArrayList recordArray,
 			FileImport fileReader) {
-		Global glob = Global.getGlobal();
+
 
 		// create MarkEntities
 		int numRecords = fileReader.getRecords(recordArray).size();
+
 		for (int r = 0; r < numRecords; ++r) {
-			// make parent for row
-
-			SuperEntity parent = new SuperEntity(
-
-			glob.getActiveProject().getHeadEntityType().getSubEntityType()
-					.get(0), glob.getActiveProject().getHead(), 0);
-			String record = fileReader.getRecordFieldValue(recordArray, r, 0);
-			if (parent.getType().getIsTextField()) {
-				parent = new StringEntity(parent, record);
-			} else {
-				try {
-					parent = new LeafMarkEntity(parent);
-					parent.setMark(Double.parseDouble(record));
-				} catch (NumberFormatException e) {
-					parent.setMark(0);
-				}
+			int count = 0;
+			SuperEntity parentEntity;
+			if(parentRowIndex < 0){
+				parentEntity = new LeafStringEntity(project.getHeadEntityType().getSubEntityType().get(0), project.getHead(), "Row"+r);
 			}
+			else{
+				String record = fileReader.getRecordFieldValue(recordArray, r, parentRowIndex);
+				parentEntity = new StringEntity(project.getHeadEntityType().getSubEntityType().get(0), project.getHead(), record);
+			}
+			for (int f = 0; f < headers.size(); ++f) {
+				if(f != parentRowIndex){
+				String record = fileReader.getRecordFieldValue(recordArray, r, f);
+				EntityType fieldType = parentEntity.getType().getSubEntityType().get(count++);
 
-			for (int f = 1; f < headers.size(); ++f) {
-				record = fileReader.getRecordFieldValue(recordArray, r, f);
-				EntityType fieldType = glob.getActiveProject().getEntityTypes()
-						.get(f);
-
-				SuperEntity mE = new SuperEntity(fieldType, parent, 0);
+					SuperEntity mE = new SuperEntity(fieldType, parentEntity, 0);
 
 				if (fieldType.getIsTextField() == true) {
 					mE = new LeafStringEntity(mE, record);
@@ -144,6 +147,8 @@ public class FileHandler {
 					}
 				}
 			}
+			}
+			System.out.print("break");
 		}
 	}
 
@@ -155,8 +160,8 @@ public class FileHandler {
 		if (fileReader.fileExists(filename)) {
 			ArrayList recordArray = fileReader.recordData();
 			headers = fileReader.getHeaders(recordArray);
-			createEntityTypes(headers, recordArray, fileReader);
-			createMarkEntities(headers, recordArray, fileReader);
+			int parentRow = createEntityTypes(headers, recordArray, fileReader);
+			createMarkEntities(parentRow, headers, recordArray, fileReader);
 		}
 	}
 

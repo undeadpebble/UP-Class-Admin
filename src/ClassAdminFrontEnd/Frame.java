@@ -374,7 +374,7 @@ public class Frame extends JFrame {
 	// create a new Tab when a new file is imported
 	public void createTab(File file) {
 		try {
-			fileHandler.openFile(file.getAbsolutePath());
+			fileHandler.openFile(file.getAbsolutePath(), Global.getGlobal().getActiveProject());
 		} catch (UnsupportedFileTypeException e) {
 			e.printStackTrace();
 		}
