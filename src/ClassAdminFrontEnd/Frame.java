@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -644,13 +645,23 @@ public class Frame extends JFrame {
 	}
 	
 	public void createStudentView(){
-
 		
-		studentPanel = new ShadowPanel(getWidth(),0,getWidth()-300,0);
-		studentPanel.setBounds(getWidth(), 0, 500, 500);
+		studentPanel = new ShadowPanel(getWidth(),0,getWidth()-250,0);
+		studentPanel.setBounds(getWidth(), 0, 250, getHeight()-20);
+		JButton button = new JButton(">");
+		button.setBounds(3, 3, 20, 20);
+		button.setBorder(new EmptyBorder(0,0,0,0));
+		studentPanel.add(button);
+		studentPanel.setLayout(null);
 		backgroundPanel.setLayer(studentPanel, 300);
 		backgroundPanel.add(studentPanel);
 		studentPanel.setVisible(false);
-	//	workspacePanel.add(studentPanel);
+		
+		button.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				studentPanel.moveOut();
+			}
+		});
 	}
 }

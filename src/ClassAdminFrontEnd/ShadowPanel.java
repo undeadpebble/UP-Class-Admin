@@ -32,14 +32,16 @@ public class ShadowPanel extends JXPanel {
 		setOpaque(false);
 		newPosX = newX;
 		newPosY = newY;
+		oldPosX = oldX;
+		oldPosY = oldY;
 	}
 
 	@Override
 	protected void paintComponent(Graphics g) {
 		int x = 5;
 		int y = 5;
-		int w = getWidth() - 68;
-		int h = getHeight() - 68;
+		int w = getWidth() - 20;
+		int h = getHeight() - 20;
 		int arc = 30;
 
 		Graphics2D g2 = (Graphics2D) g.create();
@@ -70,8 +72,8 @@ public class ShadowPanel extends JXPanel {
 	public void setBounds(int x, int y, int width, int height) {
 		super.setBounds(x, y, width, height);
 
-		int w = getWidth() - 68;
-		int h = getHeight() - 68;
+		int w = getWidth() - 20;
+		int h = getHeight() - 20;
 		int arc = 30;
 		int shadowSize = 20;
 
