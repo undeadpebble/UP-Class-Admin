@@ -27,10 +27,15 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
+import org.jdesktop.swingx.MultiSplitLayout.Leaf;
+
 
 import ClassAdminBackEnd.Global;
 
+import ClassAdminBackEnd.EntityType;
+import ClassAdminBackEnd.LeafStringEntity;
 import ClassAdminBackEnd.Project;
+import ClassAdminBackEnd.StringEntity;
 import ClassAdminBackEnd.SuperEntity;
 import ClassAdminBackEnd.TableCellListener;
 
@@ -189,16 +194,19 @@ public class FrmTable extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				table.repaint();
 				int count = tableModel.getRowCount() + 1;
-				LinkedList<SuperEntity> temp = data.get(0);
-				LinkedList<SuperEntity> newToAdd = new LinkedList<SuperEntity>();
 				
+				LinkedList<EntityType> temp = project.getEntityTypes();
 				for(int x = 0; x < temp.size();x++){
-					//if()
-					SuperEntity tempSuperEntity = new SuperEntity(temp.get(x).getType(),0);
-					newToAdd.add(tempSuperEntity);
+					if(temp.get(x).getIsTextField()){
+						LeafStringEntity addEntity = new LeafStringEntity(temp.get(x), null , "");
+					}
+					else{
+						
+					}
+					
 				}
 				
-				data.add(newToAdd);
+				//data.add(newToAdd);
 				
 				tableModel.addRow(new Object[] { txtField1.getText(),txtField1.getText() });
 				table.repaint();
