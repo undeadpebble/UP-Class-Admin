@@ -166,12 +166,23 @@ public class FrmTable extends JPanel {
 		pane.setViewportView(table);
 		JPanel eastPanel = new JPanel();
 		
-		
+		JPanel border = new JPanel();
 		JButton bordercase = new JButton("Add bordercase");
-		eastPanel.add(bordercase,BorderLayout.SOUTH);
+		border.add(bordercase);
+		
+		JComboBox cbheaders = new JComboBox(headers);
+		LinkedList<SuperEntity> headersList = project.getHead().getHeadersLinkedList();
+		border.add(cbheaders);
+		
+		
+		
+		
+		
 		
 		eastPanel.setLayout(new BorderLayout());
-
+		
+		eastPanel.add(border,BorderLayout.SOUTH);
+		
 		btnAdd = new JButton("Add");
 		eastPanel.add(btnAdd,BorderLayout.NORTH);
 		
