@@ -1,6 +1,7 @@
 package ClassAdminBackEnd;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class FileHandler {
 	final double LARGEST_MARK_VALUE = 1000;
@@ -46,44 +47,61 @@ public class FileHandler {
 		}
 	}
 
-	private void createEntityTypes(ArrayList headers, ArrayList recordArray,
+	private int createEntityTypes(ArrayList headers, ArrayList recordArray,
 			FileImport fileReader) {
 		// header entity
 		Global glob = Global.getGlobal();
-		EntityTypeFactory eTFactory = new EntityTypeFactory();
-		glob.getActiveProject().getEntityTypes().clear();
-		eTFactory.makeEntityTypeFileImport("Project", true);
+		int firstStringCol = -1;
+		// EntityTypeFactory eTFactory = new EntityTypeFactory();
+		EntityType parentType = new EntityType("Project", null, true);
+		glob.getGlobal().getActiveProject().setHeadEntityType(parentType);
 
 		SuperEntity mE = new HeadEntity(glob.getActiveProject()
-				.getEntityTypes().get(0), 0);
+				.getHeadEntityType(), 0);
 
 		glob.getActiveProject().setHead(mE);
 		// create entity types
-		for (int i = 0; i < headers.size(); ++i) {
+
+		LinkedList<EntityType> types = new LinkedList<EntityType>();
+		for (int i = 1; i < headers.size(); ++i) {
 			String record = fileReader.getRecordFieldValue(recordArray, 0, i);
+			EntityType tmp;
 			try {
 				double dub = Double.parseDouble(record);
+				
 				if (dub > LARGEST_MARK_VALUE) {
-					eTFactory
-							.makeEntityTypeFileImport((String) headers.get(i),
-									true).setName((String) headers.get(i));
-
+					tmp = new EntityType((String) headers.get(i), null, true);
+					if(firstStringCol < 0){
+						firstStringCol = i;
+						parentType = tmp;
+					}
 				} else {
-					eTFactory.makeEntityTypeFileImport((String) headers.get(i),
-							false);
-
+					tmp = new EntityType((String) headers.get(i), null, false);
+					types.add(tmp);
 				}
 			} catch (NumberFormatException e) {
-				eTFactory
-						.makeEntityTypeFileImport((String) headers.get(i), true)
-						.setName((String) headers.get(i));
-
+				tmp = new EntityType((String) headers.get(i), null, true);
+				if(firstStringCol < 0){
+					firstStringCol = i;
+					parentType = tmp;
+				}
 			}
 
 		}
+		
+		if(parentType == null){
+			//TODO
+		} else{
+			parentType.getSubEntityType().addAll(types);
+			parentType.setParentEntitytype(glob.getActiveProject().getHeadEntityType());
+			glob.getActiveProject().getHeadEntityType().getSubEntityType().add(parentType);
+		}
+		
+		
+		return firstStringCol;
 	}
 
-	private void createMarkEntities(ArrayList headers, ArrayList recordArray,
+	private void createMarkEntities(int parentRowIndex, ArrayList headers, ArrayList recordArray,
 			FileImport fileReader) {
 		Global glob = Global.getGlobal();
 
@@ -94,15 +112,14 @@ public class FileHandler {
 
 			SuperEntity parent = new SuperEntity(
 
-							glob.getActiveProject().getEntityTypes().get(1),
-							glob.getActiveProject().getHead(), 0);
+			glob.getActiveProject().getHeadEntityType().getSubEntityType()
+					.get(0), glob.getActiveProject().getHead(), 0);
 			String record = fileReader.getRecordFieldValue(recordArray, r, 0);
-			if (glob.getActiveProject().getEntityTypes().get(1)
-					.getIsTextField() == true) {
-				parent = new StringEntity(parent,record);
+			if (parent.getType().getIsTextField()) {
+				parent = new StringEntity(parent, record);
 			} else {
 				try {
-					parent= new LeafMarkEntity(parent);
+					parent = new LeafMarkEntity(parent);
 					parent.setMark(Double.parseDouble(record));
 				} catch (NumberFormatException e) {
 					parent.setMark(0);
@@ -112,7 +129,7 @@ public class FileHandler {
 			for (int f = 1; f < headers.size(); ++f) {
 				record = fileReader.getRecordFieldValue(recordArray, r, f);
 				EntityType fieldType = glob.getActiveProject().getEntityTypes()
-						.get(f + 1);
+						.get(f);
 
 				SuperEntity mE = new SuperEntity(fieldType, parent, 0);
 
@@ -129,8 +146,8 @@ public class FileHandler {
 			}
 		}
 	}
-	
-	private void openXls(String filename){
+
+	private void openXls(String filename) {
 		FileImport fileReader;
 		fileReader = new XlsImport();
 		ArrayList headers;
@@ -142,8 +159,8 @@ public class FileHandler {
 			createMarkEntities(headers, recordArray, fileReader);
 		}
 	}
-	
-	public void saveFile(String filename) throws UnsupportedFileTypeException{
+
+	public void saveFile(String filename) throws UnsupportedFileTypeException {
 		if (filename.substring(filename.indexOf('.')).contains("csv")) {
 			saveCSV(filename);
 		} else if (filename.substring(filename.indexOf('.')).contains("xls")) {
@@ -156,17 +173,16 @@ public class FileHandler {
 	private void saveCSV(String filename) {
 		CsvExport exporter = new CsvExport();
 		exporter.write(filename);
-		
-	}
 
+	}
 
 	private void saveXls(String filename) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-	private void openPDat(String filename){
-		
+
+	private void openPDat(String filename) {
+
 	}
 
 }

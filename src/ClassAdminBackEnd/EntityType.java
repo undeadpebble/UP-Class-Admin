@@ -10,6 +10,29 @@ import org.tmatesoft.sqljet.core.table.ISqlJetTable;
 import org.tmatesoft.sqljet.core.table.SqlJetDb;
 
 public class EntityType {
+	public EntityType(String name, EntityType parentEntitytype,
+			Boolean isTextField, Date date, Double defaultWeight) {
+		this.name = name;
+		this.parentEntitytype = parentEntitytype;
+		if(this.parentEntitytype != null)
+			this.parentEntitytype.getSubEntityType().add(this);
+		this.isTextField = isTextField;
+		this.date = date;
+		this.defaultWeight = defaultWeight;
+		
+	}
+	
+	public EntityType(String name, EntityType parentEntitytype,
+			Boolean isTextField) {
+		this.name = name;
+		this.parentEntitytype = parentEntitytype;
+		if(this.parentEntitytype != null)
+			this.parentEntitytype.getSubEntityType().add(this);
+		this.isTextField = isTextField;
+		this.date = null;
+		this.defaultWeight = 1.0;
+	}
+
 	private String name;
 	private LinkedList<Format> formatting;
 	private LinkedList<BorderCase> borderCasing;
@@ -41,9 +64,7 @@ public class EntityType {
 		return ID;
 	}
 
-	public EntityType(String n){
-		name = n;		
-	}
+	
 
 	
 
