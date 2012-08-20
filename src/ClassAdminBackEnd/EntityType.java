@@ -15,6 +15,11 @@ public class EntityType {
 	private LinkedList<BorderCase> borderCasing;
 	private LinkedList<SuperEntity> entityList;
 	private EntityType parentEntitytype;
+	private LinkedList<EntityType> subEntityType;
+	private Boolean isTextField;
+	private Date date;	 
+	private Double defaultWeight;
+	private int ID;
 	public EntityType getParentEntitytype() {
 		return parentEntitytype;
 	}
@@ -28,12 +33,6 @@ public class EntityType {
 			this.subEntityType = new LinkedList<EntityType>();
 		return subEntityType;
 	}
-
-	private LinkedList<EntityType> subEntityType;
-	private Boolean isTextField;
-	private Date date;	 
-	private Double defaultWeight;
-	private int ID;
 	
 	/**
 	 * @return the iD
@@ -46,30 +45,7 @@ public class EntityType {
 		name = n;		
 	}
 
-	/**
-	 * @param name
-	 * @param fields
-	 * @param visibleFields
-	 * @param fieldDefaults
-	 * @param formatting
-	 * @param borderCasing
-	 * @param entityList
-	 * @param isTextField
-	 * @param date
-	 * @param isVisible
-	 * @param defaultWeight
-	 */
-	public EntityType(String name, LinkedList<Format> formatting,
-			LinkedList<BorderCase> borderCasing,
-			LinkedList<SuperEntity> entityList, Boolean isTextField, Date date, Double defaultWeight) {
-		this.name = name;
-		this.formatting = formatting;
-		this.borderCasing = borderCasing;
-		this.entityList = entityList;
-		this.isTextField = isTextField;
-		this.date = date;
-		this.defaultWeight = defaultWeight;
-	}
+	
 
 	public String getName() {
 		return name;
