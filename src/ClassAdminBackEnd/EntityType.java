@@ -14,6 +14,22 @@ public class EntityType {
 	private LinkedList<Format> formatting;
 	private LinkedList<BorderCase> borderCasing;
 	private LinkedList<SuperEntity> entityList;
+	private EntityType parentEntitytype;
+	public EntityType getParentEntitytype() {
+		return parentEntitytype;
+	}
+
+	public void setParentEntitytype(EntityType parentEntitytype) {
+		this.parentEntitytype = parentEntitytype;
+	}
+
+	public LinkedList<EntityType> getSubEntityType() {
+		if(this.subEntityType == null)
+			this.subEntityType = new LinkedList<EntityType>();
+		return subEntityType;
+	}
+
+	private LinkedList<EntityType> subEntityType;
 	private Boolean isTextField;
 	private Date date;	 
 	private Double defaultWeight;
