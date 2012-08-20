@@ -27,6 +27,7 @@ public class ShadowPanel extends JXPanel {
 	private int newPosY;
 	private int oldPosX;
 	private int oldPosY;
+	private boolean shown;
 	
 	public ShadowPanel(int oldX, int oldY, int newX, int newY) {
 		setOpaque(false);
@@ -114,6 +115,7 @@ public class ShadowPanel extends JXPanel {
 				animator.start();
 			}
 		});
+		shown = true;
 	}
 
 	public void moveOut() {
@@ -124,7 +126,7 @@ public class ShadowPanel extends JXPanel {
 				Animator animator = PropertySetter.createAnimator(1000,
 						ShadowPanel.this, "location", new Point(oldPosX,
 								oldPosY));
-				animator.setAcceleration(0.2f);
+				animator.setAcceleration(0.0f);
 				animator.setDeceleration(0.3f);
 				animator.addTarget(new PropertySetter(ShadowPanel.this,
 						"location", new Point(oldPosX,
@@ -133,5 +135,11 @@ public class ShadowPanel extends JXPanel {
 			}
 		
 		});
+		shown = false;
 	}
+	
+	public boolean isShown() {
+		return shown;
+	}
+	
 }

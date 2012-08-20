@@ -71,6 +71,8 @@ public class Frame extends JFrame {
 	private FadePanel importInfoPanel;
 	private FadePanel exportInfoPanel;
 	private ShadowPanel studentPanel;
+	
+	private JButton button;
 
 	private final int HOME_SPACE_LEFT_X = 3;
 	private final int HOME_SPACE_Y = 55;
@@ -648,7 +650,7 @@ public class Frame extends JFrame {
 		
 		studentPanel = new ShadowPanel(getWidth(),0,getWidth()-250,0);
 		studentPanel.setBounds(getWidth(), 0, 250, getHeight()-20);
-		JButton button = new JButton(">");
+		button = new JButton(">");
 		button.setBounds(3, 3, 20, 20);
 		button.setBorder(new EmptyBorder(0,0,0,0));
 		studentPanel.add(button);
@@ -660,7 +662,11 @@ public class Frame extends JFrame {
 		button.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				studentPanel.moveOut();
+				if (studentPanel.isShown()) {
+					studentPanel.moveOut();
+					button.setText("<");
+				}
+					
 			}
 		});
 	}
