@@ -278,7 +278,7 @@ public class TreeView extends Display {
 		JComponent treeview = createPanelTreeView(label, treeHead);
 
 		JFrame frame = new JFrame();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//frame.setDefaultCloseOperation(JFrame.);
 		frame.setContentPane(treeview);
 		frame.pack();
 		frame.setVisible(true);		
@@ -287,27 +287,14 @@ public class TreeView extends Display {
 	public static JComponent createPanelTreeView(final String label, SuperEntity th) {
 		Color BACKGROUND = Color.WHITE;
 		Color FOREGROUND = Color.BLACK;
-
-		SuperEntity treeHead = th;
-		//LinkedList<SuperEntity> s = Global.getGlobal().getActiveProject().getTreeViewSelected();
-		
-		//int size = s.size();
-
-		Table nodes = null;
-		Tree tree = null;
-		Node node = null;
-		Node n;
-		tree = new Tree();
-		
-		
-		
+	
 		String str = "<tree>" + "<declarations>"
 				+ "<attributeDecl name=\"name\" type=\"String\" />"
 				+ "</declarations>";
 
 		str += th.createTreeFromHead();
-
 		str += "</tree>";
+		
 		try {
 			// Create file
 			FileWriter fstream = new FileWriter("out.xml");
@@ -330,12 +317,9 @@ public class TreeView extends Display {
 		File f1 = new File("out.xml");
 		boolean success = f1.delete();
 		if (!success) {
-			System.out.println("Deletion failed.");
 			System.exit(0);
 		} else {
-			System.out.println("File deleted.");
 		}
-		System.out.println(str);
 
 		
 		// create a new treemap
