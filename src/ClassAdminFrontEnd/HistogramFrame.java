@@ -38,6 +38,8 @@ public class HistogramFrame extends JFrame implements ActionListener {
 	static ChartPanel chartpanel ;
 	static JFreeChart chart;
 	int houerx =0;
+	double[] values;
+	int widthbar = 10;
 	public HistogramFrame()
 	{
 			JFrame f = new JFrame("Histogram");
@@ -66,7 +68,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 				}
 
 			}
-			double[] values = new double[diedata.size()];
+		 values = new double[diedata.size()];
 			for (int q = 0; q < diedata.size(); q++) {
 			
 				values[q] = diedata.get(q).get(houerx).getMark();
@@ -173,7 +175,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 						}
 				        
 				        
-				        double[] values = new double[diedata.size()];
+				    values = new double[diedata.size()];
 						for (int q = 0; q < diedata.size(); q++) {
 						
 							values[q] = diedata.get(q).get(houerx).getMark();
@@ -339,7 +341,88 @@ public class HistogramFrame extends JFrame implements ActionListener {
 					    }
 				}
 			});
+		    final JLabel width = new JLabel("Width");
+		    JButton widthsmall = new JButton("<");
 		    
+		    widthsmall.addMouseListener(new MouseListener() {
+				
+				@Override
+				public void mouseReleased(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mousePressed(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseExited(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseEntered(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseClicked(MouseEvent arg0) {
+					if(widthbar % 10 ==0)
+						widthbar +=10;
+					else
+						widthbar += 9;
+					HistogramDataset nuwedataset = new HistogramDataset();
+					nuwedataset.addSeries("Histogram", values,widthbar ,0,100);
+			        chartpanel.getChart().getXYPlot().setDataset(nuwedataset);
+			        System.out.println(widthbar);
+				}
+			});
+		    JButton widthlarge = new JButton(">");
+		    widthlarge.addMouseListener(new MouseListener() {
+				
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mousePressed(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseExited(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					System.out.println("ADSDDDD");
+					if(widthbar> 10)
+					widthbar -=10;
+					else if(widthbar >1)
+						widthbar-=1;
+						
+					HistogramDataset nuwedataset = new HistogramDataset();
+					nuwedataset.addSeries("Histogram", values,widthbar ,0,100);
+			        chartpanel.getChart().getXYPlot().setDataset(nuwedataset);
+			        System.out.println(widthbar);
+				}
+			});
 		    content.setLayout(new FlowLayout()); 
 		    content.add(chartpanel);
 		    content.add(lblNewLabel);
@@ -348,6 +431,9 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			content.add(switchregsx);
 		    content.add(rotate);
 		    content.add(extractPic);
+		    content.add(width);
+		    content.add(widthsmall);
+		    content.add(widthlarge);
 		    f.setVisible(true);
 	}
 	@Override
