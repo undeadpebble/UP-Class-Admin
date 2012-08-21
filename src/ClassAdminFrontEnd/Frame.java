@@ -256,6 +256,7 @@ public class Frame extends JFrame {
 			public void mousePressed(MouseEvent arg0) {
 			//HistogramFrame x = new HistogramFrame();
 				BoxPlotFrame x = new BoxPlotFrame();
+				x.createBoxPlotFrame();
 			System.out.println("DAS");
 				//ScatterPlotFrame x = new ScatterPlotFrame();
 			}
