@@ -278,7 +278,7 @@ public class TreeView extends Display {
 		JComponent treeview = createPanelTreeView(label, treeHead);
 
 		JFrame frame = new JFrame();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//frame.setDefaultCloseOperation(JFrame.);
 		frame.setContentPane(treeview);
 		frame.pack();
 		frame.setVisible(true);		
