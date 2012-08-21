@@ -39,6 +39,7 @@ import ClassAdminBackEnd.Global;
 
 import ClassAdminBackEnd.BorderCase;
 import ClassAdminBackEnd.EntityType;
+import ClassAdminBackEnd.Format;
 import ClassAdminBackEnd.LeafStringEntity;
 import ClassAdminBackEnd.Project;
 import ClassAdminBackEnd.StringEntity;
@@ -160,19 +161,9 @@ public class FrmTable extends JPanel {
 							.getBorderCasing();
 
 					for (int x = 0; x < bordercases.size(); x++) {
-						if (Double.parseDouble(data
-								.get(table.getRowSorter()
-										.convertRowIndexToModel(Index_row))
-								.get(Index_col).getValue()) >= bordercases.get(
-								x).getLowVal()
-								&& Double.parseDouble(data
-										.get(table.getRowSorter()
-												.convertRowIndexToModel(
-														Index_row))
-										.get(Index_col).getValue()) <= bordercases
-										.get(x).getHighVal()) {
+						/*if (bordercases.get(x).isBorderCase(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col).getValue())){
 							comp.setBackground(Color.cyan);
-						}
+						}*/
 					}
 
 					return comp;
@@ -342,7 +333,8 @@ public class FrmTable extends JPanel {
 		btnAddConditionalFormatting.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				headersList.get(0).getType().getFormatting();
+				LinkedList<Format> formats = headersList.get(0).getType().getFormatting();
+				
 			}
 		});
 
