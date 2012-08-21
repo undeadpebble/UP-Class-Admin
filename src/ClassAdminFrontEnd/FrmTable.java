@@ -54,6 +54,7 @@ public class FrmTable extends JPanel {
 	private JTextField txtField1;
 	private JTextField txtField2;
 	private LinkedList<Color> colors;
+	private LinkedList<String> colorsString;
 	LinkedList<LinkedList<SuperEntity>> data;
 	Project project;
 
@@ -63,9 +64,27 @@ public class FrmTable extends JPanel {
 			Project project) {
 		this.data = data;
 		this.project = project;
-		
-		colors.add(Color.green);
-		
+
+		colors = new LinkedList<Color>();
+		colorsString = new LinkedList<String>();
+
+		colors.add(Color.gray);
+		colorsString.add("Gray");
+		colors.add(Color.blue);
+		colorsString.add("Blue");
+		colors.add(Color.lightGray);
+		colorsString.add("LightGray");
+		colors.add(Color.magenta);
+		colorsString.add("Magenta");
+		colors.add(Color.orange);
+		colorsString.add("Orange");
+		colors.add(Color.pink);
+		colorsString.add("Pink");
+		colors.add(Color.red);
+		colorsString.add("Red");
+		colors.add(Color.yellow);
+		colorsString.add("Yellow");
+
 		createGUI(headers);
 	}
 
@@ -228,7 +247,7 @@ public class FrmTable extends JPanel {
 					final JFrame borderFrame = new JFrame();
 
 					SpinnerNumberModel SNMmax = new SpinnerNumberModel(
-							new Integer(40), // value
+							new Integer(50), // value
 							new Integer(0), // min
 							new Integer(100), // max
 							new Integer(1) // step
@@ -236,7 +255,7 @@ public class FrmTable extends JPanel {
 					final JSpinner maxVal = new JSpinner(SNMmax);
 
 					SpinnerNumberModel SNMmin = new SpinnerNumberModel(
-							new Integer(50), // value
+							new Integer(40), // value
 							new Integer(0), // min
 							new Integer(100), // max
 							new Integer(1) // step
@@ -347,7 +366,7 @@ public class FrmTable extends JPanel {
 				final JFrame formatFrame = new JFrame();
 
 				SpinnerNumberModel SNMmax = new SpinnerNumberModel(new Integer(
-						40), // value
+						0), // value
 						new Integer(0), // min
 						new Integer(100), // max
 						new Integer(1) // step
@@ -355,39 +374,160 @@ public class FrmTable extends JPanel {
 				final JSpinner maxVal = new JSpinner(SNMmax);
 
 				SpinnerNumberModel SNMmin = new SpinnerNumberModel(new Integer(
-						50), // value
+						0), // value
 						new Integer(0), // min
 						new Integer(100), // max
 						new Integer(1) // step
 				);
 				final JSpinner minVal = new JSpinner(SNMmin);
 
-				formatFrame.setLayout(new BorderLayout());
+				minVal.setEnabled(false);
+				maxVal.setEnabled(false);
 
-				formatFrame.add(maxVal, BorderLayout.CENTER);
-				formatFrame.add(minVal, BorderLayout.NORTH);
+				formatFrame.setLayout(new GridLayout(0, 2));
 
-				JButton addBetweenFroman = new JButton("Add between format");
-				formatFrame.add(addBetweenFroman, BorderLayout.SOUTH);
+				String[] formatTypesStr = new String[Format.formatTypes.length + 1];
+				formatTypesStr[0] = "";
+
+				for (int x = 1; x < formatTypesStr.length; x++) {
+					formatTypesStr[x] = Format.formatTypes[x - 1];
+				}
+
+				final JComboBox formatTypes = new JComboBox(formatTypesStr);
+
+				String[] cols = new String[colors.size()];
+
+				for (int x = 0; x < cols.length; x++) {
+					cols[x] = colorsString.get(x);
+				}
+
+				String[] whatToFormat = { "Background", "Text" };
+
+				final JComboBox colCombo = new JComboBox(cols);
+				final JComboBox whatToFormatCombo = new JComboBox(whatToFormat);
+
+				colCombo.setEnabled(false);
+				whatToFormatCombo.setEnabled(false);
+
+				final JButton addFormant = new JButton("Add format");
+				addFormant.setEnabled(false);
+
+				final JEditorPane description = new JEditorPane();
+				final JLabel label = new JLabel("Tooltip");
+
+				description.setEditable(false);
+				label.setEnabled(false);
+
+				formatFrame.add(formatTypes);
+				formatFrame.add(addFormant);
+				formatFrame.add(minVal);
+				formatFrame.add(maxVal);
+				formatFrame.add(colCombo);
+				formatFrame.add(whatToFormatCombo);
+				formatFrame.add(label);
+				formatFrame.add(description);
 
 				formatFrame.setVisible(true);
-				formatFrame.setSize(400, 400);
+				formatFrame.setSize(400, 150);
 
-				addBetweenFroman.addActionListener(new ActionListener() {
+				formatTypes.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						/*headersList
-								.get(cbheaders.getSelectedIndex())
-								.getType()
-								.getFormatting()
-								.add(new BetweenFormat(Double.parseDouble(minVal
-										.getValue().toString()), Double
-										.parseDouble(maxVal.getValue()
-												.toString())));*/
+						if (!(formatTypes.getSelectedIndex() == 0)) {
+							if (formatTypes.getSelectedIndex() == 1) {
+								minVal.setEnabled(true);
+								maxVal.setEnabled(true);
 
-						formatFrame.setVisible(false);
+								colCombo.setEnabled(true);
+								whatToFormatCombo.setEnabled(true);
 
-						table.repaint();
+								description.setEditable(true);
+								label.setEnabled(true);
+
+								addFormant.setEnabled(true);
+							} else {
+								minVal.setEnabled(true);
+								maxVal.setEnabled(false);
+
+								colCombo.setEnabled(true);
+								whatToFormatCombo.setEnabled(true);
+
+								description.setEditable(true);
+								label.setEnabled(true);
+
+								addFormant.setEnabled(true);
+							}
+						} else {
+							minVal.setEnabled(false);
+							maxVal.setEnabled(false);
+
+							colCombo.setEnabled(false);
+							whatToFormatCombo.setEnabled(false);
+
+							description.setEditable(false);
+							label.setEnabled(false);
+
+							addFormant.setEnabled(false);
+						}
+					}
+				});
+
+				addFormant.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						switch (formatTypes.getSelectedIndex()) {
+						case 1:
+							if (whatToFormatCombo.getSelectedIndex() == 0) {
+								headersList
+										.get(cbheaders.getSelectedIndex())
+										.getType()
+										.getFormatting()
+										.add(new BetweenFormat(Double
+												.parseDouble(minVal.getValue()
+														.toString()), Double
+												.parseDouble(maxVal.getValue()
+														.toString()), null,
+												colors.get(colCombo
+														.getSelectedIndex()),
+												description.getText()));
+							} else {
+								headersList
+										.get(cbheaders.getSelectedIndex())
+										.getType()
+										.getFormatting()
+										.add(new BetweenFormat(Double
+												.parseDouble(minVal.getValue()
+														.toString()), Double
+												.parseDouble(maxVal.getValue()
+														.toString()), colors
+												.get(colCombo
+														.getSelectedIndex()),
+												null, description.getText()));
+
+							}
+						case 2:if (whatToFormatCombo.getSelectedIndex() == 0) {
+							/*headersList
+							.get(cbheaders.getSelectedIndex())
+							.getType()
+							.getFormatting()
+							.add(new (Double
+									.parseDouble(minVal.getValue()
+											.toString()), null,
+									colors.get(colCombo
+											.getSelectedIndex()),
+									description.getText()));*/
+						}
+						else{
+							
+						}
+						case 3:if (whatToFormatCombo.getSelectedIndex() == 0) {
+							
+						}
+						else{
+							
+						}
+							
+						}
 					}
 				});
 			}

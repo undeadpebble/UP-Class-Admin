@@ -8,8 +8,9 @@ import org.tmatesoft.sqljet.core.table.ISqlJetTable;
 import org.tmatesoft.sqljet.core.table.SqlJetDb;
 
 public class LessThanFormat extends Format {
+	public static int numberOfValues = 1;
 
-	public LessThanFormat(int condition, int priority, Double value1, Color textColor, Color highlightColor,
+	public LessThanFormat(/*int condition, int priority,*/ Double value1, Color textColor, Color highlightColor,
 			String description) {
 		super(/* priority, */value1, textColor, highlightColor,
 				description);
