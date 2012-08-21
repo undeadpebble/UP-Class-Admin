@@ -98,6 +98,7 @@ public class TreeView extends Display {
 
 	private String m_label = "label";
 	private int m_orientation = Constants.ORIENT_LEFT_RIGHT;
+	static VisualItem m_item = null;
 
 	public TreeView(Tree t, String label) {
 		super(new Visualization());
@@ -273,28 +274,28 @@ public class TreeView extends Display {
 
 	// ------------------------------------------------------------------------
 
-	public static void createStudentFrm(String label, SuperEntity treeHead)
-	{
+	public static void createStudentFrm(String label, SuperEntity treeHead) {
 		JComponent treeview = createPanelTreeView(label, treeHead);
 
 		JFrame frame = new JFrame();
-		//frame.setDefaultCloseOperation(JFrame.);
+		// frame.setDefaultCloseOperation(JFrame.);
 		frame.setContentPane(treeview);
 		frame.pack();
-		frame.setVisible(true);		
+		frame.setVisible(true);
 	}
 
-	public static JComponent createPanelTreeView(final String label, SuperEntity th) {
+	public static JComponent createPanelTreeView(final String label,
+			SuperEntity th) {
 		Color BACKGROUND = Color.WHITE;
 		Color FOREGROUND = Color.BLACK;
-	
+
 		String str = "<tree>" + "<declarations>"
 				+ "<attributeDecl name=\"name\" type=\"String\" />"
 				+ "</declarations>";
 
 		str += th.createTreeFromHead();
 		str += "</tree>";
-		
+
 		try {
 			// Create file
 			FileWriter fstream = new FileWriter("out.xml");
@@ -321,7 +322,6 @@ public class TreeView extends Display {
 		} else {
 		}
 
-		
 		// create a new treemap
 		final TreeView tview = new TreeView(t, label);
 		tview.setBackground(BACKGROUND);
@@ -334,23 +334,45 @@ public class TreeView extends Display {
 		title.setFont(FontLib.getFont("Tahoma", Font.PLAIN, 16));
 		title.setBackground(BACKGROUND);
 		title.setForeground(FOREGROUND);
-		
 
+		/*
+		 * tview.addControlListener(new ControlAdapter() { public void
+		 * itemPressed(VisualItem item, MouseEvent e) { if
+		 * (item.canGetString(label)) {
+		 * 
+		 * while(e.isControlDown()) { System.out.println(item.getString(label));
+		 * item.setStartX(e.getX()); item.setStartY(e.getY()); } } }
+		 */
+		
 		tview.addControlListener(new ControlAdapter() {
-			public void itemPressed(VisualItem item, MouseEvent e) {
-				if (item.canGetString(label))
+			public void itemPressed(VisualItem item, MouseEvent e) 
+			{
+				if (item.canGetString(label)) 
 				{
-					item.setEndX(200);
-					item.setEndY(200);
-					item.setStartX(100);
-					item.setStartY(100);
+					if(e.isShiftDown())
+					{
+						m_item = item;
+						System.out.println("1 " + m_item.getString(label));
+					}
 				}
 			}
-			
-			public void itemExited(VisualItem item, MouseEvent e) {
-				title.setText(null);
+/*			@Override
+			public void mouseReleased(MouseEvent e) {
+				System.out.println("3 " + m_item.getString(label));
+				m_item = null;
 			}
-		});
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				System.out.println("2 " + m_item.getString(label));
+				if (m_item != null && e.isShiftDown())
+				{
+					m_item.setStartX(e.getX());
+					m_item.setStartY(e.getY());
+				}
+				else
+					m_item = null;
+			}			
+*/		});
 		
 		
 		tview.addControlListener(new ControlAdapter() {
@@ -358,7 +380,7 @@ public class TreeView extends Display {
 				if (item.canGetString(label))
 					title.setText(item.getString(label));
 			}
-			
+
 			public void itemExited(VisualItem item, MouseEvent e) {
 				title.setText(null);
 			}
@@ -368,7 +390,7 @@ public class TreeView extends Display {
 		box.add(Box.createHorizontalStrut(10));
 		box.add(title);
 		box.add(Box.createHorizontalGlue());
-		//box.add(search);
+		// box.add(search);
 		box.add(Box.createHorizontalStrut(3));
 		box.setBackground(BACKGROUND);
 
