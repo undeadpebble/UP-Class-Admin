@@ -185,26 +185,40 @@ public class FrmTable extends JPanel {
 					
 					
 					LinkedList<Format> format = data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col).getType().getFormatting();
+					
 					for(int x = 0; x < format.size();x++){
-						format.get(x).evaluate(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col).getMark());
-						if(format.get(x).getHighlightColor() != null){
-							backgroundColors.add(format.get(x).getHighlightColor());
+						if(format.get(x).evaluate(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col).getMark())){
+							if(format.get(x).getHighlightColor() != null){
+								backgroundColors.add(format.get(x).getHighlightColor());
+							}
+							else
+							if(format.get(x).getTextColor() != null){
+								textColors.add(format.get(x).getTextColor());
+							}
 						}
-						
-						if(format.get(x).getTextColor() != null){
-							textColors.add(format.get(x).getTextColor());
+						else{
+							backgroundColors.clear();
+							textColors.clear();
 						}
 					}
 					
 					int r = 0;
 					int g = 0;
 					int b = 0;
-					for(int x = 0; x < backgroundColors.size();x++){
+					
+					
+					
+					for(int x = 0; x < backgroundColors.size();x++){						
 						r += backgroundColors.get(x).getRed();
-						r += backgroundColors.get(x).getGreen();
-						r += backgroundColors.get(x).getBlue();
+						g += backgroundColors.get(x).getGreen();
+						b += backgroundColors.get(x).getBlue();
 					}
-					if(r != 0 || g != 0 || b!= 0){
+					
+					if(backgroundColors.size() > 0){
+						r = r / backgroundColors.size();
+						g /= backgroundColors.size();
+						b /= backgroundColors.size();
+						
 						comp.setBackground(new Color(r,g,b));
 					}
 
@@ -508,7 +522,7 @@ public class FrmTable extends JPanel {
 						case 1:
 							if (whatToFormatCombo.getSelectedIndex() == 0) {
 								headersList
-										.get(cbheaders.getSelectedIndex())
+										.get(cbFormatting.getSelectedIndex())
 										.getType()
 										.getFormatting()
 										.add(new BetweenFormat(Double
@@ -521,7 +535,7 @@ public class FrmTable extends JPanel {
 												description.getText()));
 							} else {
 								headersList
-										.get(cbheaders.getSelectedIndex())
+										.get(cbFormatting.getSelectedIndex())
 										.getType()
 										.getFormatting()
 										.add(new BetweenFormat(Double
@@ -537,7 +551,7 @@ public class FrmTable extends JPanel {
 						case 2:
 							if (whatToFormatCombo.getSelectedIndex() == 0) {
 								headersList
-										.get(cbheaders.getSelectedIndex())
+										.get(cbFormatting.getSelectedIndex())
 										.getType()
 										.getFormatting()
 										.add(new GreaterThanFormat(Double
@@ -548,7 +562,7 @@ public class FrmTable extends JPanel {
 												description.getText()));
 							} else {
 								headersList
-										.get(cbheaders.getSelectedIndex())
+										.get(cbFormatting.getSelectedIndex())
 										.getType()
 										.getFormatting()
 										.add(new GreaterThanFormat(Double
@@ -562,7 +576,7 @@ public class FrmTable extends JPanel {
 						case 3:
 							if (whatToFormatCombo.getSelectedIndex() == 0) {
 								headersList
-										.get(cbheaders.getSelectedIndex())
+										.get(cbFormatting.getSelectedIndex())
 										.getType()
 										.getFormatting()
 										.add(new LessThanFormat(Double
@@ -573,7 +587,7 @@ public class FrmTable extends JPanel {
 												description.getText()));
 							} else {
 								headersList
-										.get(cbheaders.getSelectedIndex())
+										.get(cbFormatting.getSelectedIndex())
 										.getType()
 										.getFormatting()
 										.add(new LessThanFormat(Double
@@ -584,6 +598,9 @@ public class FrmTable extends JPanel {
 												null, description.getText()));
 
 							}
+							
+							table.repaint();
+							formatFrame.setVisible(false);
 
 						}
 					}

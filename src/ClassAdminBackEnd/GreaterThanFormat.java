@@ -16,8 +16,9 @@ public class GreaterThanFormat extends Format {
 				description);
 		// TODO Auto-generated constructor stub
 	}
+
 	public Boolean evaluate(double mark){
-		return this.getValue1() <= mark;
+		return (this.getValue1() <= mark);
 	}
 
 	public int saveToDB(SqlJetDb db, int parentID, PDatIDGenerator idgen) throws SqlJetException {
