@@ -9,13 +9,17 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import javax.jws.Oneway;
 import javax.naming.PartialResultException;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -26,6 +30,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
+import javax.swing.text.BadLocationException;
 import javax.swing.tree.TreeNode;
 
 import ClassAdminBackEnd.Global;
@@ -87,14 +92,12 @@ public class TreeView extends Display {
 	private static final String tree = "tree";
 	private static final String treeNodes = "tree.nodes";
 	private static final String treeEdges = "tree.edges";
-	static private SuperEntity m_treeHead;
 
 	private LabelRenderer m_nodeRenderer;
 	private EdgeRenderer m_edgeRenderer;
 
 	private String m_label = "label";
 	private int m_orientation = Constants.ORIENT_LEFT_RIGHT;
-	private static LinkedList<SuperEntity> m_superEntity;
 
 	public TreeView(Tree t, String label) {
 		super(new Visualization());
@@ -220,9 +223,6 @@ public class TreeView extends Display {
 	}
 
 	// ------------------------------------------------------------------------
-	public void setSuperEntity(LinkedList<SuperEntity> superEntity) {
-		m_superEntity = superEntity;
-	}
 
 	public void setOrientation(int orientation) {
 		NodeLinkTreeLayout rtl = (NodeLinkTreeLayout) m_vis
@@ -334,13 +334,31 @@ public class TreeView extends Display {
 		title.setFont(FontLib.getFont("Tahoma", Font.PLAIN, 16));
 		title.setBackground(BACKGROUND);
 		title.setForeground(FOREGROUND);
+		
 
+		tview.addControlListener(new ControlAdapter() {
+			public void itemPressed(VisualItem item, MouseEvent e) {
+				if (item.canGetString(label))
+				{
+					item.setEndX(200);
+					item.setEndY(200);
+					item.setStartX(100);
+					item.setStartY(100);
+				}
+			}
+			
+			public void itemExited(VisualItem item, MouseEvent e) {
+				title.setText(null);
+			}
+		});
+		
+		
 		tview.addControlListener(new ControlAdapter() {
 			public void itemEntered(VisualItem item, MouseEvent e) {
 				if (item.canGetString(label))
 					title.setText(item.getString(label));
 			}
-
+			
 			public void itemExited(VisualItem item, MouseEvent e) {
 				title.setText(null);
 			}
