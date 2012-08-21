@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -273,16 +274,24 @@ public class FrmTable extends JPanel {
 				}
 			}
 		});
+		
+		JButton btnAddConditionalFormatting = new JButton("Add conditional formatting");
+		final JComboBox cbFormatting = new JComboBox(headers);
 
 		eastPanel.setLayout(new GridLayout(6, 2));
 
-		btnAdd = new JButton("Add");
+		btnAdd = new JButton("Add row");
 		eastPanel.add(btnAdd);
 
 		JButton btnView = new JButton("View student");
 		eastPanel.add(btnView);
 
 		eastPanel.add(border);
+		
+		JPanel formatting = new JPanel();
+		formatting.add(btnAddConditionalFormatting);
+		formatting.add(cbFormatting);
+		eastPanel.add(formatting);
 
 		JPanel northPanel = new JPanel();
 
@@ -327,6 +336,13 @@ public class FrmTable extends JPanel {
 						txtField1.getText() });
 				table.repaint();
 
+			}
+		});
+		
+		btnAddConditionalFormatting.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				headersList.get(0).getType().getFormatting();
 			}
 		});
 
