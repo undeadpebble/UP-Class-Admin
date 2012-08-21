@@ -34,7 +34,6 @@ import javax.swing.table.TableCellRenderer;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.MultiSplitLayout.Leaf;
 
-
 import ClassAdminBackEnd.Global;
 
 import ClassAdminBackEnd.BorderCase;
@@ -56,13 +55,14 @@ public class FrmTable extends JPanel {
 
 	private LinkedList<Integer> selected = new LinkedList<Integer>();
 
-	public FrmTable(String[] headers, LinkedList<LinkedList<SuperEntity>> data, Project project) {
+	public FrmTable(String[] headers, LinkedList<LinkedList<SuperEntity>> data,
+			Project project) {
 		this.data = data;
 		this.project = project;
 		createGUI(headers);
 	}
 
-	private void createGUI(String[] headers) {		
+	private void createGUI(String[] headers) {
 		setLayout(new BorderLayout());
 		JScrollPane pane = new JScrollPane();
 
@@ -74,15 +74,15 @@ public class FrmTable extends JPanel {
 					if (data.get(tcl.getRow()).get(tcl.getColumn())
 							.getDetails().getType().getIsTextField()) {
 						data.get(tcl.getRow()).get(tcl.getColumn())
-						.getDetails()
-						.setValue((String) tcl.getNewValue());
+								.getDetails()
+								.setValue((String) tcl.getNewValue());
 					} else {
 						try {
 							data.get(tcl.getRow())
-							.get(tcl.getColumn())
-							.setMark(
-									(Double.parseDouble((String) tcl
-											.getNewValue())));
+									.get(tcl.getColumn())
+									.setMark(
+											(Double.parseDouble((String) tcl
+													.getNewValue())));
 						} catch (Exception ex) {
 							table.getModel().setValueAt(tcl.getOldValue(),
 									tcl.getRow(), tcl.getColumn());
@@ -91,11 +91,10 @@ public class FrmTable extends JPanel {
 				}
 			}
 		};
-		
+
 		Object[][] temp = new Object[data.size()][data.get(0).size()];
-		
-		
-		for(int x = 0; x < data.get(1).size();x++){
+
+		for (int x = 0; x < data.get(1).size(); x++) {
 			project.getSelected().add(data.get(1).get(x));
 		}
 
@@ -104,59 +103,86 @@ public class FrmTable extends JPanel {
 				temp[x][y] = data.get(x).get(y).getValue();
 			}
 		}
-		
-		table = new JXTable(){
-			public Component prepareRenderer(TableCellRenderer renderer,int Index_row, int Index_col) {
-				Component comp = super.prepareRenderer(renderer, Index_row, Index_col);
-				//even index, selected or not selected
-				try{
-				if (project.getSelected().contains(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col))) {
-					int[] intTest = table.getSelectedRows();
-					boolean temp = false;
-					
-					for(int x = 0; x < intTest.length; x++){
-						if(intTest[x]==convertRowIndexToModel(Index_row)){
-							temp = true;
+
+		table = new JXTable() {
+			public Component prepareRenderer(TableCellRenderer renderer,
+					int Index_row, int Index_col) {
+				Component comp = super.prepareRenderer(renderer, Index_row,
+						Index_col);
+				// even index, selected or not selected
+				try {
+					if (project.getSelected().contains(
+							data.get(
+									table.getRowSorter()
+											.convertRowIndexToModel(Index_row))
+									.get(Index_col))) {
+						int[] intTest = table.getSelectedRows();
+						boolean temp = false;
+
+						for (int x = 0; x < intTest.length; x++) {
+							if (intTest[x] == convertRowIndexToModel(Index_row)) {
+								temp = true;
+							}
 						}
-					}
-					if(intTest.length > 0){
-						if(!temp){
-							project.getSelected().remove(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col));
-							comp.setBackground(Color.white);
-						}
-					}
-						else{
+						if (intTest.length > 0) {
+							if (!temp) {
+								project.getSelected()
+										.remove(data
+												.get(table
+														.getRowSorter()
+														.convertRowIndexToModel(
+																Index_row))
+												.get(Index_col));
+								comp.setBackground(Color.white);
+							}
+						} else {
 							comp.setBackground(Color.green);
 							table.addRowSelectionInterval(Index_row, Index_row);
 						}
-					}
-					else {
+					} else {
 						comp.setBackground(Color.white);
 					}
-				
-				if(isCellSelected(Index_row, Index_col)){
-					comp.setBackground(Color.green);
-					project.getSelected().add(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col));
-				}
-				
-				LinkedList<BorderCase> bordercases = data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col).getType().getBorderCasing();
-				
-				for(int x = 0; x < bordercases.size();x++){
-					if(Double.parseDouble(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col).getValue()) > bordercases.get(x).getLowVal() && Double.parseDouble(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col).getValue()) < bordercases.get(x).getHighVal()){
-						comp.setBackground(Color.cyan);
+
+					if (isCellSelected(Index_row, Index_col)) {
+						comp.setBackground(Color.green);
+						project.getSelected().add(
+								data.get(
+										table.getRowSorter()
+												.convertRowIndexToModel(
+														Index_row)).get(
+										Index_col));
 					}
-				}
-				
-				return comp;
-				}
-				catch (Exception e) {
+
+					LinkedList<BorderCase> bordercases = data
+							.get(table.getRowSorter().convertRowIndexToModel(
+									Index_row)).get(Index_col).getType()
+							.getBorderCasing();
+
+					for (int x = 0; x < bordercases.size(); x++) {
+						if (Double.parseDouble(data
+								.get(table.getRowSorter()
+										.convertRowIndexToModel(Index_row))
+								.get(Index_col).getValue()) >= bordercases.get(
+								x).getLowVal()
+								&& Double.parseDouble(data
+										.get(table.getRowSorter()
+												.convertRowIndexToModel(
+														Index_row))
+										.get(Index_col).getValue()) <= bordercases
+										.get(x).getHighVal()) {
+							comp.setBackground(Color.cyan);
+						}
+					}
+
+					return comp;
+				} catch (Exception e) {
 					// TODO: handle exception
 					return null;
 				}
 			}
 		};
 		table.setAutoCreateRowSorter(true);
-		
+
 		TableCellListener tcl = new TableCellListener(table, action);
 
 		table.addPropertyChangeListener(tcl);
@@ -169,7 +195,8 @@ public class FrmTable extends JPanel {
 						int viewRow = table.getSelectedRow();
 						if (viewRow < 0) {
 						} else {
-							int modelRow = table.convertRowIndexToModel(viewRow);
+							int modelRow = table
+									.convertRowIndexToModel(viewRow);
 						}
 					}
 
@@ -177,25 +204,27 @@ public class FrmTable extends JPanel {
 
 		pane.setViewportView(table);
 		JPanel eastPanel = new JPanel();
-		
+
 		JPanel border = new JPanel();
 		JButton bordercase = new JButton("Add bordercase");
 		border.add(bordercase);
-		
+
 		final JComboBox cbheaders = new JComboBox(headers);
-		final LinkedList<SuperEntity> headersList = project.getHead().getHeadersLinkedList();
+		final LinkedList<SuperEntity> headersList = project.getHead()
+				.getHeadersLinkedList();
 		border.add(cbheaders);
-		
+
 		bordercase.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {				
-				if(headersList.get(cbheaders.getSelectedIndex()).getType().getIsTextField()){
-					//Cannot add border cases to a text field
-					System.out.println("Cannot add border cases to a text field");
-				}
-				else{
-					JFrame borderFrame = new JFrame();
-				
+			public void actionPerformed(ActionEvent e) {
+				if (headersList.get(cbheaders.getSelectedIndex()).getType()
+						.getIsTextField()) {
+					// Cannot add border cases to a text field
+					System.out
+							.println("Cannot add border cases to a text field");
+				} else {
+					final JFrame borderFrame = new JFrame();
+
 					SpinnerNumberModel SNMmax = new SpinnerNumberModel(
 							new Integer(40), // value
 							new Integer(0), // min
@@ -203,7 +232,7 @@ public class FrmTable extends JPanel {
 							new Integer(1) // step
 					);
 					final JSpinner maxVal = new JSpinner(SNMmax);
-					
+
 					SpinnerNumberModel SNMmin = new SpinnerNumberModel(
 							new Integer(49), // value
 							new Integer(0), // min
@@ -211,40 +240,50 @@ public class FrmTable extends JPanel {
 							new Integer(1) // step
 					);
 					final JSpinner minVal = new JSpinner(SNMmin);
-					
+
 					borderFrame.setLayout(new BorderLayout());
-					
-					borderFrame.add(maxVal,BorderLayout.NORTH);
-					borderFrame.add(minVal,BorderLayout.CENTER);
-					
+
+					borderFrame.add(maxVal, BorderLayout.CENTER);
+					borderFrame.add(minVal, BorderLayout.NORTH);
+
 					JButton addBorderCase = new JButton("Add border case");
-					borderFrame.add(addBorderCase,BorderLayout.SOUTH);
-					
+					borderFrame.add(addBorderCase, BorderLayout.SOUTH);
+
 					borderFrame.setVisible(true);
 					borderFrame.setSize(400, 400);
-					
+
 					addBorderCase.addActionListener(new ActionListener() {
 						@Override
 						public void actionPerformed(ActionEvent e) {
-							headersList.get(cbheaders.getSelectedIndex()).getType().getBorderCasing().add(new BorderCase(Double.parseDouble(minVal.getValue().toString()), Double.parseDouble(maxVal.getValue().toString())));
-							
-							System.out.println(headersList.get(cbheaders.getSelectedIndex()).getType().getBorderCasing());
+							headersList
+									.get(cbheaders.getSelectedIndex())
+									.getType()
+									.getBorderCasing()
+									.add(new BorderCase(Double
+											.parseDouble(minVal.getValue()
+													.toString()), Double
+											.parseDouble(maxVal.getValue()
+													.toString())));
+
+							borderFrame.setVisible(false);
+
+							table.repaint();
 						}
 					});
 				}
 			}
 		});
 
-		eastPanel.setLayout(new GridLayout(6,2));		
-		
+		eastPanel.setLayout(new GridLayout(6, 2));
+
 		btnAdd = new JButton("Add");
 		eastPanel.add(btnAdd);
-		
+
 		JButton btnView = new JButton("View student");
 		eastPanel.add(btnView);
-		
+
 		eastPanel.add(border);
-		
+
 		JPanel northPanel = new JPanel();
 
 		txtField1 = new JTextField();
@@ -254,54 +293,54 @@ public class FrmTable extends JPanel {
 		JLabel lblField2 = new JLabel("Column2   ");
 		txtField1.setPreferredSize(lblField1.getPreferredSize());
 		txtField2.setPreferredSize(lblField2.getPreferredSize());
-		
+
 		add(northPanel, BorderLayout.NORTH);
 		add(eastPanel, BorderLayout.EAST);
 		add(pane, BorderLayout.CENTER);
-		
+
 		table.setColumnControlVisible(true);
 		table.setHorizontalScrollEnabled(true);
 
 		tableModel = new DefaultTableModel(temp, (Object[]) headers);
 		table.setModel(tableModel);
-		
+
 		btnAdd.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				table.repaint();
 				int count = tableModel.getRowCount() + 1;
-				
+
 				LinkedList<EntityType> temp = project.getEntityTypes();
-				for(int x = 0; x < temp.size();x++){
-					if(temp.get(x).getIsTextField()){
-						LeafStringEntity addEntity = new LeafStringEntity(temp.get(x), null , "");
+				for (int x = 0; x < temp.size(); x++) {
+					if (temp.get(x).getIsTextField()) {
+						LeafStringEntity addEntity = new LeafStringEntity(temp
+								.get(x), null, "");
+					} else {
+
 					}
-					else{
-						
-					}
-					
+
 				}
-				
-				//data.add(newToAdd);
-				
-				tableModel.addRow(new Object[] { txtField1.getText(),txtField1.getText() });
+
+				// data.add(newToAdd);
+
+				tableModel.addRow(new Object[] { txtField1.getText(),
+						txtField1.getText() });
 				table.repaint();
 
 			}
 		});
-		
 
-		
 		btnView.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				table.repaint();
 				table.getSelectedRow();
-				
-				TreeView.createStudentFrm("name",data.get(table.getSelectedRow()).get(0));
+
+				TreeView.createStudentFrm("name",
+						data.get(table.getSelectedRow()).get(0));
 			}
 		});
-			
+
 	}
 
 	public class InteractiveTableModelListener implements TableModelListener {
