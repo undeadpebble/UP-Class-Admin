@@ -5,58 +5,45 @@ import org.tmatesoft.sqljet.core.SqlJetTransactionMode;
 import org.tmatesoft.sqljet.core.table.ISqlJetTable;
 import org.tmatesoft.sqljet.core.table.SqlJetDb;
 
+public class IMGEntity extends SuperEntity {
 
-public class MarkEntity extends SuperEntity{
-
-
-	public MarkEntity(EntityType type, SuperEntity parentEntity) {
+	public IMGEntity(EntityType type, SuperEntity parentEntity, String text) {
 		super(type, parentEntity, 0);
+		this.setField(text);
+		
 		// TODO Auto-generated constructor stub
 	}
 	
-	
-
-
-	/**
-	 * @param replacedEntity
-	 */
-	public MarkEntity(SuperEntity replacedEntity) {
+	public IMGEntity(SuperEntity replacedEntity, String text){
 		super(replacedEntity);
-		// TODO Auto-generated constructor stub
+		this.setField(text);
 	}
-
-
-
+	
 
 	public String getValue(){
-		
-
-		return Double.toString(this.getMark());
-
+		//TODO
+			return this.getField();
 	}
 	
-	private Double doMarkMath() throws AbsentException{
-		return this.getMark();
+	public void setValue(String newValue){
+		this.setField(newValue);
 	}
-
+	
 	public int saveToDB(SqlJetDb db, int parentID, PDatIDGenerator idgen) throws SqlJetException {
 		int id = super.saveToDB(db, parentID, idgen);
 		db.beginTransaction(SqlJetTransactionMode.WRITE);
         try {
         	//TODO
-        	ISqlJetTable table = db.getTable(PDatExport.MARK_ENTITY_TABLE);
+        	ISqlJetTable table = db.getTable(PDatExport.IMG_ENTITY_TABLE);
         	//insert statements
         	
-        	table.insert(id+", "+this.getMark());
+        	table.insert(id+", "+this.getField());
         } finally {
             db.commit();
             
         }
         return id;
 	}
-	
-
 
 	
 }
-

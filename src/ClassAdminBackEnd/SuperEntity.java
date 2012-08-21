@@ -4,16 +4,21 @@ import java.awt.Color;
 import java.util.Date;
 import java.util.LinkedList;
 
+import org.tmatesoft.sqljet.core.SqlJetException;
+import org.tmatesoft.sqljet.core.SqlJetTransactionMode;
+import org.tmatesoft.sqljet.core.table.ISqlJetTable;
+import org.tmatesoft.sqljet.core.table.SqlJetDb;
+
 public class SuperEntity {
 
 
 	private SuperEntity parentEntity;
 	private LinkedList<SuperEntity> subEntity = new LinkedList<SuperEntity>();
-	private LinkedList<Double> subEntityWeight = new LinkedList<Double>();
+	private double weight;
 	private double mark;
 	private int rowFollowCount = 0;
 	private EntityType type;
-	private LinkedList<String> fields;
+	private String field = "";
 	/**
 	 * @return the type
 	 */
@@ -24,15 +29,21 @@ public class SuperEntity {
 	 * @param type the type to set
 	 */
 	public void setType(EntityType type) {
+		if(this.type != null){
+			this.type.getEntityList().remove(this);
+		}
 		this.type = type;
+		this.type.getEntityList().add(this);
 	}
 	/**
 	 * @return the fields
 	 */
-	public LinkedList<String> getFields() {
-		if(fields == null)
-			fields = new LinkedList<String>();
-		return fields;
+	public String getField() {
+		return field;
+	}
+	
+	public void setField(String field){
+		this.field=field;
 	}
 	/**
 	 * @return the picture
@@ -84,49 +95,32 @@ public class SuperEntity {
 	 */
 	
 	public SuperEntity(EntityType type, SuperEntity parentEntity, double mark) {
-		this.type = type;
+		this.setType(type);
 		this.parentEntity = parentEntity.unLeaf();
 		this.mark = mark;
 		this.parentEntity.getSubEntity().add(this);
-		this.parentEntity.getSubEntityWeight().add(this.getType().getDefaultWeight());
+		this.weight = this.getType().getDefaultWeight();
 
 	}
 	
 	public SuperEntity(SuperEntity replacedEntity){
-		this.type = replacedEntity.getType();
+		this.setType(replacedEntity.getType());
+		replacedEntity.getType().getEntityList().remove(replacedEntity);
+		
 		this.parentEntity = replacedEntity.getParentEntity();
 		this.mark = replacedEntity.getMark();
-		this.fields = replacedEntity.getFields();
+		this.field = replacedEntity.getField();
 		this.subEntity = replacedEntity.getSubEntity();
-		this.subEntityWeight = replacedEntity.getSubEntityWeight();
+		this.weight = replacedEntity.getWeight();
 		int index = replacedEntity.getParentEntity().getSubEntity().indexOf(replacedEntity);
 		replacedEntity.getParentEntity().getSubEntity().set(index, this);
-		replacedEntity.getParentEntity().getSubEntityWeight().set(index, this.getType().getDefaultWeight());
 	}
 	public SuperEntity(EntityType type, double mark){
-		this.type = type;
+		this.setType(type);
 		this.mark = mark;
 
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		
-		
-		builder.append("MarkEntity [mark=");
-		builder.append(mark);
-		builder.append(", subEntityWeight=");
-		builder.append(subEntityWeight);
-		builder.append(", subEntity=");
-		builder.append(subEntity);
-		builder.append("]");
-		
-		return builder.toString();
-	}
 
 	/**
 	 * @return the rowFollowCount
@@ -170,10 +164,13 @@ public class SuperEntity {
 	/**
 	 * @return the subEntityWeight
 	 */
-	public LinkedList<Double> getSubEntityWeight() {
-		if(this.subEntityWeight == null)
-			this.subEntityWeight = new LinkedList<Double>();
-		return subEntityWeight;
+	public double getWeight() {
+		
+		return weight;
+	}
+	
+	public void setWeight(double weight){
+		this.weight = weight;
 	}
 
 	/**
@@ -211,19 +208,27 @@ public class SuperEntity {
 		return this;
 	}
 	
-	private Double doMarkMath(){
+	private Double doMarkMath() throws AbsentException{
 		double mTotal = 0;
 		double wTotal = 0;
+		Boolean hasval = false;
 		for (int i = 0; i < subEntity.size(); ++i) {
 			try {
 				mTotal += subEntity.get(i).calcMark()
-						* subEntityWeight.get(i);
-				wTotal += subEntityWeight.get(i);
+						* subEntity.get(i).getWeight();
+				wTotal += subEntity.get(i).getWeight();
+				
+				hasval = true;
 			} catch (Exception e) {
 			}
 
 		}
 
+		
+		if(!hasval){
+			throw new AbsentException();
+		}
+		
 		if (wTotal != 0)
 			return mTotal / wTotal;
 		else
@@ -352,6 +357,61 @@ public class SuperEntity {
 			str = str + "qwerpoiu" + this.subEntity.get(x).getDataString();
 		}
 		
+		return str;
+	}
+	
+	public int saveToDB(SqlJetDb db, int parentID, PDatIDGenerator idgen) throws SqlJetException{
+		db.beginTransaction(SqlJetTransactionMode.WRITE);
+		int id = idgen.getID();
+        try {
+        	//TODO
+        	ISqlJetTable table = db.getTable(PDatExport.ENTITY_TABLE);
+        	//insert statements
+        	
+        	table.insert(id+", "+parentID+", "+this.type.getID());
+        } finally {
+            db.commit();
+            
+        }
+        for(int x = 0;x<this.getSubEntity().size();++x){
+        	this.getSubEntity().get(x).saveToDB(db, id, idgen);
+        }
+        return id;
+	}
+	
+	public LinkedList<SuperEntity> getColumn(LinkedList<LinkedList<SuperEntity>> data,int kolumn){
+		return(data.get(kolumn));
+	}
+	
+	public String[] getNumberHeaders(){
+		LinkedList<SuperEntity> list = this.getHeadersLinkedList();
+		LinkedList<String> strlst = new LinkedList<String>();
+		
+		for(int x = 0; x < list.size(); x++){
+			if(!list.get(x).getType().getIsTextField()){
+				strlst.add(list.get(x).getType().getName());
+			}
+		}
+		
+		String[] str = new String[strlst.size()];
+		
+		for(int x = 0; x < strlst.size(); x++){
+			str[x] = strlst.get(x);
+		}
+		
+		return(str);
+	}
+	
+	public String createTreeFromHead()
+	{
+		String str = "";
+		str += "<branch>" +
+				"<attribute name = \"name\" value= \"" + this.getValue() + "\" />";
+		for (int i = 0; i < this.getSubEntity().size(); i++)
+		{
+			str += this.getSubEntity().get(i).createTreeFromHead();
+		}
+		str +="</branch>";
 		return str;
 	}
 }

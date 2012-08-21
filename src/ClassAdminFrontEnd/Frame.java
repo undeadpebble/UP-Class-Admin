@@ -572,7 +572,7 @@ public class Frame extends JFrame {
 		// create table on panel
 		table = new FrmTable(Global.getGlobal().getActiveProject().getHead()
 				.getHeaders(), Global.getGlobal().getActiveProject().getHead()
-				.getDataLinkedList());
+				.getDataLinkedList(),Global.getGlobal().getActiveProject());
 
 		// create tabbedPane
 		if (tabbedPane == null) {

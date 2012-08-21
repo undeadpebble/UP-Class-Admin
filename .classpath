@@ -5,6 +5,7 @@
 	<classpathentry kind="lib" path="lib/javacsv.jar"/>
 	<classpathentry kind="lib" path="lib/jxl.jar"/>
 	<classpathentry kind="lib" path="lib/org.tmatesoft.sqljet_1.1.4.r1226_v20120717_1620.jar"/>
+	<classpathentry kind="lib" path="lib/antlr-runtime-3.3.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Filters"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/GraphicsUtilities"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/SwingX"/>
@@ -14,5 +15,6 @@
 	<classpathentry kind="lib" path="lib/timingframework-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/jcommon-1.0.17.jar"/>
 	<classpathentry kind="lib" path="lib/jfreechart-1.0.14.jar"/>
+	<classpathentry kind="lib" path="lib/prefuse-beta-20071021.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
