@@ -30,7 +30,7 @@ public class EntityDetails {
 		this.absentExcuse = absentExcuse;
 	}
 	public EntityDetails(int type){
-		this.type = Global.getGlobal().getActiveProject().getEntityTypes().get(type);
+		//this.type = Global.getGlobal().getActiveProject().getEntityTypes().get(type);
 		this.fields = null;
 		this.highlightColor = null;
 		this.textColor = null;

@@ -4,59 +4,69 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
 
+import org.tmatesoft.sqljet.core.SqlJetException;
+import org.tmatesoft.sqljet.core.SqlJetTransactionMode;
+import org.tmatesoft.sqljet.core.table.ISqlJetTable;
+import org.tmatesoft.sqljet.core.table.SqlJetDb;
+
 public class EntityType {
+	public EntityType(String name, EntityType parentEntitytype,
+			Boolean isTextField, Date date, Double defaultWeight) {
+		this.name = name;
+		this.parentEntitytype = parentEntitytype;
+		if(this.parentEntitytype != null)
+			this.parentEntitytype.getSubEntityType().add(this);
+		this.isTextField = isTextField;
+		this.date = date;
+		this.defaultWeight = defaultWeight;
+		
+	}
+	
+	public EntityType(String name, EntityType parentEntitytype,
+			Boolean isTextField) {
+		this.name = name;
+		this.parentEntitytype = parentEntitytype;
+		if(this.parentEntitytype != null)
+			this.parentEntitytype.getSubEntityType().add(this);
+		this.isTextField = isTextField;
+		this.date = null;
+		this.defaultWeight = 1.0;
+	}
+
 	private String name;
-	private LinkedList<String> fields;
-	private Boolean[] visibleFields;
-	private LinkedList<String> fieldDefaults;
 	private LinkedList<Format> formatting;
 	private LinkedList<BorderCase> borderCasing;
 	private LinkedList<SuperEntity> entityList;
+	private EntityType parentEntitytype;
+	private LinkedList<EntityType> subEntityType;
 	private Boolean isTextField;
-	private Date date;
-	
-	private Boolean isVisible; 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-
+	private Date date;	 
 	private Double defaultWeight;
-	private int index;
-	
-	public EntityType(String n){
-		name = n;		
+	private int ID;
+	public EntityType getParentEntitytype() {
+		return parentEntitytype;
 	}
 
-	/**
-	 * @param name
-	 * @param fields
-	 * @param visibleFields
-	 * @param fieldDefaults
-	 * @param formatting
-	 * @param borderCasing
-	 * @param entityList
-	 * @param isTextField
-	 * @param date
-	 * @param isVisible
-	 * @param defaultWeight
-	 */
-	public EntityType(String name, LinkedList<String> fields,Boolean[] visibleFields,
-			LinkedList<String> fieldDefaults, LinkedList<Format> formatting,
-			LinkedList<BorderCase> borderCasing,
-			LinkedList<SuperEntity> entityList, Boolean isTextField, Date date,
-			Boolean isVisible, Double defaultWeight) {
-		this.name = name;
-		this.fields = fields;
-		this.fieldDefaults = fieldDefaults;
-		this.formatting = formatting;
-		this.borderCasing = borderCasing;
-		this.entityList = entityList;
-		this.isTextField = isTextField;
-		this.date = date;
-		this.visibleFields = visibleFields;
-		this.isVisible = isVisible;
-		this.defaultWeight = defaultWeight;
+	public void setParentEntitytype(EntityType parentEntitytype) {
+		this.parentEntitytype = parentEntitytype;
 	}
+
+	public LinkedList<EntityType> getSubEntityType() {
+		if(this.subEntityType == null)
+			this.subEntityType = new LinkedList<EntityType>();
+		return subEntityType;
+	}
+	
+	/**
+	 * @return the iD
+	 */
+	public int getID() {
+		return ID;
+	}
+
+	
+
+	
 
 	public String getName() {
 		return name;
@@ -66,11 +76,6 @@ public class EntityType {
 		this.name = name;
 	}
 
-	public LinkedList<String> getFields() {
-		if(fields == null)
-			fields = new LinkedList<String>();
-		return fields;
-	}
 
 
 	public LinkedList<Format> getFormatting() {
@@ -111,28 +116,6 @@ public class EntityType {
 		this.date = date;
 	}
 
-	public Boolean[] getVisibleFields() {
-		return visibleFields;
-	}
-
-	public void setVisibleFields(Boolean[] visibleFields) {
-		this.visibleFields = visibleFields;
-	}
-
-	public Boolean getIsVisible() {
-		return isVisible;
-	}
-
-	public void setIsVisible(Boolean isVisible) {
-		this.isVisible = isVisible;
-	}
-
-	public LinkedList<String> getFieldDefaults() {
-		if(fieldDefaults==null)
-			fieldDefaults = new LinkedList<String>();
-		return fieldDefaults;
-	}
-
 	public Double getDefaultWeight() {
 		return defaultWeight;
 	}
@@ -140,12 +123,25 @@ public class EntityType {
 	public void setDefaultWeight(Double defaultWeight) {
 		this.defaultWeight = defaultWeight;
 	}
-
-	public int getIndex() {
-		return index;
+	
+	public void saveToDB(SqlJetDb db, int parentID, PDatIDGenerator idgen) throws SqlJetException{
+		db.beginTransaction(SqlJetTransactionMode.WRITE);
+        try {
+        	//TODO
+        	ISqlJetTable table = db.getTable(PDatExport.ENTITY_TYPE_TABLE);
+        	//insert statements
+        	this.ID = idgen.getID();
+        	table.insert(this.ID+", "+this.name+", "+this.isTextField+", "+this.date+", "+this.defaultWeight);
+        } finally {
+            db.commit();
+            
+        }
+        for(int x = 0;x<this.getBorderCasing().size();++x){
+        	this.getBorderCasing().get(x).saveToDB(db, this.ID, idgen);
+        }
+        for(int x = 0;x<this.getFormatting().size();++x){
+        	this.getFormatting().get(x).saveToDB(db, this.ID, idgen);
+        }
 	}
 
-	public void setIndex(int index) {
-		this.index = index;
-	}
 }

@@ -133,11 +133,9 @@ public class FrmTable extends JPanel {
 				if(isCellSelected(Index_row, Index_col)){
 					comp.setBackground(Color.green);
 					project.getSelected().add(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col));
+
 				}
-				
-				/*else {
-					comp.setBackground(Color.white);
-				}*/
+
 				return comp;
 			}
 		};
@@ -197,8 +195,18 @@ public class FrmTable extends JPanel {
 				tableModel.addRow(new Object[] { txtField1.getText(),
 						txtField1.getText() });
 
+				/*System.out.println(data.get(1).get(0).getValue());
+				System.out.println(table.getValueAt(1, 0));
+				System.out.println(table.getModel().getValueAt(1, 0));
+=======
+
+>>>>>>> refs/remotes/origin/marko
 				
+<<<<<<< HEAD
+				table.getModel().getValueAt(0, 0);*/
+
 				//table.getColumnModel().removeColumn(table.getColumnModel().getColumn(1));
+
 			}
 		});
 		
@@ -208,6 +216,8 @@ public class FrmTable extends JPanel {
 				table.repaint();
 				table.getSelectedRow();
 				
+
+
 				TreeView.createStudentFrm("name",data.get(table.getSelectedRow()).get(0));
 			}
 		});

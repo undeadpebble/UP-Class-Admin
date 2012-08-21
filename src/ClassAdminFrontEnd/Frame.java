@@ -1,7 +1,9 @@
 package ClassAdminFrontEnd;
 
 import java.awt.Color;
-import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseAdapter;
@@ -10,52 +12,72 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.text.BadLocationException;
-
-import org.jdesktop.swingx.JXPanel;
-import org.jdesktop.swingx.JXTable;
-import org.jdesktop.swingx.painter.CompoundPainter;
-import org.jdesktop.swingx.painter.GlossPainter;
-import org.jdesktop.swingx.painter.MattePainter;
 
 import ClassAdminBackEnd.FileHandler;
 import ClassAdminBackEnd.Global;
 import ClassAdminBackEnd.UnsupportedFileTypeException;
+import org.jdesktop.swingx.JXPanel;
 
 public class Frame extends JFrame {
 
 	private JPanel contentPane;
-	private JXPanel navBar;
-	private ReflectionButton btnImport;
-	private ReflectionButton btnExport;
-	private ReflectionButton btnStudents;
-	private FileHandler fileHandler;
+	private FadePanel homePanel;
+	private FadePanel workspacePanel;
+	private FadePanel navBar;
+	private FadePanel tabBar;
+	private FadePanel infoPanel;
+	private ThreeStopGradientPanel bottomPanel;
+	private BackgroundGradientPanel backgroundPanel;
+	private GradientMenuBar menuBar;
+	private ReflectionImagePanel container;
+	private ReflectionImagePanel containerRecentDocs;
+	private ReflectionImagePanel containerImportImage;
+	private ReflectionImagePanel containerWorkspace;
+	private ReflectionImagePanel containerStudents;
+	private ImagePanel containerImportText;
+	private ImagePanel containerImportTextSub;
+	private ImagePanel containerStudentsText;
+	private ImagePanel containerStudentsTextSub;
+	private ImagePanel containerWorkspaceText;
+	private ImagePanel containerWorkspaceTextSub;
+	private ImagePanel boxChartImage;
+	private ImagePanel histogramChartImage;
+	private ImagePanel scatterplotChartImage;
 	private JFileChooser filechooser;
 	private JFrame frame = this;
-	private FrmTable table;
-	private JTabbedPane tabbedPane;
 	private File currentFilePath;
 	private int tabCount = -1;
-	private int navBarHeight;
-	private int navBarSpace;
+	private FrmTable table;
+	private JTabbedPane tabbedPane;
+	private FileHandler fileHandler;
+	private BlurBackground blur;
+	private ReflectionButton homeButton;
+	private ReflectionButton importButton;
+	private ReflectionButton exportButton;
+	private FadePanel homeInfoPanel;
+	private FadePanel importInfoPanel;
+	private FadePanel exportInfoPanel;
+	private ShadowPanel studentPanel;
+	
+	private JButton button;
+
+	private final int HOME_SPACE_LEFT_X = 3;
+	private final int HOME_SPACE_Y = 55;
+	private final int HOME_BOTTOM_SPACE_Y = 53;
+	private final int HOME_SPACE_RIGHT_X = 22;
 
 	private static String currentOs;
 	private static String MAC_OS = "MAC";
@@ -109,146 +131,67 @@ public class Frame extends JFrame {
 		}
 	}
 
-	/**
-	 * Create the frame.
-	 */
 	public Frame() {
 
-		// determine os
-		determineOS();
-		if (currentOs == MAC_OS) {
-			setupMac();
-		} else if ((currentOs == WIN_OS) || (currentOs == null)) {
-			setupWindows();
-		}
+		// set frame title
+		setTitle("UP Admin");
 
-		// create file handler
-		fileHandler = FileHandler.get();
-
+		// frame setup
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1131, 650);
+		setBounds(100, 100, 1200, 700);
 
-		// create top menu bar
-		JMenuBar menuBar = new JMenuBar();
-		setJMenuBar(menuBar);
+		Image icon = Toolkit.getDefaultToolkit().getImage("Logo.png");
+		this.setIconImage(icon);
+
+		// Get the size of the screen
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		// Determine the new location of the window
+		int w = getSize().width;
+		int h = getSize().height;
+		int x = (dim.width - w) / 2;
+		int y = (dim.height - h) / 2;
+		// Move the window
+		setLocation(x, y);
+
+		// maximize window
+		// setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+
+		// create content pane
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setBackground(new Color(0x212121));
+		contentPane.setLayout(null);
+
+		// create menubar
+		menuBar = new GradientMenuBar();
+		menuBar.setBounds(0, 0, getWidth(), 30);
+		contentPane.add(menuBar);
 
 		// create menu
 		JMenu mnFile = new JMenu("File");
+		mnFile.setForeground(Color.white);
 		menuBar.add(mnFile);
 
-		// create menu items
-		JMenuItem mntmNew = new JMenuItem("New");
-		mnFile.add(mntmNew);
+		// create little bottom bar of home screen
+		bottomPanel = new ThreeStopGradientPanel(new Color(0xA1A1A1),
+				new Color(0x696969), new Color(0x000000));
+		bottomPanel.setSize(getWidth() - HOME_SPACE_RIGHT_X, 12);
+		bottomPanel.setBounds(HOME_SPACE_LEFT_X, getHeight()
+				- HOME_BOTTOM_SPACE_Y, bottomPanel.getWidth(),
+				bottomPanel.getHeight());
+		contentPane.add(bottomPanel);
 
-		// create gradient background panel
-		contentPane = new GradientPanel(new Color(0x878787),
-				new Color(0x242424), this.getWidth(), this.getHeight());
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
+		backgroundPanel = new BackgroundGradientPanel();
+		backgroundPanel.setSize(getWidth() - HOME_SPACE_RIGHT_X, getHeight()
+				- HOME_SPACE_Y - menuBar.getHeight());
+		backgroundPanel.setBounds(HOME_SPACE_LEFT_X, menuBar.getHeight(),
+				backgroundPanel.getWidth(), backgroundPanel.getHeight());
+		backgroundPanel.setLayout(null);
+		contentPane.add(backgroundPanel);
 
-		// create bottom navigation bar
-		navBar = new JXPanel();
-		navBar.setBounds(0, contentPane.getHeight() - navBarHeight
-				- navBarSpace, getWidth(), navBarHeight);
-
-		setupPainters();
-		contentPane.setLayout(null);
-		contentPane.add(navBar);
-		navBar.setLayout(null);
-
-		// add navigation bar labels
-		ShadowLabel lblImport = new ShadowLabel("Import", 12);
-		lblImport.setBounds(33, 64, 42, 17);
-		navBar.add(lblImport);
-
-		ShadowLabel lblExport = new ShadowLabel("Export", 12);
-		lblExport.setBounds(121, 64, 42, 17);
-		navBar.add(lblExport);
-
-		ShadowLabel lblChart = new ShadowLabel("Charts", 12);
-		lblChart.setBounds(205, 64, 42, 17);
-		navBar.add(lblChart);
-
-		ShadowLabel lblStudents = new ShadowLabel("Students", 12);
-		lblStudents.setBounds(297, 64, 54, 17);
-		navBar.add(lblStudents);
-
-		ShadowLabel lblSave = new ShadowLabel("Save", 12);
-		lblSave.setBounds(392, 64, 42, 17);
-		navBar.add(lblSave);
-
-		// add navigation bar buttons
-		try {
-
-			btnImport = new ReflectionButton(ImageIO.read(getClass()
-					.getResource("Import.png")));
-			btnImport.setBounds(20, 11, 67, 73);
-			navBar.add(btnImport);
-
-			btnExport = new ReflectionButton(ImageIO.read(getClass()
-					.getResource("Export.png")));
-			btnExport.setBounds(105, 11, 67, 73);
-			navBar.add(btnExport);
-
-			btnStudents = new ReflectionButton(ImageIO.read(getClass()
-					.getResource("Students.png")));
-			btnStudents.setBounds(289, 11, 67, 73);
-			navBar.add(btnStudents);
-
-			JButton btnChart;
-			btnChart = new ReflectionButton(ImageIO.read(getClass()
-					.getResource("Chart.png")));
-			btnChart.setBounds(194, 11, 67, 73);
-			navBar.add(btnChart);
-
-			JButton btnSave;
-			btnSave = new ReflectionButton(ImageIO.read(getClass().getResource(
-					"Save.png")));
-			btnSave.setBounds(382, 13, 67, 73);
-			navBar.add(btnSave);
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		// import button mouselistener
-		btnImport.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-				try {
-					openFile();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (BadLocationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		});
-
-		// export button mouselistener
-		btnExport.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-				try {
-					saveFileAs();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		});
-
-		// export students mouselistener
-		btnStudents.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-				studentsView();
-			}
-
-		});
+		setupHomeScreen();
+		setupWorkspaceScreen();
 
 		// frame resize listener to put nav bar at bottom of frame on resize
 		this.addComponentListener(new ComponentListener() {
@@ -263,10 +206,52 @@ public class Frame extends JFrame {
 
 			}
 
+			// resizes components with screen
 			@Override
 			public void componentResized(ComponentEvent arg0) {
-				navBar.setBounds(0, frame.getHeight() - navBar.getHeight()
-						- navBarSpace, frame.getWidth(), navBar.getHeight());
+
+				backgroundPanel.setBounds(HOME_SPACE_LEFT_X,
+						menuBar.getHeight(), frame.getWidth()
+								- HOME_SPACE_RIGHT_X, frame.getHeight()
+								- HOME_SPACE_Y - menuBar.getHeight());
+				workspacePanel.setBounds(0, 0, backgroundPanel.getWidth(),
+						backgroundPanel.getHeight());
+				bottomPanel.setBounds(HOME_SPACE_LEFT_X, frame.getHeight()
+						- HOME_BOTTOM_SPACE_Y, frame.getWidth()
+						- HOME_SPACE_RIGHT_X, 12);
+				menuBar.setBounds(0, 0, getWidth(), 30);
+				navBar.setBounds(0, backgroundPanel.getHeight() - 40 - 40,
+						getWidth(), 80);
+				workspacePanel.add(navBar);
+				if (tabbedPane != null) {
+					tabbedPane.setBounds(
+							20,
+							20,
+							workspacePanel.getWidth() - 40,
+							workspacePanel.getHeight() - 40
+									- navBar.getHeight());
+				}
+				if (tabBar != null) {
+					tabBar.setBounds(0, 0, frame.getWidth(), frame.getHeight());
+					tabBar.setLayout(null);
+				}
+				if (boxChartImage != null) {
+					boxChartImage.setBounds(tabBar.getWidth() - 70, 15, 50, 40);
+				}
+				if (histogramChartImage != null) {
+					histogramChartImage.setBounds(tabBar.getWidth() - 105, 15,
+							50, 40);
+				}
+				if (scatterplotChartImage != null) {
+					scatterplotChartImage.setBounds(tabBar.getWidth() - 140,
+							15, 50, 40);
+				}
+				if (infoPanel != null)
+				{
+					infoPanel.setBounds(0, workspacePanel.getHeight() - 112, getWidth(),43);
+				}
+				/*if (studentPanel != null)
+				studentPanel.setBounds(0, 0, 500, 500);*/
 
 			}
 
@@ -276,24 +261,254 @@ public class Frame extends JFrame {
 			}
 		});
 
+		fileHandler = FileHandler.get();
 	}
 
-	private void setupWindows() {
-		navBarHeight = 84;
-		navBarSpace = 60;
+	public void setupHomeScreen() {
+
+		homePanel = new FadePanel(false,800,400);
+		homePanel.setBounds(0, 0, backgroundPanel.getWidth(),
+				backgroundPanel.getHeight());
+		backgroundPanel.add(homePanel);
+		homePanel.setLayout(null);
+
+		blur = new BlurBackground(this);
+		this.setGlassPane(blur);
+		blur.setBounds(0, 0, getWidth(), getHeight());
+
+		// add title bars
+		try {
+			container = new ReflectionImagePanel(ImageIO.read(getClass()
+					.getResource("UPAdminHomeSelectTask.png")));
+			container.setBounds(117, 25, 953, 88);
+			homePanel.add(container);
+
+			containerRecentDocs = new ReflectionImagePanel(
+					ImageIO.read(getClass().getResource(
+							"UPAdminHomeRecentDocs.png")));
+			containerRecentDocs.setBounds(117, 366, 953, 81);
+			homePanel.add(containerRecentDocs);
+
+			containerImportImage = new ReflectionImagePanel(
+					ImageIO.read(getClass().getResource("Import.png")));
+			containerImportImage.setBounds(163, 139, 75, 138);
+			homePanel.add(containerImportImage);
+
+			containerWorkspace = new ReflectionImagePanel(
+					ImageIO.read(getClass().getResource("Workspace.png")));
+			containerWorkspace.setBounds(163, 235, 75, 102);
+			homePanel.add(containerWorkspace);
+
+			containerStudents = new ReflectionImagePanel(
+					ImageIO.read(getClass().getResource("Students.png")));
+			containerStudents.setBounds(544, 124, 75, 102);
+			homePanel.add(containerStudents);
+
+			containerImportText = new ImagePanel(ImageIO.read(getClass()
+					.getResource("ImportText.png")), true);
+			containerImportText.setBounds(210, 130, 89, 45);
+			homePanel.add(containerImportText);
+
+			containerImportTextSub = new ImagePanel(ImageIO.read(getClass()
+					.getResource("ImportSub.png")), false);
+			containerImportTextSub.setBounds(210, 166, 129, 32);
+			homePanel.add(containerImportTextSub);
+
+			containerStudentsText = new ImagePanel(ImageIO.read(getClass()
+					.getResource("StudentsText.png")), true);
+			containerStudentsText.setBounds(600, 130, 147, 54);
+			homePanel.add(containerStudentsText);
+
+			containerStudentsTextSub = new ImagePanel(ImageIO.read(getClass()
+					.getResource("StudentsSub.png")), false);
+			containerStudentsTextSub.setBounds(600, 166, 147, 32);
+			homePanel.add(containerStudentsTextSub);
+
+			containerWorkspaceText = new ImagePanel(ImageIO.read(getClass()
+					.getResource("WorkspaceText.png")), true);
+			containerWorkspaceText.setBounds(210, 224, 135, 53);
+			homePanel.add(containerWorkspaceText);
+
+			containerWorkspaceTextSub = new ImagePanel(ImageIO.read(getClass()
+					.getResource("WorkspaceSub.png")), false);
+			containerWorkspaceTextSub.setBounds(210, 259, 238, 32);
+			homePanel.add(containerWorkspaceTextSub);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		containerWorkspaceText.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				homeToWorkspaceTransition();
+			}
+		});
+
+		containerImportText.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				try {
+					openFile();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (BadLocationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+		homePanel.fadeIn();
 	}
 
-	private void setupMac() {
-		navBarHeight = 84;
-		navBarSpace = 23;
-	}
+	private void setupWorkspaceScreen() {
+		// create background pane for workspace screen
+		workspacePanel = new FadePanel(false,800,400);
+		workspacePanel.setBounds(0, 0, backgroundPanel.getWidth(),
+				backgroundPanel.getHeight());
+		backgroundPanel.add(workspacePanel);
+		workspacePanel.setLayout(null);
 
-	// bottom nav bar background painter
-	private void setupPainters() {
-		GlossPainter gloss = new GlossPainter();
+		//create navigation bar
+		navBar = new FadePanel(true,800,400);
+		navBar.setBounds(0, workspacePanel.getHeight() - 40 - 40, getWidth(),
+				80);
+		workspacePanel.add(navBar);
+		navBar.setLayout(null);
+		
+		//create transparent panel on which info bubbles will be shown
+		infoPanel = new FadePanel(false,200,200);
+		infoPanel.setBounds(0, workspacePanel.getHeight() - 112, getWidth(),43);
+		workspacePanel.add(infoPanel);
+		infoPanel.setLayout(null);
+		infoPanel.fadeIn();
+		
+		createStudentView();
+		
+		try {
+			
+			//create buttons on nav bar and add their respective mouselisteners
+			homeButton = new ReflectionButton(ImageIO.read(getClass()
+					.getResource("Home.png")));
+			homeButton.setBounds(8, 8, 68, 80);
+			navBar.add(homeButton);
+			
 
-		MattePainter matte = new MattePainter(new Color(0x242424));
-		navBar.setBackgroundPainter(new CompoundPainter(matte, gloss));
+			importButton = new ReflectionButton(ImageIO.read(getClass()
+					.getResource("Import.png")));
+			importButton.setBounds(84, 8, 68, 80);
+			navBar.add(importButton);
+
+			
+
+			exportButton = new ReflectionButton(ImageIO.read(getClass()
+					.getResource("Export.png")));
+			exportButton.setBounds(150, 8, 68, 80);
+			navBar.add(exportButton);
+			
+			//create info bubbles panel
+			homeInfoPanel = new FadePanel(false,200,200);
+			homeInfoPanel.setBounds(8, 0, 62, infoPanel.getHeight());
+			homeInfoPanel.setLayout(null);
+			infoPanel.add(homeInfoPanel);
+			
+			
+			//create info bubble image
+			ImagePanel infoBubble = new ImagePanel(ImageIO.read(getClass()
+					.getResource("HomeInfo.png")),false);
+			infoBubble.setBounds(0, 0, infoPanel.getWidth(), infoPanel.getHeight());
+			infoBubble.setLayout(null);
+			homeInfoPanel.add(infoBubble);
+			
+			//create import bubbles panel
+			importInfoPanel = new FadePanel(false,200,200);
+			importInfoPanel.setBounds(80, 0, 62, infoPanel.getHeight());
+			importInfoPanel.setLayout(null);
+			infoPanel.add(importInfoPanel);
+			
+			
+			//create import bubble image
+			ImagePanel importBubble = new ImagePanel(ImageIO.read(getClass()
+					.getResource("ImportInfo.png")),false);
+			importBubble.setBounds(0, 0, infoPanel.getWidth(), infoPanel.getHeight());
+			importBubble.setLayout(null);
+			importInfoPanel.add(importBubble);
+			
+			//create export bubbles panel
+			exportInfoPanel = new FadePanel(false,200,200);
+			exportInfoPanel.setBounds(150, 0, 62, infoPanel.getHeight());
+			exportInfoPanel.setLayout(null);
+			infoPanel.add(exportInfoPanel);
+			
+			
+			//create export bubble image
+			ImagePanel exportBubble = new ImagePanel(ImageIO.read(getClass()
+					.getResource("ExportInfo.png")),false);
+			exportBubble.setBounds(0, 0, infoPanel.getWidth(), infoPanel.getHeight());
+			exportBubble.setLayout(null);
+			exportInfoPanel.add(exportBubble);
+			
+			
+			
+			homeButton.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mousePressed(MouseEvent arg0) {
+					workspaceToHomeTransition();
+				}
+				
+				public void mouseEntered(MouseEvent arg0) {
+					homeInfoPanel.fadeIn();
+				}
+				
+				public void mouseExited(MouseEvent arg0) {
+					homeInfoPanel.fadeOut();
+				}
+			});
+			
+			
+			importButton.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mousePressed(MouseEvent arg0) {
+					try {
+						openFile();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (BadLocationException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				
+				public void mouseEntered(MouseEvent arg0) {
+					importInfoPanel.fadeIn();
+				}
+				
+				public void mouseExited(MouseEvent arg0) {
+					importInfoPanel.fadeOut();
+				}
+			});
+			
+			exportButton.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mousePressed(MouseEvent arg0) {
+					
+				}
+				
+				public void mouseEntered(MouseEvent arg0) {
+					exportInfoPanel.fadeIn();
+				}
+				
+				public void mouseExited(MouseEvent arg0) {
+					exportInfoPanel.fadeOut();
+				}
+			});
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 	public void openFile() throws IOException, BadLocationException {
@@ -303,6 +518,7 @@ public class Frame extends JFrame {
 		FileFilter fileFilter = new FileNameExtensionFilter(
 				"Supported files types: pdat, csv", "pdat", "csv");
 
+		blur.fadeIn();
 		// Create a file chooser
 		filechooser = new JFileChooser();
 		if (currentFilePath != null) {
@@ -319,47 +535,20 @@ public class Frame extends JFrame {
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			file = filechooser.getSelectedFile();
 			currentFilePath = filechooser.getSelectedFile();
+			blur.fadeOut();
 			createTab(file);
+			homeToWorkspaceTransition();
+			tabBar.fadeIn();
+			
+			studentPanel.moveIn();
 		} else {
-
+			blur.fadeOut();
 		}
 	}
 
-	public void saveFileAs() throws IOException {
-
-		File file;
-		// set the file extentions that may be chosen
-		FileFilter filter = new FileNameExtensionFilter(
-				"Supported files types: pdat, csv", "pdat", "csv");
-
-		// Create a file chooser
-		filechooser = new JFileChooser();
-		if (currentFilePath != null) {
-			filechooser.setCurrentDirectory(currentFilePath);
-		}
-		currentFilePath = filechooser.getSelectedFile();
-
-		// add the filter to the file chooser
-		filechooser.addChoosableFileFilter(filter);
-
-		// shows the dialog, return value specifies file
-		int returnVal = filechooser.showSaveDialog(this);
-
-		// if the chosen file is valid
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			file = filechooser.getSelectedFile();
-
-			try {
-				FileHandler.get().saveFile(file.getAbsolutePath());
-			} catch (UnsupportedFileTypeException e) {
-				e.printStackTrace();
-			}
-		} else {
-
-		}
-	}
-
-	// function to determine OS that is currently running
+	/*
+	 * function to determine OS that is currently running
+	 */
 	public static void determineOS() {
 		currentOs = System.getProperty("os.name").toUpperCase();
 		if (currentOs.contains("MAC")) {
@@ -371,10 +560,12 @@ public class Frame extends JFrame {
 		}
 	}
 
-	// create a new Tab when a new file is imported
+	/*
+	 * create a new Tab when a new file is imported
+	 */
 	public void createTab(File file) {
 		try {
-			fileHandler.openFile(file.getAbsolutePath());
+			fileHandler.openFile(file.getAbsolutePath(), Global.getGlobal().getActiveProject());
 		} catch (UnsupportedFileTypeException e) {
 			e.printStackTrace();
 		}
@@ -386,9 +577,20 @@ public class Frame extends JFrame {
 		// create tabbedPane
 		if (tabbedPane == null) {
 			tabbedPane = new JTabbedPane();
-			tabbedPane.setBounds(54, 50, 948, 400);
-			contentPane.add(tabbedPane);
+			tabbedPane.setBounds(20, 20, workspacePanel.getWidth() - 40,
+					workspacePanel.getHeight() - 40 - navBar.getHeight());
 		}
+
+		// create panel on which tabbedPane will be
+		if (tabBar == null) {
+			tabBar = new FadePanel(false,800,400);
+			tabBar.setBounds(0, 0, frame.getWidth(), frame.getHeight());
+			tabBar.setLayout(null);
+			createGraphIcons();
+		}
+		tabBar.add(tabbedPane);
+
+		workspacePanel.add(tabBar);
 
 		// put panel with table on a new tab
 		tabbedPane.addTab(file.getName(), table);
@@ -396,67 +598,76 @@ public class Frame extends JFrame {
 		tabbedPane.setTabComponentAt(tabCount, new TabButton(file.getName()));
 	}
 
-	// create students table
-	private void studentsView() {
+	/*
+	 * Function to simulate transitions from home screen to 
+	 * workspace screen 
+	 */
+	public void homeToWorkspaceTransition() {
+		homePanel.fadeOut();
+		workspacePanel.fadeIn();
+		navBar.fadeIn();
+		frame.remove(blur);
+	}
+
+	/*
+	 * Function to simulate transitions from workspace screen to 
+	 * home screen 
+	 */
+	public void workspaceToHomeTransition() {
+		homePanel.fadeIn();
+		workspacePanel.fadeOut();
+		navBar.fadeOut();
+	}
+
+	/*
+	 * Function to create graph icons on top of right side of 
+	 * workspace screen 
+	 */
+	public void createGraphIcons() {
+		try {
+			boxChartImage = new ImagePanel(ImageIO.read(getClass().getResource(
+					"Box.png")), true);
+			boxChartImage.setBounds(tabBar.getWidth() - 70, 15, 60, 40);
+			tabBar.add(boxChartImage);
+
+			histogramChartImage = new ImagePanel(ImageIO.read(getClass()
+					.getResource("Histogram.png")), true);
+			histogramChartImage.setBounds(tabBar.getWidth() - 105, 15, 50, 40);
+			tabBar.add(histogramChartImage);
+
+			scatterplotChartImage = new ImagePanel(ImageIO.read(getClass()
+					.getResource("Scatterplot.png")), true);
+			scatterplotChartImage
+					.setBounds(tabBar.getWidth() - 140, 15, 50, 40);
+			tabBar.add(scatterplotChartImage);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+	
+	public void createStudentView(){
 		
-		MyTableModel model = new MyTableModel();
-		JXTable studentsTable = new JXTable(model) {
-			public Component prepareRenderer(TableCellRenderer renderer,
-					int Index_row, int Index_col) {
-				Component comp = super.prepareRenderer(renderer, Index_row,
-						Index_col);
-				// even index, selected or not selected
-				if (Index_row % 2 == 0 && !isCellSelected(Index_row, Index_col)) {
-					comp.setBackground(Color.lightGray);
-				} else {
-					comp.setBackground(Color.white);
+		studentPanel = new ShadowPanel(getWidth(),0,getWidth()-250,0);
+		studentPanel.setBounds(getWidth(), 0, 250, getHeight()-20);
+		button = new JButton(">");
+		button.setBounds(3, 3, 20, 20);
+		button.setBorder(new EmptyBorder(0,0,0,0));
+		studentPanel.add(button);
+		studentPanel.setLayout(null);
+		backgroundPanel.setLayer(studentPanel, 300);
+		backgroundPanel.add(studentPanel);
+		studentPanel.setVisible(false);
+		
+		button.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				if (studentPanel.isShown()) {
+					studentPanel.moveOut();
+					button.setText("<");
 				}
-				return comp;
+					
 			}
-		};
-		studentsTable.setBounds(54, 50, 948, 400);
-		studentsTable.setGridColor(Color.black);
-		contentPane.add(studentsTable);
-		
-		 studentsTable.getSelectedRow();
-
-		
-
-		
-
-	//	table.setRowHeight(80);
-	//	table.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer());
-		JScrollPane pane = new JScrollPane(table);
-
-		studentsTable.setModel(model);
-	}
-
-	class MyTableModel extends AbstractTableModel {
-		public Object getValueAt(int row, int column) {
-			return "" + (row * column);
-		}
-
-		public int getColumnCount() {
-			return 4;
-		}
-
-		public int getRowCount() {
-			return 5;
-		}
-
-	}
-
-	class ImageRenderer extends DefaultTableCellRenderer {
-		JLabel lbl = new JLabel();
-
-		ImageIcon icon = new ImageIcon(getClass().getResource("Chart.png"));
-
-		public Component getTableCellRendererComponent(JTable table,
-				Object value, boolean isSelected, boolean hasFocus, int row,
-				int column) {
-			lbl.setText((String) value);
-			lbl.setIcon(icon);
-			return lbl;
-		}
+		});
 	}
 }

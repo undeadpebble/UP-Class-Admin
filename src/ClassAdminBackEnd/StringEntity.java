@@ -1,28 +1,48 @@
 package ClassAdminBackEnd;
 
+import org.tmatesoft.sqljet.core.SqlJetException;
+import org.tmatesoft.sqljet.core.SqlJetTransactionMode;
+import org.tmatesoft.sqljet.core.table.ISqlJetTable;
+import org.tmatesoft.sqljet.core.table.SqlJetDb;
+
 public class StringEntity extends SuperEntity{
 
 	public StringEntity(EntityType type, SuperEntity parentEntity, String text) {
 		super(type, parentEntity, 0);
-		this.getFields().add(text);
+		this.setField(text);
 		
 		// TODO Auto-generated constructor stub
 	}
 	
 	public StringEntity(SuperEntity replacedEntity, String text){
 		super(replacedEntity);
-		if(this.getFields().size() == 0)
-			this.getFields().add(text);
+		this.setField(text);
 	}
 	
 
 	public String getValue(){
 		//TODO
-			return this.getFields().get(0);
+			return this.getField();
 	}
 	
 	public void setValue(String newValue){
-		this.getFields().set(0, newValue);
+		this.setField(newValue);
+	}
+	
+	public int saveToDB(SqlJetDb db, int parentID, PDatIDGenerator idgen) throws SqlJetException {
+		int id = super.saveToDB(db, parentID, idgen);
+		db.beginTransaction(SqlJetTransactionMode.WRITE);
+        try {
+        	//TODO
+        	ISqlJetTable table = db.getTable(PDatExport.STRING_ENTITY_TABLE);
+        	//insert statements
+        	
+        	table.insert(id+", "+this.getField());
+        } finally {
+            db.commit();
+            
+        }
+        return id;
 	}
 
 	

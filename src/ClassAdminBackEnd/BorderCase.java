@@ -1,5 +1,10 @@
 package ClassAdminBackEnd;
 
+import org.tmatesoft.sqljet.core.SqlJetException;
+import org.tmatesoft.sqljet.core.SqlJetTransactionMode;
+import org.tmatesoft.sqljet.core.table.ISqlJetTable;
+import org.tmatesoft.sqljet.core.table.SqlJetDb;
+
 public class BorderCase {
 	private Double lowVal;
 	private Double highVal;
@@ -54,5 +59,21 @@ public class BorderCase {
 		}
 		
 		return false;
+	}
+	
+	public int saveToDB(SqlJetDb db, int parentID, PDatIDGenerator idgen) throws SqlJetException {
+
+		db.beginTransaction(SqlJetTransactionMode.WRITE);
+        try {
+        	//TODO
+        	ISqlJetTable table = db.getTable(PDatExport.ENTITY_TABLE);
+        	//insert statements
+        	
+        	table.insert(parentID+", "+this.getLowVal()+", "+this.getHighVal());
+        } finally {
+            db.commit();
+            
+        }
+        return 0;
 	}
 }
