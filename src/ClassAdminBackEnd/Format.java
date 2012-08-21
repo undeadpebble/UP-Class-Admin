@@ -8,13 +8,20 @@ import org.tmatesoft.sqljet.core.table.ISqlJetTable;
 import org.tmatesoft.sqljet.core.table.SqlJetDb;
 
 public class Format {
-	private int priority;
+	//private int priority;
 	private Double value1;
 	private Color textColor;
 	private Color highlightColor;
 	private String description;
+	private int numberOfValues;
 	
 	
+	public int getNumberOfValues() {
+		return numberOfValues;
+	}
+	protected void setNumberOfValues(int numberOfValues) {
+		this.numberOfValues = numberOfValues;
+	}
 	/**
 	 * @param condition
 	 * @param priority
@@ -24,21 +31,21 @@ public class Format {
 	 * @param highlightColor
 	 * @param description
 	 */
-	public Format(int priority, Double value1, 
+	public Format(/*int priority, */Double value1, 
 			Color textColor, Color highlightColor, String description) {
-		this.priority = priority;
+		//this.priority = priority;
 		this.value1 = value1;
 		this.textColor = textColor;
 		this.highlightColor = highlightColor;
 		this.description = description;
 	}
-	public int getPriority() {
+	/*public int getPriority() {
 		return priority;
 	}
 	
 	public void setPriority(int priority) {
 		this.priority = priority;
-	}
+	}*/
 	public Double getValue1() {
 		return value1;
 	}

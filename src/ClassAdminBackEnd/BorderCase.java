@@ -54,7 +54,7 @@ public class BorderCase {
 	 * @return boolean
 	 */
 	public boolean isBorderCase(SuperEntity markE){
-		if((markE.getMark() < highVal) && (markE.getMark() > lowVal)){
+		if((markE.getMark() < highVal) && (markE.getMark() >= lowVal)){
 			return true;
 		}
 		

@@ -37,6 +37,7 @@ import org.jdesktop.swingx.MultiSplitLayout.Leaf;
 
 import ClassAdminBackEnd.Global;
 
+import ClassAdminBackEnd.BetweenFormat;
 import ClassAdminBackEnd.BorderCase;
 import ClassAdminBackEnd.EntityType;
 import ClassAdminBackEnd.Format;
@@ -52,6 +53,7 @@ public class FrmTable extends JPanel {
 	private DefaultTableModel tableModel;
 	private JTextField txtField1;
 	private JTextField txtField2;
+	private LinkedList<Color> colors;
 	LinkedList<LinkedList<SuperEntity>> data;
 	Project project;
 
@@ -61,6 +63,9 @@ public class FrmTable extends JPanel {
 			Project project) {
 		this.data = data;
 		this.project = project;
+		
+		colors.add(Color.green);
+		
 		createGUI(headers);
 	}
 
@@ -161,9 +166,14 @@ public class FrmTable extends JPanel {
 							.getBorderCasing();
 
 					for (int x = 0; x < bordercases.size(); x++) {
-						/*if (bordercases.get(x).isBorderCase(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col).getValue())){
+						if (bordercases.get(x).isBorderCase(
+								data.get(
+										table.getRowSorter()
+												.convertRowIndexToModel(
+														Index_row)).get(
+										Index_col))) {
 							comp.setBackground(Color.cyan);
-						}*/
+						}
 					}
 
 					return comp;
@@ -226,7 +236,7 @@ public class FrmTable extends JPanel {
 					final JSpinner maxVal = new JSpinner(SNMmax);
 
 					SpinnerNumberModel SNMmin = new SpinnerNumberModel(
-							new Integer(49), // value
+							new Integer(50), // value
 							new Integer(0), // min
 							new Integer(100), // max
 							new Integer(1) // step
@@ -265,8 +275,9 @@ public class FrmTable extends JPanel {
 				}
 			}
 		});
-		
-		JButton btnAddConditionalFormatting = new JButton("Add conditional formatting");
+
+		JButton btnAddConditionalFormatting = new JButton(
+				"Add conditional formatting");
 		final JComboBox cbFormatting = new JComboBox(headers);
 
 		eastPanel.setLayout(new GridLayout(6, 2));
@@ -278,7 +289,7 @@ public class FrmTable extends JPanel {
 		eastPanel.add(btnView);
 
 		eastPanel.add(border);
-		
+
 		JPanel formatting = new JPanel();
 		formatting.add(btnAddConditionalFormatting);
 		formatting.add(cbFormatting);
@@ -329,13 +340,58 @@ public class FrmTable extends JPanel {
 
 			}
 		});
-		
+
 		btnAddConditionalFormatting.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				LinkedList<Format> formats = headersList.get(0).getType().getFormatting();
-				
+				final JFrame formatFrame = new JFrame();
+
+				SpinnerNumberModel SNMmax = new SpinnerNumberModel(new Integer(
+						40), // value
+						new Integer(0), // min
+						new Integer(100), // max
+						new Integer(1) // step
+				);
+				final JSpinner maxVal = new JSpinner(SNMmax);
+
+				SpinnerNumberModel SNMmin = new SpinnerNumberModel(new Integer(
+						50), // value
+						new Integer(0), // min
+						new Integer(100), // max
+						new Integer(1) // step
+				);
+				final JSpinner minVal = new JSpinner(SNMmin);
+
+				formatFrame.setLayout(new BorderLayout());
+
+				formatFrame.add(maxVal, BorderLayout.CENTER);
+				formatFrame.add(minVal, BorderLayout.NORTH);
+
+				JButton addBetweenFroman = new JButton("Add between format");
+				formatFrame.add(addBetweenFroman, BorderLayout.SOUTH);
+
+				formatFrame.setVisible(true);
+				formatFrame.setSize(400, 400);
+
+				addBetweenFroman.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						/*headersList
+								.get(cbheaders.getSelectedIndex())
+								.getType()
+								.getFormatting()
+								.add(new BetweenFormat(Double.parseDouble(minVal
+										.getValue().toString()), Double
+										.parseDouble(maxVal.getValue()
+												.toString())));*/
+
+						formatFrame.setVisible(false);
+
+						table.repaint();
+					}
+				});
 			}
+
 		});
 
 		btnView.addActionListener(new ActionListener() {
