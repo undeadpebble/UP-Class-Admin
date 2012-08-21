@@ -565,7 +565,7 @@ public class Frame extends JFrame {
 	 */
 	public void createTab(File file) {
 		try {
-			fileHandler.openFile(file.getAbsolutePath());
+			fileHandler.openFile(file.getAbsolutePath(), Global.getGlobal().getActiveProject());
 		} catch (UnsupportedFileTypeException e) {
 			e.printStackTrace();
 		}
