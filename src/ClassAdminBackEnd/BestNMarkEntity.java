@@ -63,8 +63,8 @@ public class BestNMarkEntity extends MarkEntity{
 			return mTotal;
 	}
 	
-	public int saveToDB(SqlJetDb db, int parentID, PDatIDGenerator idgen) throws SqlJetException {
-		int id = super.saveToDB(db, parentID, idgen);
+	public long saveToDB(SqlJetDb db, long parentID, PDatIDGenerator idgen) throws SqlJetException {
+		long id = super.saveToDB(db, parentID, idgen);
 		db.beginTransaction(SqlJetTransactionMode.WRITE);
         try {
         	//TODO

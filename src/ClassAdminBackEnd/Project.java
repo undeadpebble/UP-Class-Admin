@@ -43,7 +43,7 @@ public class Project {
 	
 	public void saveToDB(SqlJetDb db) throws SqlJetException{
 		PDatIDGenerator idgen = new PDatIDGenerator();
-		this.headEntityType.saveToDB(db, 0, idgen);
+		this.headEntityType.saveToDB(db, new Long(0), idgen);
 		
 		this.head.saveToDB(db, 0, idgen);
 	}

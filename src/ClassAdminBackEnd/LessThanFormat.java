@@ -20,14 +20,15 @@ public class LessThanFormat extends Format {
 		return this.getValue1() >= mark;
 	}
 	
-	public int saveToDB(SqlJetDb db, int parentID, PDatIDGenerator idgen) throws SqlJetException {
+	public long saveToDB(SqlJetDb db, long parentID, PDatIDGenerator idgen) throws SqlJetException {
 		db.beginTransaction(SqlJetTransactionMode.WRITE);
         try {
         	//TODO
         	ISqlJetTable table = db.getTable(PDatExport.GREATER_THAN_FORMAT_TABLE);
         	//insert statements
+        	long id = super.saveToDB(db, parentID, idgen);
         	
-        	table.insert(parentID+", "+this.getValue1());
+        	table.insert(id+", "+this.getValue1());
         } finally {
             db.commit();
             

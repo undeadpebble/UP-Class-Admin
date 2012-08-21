@@ -362,9 +362,9 @@ public class SuperEntity {
 		return str;
 	}
 	
-	public int saveToDB(SqlJetDb db, int parentID, PDatIDGenerator idgen) throws SqlJetException{
+	public long saveToDB(SqlJetDb db, long parentID, PDatIDGenerator idgen) throws SqlJetException{
 		db.beginTransaction(SqlJetTransactionMode.WRITE);
-		int id = idgen.getID();
+		long id = idgen.getID();
         try {
         	//TODO
         	ISqlJetTable table = db.getTable(PDatExport.ENTITY_TABLE);

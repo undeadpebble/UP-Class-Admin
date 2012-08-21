@@ -9,27 +9,19 @@ public class BorderCase {
 	private Double lowVal;
 	private Double highVal;
 	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("BorderCase [lowVal=");
-		builder.append(lowVal);
-		builder.append(", highVal=");
-		builder.append(highVal);
-		builder.append("]");
-		return builder.toString();
-	}
 
 	/**
 	 * @param lowVal
 	 * @param highVal
 	 */
 	public BorderCase(Double lowVal, Double highVal) {
-		this.lowVal = lowVal;
-		this.highVal = highVal;
+		if(lowVal > highVal){
+			this.lowVal = highVal;
+			this.highVal = lowVal;
+		} else{
+			this.lowVal = lowVal;
+			this.highVal = highVal;
+		}
 	}
 
 	public Double getLowVal() {
@@ -48,11 +40,6 @@ public class BorderCase {
 		this.highVal = highVal;
 	}
 	
-	/**
-	 * Returns if the MarkEntity is a borderCase or not
-	 * @param markEntity
-	 * @return boolean
-	 */
 	public boolean isBorderCase(SuperEntity markE){
 		if((markE.getMark() < highVal) && (markE.getMark() > lowVal)){
 			return true;
@@ -61,7 +48,7 @@ public class BorderCase {
 		return false;
 	}
 	
-	public int saveToDB(SqlJetDb db, int parentID, PDatIDGenerator idgen) throws SqlJetException {
+	public long saveToDB(SqlJetDb db, long parentID, PDatIDGenerator idgen) throws SqlJetException {
 
 		db.beginTransaction(SqlJetTransactionMode.WRITE);
         try {
