@@ -254,8 +254,8 @@ public class Frame extends JFrame {
 		btnChart.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-			HistogramFrame x = new HistogramFrame();
-		
+			//HistogramFrame x = new HistogramFrame();
+				BoxPlotFrame x = new BoxPlotFrame();
 			System.out.println("DAS");
 				//ScatterPlotFrame x = new ScatterPlotFrame();
 			}
