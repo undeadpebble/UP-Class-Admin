@@ -11,14 +11,14 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.xml.crypto.dsig.spec.XSLTTransformParameterSpec;
 
-<<<<<<< HEAD
+
 
 import org.tmatesoft.sqljet.core.SqlJetException;
 
 
-=======
+
 import ClassAdminFrontEnd.EntityTypePanel;
->>>>>>> refs/remotes/origin/gerhard
+
 import ClassAdminFrontEnd.Frame;
 
 import ClassAdminFrontEnd.FrmTable;

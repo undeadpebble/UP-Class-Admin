@@ -133,11 +133,9 @@ public class FrmTable extends JPanel {
 				if(isCellSelected(Index_row, Index_col)){
 					comp.setBackground(Color.green);
 					project.getSelected().add(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col));
+
 				}
-				
-				/*else {
-					comp.setBackground(Color.white);
-				}*/
+
 				return comp;
 			}
 		};
