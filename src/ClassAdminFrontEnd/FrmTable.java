@@ -92,7 +92,7 @@ public class FrmTable extends JPanel {
 	private void createGUI(String[] headers) {
 		setLayout(new BorderLayout());
 		JScrollPane pane = new JScrollPane();
-
+		
 		Action action = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				TableCellListener tcl = (TableCellListener) e.getSource();
@@ -196,10 +196,10 @@ public class FrmTable extends JPanel {
 								textColors.add(format.get(x).getTextColor());
 							}
 						}
-						else{
+						/*else{
 							backgroundColors.clear();
 							textColors.clear();
-						}
+						}*/
 					}
 					
 					int r = 0;
@@ -216,10 +216,19 @@ public class FrmTable extends JPanel {
 					
 					if(backgroundColors.size() > 0){
 						r = r / backgroundColors.size();
-						g /= backgroundColors.size();
-						b /= backgroundColors.size();
-						
-						comp.setBackground(new Color(r,g,b));
+						g = g / backgroundColors.size();
+						b = b / backgroundColors.size();
+					}
+					
+					for(int x = 0; x < format.size();x++){
+						if(format.get(x).evaluate(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col).getMark())){
+							
+							if(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col).getMark() > format.get(x).getValue1()){
+							System.out.println(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col).getMark()+ " " +format.get(x).evaluate(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col).getMark()));
+							comp.setBackground(new Color(r,g,b));
+							}
+						}
+
 					}
 
 					LinkedList<BorderCase> bordercases = data
@@ -533,6 +542,8 @@ public class FrmTable extends JPanel {
 												colors.get(colCombo
 														.getSelectedIndex()),
 												description.getText()));
+								
+
 							} else {
 								headersList
 										.get(cbFormatting.getSelectedIndex())

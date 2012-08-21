@@ -18,7 +18,7 @@ public class GreaterThanFormat extends Format {
 	}
 
 	public Boolean evaluate(double mark){
-		return (this.getValue1() <= mark);
+		return (this.getValue1() < mark);
 	}
 
 	public int saveToDB(SqlJetDb db, int parentID, PDatIDGenerator idgen) throws SqlJetException {
