@@ -285,7 +285,7 @@ public class SuperEntity {
 	public LinkedList<SuperEntity> getHeadersLinkedList(){
 		LinkedList<SuperEntity> lEntity = new LinkedList<SuperEntity>();
 		
-		lEntity.add(this);
+		//lEntity.add(this);
 		
 		for(int x = 0; x < this.subEntity.size();x++){
 			this.subEntity.get(x).getLinkedListData(lEntity);

@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -18,8 +19,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -34,6 +37,7 @@ import org.jdesktop.swingx.MultiSplitLayout.Leaf;
 
 import ClassAdminBackEnd.Global;
 
+import ClassAdminBackEnd.BorderCase;
 import ClassAdminBackEnd.EntityType;
 import ClassAdminBackEnd.LeafStringEntity;
 import ClassAdminBackEnd.Project;
@@ -135,6 +139,14 @@ public class FrmTable extends JPanel {
 					project.getSelected().add(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col));
 				}
 				
+				LinkedList<BorderCase> bordercases = data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col).getType().getBorderCasing();
+				
+				for(int x = 0; x < bordercases.size();x++){
+					if(Double.parseDouble(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col).getValue()) > bordercases.get(x).getLowVal() && Double.parseDouble(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col).getValue()) < bordercases.get(x).getHighVal()){
+						comp.setBackground(Color.cyan);
+					}
+				}
+				
 				return comp;
 				}
 				catch (Exception e) {
@@ -170,25 +182,68 @@ public class FrmTable extends JPanel {
 		JButton bordercase = new JButton("Add bordercase");
 		border.add(bordercase);
 		
-		JComboBox cbheaders = new JComboBox(headers);
-		LinkedList<SuperEntity> headersList = project.getHead().getHeadersLinkedList();
+		final JComboBox cbheaders = new JComboBox(headers);
+		final LinkedList<SuperEntity> headersList = project.getHead().getHeadersLinkedList();
 		border.add(cbheaders);
 		
-		
-		
-		
-		
-		
-		eastPanel.setLayout(new BorderLayout());
-		
-		eastPanel.add(border,BorderLayout.SOUTH);
+		bordercase.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {				
+				if(headersList.get(cbheaders.getSelectedIndex()).getType().getIsTextField()){
+					//Cannot add border cases to a text field
+					System.out.println("Cannot add border cases to a text field");
+				}
+				else{
+					JFrame borderFrame = new JFrame();
+				
+					SpinnerNumberModel SNMmax = new SpinnerNumberModel(
+							new Integer(40), // value
+							new Integer(0), // min
+							new Integer(100), // max
+							new Integer(1) // step
+					);
+					final JSpinner maxVal = new JSpinner(SNMmax);
+					
+					SpinnerNumberModel SNMmin = new SpinnerNumberModel(
+							new Integer(49), // value
+							new Integer(0), // min
+							new Integer(100), // max
+							new Integer(1) // step
+					);
+					final JSpinner minVal = new JSpinner(SNMmin);
+					
+					borderFrame.setLayout(new BorderLayout());
+					
+					borderFrame.add(maxVal,BorderLayout.NORTH);
+					borderFrame.add(minVal,BorderLayout.CENTER);
+					
+					JButton addBorderCase = new JButton("Add border case");
+					borderFrame.add(addBorderCase,BorderLayout.SOUTH);
+					
+					borderFrame.setVisible(true);
+					borderFrame.setSize(400, 400);
+					
+					addBorderCase.addActionListener(new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							headersList.get(cbheaders.getSelectedIndex()).getType().getBorderCasing().add(new BorderCase(Double.parseDouble(minVal.getValue().toString()), Double.parseDouble(maxVal.getValue().toString())));
+							
+							System.out.println(headersList.get(cbheaders.getSelectedIndex()).getType().getBorderCasing());
+						}
+					});
+				}
+			}
+		});
+
+		eastPanel.setLayout(new GridLayout(6,2));		
 		
 		btnAdd = new JButton("Add");
-		eastPanel.add(btnAdd,BorderLayout.NORTH);
+		eastPanel.add(btnAdd);
 		
 		JButton btnView = new JButton("View student");
-		eastPanel.add(btnView,BorderLayout.CENTER);
-
+		eastPanel.add(btnView);
+		
+		eastPanel.add(border);
 		
 		JPanel northPanel = new JPanel();
 
@@ -235,12 +290,7 @@ public class FrmTable extends JPanel {
 			}
 		});
 		
-		bordercase.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-			}
-		});
+
 		
 		btnView.addActionListener(new ActionListener() {
 			@Override
