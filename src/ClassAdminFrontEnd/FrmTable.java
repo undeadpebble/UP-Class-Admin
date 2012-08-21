@@ -102,19 +102,7 @@ public class FrmTable extends JPanel {
 		}
 		
 		table = new JTable(){
-<<<<<<< HEAD
-			public Component prepareRenderer(TableCellRenderer renderer,
-					int Index_row, int Index_col) {
-				Component comp = super.prepareRenderer(renderer, Index_row,
-						Index_col);
-				// even index, selected or not selected
-			
-				if (Index_row % 2 == 0 && !isCellSelected(Index_row, Index_col)) {
-					comp.setBackground(new Color(0xE8E8E8));
-				} else {
-					comp.setBackground(new Color(0xDBDBDB));
-				}
-=======
+
 			public Component prepareRenderer(TableCellRenderer renderer,int Index_row, int Index_col) {
 				Component comp = super.prepareRenderer(renderer, Index_row, Index_col);
 				//even index, selected or not selected
