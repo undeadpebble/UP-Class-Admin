@@ -5,7 +5,6 @@ import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -46,6 +45,8 @@ import ClassAdminBackEnd.Project;
 import ClassAdminBackEnd.StringEntity;
 import ClassAdminBackEnd.SuperEntity;
 import ClassAdminBackEnd.TableCellListener;
+import ClassAdminBackEnd.GreaterThanFormat;
+import ClassAdminBackEnd.LessThanFormat;
 
 public class FrmTable extends JPanel {
 	private JXTable table;
@@ -177,6 +178,34 @@ public class FrmTable extends JPanel {
 												.convertRowIndexToModel(
 														Index_row)).get(
 										Index_col));
+					}
+					
+					LinkedList<Color> backgroundColors = new LinkedList<Color>();
+					LinkedList<Color> textColors = new LinkedList<Color>();
+					
+					
+					LinkedList<Format> format = data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col).getType().getFormatting();
+					for(int x = 0; x < format.size();x++){
+						format.get(x).evaluate(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col).getMark());
+						if(format.get(x).getHighlightColor() != null){
+							backgroundColors.add(format.get(x).getHighlightColor());
+						}
+						
+						if(format.get(x).getTextColor() != null){
+							textColors.add(format.get(x).getTextColor());
+						}
+					}
+					
+					int r = 0;
+					int g = 0;
+					int b = 0;
+					for(int x = 0; x < backgroundColors.size();x++){
+						r += backgroundColors.get(x).getRed();
+						r += backgroundColors.get(x).getGreen();
+						r += backgroundColors.get(x).getBlue();
+					}
+					if(r != 0 || g != 0 || b!= 0){
+						comp.setBackground(new Color(r,g,b));
 					}
 
 					LinkedList<BorderCase> bordercases = data
@@ -505,28 +534,57 @@ public class FrmTable extends JPanel {
 												null, description.getText()));
 
 							}
-						case 2:if (whatToFormatCombo.getSelectedIndex() == 0) {
-							/*headersList
-							.get(cbheaders.getSelectedIndex())
-							.getType()
-							.getFormatting()
-							.add(new (Double
-									.parseDouble(minVal.getValue()
-											.toString()), null,
-									colors.get(colCombo
-											.getSelectedIndex()),
-									description.getText()));*/
-						}
-						else{
-							
-						}
-						case 3:if (whatToFormatCombo.getSelectedIndex() == 0) {
-							
-						}
-						else{
-							
-						}
-							
+						case 2:
+							if (whatToFormatCombo.getSelectedIndex() == 0) {
+								headersList
+										.get(cbheaders.getSelectedIndex())
+										.getType()
+										.getFormatting()
+										.add(new GreaterThanFormat(Double
+												.parseDouble(minVal.getValue()
+														.toString()), null,
+												colors.get(colCombo
+														.getSelectedIndex()),
+												description.getText()));
+							} else {
+								headersList
+										.get(cbheaders.getSelectedIndex())
+										.getType()
+										.getFormatting()
+										.add(new GreaterThanFormat(Double
+												.parseDouble(minVal.getValue()
+														.toString()), colors
+												.get(colCombo
+														.getSelectedIndex()),
+												null, description.getText()));
+
+							}
+						case 3:
+							if (whatToFormatCombo.getSelectedIndex() == 0) {
+								headersList
+										.get(cbheaders.getSelectedIndex())
+										.getType()
+										.getFormatting()
+										.add(new LessThanFormat(Double
+												.parseDouble(minVal.getValue()
+														.toString()), null,
+												colors.get(colCombo
+														.getSelectedIndex()),
+												description.getText()));
+							} else {
+								headersList
+										.get(cbheaders.getSelectedIndex())
+										.getType()
+										.getFormatting()
+										.add(new LessThanFormat(Double
+												.parseDouble(minVal.getValue()
+														.toString()), colors
+												.get(colCombo
+														.getSelectedIndex()),
+												null, description.getText()));
+
+							}
+
 						}
 					}
 				});
