@@ -140,7 +140,7 @@ public class FileHandler {
 					mE = new LeafStringEntity(mE, record);
 				} else {
 					try {
-						mE = new LeafMarkEntity(mE);
+						mE = new LeafMarkEntity(mE,0);
 						mE.setMark(Double.parseDouble(record));
 					} catch (NumberFormatException e) {
 						mE.setMark(0);

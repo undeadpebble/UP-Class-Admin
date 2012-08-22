@@ -9,6 +9,9 @@ public class LeafStringEntity extends StringEntity{
 
 	public LeafStringEntity(SuperEntity replacedEntity, String text) {
 		super(replacedEntity, text);
+		if(this.getSubEntity().size() != 0){
+			this.unLeaf();
+		}
 	}
 
 	private Boolean isAbsent(){

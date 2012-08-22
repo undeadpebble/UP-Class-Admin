@@ -179,6 +179,138 @@ public class PDatImport {
 		
 	}
 	
+	private void readEntities(SqlJetDb db) throws SqlJetException{
+		ISqlJetTable table = db.getTable(PDatExport.ENTITY_TABLE);
+		ISqlJetCursor cursor = table.order("entityID");
+
+		try {
+			if (!cursor.eof()) {
+				do {
+					
+					long entityID = cursor.getInteger("entityID");
+					long parentID = cursor.getInteger("parentID");
+					long typeID = cursor.getInteger("typeID");
+					
+
+					entityList_ID.add(entityID);
+					EntityType eType = entityTypeList.get(entityTypeList_ID.indexOf(typeID));
+					if (parentID == 0) {
+						SuperEntity sEntity = new SuperEntity(eType, 0);
+						entityList.add(sEntity);
+						project.setHead(sEntity);
+					} else {
+						SuperEntity sEntity = new SuperEntity(eType,entityList.get(entityList_ID.indexOf(parentID)),0);
+						entityList.add(sEntity);
+
+					}
+
+				} while (cursor.next());
+			}
+		} finally {
+			cursor.close();
+		}
+		
+		table = db.getTable(PDatExport.BEST_N_ENTITY_TABLE);
+		cursor = table.order("entityID");
+
+		try {
+			if (!cursor.eof()) {
+				do {
+					
+					long entityID = cursor.getInteger("entityID");
+					long nValue = cursor.getInteger("N");
+
+					
+					int entityIndex = entityList_ID.indexOf(entityID);
+					SuperEntity sEntity = entityList.get(entityIndex);
+					
+						SuperEntity newEntity = new BestNMarkEntity(sEntity, (int)nValue);
+						entityList.set(entityIndex, newEntity);
+					
+
+				} while (cursor.next());
+			}
+		} finally {
+			cursor.close();
+		}
+		
+		
+		table = db.getTable(PDatExport.MARK_ENTITY_TABLE);
+		cursor = table.order("entityID");
+
+		try {
+			if (!cursor.eof()) {
+				do {
+					
+					long entityID = cursor.getInteger("entityID");
+					long mark = cursor.getInteger("mark");
+
+					
+					int entityIndex = entityList_ID.indexOf(entityID);
+					SuperEntity sEntity = entityList.get(entityIndex);
+					
+						SuperEntity newEntity = new LeafMarkEntity(sEntity,mark);
+
+						entityList.set(entityIndex, newEntity);
+					
+
+				} while (cursor.next());
+			}
+		} finally {
+			cursor.close();
+		}
+		
+		table = db.getTable(PDatExport.STRING_ENTITY_TABLE);
+		cursor = table.order("entityID");
+
+		try {
+			if (!cursor.eof()) {
+				do {
+					
+					long entityID = cursor.getInteger("entityID");
+					String field = cursor.getString("field");
+
+					
+					int entityIndex = entityList_ID.indexOf(entityID);
+					SuperEntity sEntity = entityList.get(entityIndex);
+					
+						SuperEntity newEntity = new LeafStringEntity(sEntity,field);
+
+						entityList.set(entityIndex, newEntity);
+					
+
+				} while (cursor.next());
+			}
+		} finally {
+			cursor.close();
+		}
+		
+		table = db.getTable(PDatExport.IMG_ENTITY_TABLE);
+		cursor = table.order("entityID");
+
+		try {
+			if (!cursor.eof()) {
+				do {
+					
+					long entityID = cursor.getInteger("entityID");
+					String field = cursor.getString("address");
+
+					
+					int entityIndex = entityList_ID.indexOf(entityID);
+					SuperEntity sEntity = entityList.get(entityIndex);
+					
+						SuperEntity newEntity = new IMGEntity(sEntity,field);
+
+						entityList.set(entityIndex, newEntity);
+					
+
+				} while (cursor.next());
+			}
+		} finally {
+			cursor.close();
+		}
+	}
+	
 	private class FormatStruct{
 		public FormatStruct(Color textColor, Color highlightColor,
 				String description) {

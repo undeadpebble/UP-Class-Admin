@@ -14,6 +14,15 @@ public class BestNMarkEntity extends MarkEntity{
 		// TODO Auto-generated constructor stub
 	}
 	
+	/**
+	 * @param replacedEntity
+	 */
+	public BestNMarkEntity(SuperEntity replacedEntity, int N) {
+		super(replacedEntity);
+		this.N = N;
+		// TODO Auto-generated constructor stub
+	}
+
 	@SuppressWarnings("unused")
 	private Double doMarkMath() throws AbsentException{
 		double mTotal = 0;
