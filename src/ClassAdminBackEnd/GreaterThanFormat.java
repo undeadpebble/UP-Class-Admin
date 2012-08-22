@@ -14,6 +14,7 @@ public class GreaterThanFormat extends Format {
 			String description) {
 		super(/* priority, */value1, textColor, highlightColor,
 				description);
+		super.type = 2;
 		// TODO Auto-generated constructor stub
 	}
 

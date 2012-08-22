@@ -138,6 +138,7 @@ public class FrmTable extends JPanel {
 						Index_col);
 				// even index, selected or not selected
 				try {
+					
 					if (project.getSelected().contains(
 							data.get(
 									table.getRowSorter()
@@ -205,9 +206,7 @@ public class FrmTable extends JPanel {
 					int r = 0;
 					int g = 0;
 					int b = 0;
-					
-					
-					
+
 					for(int x = 0; x < backgroundColors.size();x++){						
 						r += backgroundColors.get(x).getRed();
 						g += backgroundColors.get(x).getGreen();
@@ -223,10 +222,29 @@ public class FrmTable extends JPanel {
 					for(int x = 0; x < format.size();x++){
 						if(format.get(x).evaluate(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col).getMark())){
 							
-							if(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col).getMark() > format.get(x).getValue1()){
-							System.out.println(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col).getMark()+ " " +format.get(x).evaluate(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col).getMark()));
-							comp.setBackground(new Color(r,g,b));
+							
+							switch (format.get(x).type){
+							case 1:{
+								if(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col).getMark() > format.get(x).getValue1() && data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col).getMark() < ((BetweenFormat)format.get(x)).getValue2()){
+									//System.out.println(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col).getMark());
+									comp.setBackground(new Color(r,g,b));
+								}
 							}
+							case 2:{
+								if(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col).getMark() > format.get(x).getValue1()){
+									//System.out.println(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col).getMark());
+									comp.setBackground(new Color(r,g,b));
+								}
+								
+							}
+							case 3:{
+								if(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col).getMark() < format.get(x).getValue1()){
+									//System.out.println(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col).getMark());
+									comp.setBackground(new Color(r,g,b));
+								}
+							}
+							}
+							
 						}
 
 					}
@@ -527,8 +545,10 @@ public class FrmTable extends JPanel {
 				addFormant.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
+						System.out.println(formatTypes.getSelectedIndex());
+						
 						switch (formatTypes.getSelectedIndex()) {
-						case 1:
+						case 1:{
 							if (whatToFormatCombo.getSelectedIndex() == 0) {
 								headersList
 										.get(cbFormatting.getSelectedIndex())
@@ -559,59 +579,70 @@ public class FrmTable extends JPanel {
 												null, description.getText()));
 
 							}
-						case 2:
-							if (whatToFormatCombo.getSelectedIndex() == 0) {
-								headersList
-										.get(cbFormatting.getSelectedIndex())
-										.getType()
-										.getFormatting()
-										.add(new GreaterThanFormat(Double
-												.parseDouble(minVal.getValue()
-														.toString()), null,
-												colors.get(colCombo
-														.getSelectedIndex()),
-												description.getText()));
-							} else {
-								headersList
-										.get(cbFormatting.getSelectedIndex())
-										.getType()
-										.getFormatting()
-										.add(new GreaterThanFormat(Double
-												.parseDouble(minVal.getValue()
-														.toString()), colors
-												.get(colCombo
-														.getSelectedIndex()),
-												null, description.getText()));
-
-							}
-						case 3:
-							if (whatToFormatCombo.getSelectedIndex() == 0) {
-								headersList
-										.get(cbFormatting.getSelectedIndex())
-										.getType()
-										.getFormatting()
-										.add(new LessThanFormat(Double
-												.parseDouble(minVal.getValue()
-														.toString()), null,
-												colors.get(colCombo
-														.getSelectedIndex()),
-												description.getText()));
-							} else {
-								headersList
-										.get(cbFormatting.getSelectedIndex())
-										.getType()
-										.getFormatting()
-										.add(new LessThanFormat(Double
-												.parseDouble(minVal.getValue()
-														.toString()), colors
-												.get(colCombo
-														.getSelectedIndex()),
-												null, description.getText()));
-
-							}
-							
 							table.repaint();
 							formatFrame.setVisible(false);
+							break;
+						}
+						case 2:{
+							if (whatToFormatCombo.getSelectedIndex() == 0) {
+								headersList
+										.get(cbFormatting.getSelectedIndex())
+										.getType()
+										.getFormatting()
+										.add(new GreaterThanFormat(Double
+												.parseDouble(minVal.getValue()
+														.toString()), null,
+												colors.get(colCombo
+														.getSelectedIndex()),
+												description.getText()));
+							} else {
+								headersList
+										.get(cbFormatting.getSelectedIndex())
+										.getType()
+										.getFormatting()
+										.add(new GreaterThanFormat(Double
+												.parseDouble(minVal.getValue()
+														.toString()), colors
+												.get(colCombo
+														.getSelectedIndex()),
+												null, description.getText()));
+
+							}
+							table.repaint();
+							formatFrame.setVisible(false);
+							break;
+						}
+						case 3:{
+							if (whatToFormatCombo.getSelectedIndex() == 0) {
+								headersList
+										.get(cbFormatting.getSelectedIndex())
+										.getType()
+										.getFormatting()
+										.add(new LessThanFormat(Double
+												.parseDouble(minVal.getValue()
+														.toString()), null,
+												colors.get(colCombo
+														.getSelectedIndex()),
+												description.getText()));
+							} else {
+								headersList
+										.get(cbFormatting.getSelectedIndex())
+										.getType()
+										.getFormatting()
+										.add(new LessThanFormat(Double
+												.parseDouble(minVal.getValue()
+														.toString()), colors
+												.get(colCombo
+														.getSelectedIndex()),
+												null, description.getText()));
+
+							}
+							table.repaint();
+							formatFrame.setVisible(false);
+							break;
+						}
+							
+							
 
 						}
 					}

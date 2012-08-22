@@ -16,6 +16,7 @@ public class Format {
 	//public static Format[] formats = {new BetweenFormat(null, null, null, null, null),new GreaterThanFormat(0, 0, 0.0, null, null, ""),new LessThanFormat(0, 0, 0.0, null, null, "")};
 	
 	public static String[] formatTypes = {"Between Format","Greater than Format","Less than Format"};
+	public int type;
 	
 	/**
 	 * @param condition

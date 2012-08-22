@@ -34,6 +34,8 @@ public class BetweenFormat extends Format {
 			this.value2 = value1;
 			this.setValue1(value2);
 		}
+		
+		super.type = 1;
 		// TODO Auto-generated constructor stub
 	}
 	
