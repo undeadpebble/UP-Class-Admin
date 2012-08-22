@@ -197,10 +197,6 @@ public class FrmTable extends JPanel {
 								textColors.add(format.get(x).getTextColor());
 							}
 						}
-						/*else{
-							backgroundColors.clear();
-							textColors.clear();
-						}*/
 					}
 					
 					int r = 0;
@@ -219,35 +215,10 @@ public class FrmTable extends JPanel {
 						b = b / backgroundColors.size();
 					}
 					
-					for(int x = 0; x < format.size();x++){
-						if(format.get(x).evaluate(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col).getMark())){
-							
-							
-							switch (format.get(x).type){
-							case 1:{
-								if(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col).getMark() > format.get(x).getValue1() && data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col).getMark() < ((BetweenFormat)format.get(x)).getValue2()){
-									//System.out.println(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col).getMark());
-									comp.setBackground(new Color(r,g,b));
-								}
-							}
-							case 2:{
-								if(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col).getMark() > format.get(x).getValue1()){
-									//System.out.println(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col).getMark());
-									comp.setBackground(new Color(r,g,b));
-								}
-								
-							}
-							case 3:{
-								if(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col).getMark() < format.get(x).getValue1()){
-									//System.out.println(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col).getMark());
-									comp.setBackground(new Color(r,g,b));
-								}
-							}
-							}
-							
+						if(r != 0 || g != 0 || b != 0){
+							comp.setBackground(new Color(r,g,b));							
 						}
 
-					}
 
 					LinkedList<BorderCase> bordercases = data
 							.get(table.getRowSorter().convertRowIndexToModel(
@@ -544,9 +515,7 @@ public class FrmTable extends JPanel {
 
 				addFormant.addActionListener(new ActionListener() {
 					@Override
-					public void actionPerformed(ActionEvent e) {
-						System.out.println(formatTypes.getSelectedIndex());
-						
+					public void actionPerformed(ActionEvent e) {						
 						switch (formatTypes.getSelectedIndex()) {
 						case 1:{
 							if (whatToFormatCombo.getSelectedIndex() == 0) {

@@ -14,7 +14,6 @@ public class LessThanFormat extends Format {
 			String description) {
 		super(/* priority, */value1, textColor, highlightColor,
 				description);
-		super.type = 3;
 		// TODO Auto-generated constructor stub
 	}
 	
