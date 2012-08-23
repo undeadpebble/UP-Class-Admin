@@ -15,6 +15,11 @@ public class EntityType {
 	private LinkedList<BorderCase> borderCasing;
 	private LinkedList<SuperEntity> entityList;
 	private EntityType parentEntitytype;
+	private LinkedList<EntityType> subEntityType;
+	private Boolean isTextField;
+	private Date date;	 
+	private Double defaultWeight;
+	private long ID;
 	public EntityType getParentEntitytype() {
 		return parentEntitytype;
 	}
@@ -29,16 +34,11 @@ public class EntityType {
 		return subEntityType;
 	}
 
-	private LinkedList<EntityType> subEntityType;
-	private Boolean isTextField;
-	private Date date;	 
-	private Double defaultWeight;
-	private int ID;
 	
 	/**
 	 * @return the iD
 	 */
-	public int getID() {
+	public long getID() {
 		return ID;
 	}
 
@@ -66,6 +66,24 @@ public class EntityType {
 		this.formatting = formatting;
 		this.borderCasing = borderCasing;
 		this.entityList = entityList;
+		this.isTextField = isTextField;
+		this.date = date;
+		this.defaultWeight = defaultWeight;
+	}
+
+
+
+	/**
+	 * @param name
+	 * @param parentEntitytype
+	 * @param isTextField
+	 * @param date
+	 * @param defaultWeight
+	 */
+	public EntityType(String name, EntityType parentEntitytype,
+			Boolean isTextField, Date date, Double defaultWeight) {
+		this.name = name;
+		this.parentEntitytype = parentEntitytype;
 		this.isTextField = isTextField;
 		this.date = date;
 		this.defaultWeight = defaultWeight;
@@ -127,14 +145,14 @@ public class EntityType {
 		this.defaultWeight = defaultWeight;
 	}
 	
-	public void saveToDB(SqlJetDb db, int parentID, PDatIDGenerator idgen) throws SqlJetException{
+	public void saveToDB(SqlJetDb db, Long parentID, PDatIDGenerator idgen) throws SqlJetException{
 		db.beginTransaction(SqlJetTransactionMode.WRITE);
         try {
         	//TODO
         	ISqlJetTable table = db.getTable(PDatExport.ENTITY_TYPE_TABLE);
         	//insert statements
         	this.ID = idgen.getID();
-        	table.insert(this.ID+", "+this.name+", "+this.isTextField+", "+this.date+", "+this.defaultWeight);
+        	table.insert(this.ID+", "+this.name+", "+parentID+", "+this.isTextField+", "+this.date+", "+this.defaultWeight);
         } finally {
             db.commit();
             

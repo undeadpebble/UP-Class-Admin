@@ -55,7 +55,7 @@ public class testMain
 		
 		try {
 
-			fh.openFile("test.csv");
+			fh.openFile("test.csv", new Project());
 
 		} catch (UnsupportedFileTypeException e) {
 			// TODO Auto-generated catch block

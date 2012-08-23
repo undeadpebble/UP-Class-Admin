@@ -102,7 +102,7 @@ public class FileHandler {
 				parent = new StringEntity(parent,record);
 			} else {
 				try {
-					parent= new LeafMarkEntity(parent);
+					parent= new LeafMarkEntity(parent,0);
 					parent.setMark(Double.parseDouble(record));
 				} catch (NumberFormatException e) {
 					parent.setMark(0);
@@ -120,7 +120,7 @@ public class FileHandler {
 					mE = new LeafStringEntity(mE, record);
 				} else {
 					try {
-						mE = new LeafMarkEntity(mE);
+						mE = new LeafMarkEntity(mE,0);
 						mE.setMark(Double.parseDouble(record));
 					} catch (NumberFormatException e) {
 						mE.setMark(0);

@@ -14,6 +14,15 @@ public class BestNMarkEntity extends MarkEntity{
 		// TODO Auto-generated constructor stub
 	}
 	
+	/**
+	 * @param replacedEntity
+	 */
+	public BestNMarkEntity(SuperEntity replacedEntity, int N) {
+		super(replacedEntity);
+		this.N = N;
+		// TODO Auto-generated constructor stub
+	}
+
 	@SuppressWarnings("unused")
 	private Double doMarkMath() throws AbsentException{
 		double mTotal = 0;
@@ -63,8 +72,8 @@ public class BestNMarkEntity extends MarkEntity{
 			return mTotal;
 	}
 	
-	public int saveToDB(SqlJetDb db, int parentID, PDatIDGenerator idgen) throws SqlJetException {
-		int id = super.saveToDB(db, parentID, idgen);
+	public long saveToDB(SqlJetDb db, long parentID, PDatIDGenerator idgen) throws SqlJetException {
+		long id = super.saveToDB(db, parentID, idgen);
 		db.beginTransaction(SqlJetTransactionMode.WRITE);
         try {
         	//TODO
