@@ -9,13 +9,17 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import javax.jws.Oneway;
 import javax.naming.PartialResultException;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -26,6 +30,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
+import javax.swing.text.BadLocationException;
 import javax.swing.tree.TreeNode;
 
 import ClassAdminBackEnd.Global;
@@ -87,14 +92,13 @@ public class TreeView extends Display {
 	private static final String tree = "tree";
 	private static final String treeNodes = "tree.nodes";
 	private static final String treeEdges = "tree.edges";
-	static private SuperEntity m_treeHead;
 
 	private LabelRenderer m_nodeRenderer;
 	private EdgeRenderer m_edgeRenderer;
 
 	private String m_label = "label";
 	private int m_orientation = Constants.ORIENT_LEFT_RIGHT;
-	private static LinkedList<SuperEntity> m_superEntity;
+	static VisualItem m_item = null;
 
 	public TreeView(Tree t, String label) {
 		super(new Visualization());
@@ -220,9 +224,6 @@ public class TreeView extends Display {
 	}
 
 	// ------------------------------------------------------------------------
-	public void setSuperEntity(LinkedList<SuperEntity> superEntity) {
-		m_superEntity = superEntity;
-	}
 
 	public void setOrientation(int orientation) {
 		NodeLinkTreeLayout rtl = (NodeLinkTreeLayout) m_vis
@@ -273,34 +274,22 @@ public class TreeView extends Display {
 
 	// ------------------------------------------------------------------------
 
-	public static void createStudentFrm(String label, SuperEntity treeHead)
-	{
+	public static void createStudentFrm(String label, SuperEntity treeHead) {
 		JComponent treeview = createPanelTreeView(label, treeHead);
 
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 		frame.setContentPane(treeview);
 		frame.pack();
-		frame.setVisible(true);		
+		frame.setVisible(true);
 	}
 
-	public static JComponent createPanelTreeView(final String label, SuperEntity th) {
+	public static JComponent createPanelTreeView(final String label,
+			SuperEntity th) {
 		Color BACKGROUND = Color.WHITE;
 		Color FOREGROUND = Color.BLACK;
 
-		SuperEntity treeHead = th;
-		//LinkedList<SuperEntity> s = Global.getGlobal().getActiveProject().getTreeViewSelected();
-		
-		//int size = s.size();
-
-		Table nodes = null;
-		Tree tree = null;
-		Node node = null;
-		Node n;
-		tree = new Tree();
-		
-		
-		
 		String str = "<tree>" + "<declarations>"
 				+ "<attributeDecl name=\"name\" type=\"String\" />"
 				+ "</declarations>";
@@ -308,6 +297,7 @@ public class TreeView extends Display {
 		str += th.createTreeFromHead();
 
 		str += "</tree>";
+
 		try {
 			// Create file
 			FileWriter fstream = new FileWriter("out.xml");
@@ -337,7 +327,6 @@ public class TreeView extends Display {
 		}
 		System.out.println(str);
 
-		
 		// create a new treemap
 		final TreeView tview = new TreeView(t, label);
 		tview.setBackground(BACKGROUND);
@@ -351,6 +340,46 @@ public class TreeView extends Display {
 		title.setBackground(BACKGROUND);
 		title.setForeground(FOREGROUND);
 
+		/*
+		 * tview.addControlListener(new ControlAdapter() { public void
+		 * itemPressed(VisualItem item, MouseEvent e) { if
+		 * (item.canGetString(label)) {
+		 * 
+		 * while(e.isControlDown()) { System.out.println(item.getString(label));
+		 * item.setStartX(e.getX()); item.setStartY(e.getY()); } } }
+		 */
+		
+		tview.addControlListener(new ControlAdapter() {
+			public void itemPressed(VisualItem item, MouseEvent e) 
+			{
+				if (item.canGetString(label)) 
+				{
+					if(e.isShiftDown())
+					{
+						m_item = item;
+						System.out.println("1 " + m_item.getString(label));
+					}
+				}
+			}
+/*			@Override
+			public void mouseReleased(MouseEvent e) {
+				System.out.println("3 " + m_item.getString(label));
+				m_item = null;
+			}
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				System.out.println("2 " + m_item.getString(label));
+				if (m_item != null && e.isShiftDown())
+				{
+					m_item.setStartX(e.getX());
+					m_item.setStartY(e.getY());
+				}
+				else
+					m_item = null;
+			}			
+*/		});
+		
+		
 		tview.addControlListener(new ControlAdapter() {
 			public void itemEntered(VisualItem item, MouseEvent e) {
 				if (item.canGetString(label))
@@ -366,7 +395,7 @@ public class TreeView extends Display {
 		box.add(Box.createHorizontalStrut(10));
 		box.add(title);
 		box.add(Box.createHorizontalGlue());
-		//box.add(search);
+		// box.add(search);
 		box.add(Box.createHorizontalStrut(3));
 		box.setBackground(BACKGROUND);
 
