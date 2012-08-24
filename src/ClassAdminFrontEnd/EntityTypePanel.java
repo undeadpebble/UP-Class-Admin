@@ -63,15 +63,7 @@ public class EntityTypePanel extends JPanel {
 		btnCreateEntityType.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println();
-
-				if (txfName.getText().compareTo("") != 0) {					
-						EntityType entType = new EntityType(txfName.getText(), null, null, null, txfIsTextField.isSelected(), null,Double.parseDouble(numberChooser.getValue().toString()) );
-						project.getEntityTypes().add(entType);
-					 
-				} else {
-					// TO DO
-				}
+				
 			}
 		});
 	}

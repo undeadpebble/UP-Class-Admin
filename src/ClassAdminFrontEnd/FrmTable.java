@@ -408,16 +408,7 @@ public class FrmTable extends JPanel {
 				table.repaint();
 				int count = tableModel.getRowCount() + 1;
 
-				LinkedList<EntityType> temp = project.getEntityTypes();
-				for (int x = 0; x < temp.size(); x++) {
-					if (temp.get(x).getIsTextField()) {
-						LeafStringEntity addEntity = new LeafStringEntity(temp
-								.get(x), null, "");
-					} else {
-
-					}
-
-				}
+				
 
 				// data.add(newToAdd);
 
