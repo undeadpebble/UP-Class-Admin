@@ -17,7 +17,8 @@ import ClassAdminBackEnd.Global;
 public class BoxPlotOptionMenu extends JFrame implements ActionListener {
 	final String[] headers = Global.getGlobal().getActiveProject()
 			.getHead().getHeaders();
-	protected final JComboBox xxascb = new JComboBox();
+	protected final static JComboBox choosecombo = new JComboBox();
+	protected String toets="";
 	public void createFrame()
 	{
 		JFrame f = new JFrame("BoxPlot");
@@ -26,10 +27,11 @@ public class BoxPlotOptionMenu extends JFrame implements ActionListener {
 		
 		final String[] kolom = Global.getGlobal().getActiveProject().getHead()
 				.getNumberHeaders();
-		
-		
-		xxascb.setModel(new DefaultComboBoxModel(kolom));
-		
+		System.out.println(kolom);
+	
+		choosecombo.setModel(new DefaultComboBoxModel(kolom));
+		choosecombo.addActionListener(this);
+
 		JButton choose = new JButton("Add");
 		choose.addMouseListener(new MouseListener() {
 			
@@ -66,20 +68,21 @@ public class BoxPlotOptionMenu extends JFrame implements ActionListener {
 			}
 		});
 		content.setLayout(new FlowLayout());
-		f.add(xxascb);
+		f.add(choosecombo);
 		f.add(choose);
 		f.setVisible(true);
+		
 	}
 	public BoxPlotOptionMenu(){
 		
 	}
 	public int getIndexOfHeader()
 	{
-		
-		System.out.println( (String)xxascb.getSelectedItem());
+
+
 		for (int s = 0; s < headers.length; s++) {
-		//	System.out.println(headers[s]);
-			if (headers[s].equals((String) xxascb.getSelectedItem())) {
+
+			if (headers[s].equals((String)choosecombo.getSelectedItem())) {
 				
 				return s;
 				
@@ -89,9 +92,10 @@ public class BoxPlotOptionMenu extends JFrame implements ActionListener {
 		return 0;
 	}
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+	 public void actionPerformed(ActionEvent e) {
+        JComboBox cb = (JComboBox)e.getSource();
+        toets = (String)cb.getSelectedItem();
+      
+    }
 
 }

@@ -232,6 +232,7 @@ public class BoxPlotFrame extends JFrame implements ActionListener {
 	}
 	public void addBoxSeries()
 	{
+	//	System.out.println(box.getIndexOfHeader());
 		ArrayList nuwe = new ArrayList();
 		//	System.out.println(headerindex);
 		//	System.out.println(headers[houerx]);
