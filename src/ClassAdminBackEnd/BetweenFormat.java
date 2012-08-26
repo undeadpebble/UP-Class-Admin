@@ -9,6 +9,7 @@ import org.tmatesoft.sqljet.core.table.SqlJetDb;
 
 public class BetweenFormat extends Format {
 	Double value2;
+	public static int numberOfValues = 1;
 
 	/**
 	 * @return the value2
@@ -24,15 +25,16 @@ public class BetweenFormat extends Format {
 		this.value2 = value2;
 	}
 
-	public BetweenFormat(int priority, Double value1, Double value2, Color textColor,
+	public BetweenFormat(/*int priority, */Double value1, Double value2, Color textColor,
 			Color highlightColor, String description) {
-		super(priority, value1, textColor, highlightColor, description);
+		super(/*priority, */value1, textColor, highlightColor, description);
 		if(value1 < value2)
 			this.value2=value2;
 		else{
 			this.value2 = value1;
 			this.setValue1(value2);
 		}
+		
 		// TODO Auto-generated constructor stub
 	}
 	

@@ -122,7 +122,7 @@ public class PDatImport {
 					EntityType eType = entityTypeList.get(entityTypeList_ID
 							.indexOf(formatList_TypeID.get(parentIndex)));
 
-					Format format = new LessThanFormat(0,0,val1,formatStructList.get(parentIndex).textColor,formatStructList.get(parentIndex).highlightColor,formatStructList.get(parentIndex).description);
+					Format format = new LessThanFormat(val1,formatStructList.get(parentIndex).textColor,formatStructList.get(parentIndex).highlightColor,formatStructList.get(parentIndex).description);
 					eType.getFormatting().add(format);
 
 				} while (cursor.next());
@@ -144,7 +144,7 @@ public class PDatImport {
 							EntityType eType = entityTypeList.get(entityTypeList_ID
 									.indexOf(formatList_TypeID.get(parentIndex)));
 
-							Format format = new GreaterThanFormat(0,0,val1,formatStructList.get(parentIndex).textColor,formatStructList.get(parentIndex).highlightColor,formatStructList.get(parentIndex).description);
+							Format format = new GreaterThanFormat(val1,formatStructList.get(parentIndex).textColor,formatStructList.get(parentIndex).highlightColor,formatStructList.get(parentIndex).description);
 							eType.getFormatting().add(format);
 
 						} while (cursor.next());
@@ -167,7 +167,7 @@ public class PDatImport {
 							EntityType eType = entityTypeList.get(entityTypeList_ID
 									.indexOf(formatList_TypeID.get(parentIndex)));
 
-							Format format = new BetweenFormat(0, val1,val2,formatStructList.get(parentIndex).textColor,formatStructList.get(parentIndex).highlightColor,formatStructList.get(parentIndex).description);
+							Format format = new BetweenFormat(val1,val2,formatStructList.get(parentIndex).textColor,formatStructList.get(parentIndex).highlightColor,formatStructList.get(parentIndex).description);
 							eType.getFormatting().add(format);
 
 						} while (cursor.next());

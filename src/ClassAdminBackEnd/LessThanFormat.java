@@ -8,12 +8,12 @@ import org.tmatesoft.sqljet.core.table.ISqlJetTable;
 import org.tmatesoft.sqljet.core.table.SqlJetDb;
 
 public class LessThanFormat extends Format {
+	public static int numberOfValues = 1;
 
-	public LessThanFormat(int condition, int priority, Double value1, Color textColor, Color highlightColor,
+	public LessThanFormat(Double value1, Color textColor, Color highlightColor,
 			String description) {
-		super( priority, value1, textColor, highlightColor,
+		super(value1, textColor, highlightColor,
 				description);
-		// TODO Auto-generated constructor stub
 	}
 	
 	public Boolean evaluate(double mark){

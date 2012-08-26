@@ -54,7 +54,7 @@ public class FileHandler {
 		// header entity
 		int firstStringCol = -1;
 		// EntityTypeFactory eTFactory = new EntityTypeFactory();
-		EntityType headType = new EntityType("Project", null, true);
+		EntityType headType = new EntityType("Project", null, true,null,1.0);
 		project.setHeadEntityType(headType);
 
 		SuperEntity mE = new HeadEntity(project
@@ -73,7 +73,7 @@ public class FileHandler {
 				double dub = Double.parseDouble(record);
 				
 				if (dub > LARGEST_MARK_VALUE) {
-					tmp = new EntityType((String) headers.get(i), null, true);
+					tmp = new EntityType((String) headers.get(i), null, true,null,1.0);
 					if(firstStringCol < 0){
 						firstStringCol = i;
 						parentType = tmp;
@@ -81,11 +81,11 @@ public class FileHandler {
 						types.add(tmp);
 					}
 				} else {
-					tmp = new EntityType((String) headers.get(i), null, false);
+					tmp = new EntityType((String) headers.get(i), null, false,null,1.0);
 					types.add(tmp);
 				}
 			} catch (NumberFormatException e) {
-				tmp = new EntityType((String) headers.get(i), null, true);
+				tmp = new EntityType((String) headers.get(i), null, true,null,1.0);
 				if(firstStringCol < 0){
 					firstStringCol = i;
 					parentType = tmp;
@@ -97,7 +97,7 @@ public class FileHandler {
 		}
 		
 		if(parentType == null){
-			parentType = new EntityType("row", null, true);
+			parentType = new EntityType("row", null, true,null,1.0);
 		} 
 			parentType.getSubEntityType().addAll(types);
 			parentType.setParentEntitytype(project.getHeadEntityType());
