@@ -6,10 +6,12 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
+import java.awt.event.MouseMotionAdapter;
 import java.util.LinkedList;
 
 import javax.swing.JButton;
@@ -60,6 +62,15 @@ public class FrmTable extends JPanel {
 	Project project;
 
 	private LinkedList<Integer> selected = new LinkedList<Integer>();
+	
+	private String getColorName(Color c){
+		for(int x = 0; x <colors.size();x++){
+			if(c == colors.get(x)){
+				return(colorsString.get(x));
+			}
+		}
+		return("");
+	}
 
 	public FrmTable(String[] headers, LinkedList<LinkedList<SuperEntity>> data,
 			Project project) {
@@ -262,14 +273,55 @@ public class FrmTable extends JPanel {
 							comp.setBackground(Color.cyan);
 						}
 					}
+					
+					/*if (comp instanceof JComponent) {
+			            JComponent jc = (JComponent)comp;
+			            jc.setToolTipText((String)getValueAt(Index_row, Index_col));
+			        }*/
 
 					return comp;
 				} catch (Exception e) {
 					// TODO: handle exception
 					return null;
 				}
+				
 			}
 		};
+		
+		table.addMouseMotionListener(new MouseMotionAdapter() {
+			   public void mouseMoved(MouseEvent e){
+			        Point p = e.getPoint(); 
+			        int row = table.rowAtPoint(p);
+			        int col = table.columnAtPoint(p);
+			        String toolTip = "";
+			        
+			        try{
+			        
+					LinkedList<Format> format = data
+							.get(table.getRowSorter().convertRowIndexToModel(
+									row)).get(col).getType()
+							.getFormatting();
+					
+					for (int x = 0; x < format.size(); x++) {
+						if (format.get(x).evaluate(data.get(table.getRowSorter().convertRowIndexToModel(row)).get(col).getMark())) {
+							if (format.get(x).getHighlightColor() != null) {
+								toolTip += " Background Color = " + getColorName(format.get(x).getHighlightColor()) + ", due to "+ format.get(x).getDescription();
+								toolTip += "\t";
+							} else if (format.get(x).getTextColor() != null) {
+								toolTip += " Text Color = " +getColorName(format.get(x).getTextColor()) + ", due to "+ format.get(x).getDescription();
+								toolTip += "\t";
+							}
+						}
+					}
+					
+			        table.setToolTipText(toolTip);
+			        }
+			        catch (Exception ex) {
+						// TODO: handle exception
+					}
+			    }//end MouseMoved
+			}); // end MouseMotionAdapter
+			
 		table.setAutoCreateRowSorter(true);
 
 		TableCellListener tcl = new TableCellListener(table, action);
@@ -638,6 +690,8 @@ public class FrmTable extends JPanel {
 		btnView.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				project.getHeadEntityType().getEntityList();
+				
 				table.repaint();
 				table.getSelectedRow();
 
