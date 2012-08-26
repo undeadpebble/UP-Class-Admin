@@ -147,21 +147,26 @@ public class EntityType {
 	
 	public void saveToDB(SqlJetDb db, Long parentID, PDatIDGenerator idgen) throws SqlJetException{
 		db.beginTransaction(SqlJetTransactionMode.WRITE);
-        try {
+        
         	//TODO
         	ISqlJetTable table = db.getTable(PDatExport.ENTITY_TYPE_TABLE);
         	//insert statements
         	this.ID = idgen.getID();
         	table.insert(this.ID+", "+this.name+", "+parentID+", "+this.isTextField+", "+this.date+", "+this.defaultWeight);
-        } finally {
+        	
+        
             db.commit();
             
-        }
+        
         for(int x = 0;x<this.getBorderCasing().size();++x){
         	this.getBorderCasing().get(x).saveToDB(db, this.ID, idgen);
         }
         for(int x = 0;x<this.getFormatting().size();++x){
         	this.getFormatting().get(x).saveToDB(db, this.ID, idgen);
+        }
+        
+        for(int x = 0;x<this.getSubEntityType().size();++x){
+        	this.getSubEntityType().get(x).saveToDB(db, this.ID, idgen);
         }
 	}
 

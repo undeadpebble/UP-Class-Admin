@@ -3,6 +3,8 @@ package ClassAdminBackEnd;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import org.tmatesoft.sqljet.core.SqlJetException;
+
 public class FileHandler {
 	final double LARGEST_MARK_VALUE = 1000;
 	/**
@@ -30,7 +32,10 @@ public class FileHandler {
 		} else if (filename.substring(filename.indexOf('.')).contains("xls")) {
 			openXls(filename);
 
-		} else
+		} else if (filename.substring(filename.indexOf('.')).contains("pdat")) {
+			openPDat(filename);
+		}
+		else
 			throw new UnsupportedFileTypeException();
 
 	}
@@ -165,12 +170,14 @@ public class FileHandler {
 		}
 	}
 
-	public void saveFile(String filename) throws UnsupportedFileTypeException {
+	public void saveFile(String filename, Project project) throws UnsupportedFileTypeException {
 		if (filename.substring(filename.indexOf('.')).contains("csv")) {
 			saveCSV(filename);
 		} else if (filename.substring(filename.indexOf('.')).contains("xls")) {
 			saveXls(filename);
 
+		} else if (filename.substring(filename.indexOf('.')).contains("pdat")) {
+			 savePDat(filename);
 		} else
 			throw new UnsupportedFileTypeException();
 	}
@@ -187,7 +194,23 @@ public class FileHandler {
 	}
 
 	private void openPDat(String filename) {
-
+		PDatImport pImport = new PDatImport();
+		try {
+			pImport.importFile(filename, project);
+		} catch (SqlJetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private void savePDat(String filename){
+		PDatExport pExport = new PDatExport();
+		try {
+			pExport.exportFile(project, filename);
+		} catch (SqlJetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

@@ -363,16 +363,15 @@ public class SuperEntity {
 	public long saveToDB(SqlJetDb db, long parentID, PDatIDGenerator idgen) throws SqlJetException{
 		db.beginTransaction(SqlJetTransactionMode.WRITE);
 		long id = idgen.getID();
-        try {
-        	//TODO
+
         	ISqlJetTable table = db.getTable(PDatExport.ENTITY_TABLE);
         	//insert statements
-        	
-        	table.insert(id+", "+parentID+", "+this.type.getID());
-        } finally {
+        	String insert = id+", "+parentID+", "+this.getType().getID();
+        	table.insert(id+", "+parentID+", "+this.getType().getID());
+
             db.commit();
             
-        }
+        
         for(int x = 0;x<this.getSubEntity().size();++x){
         	this.getSubEntity().get(x).saveToDB(db, id, idgen);
         }

@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.LinkedList;
 
 import org.tmatesoft.sqljet.core.SqlJetException;
+import org.tmatesoft.sqljet.core.SqlJetTransactionMode;
 import org.tmatesoft.sqljet.core.internal.table.SqlJetCursor;
 import org.tmatesoft.sqljet.core.table.ISqlJetCursor;
 import org.tmatesoft.sqljet.core.table.ISqlJetTable;
@@ -29,11 +30,16 @@ public class PDatImport {
 		File dbFile = new File(filename);
 
 		SqlJetDb db = SqlJetDb.open(dbFile, true);
+		readTypes(db);
+		readBordercases(db);
+		readFormats(db);
+		readEntities(db);
 	}
 
 	private void readTypes(SqlJetDb db) throws SqlJetException {
+		db.beginTransaction(SqlJetTransactionMode.READ_ONLY);
 		ISqlJetTable table = db.getTable(PDatExport.ENTITY_TYPE_TABLE);
-		ISqlJetCursor cursor = table.order("typeID");
+		ISqlJetCursor cursor = table.open();
 
 		try {
 			if (!cursor.eof()) {

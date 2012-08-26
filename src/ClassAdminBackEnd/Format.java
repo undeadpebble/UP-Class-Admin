@@ -77,7 +77,7 @@ public class Format {
 			throws SqlJetException {
 		long id = idgen.getID();
 		db.beginTransaction(SqlJetTransactionMode.WRITE);
-		try {
+
 			ISqlJetTable table = db.getTable(PDatExport.FORMAT_TABLE);
 			// insert statements
 
@@ -86,10 +86,10 @@ public class Format {
 
 					+ this.getHighlightColor().getRGB());
 
-		} finally {
+
 			db.commit();
 
-		}
+		
 		return id;
 	}
 
