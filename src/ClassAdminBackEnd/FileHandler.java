@@ -126,20 +126,20 @@ public class FileHandler {
 
 		for (int r = 0; r < numRecords; ++r) {
 			int count = 0;
-			SuperEntity parentEntity;
+			SuperEntityPointer parentEntity;
 			if(parentRowIndex < 0){
-				parentEntity = new LeafStringEntity(project.getHeadEntityType().getSubEntityType().get(0), project.getHead(), "Row"+r);
+				parentEntity = new SuperEntityPointer(new LeafStringEntity(project.getHeadEntityType().getSubEntityType().get(0), project.getHead(), "Row"+r));
 			}
 			else{
 				String record = fileReader.getRecordFieldValue(recordArray, r, parentRowIndex);
-				parentEntity = new StringEntity(project.getHeadEntityType().getSubEntityType().get(0), project.getHead(), record);
+				parentEntity = new SuperEntityPointer(new LeafStringEntity(project.getHeadEntityType().getSubEntityType().get(0), project.getHead(), record));
 			}
 			for (int f = 0; f < headers.size(); ++f) {
 				if(f != parentRowIndex){
 				String record = fileReader.getRecordFieldValue(recordArray, r, f);
-				EntityType fieldType = parentEntity.getType().getSubEntityType().get(count++);
+				EntityType fieldType = parentEntity.getTarget().getType().getSubEntityType().get(count++);
 
-					SuperEntity mE = new SuperEntity(fieldType, parentEntity, 0);
+					SuperEntity mE = new SuperEntity(fieldType, parentEntity.getTarget(), 0);
 
 				if (fieldType.getIsTextField() == true) {
 					mE = new LeafStringEntity(mE, record);

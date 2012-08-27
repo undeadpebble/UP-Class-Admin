@@ -19,6 +19,7 @@ public class SuperEntity {
 	private int rowFollowCount = 0;
 	private EntityType type;
 	private String field = "";
+	private SuperEntityPointer thisPointer;
 	/**
 	 * @return the type
 	 */
@@ -95,8 +96,8 @@ public class SuperEntity {
 	 */
 	
 	public SuperEntity(EntityType type, SuperEntity parentEntity, double mark) {
-		this.setType(type);
 		this.parentEntity = parentEntity.unLeaf();
+		this.setType(type);
 		this.mark = mark;
 		this.parentEntity.getSubEntity().add(this);
 		this.weight = this.getType().getDefaultWeight();
@@ -104,15 +105,24 @@ public class SuperEntity {
 	}
 	
 	public SuperEntity(SuperEntity replacedEntity){
+
 		this.setType(replacedEntity.getType());
 		replacedEntity.getType().getEntityList().remove(replacedEntity);
+		this.setThisPointer(replacedEntity.getThisPointer());
+		
+		if(this.getThisPointer() != null)
+			this.getThisPointer().setTarget(this);
 		
 		this.parentEntity = replacedEntity.getParentEntity();
 		this.mark = replacedEntity.getMark();
 		this.field = replacedEntity.getField();
 		this.subEntity = replacedEntity.getSubEntity();
+		for(int x = 0;x<subEntity.size();++x){
+			this.subEntity.get(x).setParentEntity(this);
+		}
 		this.weight = replacedEntity.getWeight();
 		int index = replacedEntity.getParentEntity().getSubEntity().indexOf(replacedEntity);
+
 		replacedEntity.getParentEntity().getSubEntity().set(index, this);
 	}
 	public SuperEntity(EntityType type, double mark){
@@ -173,6 +183,12 @@ public class SuperEntity {
 		this.weight = weight;
 	}
 
+	public SuperEntityPointer getThisPointer() {
+		return thisPointer;
+	}
+	public void setThisPointer(SuperEntityPointer thisPointer) {
+		this.thisPointer = thisPointer;
+	}
 	/**
 	 * @return the mark
 	 */
