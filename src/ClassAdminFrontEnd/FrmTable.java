@@ -7,6 +7,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.Point;
+import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -113,8 +114,6 @@ public class FrmTable extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				TableCellListener tcl = (TableCellListener) e.getSource();
 				
-				
-
 				if (tcl.getOldValue() != tcl.getNewValue()) {
 					if (data.get(tcl.getRow()).get(tcl.getColumn())
 							.getDetails().getType().getIsTextField()) {
@@ -138,10 +137,6 @@ public class FrmTable extends JPanel {
 		};
 
 		Object[][] temp = new Object[data.size()][data.get(0).size()];
-
-		for (int x = 0; x < data.get(1).size(); x++) {
-			project.getSelected().add(data.get(1).get(x));
-		}
 
 		for (int x = 0; x < data.size(); x++) {
 			for (int y = 0; y < data.get(0).size(); y++) {
@@ -190,25 +185,27 @@ public class FrmTable extends JPanel {
 								comp.setBackground(Color.white);
 							}
 						} else {
-							backgroundColors.add(Color.green);
-							comp.setBackground(Color.green);
-							table.addRowSelectionInterval(Index_row, Index_row);
+							backgroundColors.add(Color.orange);
+							comp.setBackground(Color.orange);
+
+							//table.addRowSelectionInterval(Index_row, Index_row);
 						}
 					} else {
 						comp.setBackground(Color.white);
 					}
 
 					if (isCellSelected(Index_row, Index_col)) {
-						backgroundColors.add(Color.green);
-						comp.setBackground(Color.green);
+						backgroundColors.add(Color.orange);
+						comp.setBackground(Color.orange);
 						project.getSelected().add(
 								data.get(
 										table.getRowSorter()
 												.convertRowIndexToModel(
 														Index_row)).get(
 										Index_col));
+						comp.setForeground(Color.black);
+						table.repaint();
 					}
-
 
 
 					for (int x = 0; x < format.size(); x++) {
@@ -362,7 +359,7 @@ public class FrmTable extends JPanel {
 		border.add(cbheaders);
 		
 		JPanel searchPnl = new JPanel();
-		final JTextField searchTxt = new JTextField();
+		final TextField searchTxt = new TextField(20);
 		
 		JButton btnSearch = new JButton("Search");
 		
@@ -496,18 +493,22 @@ public class FrmTable extends JPanel {
 		btnSearch.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				
 				if(searchTxt.getText().compareTo("") != 0){
+					project.getSelected().clear();
 					for(int x = 0; x < data.size();x++){
 						for(int y = 0; y < data.get(0).size();y++){
-							if(data.get(x).get(y).getValue().compareTo(searchTxt.getText()) == 0){
-								for(int z = 0; z < data.get(x).size();z++){
-									System.out.println("A");
-									project.getSelected().add(data.get(x).get(z));
-								}
+							if(data.get(x).get(y).getValue().contains(searchTxt.getText())){
+								if(!project.getSelected().contains(data.get(x).get(0)));
+									for(int z = 0; z < data.get(x).size();z++){
+										project.getSelected().add(data.get(x).get(z));
+										tableModel.fireTableDataChanged();	
+									}
+								tableModel.fireTableDataChanged();	
 							}
 						}
 					}
-				}
+				}		
 			}
 		});
 
