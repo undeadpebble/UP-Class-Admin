@@ -15,10 +15,12 @@ import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.graphics.ReflectionRenderer;
 
 import com.jhlabs.image.GainFilter;
+import com.jhlabs.image.GlowFilter;
 
-public class ImagePanel extends JXPanel implements MouseListener{
+public class ImagePanel extends JXPanel implements MouseListener {
 
 	private BufferedImage image = null;
+	private BufferedImage highlightimage;
 	private Boolean highlight = false;
 	private Boolean entered = false;
 
@@ -33,68 +35,81 @@ public class ImagePanel extends JXPanel implements MouseListener{
 
 		c.addMouseListener(this);
 	}
+
+	public void createHighlight(Graphics g) {
+
+		Graphics2D g2 = (Graphics2D) g;
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
 	
+		BufferedImage helpimage = image;
+		GainFilter apply = new GainFilter();
+		apply.setGain(0.6f);
+		apply.setBias(0.7f);
+		highlightimage = apply.filter(helpimage, null);
+		
+		Cursor cursor = new Cursor(Cursor.HAND_CURSOR);
+		this.setCursor(cursor);
+	}
+
 	@Override
 	public void paintComponent(Graphics g) {
 
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
-		if ((entered) && (highlight))
-		{
-			float[] factors = new float[]  {1.2f, 1.2f, 1.2f, 1.2f};
-			float[] offsets = new float[] { 0.0f, 0.0f, 0.0f, 0.0f };
-			RescaleOp op = new RescaleOp(factors,offsets,null);
-			BufferedImage brighter = op.filter(image, null);
-			g2.drawImage(brighter, 0, 0, null);
-			
-			Cursor cursor = new Cursor(Cursor.HAND_CURSOR);
-			this.setCursor(cursor);
-			/*
-			BufferedImage highlightImage = image;
-			GainFilter apply = new GainFilter();
-			apply.setGain(0.6f);
-			apply.setBias(0.8f);
-			highlightImage = apply.filter(highlightImage, null);
-			g2.drawImage(highlightImage, 0, 0, null); */
+		if (highlight) {
+			if (entered) {
+				if (highlightimage == null) {
+					createHighlight(g2);
+					g2.drawImage(highlightimage, 0, 0, null);
+				} else {
+					g2.drawImage(highlightimage, 0, 0, null);
+				}
+			}
+			else {
+				g2.drawImage(image, 0, 0, null);
+			}
 		}
-		else
+		else {
 			g2.drawImage(image, 0, 0, null);
-		super.repaint();
-
+		}
+		
 		g2.dispose();
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
+		JComponent c = (JComponent) arg0.getComponent();
 		entered = true;
-		
+		c.repaint();
+
 	}
 
 	@Override
 	public void mouseExited(MouseEvent arg0) {
+		JComponent c = (JComponent) arg0.getComponent();
 		entered = false;
-		
+		c.repaint();
+
 	}
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-	
 
 }
