@@ -48,11 +48,11 @@ public class Frame extends JFrame {
 	private ReflectionImagePanel containerImportImage;
 	private ReflectionImagePanel containerWorkspace;
 	private ReflectionImagePanel containerStudents;
-	private ImagePanel containerImportText;
+	private MenuImagePanel containerImportText;
 	private ImagePanel containerImportTextSub;
-	private ImagePanel containerStudentsText;
+	private MenuImagePanel containerStudentsText;
 	private ImagePanel containerStudentsTextSub;
-	private ImagePanel containerWorkspaceText;
+	private MenuImagePanel containerWorkspaceText;
 	private ImagePanel containerWorkspaceTextSub;
 	private ImagePanel boxChartImage;
 	private ImagePanel histogramChartImage;
@@ -307,8 +307,8 @@ public class Frame extends JFrame {
 			containerStudents.setBounds(544, 124, 75, 102);
 			homePanel.add(containerStudents);
 
-			containerImportText = new ImagePanel(ImageIO.read(getClass()
-					.getResource("ImportText.png")), true);
+			containerImportText = new MenuImagePanel(ImageIO.read(getClass()
+					.getResource("ImportText.png")));
 			containerImportText.setBounds(210, 130, 89, 45);
 			homePanel.add(containerImportText);
 
@@ -317,8 +317,8 @@ public class Frame extends JFrame {
 			containerImportTextSub.setBounds(210, 166, 129, 32);
 			homePanel.add(containerImportTextSub);
 
-			containerStudentsText = new ImagePanel(ImageIO.read(getClass()
-					.getResource("StudentsText.png")), true);
+			containerStudentsText = new MenuImagePanel(ImageIO.read(getClass()
+					.getResource("StudentsText.png")));
 			containerStudentsText.setBounds(600, 130, 147, 54);
 			homePanel.add(containerStudentsText);
 
@@ -327,8 +327,8 @@ public class Frame extends JFrame {
 			containerStudentsTextSub.setBounds(600, 166, 147, 32);
 			homePanel.add(containerStudentsTextSub);
 
-			containerWorkspaceText = new ImagePanel(ImageIO.read(getClass()
-					.getResource("WorkspaceText.png")), true);
+			containerWorkspaceText = new MenuImagePanel(ImageIO.read(getClass()
+					.getResource("WorkspaceText.png")));
 			containerWorkspaceText.setBounds(210, 224, 135, 53);
 			homePanel.add(containerWorkspaceText);
 
