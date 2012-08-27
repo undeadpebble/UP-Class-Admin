@@ -39,7 +39,7 @@ public class PDatImport {
 	private void readTypes(SqlJetDb db) throws SqlJetException {
 		db.beginTransaction(SqlJetTransactionMode.READ_ONLY);
 		ISqlJetTable table = db.getTable(PDatExport.ENTITY_TYPE_TABLE);
-		ISqlJetCursor cursor = table.open();
+		ISqlJetCursor cursor = table.order("typeID");
 
 		try {
 			if (!cursor.eof()) {
