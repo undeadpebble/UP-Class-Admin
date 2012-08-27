@@ -183,7 +183,7 @@ public class Frame extends JFrame {
 				bottomPanel.getHeight());
 		contentPane.add(bottomPanel);
 
-		backgroundPanel = new BackgroundGradientPanel();
+		backgroundPanel = new BackgroundGradientPanel(contentPane);
 		backgroundPanel.setSize(getWidth() - HOME_SPACE_RIGHT_X, getHeight()
 				- HOME_SPACE_Y - menuBar.getHeight());
 		backgroundPanel.setBounds(HOME_SPACE_LEFT_X, menuBar.getHeight(),
