@@ -80,7 +80,7 @@ public class BestNMarkEntity extends MarkEntity{
         	ISqlJetTable table = db.getTable(PDatExport.ENTITY_TABLE);
         	//insert statements
         	
-        	table.insert(id+", "+this.N);
+        	table.insert(id,this.N);
         } finally {
             db.commit();
             

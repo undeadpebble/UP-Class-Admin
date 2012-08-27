@@ -55,7 +55,7 @@ public class BorderCase {
         	ISqlJetTable table = db.getTable(PDatExport.ENTITY_TABLE);
         	//insert statements
         	
-        	table.insert(parentID+", "+this.getLowVal()+", "+this.getHighVal());
+        	table.insert(parentID,this.getLowVal(),this.getHighVal());
 
             db.commit();
             

@@ -29,8 +29,8 @@ public class testMain
 		
 		try {
 			fh.openFile("test.csv", Global.getGlobal().getActiveProject());
-			
-			fh.saveFile("test.pdat",Global.getGlobal().getActiveProject());
+		
+			fh.saveFile("c:/test.pdat",Global.getGlobal().getActiveProject());
 			
 			fh.openFile("test.pdat", Global.getGlobal().getActiveProject());
 			

@@ -51,7 +51,7 @@ public class BetweenFormat extends Format {
         	//insert statements
         	long id = super.saveToDB(db, parentID, idgen);
         	
-        	table.insert(id+", "+this.getValue1()+", "+this.getValue2());
+        	table.insert(id,this.getValue1(),this.getValue2());
         } finally {
             db.commit();
             

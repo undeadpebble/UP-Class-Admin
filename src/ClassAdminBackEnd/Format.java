@@ -81,10 +81,7 @@ public class Format {
 			ISqlJetTable table = db.getTable(PDatExport.FORMAT_TABLE);
 			// insert statements
 
-			table.insert(id + ", " + parentID + ", "
-					+ this.getTextColor().getRGB() + ", "
-
-					+ this.getHighlightColor().getRGB());
+			table.insert(id ,parentID,this.getTextColor().getRGB(),this.getHighlightColor().getRGB());
 
 
 			db.commit();

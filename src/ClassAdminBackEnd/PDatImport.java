@@ -34,12 +34,14 @@ public class PDatImport {
 		readBordercases(db);
 		readFormats(db);
 		readEntities(db);
+		
+		db.close();
 	}
 
 	private void readTypes(SqlJetDb db) throws SqlJetException {
 		db.beginTransaction(SqlJetTransactionMode.READ_ONLY);
 		ISqlJetTable table = db.getTable(PDatExport.ENTITY_TYPE_TABLE);
-		ISqlJetCursor cursor = table.order("typeID");
+		ISqlJetCursor cursor = table.order(table.getPrimaryKeyIndexName());
 
 		try {
 			if (!cursor.eof()) {
@@ -76,7 +78,7 @@ public class PDatImport {
 
 	private void readBordercases(SqlJetDb db) throws SqlJetException {
 		ISqlJetTable table = db.getTable(PDatExport.BORDERCASE_TABLE);
-		ISqlJetCursor cursor = table.order("typeID");
+		ISqlJetCursor cursor = table.order(table.getPrimaryKeyIndexName());
 		try {
 			if (!cursor.eof()) {
 				do {
@@ -100,7 +102,7 @@ public class PDatImport {
 	private void readFormats(SqlJetDb db) throws SqlJetException {
 		//format headers
 		ISqlJetTable table = db.getTable(PDatExport.FORMAT_TABLE);
-		ISqlJetCursor cursor = table.order("formatID");
+		ISqlJetCursor cursor = table.order(table.getPrimaryKeyIndexName());
 
 		try {
 			if (!cursor.eof()) {
@@ -117,7 +119,7 @@ public class PDatImport {
 
 		//less-than formats
 		table = db.getTable(PDatExport.LESS_THAN_FORMAT_TABLE);
-		cursor = table.order("typeID");
+		cursor = table.order(table.getPrimaryKeyIndexName());
 		try {
 			if (!cursor.eof()) {
 				do {
@@ -139,7 +141,7 @@ public class PDatImport {
 		
 		//greater-than formats
 				table = db.getTable(PDatExport.GREATER_THAN_FORMAT_TABLE);
-				cursor = table.order("typeID");
+				cursor = table.order(table.getPrimaryKeyIndexName());
 				try {
 					if (!cursor.eof()) {
 						do {
@@ -161,7 +163,7 @@ public class PDatImport {
 				
 				//between formats
 				table = db.getTable(PDatExport.GREATER_THAN_FORMAT_TABLE);
-				cursor = table.order("typeID");
+				cursor = table.order(table.getPrimaryKeyIndexName());
 				try {
 					if (!cursor.eof()) {
 						do {
@@ -187,8 +189,7 @@ public class PDatImport {
 	
 	private void readEntities(SqlJetDb db) throws SqlJetException{
 		ISqlJetTable table = db.getTable(PDatExport.ENTITY_TABLE);
-		ISqlJetCursor cursor = table.order("entityID");
-
+		ISqlJetCursor cursor = table.order(table.getPrimaryKeyIndexName());
 		try {
 			if (!cursor.eof()) {
 				do {
@@ -217,7 +218,7 @@ public class PDatImport {
 		}
 		
 		table = db.getTable(PDatExport.BEST_N_ENTITY_TABLE);
-		cursor = table.order("entityID");
+		cursor = table.order(table.getPrimaryKeyIndexName());
 
 		try {
 			if (!cursor.eof()) {
@@ -242,7 +243,7 @@ public class PDatImport {
 		
 		
 		table = db.getTable(PDatExport.MARK_ENTITY_TABLE);
-		cursor = table.order("entityID");
+		cursor = table.order(table.getPrimaryKeyIndexName());
 
 		try {
 			if (!cursor.eof()) {
@@ -267,7 +268,7 @@ public class PDatImport {
 		}
 		
 		table = db.getTable(PDatExport.STRING_ENTITY_TABLE);
-		cursor = table.order("entityID");
+		cursor = table.order(table.getPrimaryKeyIndexName());
 
 		try {
 			if (!cursor.eof()) {
@@ -292,7 +293,7 @@ public class PDatImport {
 		}
 		
 		table = db.getTable(PDatExport.IMG_ENTITY_TABLE);
-		cursor = table.order("entityID");
+		cursor = table.order(table.getPrimaryKeyIndexName());
 
 		try {
 			if (!cursor.eof()) {
@@ -306,6 +307,30 @@ public class PDatImport {
 					SuperEntity sEntity = entityList.get(entityIndex);
 					
 						SuperEntity newEntity = new IMGEntity(sEntity,field);
+
+						entityList.set(entityIndex, newEntity);
+					
+
+				} while (cursor.next());
+			}
+		} finally {
+			cursor.close();
+		}
+		
+		table = db.getTable(PDatExport.ABSENT_ENTITY_TABLE);
+		cursor = table.order(table.getPrimaryKeyIndexName());
+
+		try {
+			if (!cursor.eof()) {
+				do {
+					
+					long entityID = cursor.getInteger("entityID");
+
+					
+					int entityIndex = entityList_ID.indexOf(entityID);
+					SuperEntity sEntity = entityList.get(entityIndex);
+					
+						SuperEntity newEntity = new AbsentLeafMarkEntity(sEntity);
 
 						entityList.set(entityIndex, newEntity);
 					

@@ -366,8 +366,8 @@ public class SuperEntity {
 
         	ISqlJetTable table = db.getTable(PDatExport.ENTITY_TABLE);
         	//insert statements
-        	String insert = id+", "+parentID+", "+this.getType().getID();
-        	table.insert(id+", "+parentID+", "+this.getType().getID());
+        	
+        	table.insert(id,parentID,this.getType().getID());
 
             db.commit();
             

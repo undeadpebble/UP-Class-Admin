@@ -16,6 +16,7 @@ public class PDatExport {
 	public static final String ENTITY_TABLE = "Entity";
 	public static final String BEST_N_ENTITY_TABLE = "BestNEntity";
 	public static final String STRING_ENTITY_TABLE = "StringEntity";
+	public static final String ABSENT_ENTITY_TABLE = "AbsentEntity";
 	public static final String IMG_ENTITY_TABLE = "ImageEntity";
 	public static final String MARK_ENTITY_TABLE = "MarkEntity";
 	public static final String BETWEEN_FORMAT_TABLE = "BetweenFormat";
@@ -45,7 +46,7 @@ public class PDatExport {
         try {
         	//create tables
         	String createTableQuery = "CREATE TABLE " + ENTITY_TYPE_TABLE +
-        			"(typeID INTEGER NOT NULL ," +
+        			"(typeID INTEGER NOT NULL PRIMARY KEY," +
         			"name TEXT ," +
         			"parentID INTEGER," +
         			"isText Boolean," +
@@ -64,6 +65,11 @@ public class PDatExport {
         	createTableQuery = "CREATE TABLE " + BEST_N_ENTITY_TABLE + "(" +
         			"entityID int NOT NULL PRIMARY KEY," +
         			"N INTEGER"+
+        			")";
+        	db.createTable(createTableQuery);
+        	
+        	createTableQuery = "CREATE TABLE " + ABSENT_ENTITY_TABLE + "(" +
+        			"entityID int NOT NULL PRIMARY KEY" +
         			")";
         	db.createTable(createTableQuery);
         	
@@ -95,26 +101,26 @@ public class PDatExport {
         	db.createTable(createTableQuery);
         	
         	createTableQuery = "CREATE TABLE " + GREATER_THAN_FORMAT_TABLE + "(" +
-        			"formatID INTEGER ," +
+        			"formatID INTEGER NOT NULL PRIMARY KEY," +
         			"value1 float " +
         			")";
         	db.createTable(createTableQuery);
         	
         	createTableQuery = "CREATE TABLE " + LESS_THAN_FORMAT_TABLE + "(" +
-        			"formatID INTEGER ," +
+        			"formatID INTEGER NOT NULL PRIMARY KEY," +
         			"value1 float " +
         			")";
         	db.createTable(createTableQuery);
         	
         	createTableQuery = "CREATE TABLE " + BETWEEN_FORMAT_TABLE + "(" +
-        			"formatID INTEGER ," +
+        			"formatID INTEGER NOT NULL PRIMARY KEY," +
         			"value1 float ," +
         			"value2 float " +
         			")";
         	db.createTable(createTableQuery);
         	
         	createTableQuery = "CREATE TABLE " + BORDERCASE_TABLE + "(" +
-        			"typeID INTEGER ," +
+        			"typeID INTEGER NOT NULL PRIMARY KEY," +
         			"lowval float ," +
         			"highval float " +
         			")";

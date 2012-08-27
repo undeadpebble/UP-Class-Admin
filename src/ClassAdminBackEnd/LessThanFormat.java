@@ -28,7 +28,7 @@ public class LessThanFormat extends Format {
         	//insert statements
         	long id = super.saveToDB(db, parentID, idgen);
         	
-        	table.insert(id+", "+this.getValue1());
+        	table.insert(id,this.getValue1());
         } finally {
             db.commit();
             

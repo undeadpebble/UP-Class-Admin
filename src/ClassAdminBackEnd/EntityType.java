@@ -152,8 +152,7 @@ public class EntityType {
         	ISqlJetTable table = db.getTable(PDatExport.ENTITY_TYPE_TABLE);
         	//insert statements
         	this.ID = idgen.getID();
-        	System.out.println(this.ID+", '"+this.name+"', "+parentID+", "+this.isTextField+", '"+this.date+"', "+this.defaultWeight);
-        	table.insert(this.ID+", '"+this.name+"', "+parentID+", "+this.isTextField+", '"+this.date+"', "+this.defaultWeight);
+        	table.insert(this.ID,this.name,parentID,this.isTextField,this.date,this.defaultWeight);
         	
         
             db.commit();

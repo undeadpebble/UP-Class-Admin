@@ -37,7 +37,7 @@ public class StringEntity extends SuperEntity{
         	ISqlJetTable table = db.getTable(PDatExport.STRING_ENTITY_TABLE);
         	//insert statements
         	
-        	table.insert(id+", "+this.getField());
+        	table.insert(id,this.getField());
         } finally {
             db.commit();
             
