@@ -42,6 +42,7 @@ import ClassAdminBackEnd.BetweenFormat;
 import ClassAdminBackEnd.BorderCase;
 import ClassAdminBackEnd.EntityType;
 import ClassAdminBackEnd.Format;
+import ClassAdminBackEnd.LeafMarkEntity;
 import ClassAdminBackEnd.LeafStringEntity;
 import ClassAdminBackEnd.Project;
 import ClassAdminBackEnd.StringEntity;
@@ -96,6 +97,8 @@ public class FrmTable extends JPanel {
 		colorsString.add("Red");
 		colors.add(Color.yellow);
 		colorsString.add("Yellow");
+		colors.add(Color.green);
+		colorsString.add("Green");
 
 		createGUI(headers);
 	}
@@ -107,6 +110,8 @@ public class FrmTable extends JPanel {
 		Action action = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				TableCellListener tcl = (TableCellListener) e.getSource();
+				
+				
 
 				if (tcl.getOldValue() != tcl.getNewValue()) {
 					if (data.get(tcl.getRow()).get(tcl.getColumn())
@@ -149,6 +154,14 @@ public class FrmTable extends JPanel {
 						Index_col);
 				// even index, selected or not selected
 				try {
+					
+					LinkedList<Color> backgroundColors = new LinkedList<Color>();
+					LinkedList<Color> textColors = new LinkedList<Color>();
+
+					LinkedList<Format> format = data
+							.get(table.getRowSorter().convertRowIndexToModel(
+									Index_row)).get(Index_col).getType()
+							.getFormatting();
 
 					if (project.getSelected().contains(
 							data.get(
@@ -175,6 +188,7 @@ public class FrmTable extends JPanel {
 								comp.setBackground(Color.white);
 							}
 						} else {
+							backgroundColors.add(Color.green);
 							comp.setBackground(Color.green);
 							table.addRowSelectionInterval(Index_row, Index_row);
 						}
@@ -183,6 +197,7 @@ public class FrmTable extends JPanel {
 					}
 
 					if (isCellSelected(Index_row, Index_col)) {
+						backgroundColors.add(Color.green);
 						comp.setBackground(Color.green);
 						project.getSelected().add(
 								data.get(
@@ -192,13 +207,7 @@ public class FrmTable extends JPanel {
 										Index_col));
 					}
 
-					LinkedList<Color> backgroundColors = new LinkedList<Color>();
-					LinkedList<Color> textColors = new LinkedList<Color>();
 
-					LinkedList<Format> format = data
-							.get(table.getRowSorter().convertRowIndexToModel(
-									Index_row)).get(Index_col).getType()
-							.getFormatting();
 
 					for (int x = 0; x < format.size(); x++) {
 						if (format.get(x).evaluate(
@@ -460,9 +469,14 @@ public class FrmTable extends JPanel {
 				table.repaint();
 				int count = tableModel.getRowCount() + 1;
 
+				EntityType testHead = project.getHeadEntityType();
+				LinkedList<EntityType> list = testHead.getSubEntityType();
 				
-
-				// data.add(newToAdd);
+				for(int x = 0; x < list.size();x++){
+					createEntities(list.get(x), project.getHead());
+				}
+				
+				data = project.getHead().getDataLinkedList();
 
 				tableModel.addRow(new Object[] { txtField1.getText(),
 						txtField1.getText() });
@@ -690,7 +704,7 @@ public class FrmTable extends JPanel {
 		btnView.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				project.getHeadEntityType().getEntityList();
+
 				
 				table.repaint();
 				table.getSelectedRow();
@@ -700,6 +714,25 @@ public class FrmTable extends JPanel {
 			}
 		});
 
+	}
+	
+	private void createEntities(EntityType entType, SuperEntity parent){
+		LinkedList<EntityType> list = entType.getSubEntityType();
+		
+		if(entType.getIsTextField()){
+			LeafStringEntity head = new LeafStringEntity(entType, parent, "");
+			
+			for(int x = 0; x < list.size();x++){
+				createEntities(list.get(x),head);
+			}
+		}
+		else{
+			LeafMarkEntity head = new LeafMarkEntity(entType, parent, 0);
+			
+			for(int x = 0; x < list.size();x++){
+				createEntities(list.get(x),head);
+			}
+		}
 	}
 
 	public class InteractiveTableModelListener implements TableModelListener {
