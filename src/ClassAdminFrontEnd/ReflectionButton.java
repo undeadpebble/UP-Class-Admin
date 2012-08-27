@@ -5,6 +5,7 @@ import java.awt.Composite;
 import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Paint;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
@@ -14,6 +15,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.SwingWorker;
+import javax.swing.border.EmptyBorder;
 
 import org.jdesktop.swingx.graphics.BlendComposite;
 import org.jdesktop.swingx.graphics.ReflectionRenderer;
@@ -30,9 +32,11 @@ import com.jhlabs.image.UnsharpFilter;
 public class ReflectionButton extends JButton implements MouseListener {
 
 	private BufferedImage image = null;
-	private BufferedImage imagelight = null;
+
 	private BufferedImage reflection;
+	private BufferedImage highlightreflection;
 	private boolean entered;
+	Image intermediateImage;
 
 	public ReflectionButton(BufferedImage _image) {
 		image = _image;
@@ -40,6 +44,34 @@ public class ReflectionButton extends JButton implements MouseListener {
 		setOpaque(false);
 		installUI(this);
 		entered = false;
+		this.setBorder(new EmptyBorder(0, 0, 0, 0));
+	}
+
+	public void createReflectionButton(Graphics g) {
+		Graphics2D g2 = (Graphics2D) g;
+
+		ReflectionRenderer renderer = new ReflectionRenderer();
+		renderer.setBlurEnabled(true);
+		renderer.setLength(0.5f);
+
+		reflection = renderer.appendReflection(image);
+
+		g2.dispose();
+	}
+
+	public void createReflectionHighlight(Graphics g) {
+		BufferedImage highlightImage = image;
+		ReflectionRenderer renderer = new ReflectionRenderer();
+		renderer.setBlurEnabled(true);
+		renderer.setLength(0.5f);
+		GainFilter apply = new GainFilter();
+		apply.setGain(0.3f);
+		apply.setBias(0.7f);
+		highlightImage = apply.filter(highlightImage, null);
+		highlightreflection = renderer.appendReflection(highlightImage);
+
+		Cursor cursor = new Cursor(Cursor.HAND_CURSOR);
+		this.setCursor(cursor);
 	}
 
 	public void installUI(JComponent c) {
@@ -49,47 +81,42 @@ public class ReflectionButton extends JButton implements MouseListener {
 
 	@Override
 	public void paintComponent(Graphics g) {
-
-		super.repaint();
 		Graphics2D g2 = (Graphics2D) g;
-		
-		ReflectionRenderer renderer = new ReflectionRenderer();
-		renderer.setBlurEnabled(true);
-		renderer.setLength(0.5f);
-		
-		if (entered)
-		{
-			//black rectangle glitch
-			//g2.setComposite(BlendComposite.Add);
-			
-			//on hover, use gain filter
-			
-			BufferedImage highlightImage = image;
-			GainFilter apply = new GainFilter();
-			apply.setGain(0.3f);
-			apply.setBias(0.7f);
-			highlightImage = apply.filter(highlightImage, null);
-			reflection = renderer.appendReflection(highlightImage); 
-			
-			Cursor cursor = new Cursor(Cursor.HAND_CURSOR);
-			this.setCursor(cursor);
-			//using a glow filter
-			/*
-			BufferedImage highlightImage = image;
-			GlowFilter apply = new GlowFilter();
-			apply.setAmount(0.1f);
-			highlightImage = apply.filter(highlightImage, null);
-			reflection = renderer.appendReflection(highlightImage); */
+		if (!entered) {
+			if (reflection == null) {
+				long startTime = System.nanoTime();
+				createReflectionButton(g2);
+				g2.drawImage(reflection, 0, 0, null);
+				long endTime = System.nanoTime();
+				long totalTime = (endTime - startTime) / 1000000;
+				System.out.println("Direct: " + ((float) totalTime / 100));
+			} else {
+				long startTime = System.nanoTime();
+				g2.drawImage(reflection, 0, 0, null);
+				long endTime = System.nanoTime();
+				long totalTime = (endTime - startTime) / 1000000;
+				System.out
+						.println("Intermediate: " + ((float) totalTime / 100));
+			}
+		} else {
+			if (highlightreflection == null) {
+				long startTime = System.nanoTime();
+				createReflectionHighlight(g2);
+				g2.drawImage(highlightreflection, 0, 0, null);
+				long endTime = System.nanoTime();
+				long totalTime = (endTime - startTime) / 1000000;
+				System.out.println("Direct: " + ((float) totalTime / 100));
+			} else {
+				long startTime = System.nanoTime();
+				g2.drawImage(highlightreflection, 0, 0, null);
+				long endTime = System.nanoTime();
+				long totalTime = (endTime - startTime) / 1000000;
+				System.out
+						.println("Intermediate: " + ((float) totalTime / 100));
+			}
 		}
-		else {
-			//else draw normal image
-			reflection = renderer.appendReflection(image);
-		}
-		//draw image
-		g2.drawImage(reflection, 0, 0, null);
-		g2.dispose();
+
 	}
-	
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
@@ -122,7 +149,5 @@ public class ReflectionButton extends JButton implements MouseListener {
 		// TODO Auto-generated method stub
 
 	}
-	
-
 
 }
