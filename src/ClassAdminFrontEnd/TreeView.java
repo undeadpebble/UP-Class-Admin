@@ -6,8 +6,13 @@ import ClassAdminBackEnd.*;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Label;
+import java.awt.Point;
+import java.awt.dnd.DragSource;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -30,6 +35,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
+import javax.swing.TransferHandler;
+import javax.swing.border.MatteBorder;
 import javax.swing.text.BadLocationException;
 import javax.swing.tree.TreeNode;
 
@@ -99,6 +106,10 @@ public class TreeView extends Display {
 	private String m_label = "label";
 	private int m_orientation = Constants.ORIENT_LEFT_RIGHT;
 	static VisualItem m_item = null;
+	
+	Point mp;
+    static Cursor dc = new Cursor(Cursor.DEFAULT_CURSOR);
+    static Cursor yd = DragSource.DefaultMoveDrop;
 
 	public TreeView(Tree t, String label) {
 		super(new Visualization());
@@ -273,7 +284,14 @@ public class TreeView extends Display {
 	}
 
 	// ------------------------------------------------------------------------
-
+	public static void addMouseListeners(TreeView treeView)
+	{
+		VisualItem item;
+		Component c = treeView.getComponent(0);
+		System.out.println(c.getName());
+//		System.out.println(i);
+	}
+	
 	public static void createStudentFrm(String label, SuperEntity treeHead) {
 		JComponent treeview = createPanelTreeView(label, treeHead);
 
@@ -335,47 +353,23 @@ public class TreeView extends Display {
 		title.setBackground(BACKGROUND);
 		title.setForeground(FOREGROUND);
 
-		/*
-		 * tview.addControlListener(new ControlAdapter() { public void
-		 * itemPressed(VisualItem item, MouseEvent e) { if
-		 * (item.canGetString(label)) {
-		 * 
-		 * while(e.isControlDown()) { System.out.println(item.getString(label));
-		 * item.setStartX(e.getX()); item.setStartY(e.getY()); } } }
-		 */
+		MouseListener ml = new MouseAdapter(){
+			public void mousePressed(MouseEvent e){
+				JComponent jc = (JComponent)e.getSource();
+				TransferHandler th = jc.getTransferHandler();
+				th.exportAsDrag(jc, e, TransferHandler.MOVE);
+			}
+		};
+		
 		
 		tview.addControlListener(new ControlAdapter() {
-			public void itemPressed(VisualItem item, MouseEvent e) 
+			public void itemPressed(VisualItem item, MouseEvent e)
 			{
-				if (item.canGetString(label)) 
+				if (item.canGetString(label))
 				{
-					if(e.isShiftDown())
-					{
-						m_item = item;
-						System.out.println("1 " + m_item.getString(label));
-					}
+					System.out.println(item.getString(label));
 				}
 			}
-/*			@Override
-			public void mouseReleased(MouseEvent e) {
-				System.out.println("3 " + m_item.getString(label));
-				m_item = null;
-			}
-			@Override
-			public void mouseMoved(MouseEvent e) {
-				System.out.println("2 " + m_item.getString(label));
-				if (m_item != null && e.isShiftDown())
-				{
-					m_item.setStartX(e.getX());
-					m_item.setStartY(e.getY());
-				}
-				else
-					m_item = null;
-			}			
-*/		});
-		
-		
-		tview.addControlListener(new ControlAdapter() {
 			public void itemEntered(VisualItem item, MouseEvent e) {
 				if (item.canGetString(label))
 					title.setText(item.getString(label));
@@ -399,6 +393,8 @@ public class TreeView extends Display {
 		panel.setForeground(FOREGROUND);
 		panel.add(tview, BorderLayout.CENTER);
 		panel.add(box, BorderLayout.SOUTH);
+		addMouseListeners(tview);
+		
 		return panel;
 	}
 
