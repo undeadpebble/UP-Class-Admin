@@ -21,6 +21,7 @@ public class PDatExport {
 	public static final String BETWEEN_FORMAT_TABLE = "BetweenFormat";
 	public static final String LESS_THAN_FORMAT_TABLE = "LessThanFormat";
 	public static final String GREATER_THAN_FORMAT_TABLE = "GreaterThanFormat";
+	public static final String FORMAT_TABLE = "Format";
 	public static final String BORDERCASE_TABLE = "BorderCase";
 	
 	
@@ -46,6 +47,7 @@ public class PDatExport {
         	String createTableQuery = "CREATE TABLE " + ENTITY_TYPE_TABLE +
         			"(typeID int NOT NULL PRIMARY KEY," +
         			"name varchar(255) ," +
+        			"parentID int," +
         			"isText Boolean," +
         			"date Date," +
         			"defaultWeight float" +
@@ -83,20 +85,29 @@ public class PDatExport {
         			")";
         	db.createTable(createTableQuery);
         	
-        	createTableQuery = "CREATE TABLE " + GREATER_THAN_FORMAT_TABLE + "(" +
+        	createTableQuery = "CREATE TABLE " + FORMAT_TABLE + "(" +
+        			"formatID int NOT NULL PRIMARY KEY," +
         			"typeID int ," +
+        			"textColor int ," +
+					"highlightColor int ," +
+					"description varchar(1000) " +
+        			")";
+        	db.createTable(createTableQuery);
+        	
+        	createTableQuery = "CREATE TABLE " + GREATER_THAN_FORMAT_TABLE + "(" +
+        			"formatID int ," +
         			"value1 float " +
         			")";
         	db.createTable(createTableQuery);
         	
         	createTableQuery = "CREATE TABLE " + LESS_THAN_FORMAT_TABLE + "(" +
-        			"typeID int ," +
+        			"formatID int ," +
         			"value1 float " +
         			")";
         	db.createTable(createTableQuery);
         	
         	createTableQuery = "CREATE TABLE " + BETWEEN_FORMAT_TABLE + "(" +
-        			"typeID int ," +
+        			"formatID int ," +
         			"value1 float ," +
         			"value2 float " +
         			")";

@@ -23,12 +23,13 @@ import org.jdesktop.swingx.image.GaussianBlurFilter;
 public class ShadowPanel extends JXPanel {
 
 	private BufferedImage shadow;
+	private BufferedImage panel;
 	private int newPosX;
 	private int newPosY;
 	private int oldPosX;
 	private int oldPosY;
 	private boolean shown;
-	
+
 	public ShadowPanel(int oldX, int oldY, int newX, int newY) {
 		setOpaque(false);
 		newPosX = newX;
@@ -104,14 +105,13 @@ public class ShadowPanel extends JXPanel {
 		setVisible(true);
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				Animator animator = PropertySetter.createAnimator(1000,
+				Animator animator = PropertySetter.createAnimator(200,
 						ShadowPanel.this, "location", new Point(newPosX,
 								newPosY));
-				animator.setAcceleration(0.2f);
-				animator.setDeceleration(0.3f);
+				// animator.setAcceleration(0.2f);
+				// animator.setDeceleration(0.3f);
 				animator.addTarget(new PropertySetter(ShadowPanel.this,
-						"location", new Point(newPosX,
-								newPosY)));
+						"location", new Point(newPosX, newPosY)));
 				animator.start();
 			}
 		});
@@ -123,23 +123,42 @@ public class ShadowPanel extends JXPanel {
 		setVisible(true);
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				Animator animator = PropertySetter.createAnimator(1000,
+				Animator animator = PropertySetter.createAnimator(200,
 						ShadowPanel.this, "location", new Point(oldPosX,
 								oldPosY));
-				animator.setAcceleration(0.0f);
-				animator.setDeceleration(0.3f);
+				// animator.setAcceleration(0.0f);
+				// animator.setDeceleration(0.3f);
 				animator.addTarget(new PropertySetter(ShadowPanel.this,
-						"location", new Point(oldPosX,
-								oldPosY)));
+						"location", new Point(oldPosX, oldPosY)));
 				animator.start();
 			}
-		
+
 		});
 		shown = false;
 	}
-	
+
 	public boolean isShown() {
 		return shown;
 	}
-	
+
+	public void setShown(boolean b) {
+		shown = b;
+	}
+
+	public void setNewX(int x) {
+		newPosX = x;
+	}
+
+	public void setNewY(int y) {
+		newPosY = y;
+	}
+
+	public void setOldX(int x) {
+		oldPosX = x;
+	}
+
+	public void setOldY(int y) {
+		oldPosY = y;
+	}
+
 }

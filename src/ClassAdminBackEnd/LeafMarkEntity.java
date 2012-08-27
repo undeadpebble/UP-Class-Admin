@@ -8,8 +8,12 @@ public class LeafMarkEntity extends MarkEntity{
 		// TODO Auto-generated constructor stub
 	}
 	
-	public LeafMarkEntity(SuperEntity replacedEntity) {
+	public LeafMarkEntity(SuperEntity replacedEntity, double mark) {
 		super(replacedEntity);
+		this.setMark(mark);
+		if(this.getSubEntity().size() != 0){
+			this.unLeaf();
+		}
 		// TODO Auto-generated constructor stub
 	}
 

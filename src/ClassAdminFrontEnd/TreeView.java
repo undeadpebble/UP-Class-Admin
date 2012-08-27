@@ -296,7 +296,8 @@ public class TreeView extends Display {
 		JComponent treeview = createPanelTreeView(label, treeHead);
 
 		JFrame frame = new JFrame();
-		// frame.setDefaultCloseOperation(JFrame.);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 		frame.setContentPane(treeview);
 		frame.pack();
 		frame.setVisible(true);
@@ -312,6 +313,7 @@ public class TreeView extends Display {
 				+ "</declarations>";
 
 		str += th.createTreeFromHead();
+
 		str += "</tree>";
 
 		try {
@@ -336,9 +338,12 @@ public class TreeView extends Display {
 		File f1 = new File("out.xml");
 		boolean success = f1.delete();
 		if (!success) {
+			System.out.println("Deletion failed.");
 			System.exit(0);
 		} else {
+			System.out.println("File deleted.");
 		}
+		System.out.println(str);
 
 		// create a new treemap
 		final TreeView tview = new TreeView(t, label);

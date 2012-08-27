@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -24,7 +25,7 @@ public class EntityTypePanel extends JPanel {
 	Project project;
 	JButton btnCreateEntityType;
 	TextField txfName;
-	Checkbox txfIsTextField;
+	JCheckBox txfIsTextField;
 	SpinnerNumberModel SNMDefaultWeight;
 
 	public EntityTypePanel(final Project project) {
@@ -39,7 +40,7 @@ public class EntityTypePanel extends JPanel {
 		
 		JPanel isTextFieldPnl = new JPanel();
 		isTextFieldPnl.add(new JLabel("Text field?"));
-		txfIsTextField = new Checkbox();
+		txfIsTextField = new JCheckBox();
 		isTextFieldPnl.add(txfIsTextField);
 		
 		JPanel numberPnl = new JPanel();
@@ -49,27 +50,20 @@ public class EntityTypePanel extends JPanel {
 				new Integer(100), // max
 				new Integer(1) // step
 		);
-		JSpinner numberChooser = new JSpinner(SNMDefaultWeight);
-		numberPnl.add(new JLabel("Default weight of this field"));
+		final JSpinner numberChooser = new JSpinner(SNMDefaultWeight);
+		numberPnl.add(new JLabel("Default weight of this field (only if not text field)"));
+		numberPnl.add(numberChooser);
 		btnCreateEntityType = new JButton("Create new entity type");
 		
 		this.add(namePnl,BorderLayout.NORTH);
-		this.add(isTextFieldPnl,BorderLayout.CENTER);
-		this.add(numberChooser,BorderLayout.WEST);
+		this.add(isTextFieldPnl,BorderLayout.WEST);
+		this.add(numberPnl,BorderLayout.CENTER);
 		this.add(btnCreateEntityType,BorderLayout.PAGE_END);
 
 		btnCreateEntityType.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
-				if (txfName.getText().compareTo("") != 0) {
-					/*
-					 * EntityType entType = new EntityTyp
-					 * project.getEntityTypes().add(entType);
-					 */
-				} else {
-					// TO DO
-				}
+				
 			}
 		});
 	}

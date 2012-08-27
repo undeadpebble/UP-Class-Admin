@@ -112,10 +112,8 @@ public class SuperEntity {
 		this.field = replacedEntity.getField();
 		this.subEntity = replacedEntity.getSubEntity();
 		this.weight = replacedEntity.getWeight();
-
-		int index = this.getParentEntity().getSubEntity().indexOf(replacedEntity);
-		this.getParentEntity().getSubEntity().set(index, this);
-		
+		int index = replacedEntity.getParentEntity().getSubEntity().indexOf(replacedEntity);
+		replacedEntity.getParentEntity().getSubEntity().set(index, this);
 	}
 	public SuperEntity(EntityType type, double mark){
 		this.setType(type);
@@ -287,7 +285,7 @@ public class SuperEntity {
 	public LinkedList<SuperEntity> getHeadersLinkedList(){
 		LinkedList<SuperEntity> lEntity = new LinkedList<SuperEntity>();
 		
-		lEntity.add(this);
+		//lEntity.add(this);
 		
 		for(int x = 0; x < this.subEntity.size();x++){
 			this.subEntity.get(x).getLinkedListData(lEntity);
@@ -362,9 +360,9 @@ public class SuperEntity {
 		return str;
 	}
 	
-	public int saveToDB(SqlJetDb db, int parentID, PDatIDGenerator idgen) throws SqlJetException{
+	public long saveToDB(SqlJetDb db, long parentID, PDatIDGenerator idgen) throws SqlJetException{
 		db.beginTransaction(SqlJetTransactionMode.WRITE);
-		int id = idgen.getID();
+		long id = idgen.getID();
         try {
         	//TODO
         	ISqlJetTable table = db.getTable(PDatExport.ENTITY_TABLE);

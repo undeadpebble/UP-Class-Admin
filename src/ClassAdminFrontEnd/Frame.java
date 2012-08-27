@@ -1,6 +1,7 @@
 package ClassAdminFrontEnd;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -250,9 +251,11 @@ public class Frame extends JFrame {
 				{
 					infoPanel.setBounds(0, workspacePanel.getHeight() - 112, getWidth(),43);
 				}
-				/*if (studentPanel != null)
-				studentPanel.setBounds(0, 0, 500, 500);*/
-
+				if (studentPanel != null) {
+					studentPanel.setBounds(frame.getWidth()-45, 0, 250, getHeight()-20);
+					studentPanel.setNewX(getWidth()-45);
+					studentPanel.setOldX(getWidth()-250);
+				}
 			}
 
 			@Override
@@ -540,7 +543,7 @@ public class Frame extends JFrame {
 			homeToWorkspaceTransition();
 			tabBar.fadeIn();
 			
-			studentPanel.moveIn();
+			//studentPanel.moveIn();
 		} else {
 			blur.fadeOut();
 		}
@@ -565,7 +568,7 @@ public class Frame extends JFrame {
 	 */
 	public void createTab(File file) {
 		try {
-			fileHandler.openFile(file.getAbsolutePath(), Global.getGlobal().getActiveProject());
+			fileHandler.openFile(file.getAbsolutePath(),Global.getGlobal().getActiveProject());
 		} catch (UnsupportedFileTypeException e) {
 			e.printStackTrace();
 		}
@@ -596,6 +599,8 @@ public class Frame extends JFrame {
 		tabbedPane.addTab(file.getName(), table);
 		tabCount++;
 		tabbedPane.setTabComponentAt(tabCount, new TabButton(file.getName()));
+		
+		studentPanel.moveIn();
 	}
 
 	/*
@@ -648,16 +653,19 @@ public class Frame extends JFrame {
 	
 	public void createStudentView(){
 		
-		studentPanel = new ShadowPanel(getWidth(),0,getWidth()-250,0);
+		studentPanel = new ShadowPanel(getWidth()-45,0,getWidth()-250,0);
 		studentPanel.setBounds(getWidth(), 0, 250, getHeight()-20);
 		button = new JButton(">");
-		button.setBounds(3, 3, 20, 20);
+		button.setBounds(3, 30, 20, 20);
 		button.setBorder(new EmptyBorder(0,0,0,0));
 		studentPanel.add(button);
 		studentPanel.setLayout(null);
+		studentPanel.setShown(false);
 		backgroundPanel.setLayer(studentPanel, 300);
 		backgroundPanel.add(studentPanel);
 		studentPanel.setVisible(false);
+		
+		button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		
 		button.addMouseListener(new MouseAdapter() {
 			@Override
@@ -665,6 +673,12 @@ public class Frame extends JFrame {
 				if (studentPanel.isShown()) {
 					studentPanel.moveOut();
 					button.setText("<");
+					studentPanel.setShown(false);
+				}
+				else {
+					studentPanel.moveIn();
+					studentPanel.setShown(true);
+					button.setText(">");
 				}
 					
 			}

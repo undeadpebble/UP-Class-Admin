@@ -1,8 +1,8 @@
 package ClassAdminBackEnd;
 
 public class PDatIDGenerator {
-	private int val = 0;
-	public int getID(){
+	private Long val = new Long(0);
+	public Long getID(){
 		return ++val;
 	}
 }

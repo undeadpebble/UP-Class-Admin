@@ -8,26 +8,27 @@ import org.tmatesoft.sqljet.core.table.ISqlJetTable;
 import org.tmatesoft.sqljet.core.table.SqlJetDb;
 
 public class LessThanFormat extends Format {
+	public static int numberOfValues = 1;
 
-	public LessThanFormat(int condition, int priority, Double value1, Color textColor, Color highlightColor,
+	public LessThanFormat(Double value1, Color textColor, Color highlightColor,
 			String description) {
-		super( priority, value1, textColor, highlightColor,
+		super(value1, textColor, highlightColor,
 				description);
-		// TODO Auto-generated constructor stub
 	}
 	
 	public Boolean evaluate(double mark){
 		return this.getValue1() >= mark;
 	}
 	
-	public int saveToDB(SqlJetDb db, int parentID, PDatIDGenerator idgen) throws SqlJetException {
+	public long saveToDB(SqlJetDb db, long parentID, PDatIDGenerator idgen) throws SqlJetException {
 		db.beginTransaction(SqlJetTransactionMode.WRITE);
         try {
         	//TODO
         	ISqlJetTable table = db.getTable(PDatExport.GREATER_THAN_FORMAT_TABLE);
         	//insert statements
+        	long id = super.saveToDB(db, parentID, idgen);
         	
-        	table.insert(parentID+", "+this.getValue1());
+        	table.insert(id+", "+this.getValue1());
         } finally {
             db.commit();
             

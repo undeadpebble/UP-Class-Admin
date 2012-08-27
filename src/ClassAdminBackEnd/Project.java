@@ -18,17 +18,26 @@ public class Project {
 	private EntityType headEntityType;
 	
 	
+	/**
+	 * @return the headEntityType
+	 */
 	public EntityType getHeadEntityType() {
 		return headEntityType;
 	}
 
+
+	/**
+	 * @param headEntityType the headEntityType to set
+	 */
 	public void setHeadEntityType(EntityType headEntityType) {
 		this.headEntityType = headEntityType;
 	}
 
+
 	public SuperEntity getHead() {
 		return head;
 	}
+	
 
 	public void setHead(SuperEntity head) {
 		this.head = head;
@@ -39,11 +48,11 @@ public class Project {
 			selected = new LinkedList<SuperEntity>();
 		return selected;
 	}
-	
-	
+
 	public void saveToDB(SqlJetDb db) throws SqlJetException{
 		PDatIDGenerator idgen = new PDatIDGenerator();
-		this.headEntityType.saveToDB(db, 0, idgen);
+		this.headEntityType.saveToDB(db, new Long(0), idgen);
+
 		
 		this.head.saveToDB(db, 0, idgen);
 	}
