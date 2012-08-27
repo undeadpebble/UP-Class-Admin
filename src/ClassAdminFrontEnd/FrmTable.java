@@ -294,15 +294,6 @@ public class FrmTable extends JPanel {
 			}
 		};
 		
-
-        table.addKeyListener(new KeyAdapter() {
- 
-            @Override
-            public void keyPressed(KeyEvent e) {
-                int key = e.getKeyCode();
-                System.out.println("ENTER pressed:" + key);
-            }
-        });
         
 		//---------------------------------------------------------------------------------------------------
         // tooltip when hovering
