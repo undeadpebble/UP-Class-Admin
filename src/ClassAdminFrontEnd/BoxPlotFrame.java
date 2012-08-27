@@ -38,12 +38,12 @@ public class BoxPlotFrame extends JFrame implements ActionListener {
 			.getActiveProject().getHead().getDataLinkedList();
 	protected final String[] headers = Global.getGlobal().getActiveProject()
 			.getHead().getHeaders();
-
+	protected static int teller = 0;
 	protected final int seriesCount = 1;
 	protected final int categoryCount = 1;
 	protected final int entityCount = diedata.size();
 	protected final BoxPlotOptionMenu box= new BoxPlotOptionMenu();
-	protected final DefaultBoxAndWhiskerCategoryDataset dataset = new DefaultBoxAndWhiskerCategoryDataset();
+	protected static final DefaultBoxAndWhiskerCategoryDataset dataset = new DefaultBoxAndWhiskerCategoryDataset();
 	public BoxPlotFrame()
 	{
 		
@@ -242,7 +242,9 @@ public class BoxPlotFrame extends JFrame implements ActionListener {
 
 				//System.out.println(diedata.get(k).get(box.getIndexOfHeader()).getMark());
 			}
-			dataset.add(nuwe, "Series" + 2, headers[box.getIndexOfHeader()]);
+			teller +=1;
+			dataset.add(nuwe, "Series" + teller, headers[box.getIndexOfHeader()]);
+			
 			chartpanel.getChart().getCategoryPlot().setDataset(dataset);
 	}
 	@Override
