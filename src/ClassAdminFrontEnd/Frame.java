@@ -176,7 +176,7 @@ public class Frame extends JFrame {
 
 		// create little bottom bar of home screen
 		bottomPanel = new ThreeStopGradientPanel(new Color(0xA1A1A1),
-				new Color(0x696969), new Color(0x000000));
+				new Color(0x696969), new Color(0x000000), contentPane);
 		bottomPanel.setSize(getWidth() - HOME_SPACE_RIGHT_X, 12);
 		bottomPanel.setBounds(HOME_SPACE_LEFT_X, getHeight()
 				- HOME_BOTTOM_SPACE_Y, bottomPanel.getWidth(),

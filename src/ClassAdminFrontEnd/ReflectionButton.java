@@ -84,35 +84,33 @@ public class ReflectionButton extends JButton implements MouseListener {
 		Graphics2D g2 = (Graphics2D) g;
 		if (!entered) {
 			if (reflection == null) {
-				long startTime = System.nanoTime();
+			//	long startTime = System.nanoTime();
 				createReflectionButton(g2);
 				g2.drawImage(reflection, 0, 0, null);
-				long endTime = System.nanoTime();
-				long totalTime = (endTime - startTime) / 1000000;
-				System.out.println("Direct: " + ((float) totalTime / 100));
+			//	long endTime = System.nanoTime();
+			//	long totalTime = (endTime - startTime) / 1000000;
+			//	System.out.println("Direct: " + ((float) totalTime / 100));
 			} else {
-				long startTime = System.nanoTime();
+			//	long startTime = System.nanoTime();
 				g2.drawImage(reflection, 0, 0, null);
-				long endTime = System.nanoTime();
-				long totalTime = (endTime - startTime) / 1000000;
-				System.out
-						.println("Intermediate: " + ((float) totalTime / 100));
+			//	long endTime = System.nanoTime();
+			//	long totalTime = (endTime - startTime) / 1000000;
+			//	System.out.println("Intermediate: " + ((float) totalTime / 100));
 			}
 		} else {
 			if (highlightreflection == null) {
-				long startTime = System.nanoTime();
+			//	long startTime = System.nanoTime();
 				createReflectionHighlight(g2);
 				g2.drawImage(highlightreflection, 0, 0, null);
-				long endTime = System.nanoTime();
-				long totalTime = (endTime - startTime) / 1000000;
-				System.out.println("Direct: " + ((float) totalTime / 100));
+			//	long endTime = System.nanoTime();
+			//	long totalTime = (endTime - startTime) / 1000000;
+			//	System.out.println("Direct: " + ((float) totalTime / 100));
 			} else {
-				long startTime = System.nanoTime();
+			//	long startTime = System.nanoTime();
 				g2.drawImage(highlightreflection, 0, 0, null);
-				long endTime = System.nanoTime();
-				long totalTime = (endTime - startTime) / 1000000;
-				System.out
-						.println("Intermediate: " + ((float) totalTime / 100));
+			//	long endTime = System.nanoTime();
+			//	long totalTime = (endTime - startTime) / 1000000;
+			//	System.out.println("Intermediate: " + ((float) totalTime / 100));
 			}
 		}
 
