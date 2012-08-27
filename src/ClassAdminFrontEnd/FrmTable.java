@@ -36,6 +36,8 @@ import javax.swing.table.TableCellRenderer;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.MultiSplitLayout.Leaf;
 
+import prefuse.data.search.SearchTupleSet;
+
 import ClassAdminBackEnd.Global;
 
 import ClassAdminBackEnd.BetweenFormat;
@@ -282,11 +284,6 @@ public class FrmTable extends JPanel {
 							comp.setBackground(Color.cyan);
 						}
 					}
-					
-					/*if (comp instanceof JComponent) {
-			            JComponent jc = (JComponent)comp;
-			            jc.setToolTipText((String)getValueAt(Index_row, Index_col));
-			        }*/
 
 					return comp;
 				} catch (Exception e) {
@@ -363,6 +360,14 @@ public class FrmTable extends JPanel {
 		final LinkedList<SuperEntity> headersList = project.getHead()
 				.getHeadersLinkedList();
 		border.add(cbheaders);
+		
+		JPanel searchPnl = new JPanel();
+		final JTextField searchTxt = new JTextField();
+		
+		JButton btnSearch = new JButton("Search");
+		
+		searchPnl.add(btnSearch);
+		searchPnl.add(searchTxt);
 
 		bordercase.addActionListener(new ActionListener() {
 			@Override
@@ -437,11 +442,14 @@ public class FrmTable extends JPanel {
 		eastPanel.add(btnView);
 
 		eastPanel.add(border);
+		
 
 		JPanel formatting = new JPanel();
 		formatting.add(btnAddConditionalFormatting);
 		formatting.add(cbFormatting);
 		eastPanel.add(formatting);
+		
+		eastPanel.add(searchPnl);
 
 		JPanel northPanel = new JPanel();
 
@@ -482,6 +490,24 @@ public class FrmTable extends JPanel {
 						txtField1.getText() });
 				table.repaint();
 
+			}
+		});
+		
+		btnSearch.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(searchTxt.getText().compareTo("") != 0){
+					for(int x = 0; x < data.size();x++){
+						for(int y = 0; y < data.get(0).size();y++){
+							if(data.get(x).get(y).getValue().compareTo(searchTxt.getText()) == 0){
+								for(int z = 0; z < data.get(x).size();z++){
+									System.out.println("A");
+									project.getSelected().add(data.get(x).get(z));
+								}
+							}
+						}
+					}
+				}
 			}
 		});
 
