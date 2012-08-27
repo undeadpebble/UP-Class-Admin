@@ -10,6 +10,9 @@ import java.awt.Point;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseMotionAdapter;
@@ -291,6 +294,18 @@ public class FrmTable extends JPanel {
 			}
 		};
 		
+
+        table.addKeyListener(new KeyAdapter() {
+ 
+            @Override
+            public void keyPressed(KeyEvent e) {
+                int key = e.getKeyCode();
+                System.out.println("ENTER pressed:" + key);
+            }
+        });
+        
+		//---------------------------------------------------------------------------------------------------
+        // tooltip when hovering
 		table.addMouseMotionListener(new MouseMotionAdapter() {
 			   public void mouseMoved(MouseEvent e){
 			        Point p = e.getPoint(); 
@@ -324,13 +339,13 @@ public class FrmTable extends JPanel {
 					}
 			    }//end MouseMoved
 			}); // end MouseMotionAdapter
-			
+			//=---------------------------------------------------------------------------------------------
 		table.setAutoCreateRowSorter(true);
 
 		TableCellListener tcl = new TableCellListener(table, action);
 
 		table.addPropertyChangeListener(tcl);
-
+//--------------------------------------------------------------------------------------------
 		table.getSelectionModel().addListSelectionListener(
 				new ListSelectionListener() {
 
@@ -345,7 +360,7 @@ public class FrmTable extends JPanel {
 					}
 
 				});
-
+//--------------------------------------------------------------------------------------
 		pane.setViewportView(table);
 		JPanel eastPanel = new JPanel();
 
@@ -365,7 +380,8 @@ public class FrmTable extends JPanel {
 		
 		searchPnl.add(btnSearch);
 		searchPnl.add(searchTxt);
-
+//=--------------------------------------------------------------------------------------------------------------
+		//bordercase button
 		bordercase.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -425,7 +441,7 @@ public class FrmTable extends JPanel {
 				}
 			}
 		});
-
+		//=--------------------------------------------------------------------------------------------------------------
 		JButton btnAddConditionalFormatting = new JButton(
 				"Add conditional formatting");
 		final JComboBox cbFormatting = new JComboBox(headers);
@@ -467,7 +483,7 @@ public class FrmTable extends JPanel {
 
 		tableModel = new DefaultTableModel(temp, (Object[]) headers);
 		table.setModel(tableModel);
-
+		//=--------------------------------------------------------------------------------------------------------------
 		btnAdd.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -489,7 +505,7 @@ public class FrmTable extends JPanel {
 
 			}
 		});
-		
+		//=--------------------------------------------------------------------------------------------------------------
 		btnSearch.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -511,7 +527,7 @@ public class FrmTable extends JPanel {
 				}		
 			}
 		});
-
+		//=--------------------------------------------------------------------------------------------------------------
 		btnAddConditionalFormatting.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -727,7 +743,7 @@ public class FrmTable extends JPanel {
 			}
 
 		});
-
+		//=--------------------------------------------------------------------------------------------------------------
 		btnView.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -742,7 +758,7 @@ public class FrmTable extends JPanel {
 		});
 
 	}
-	
+	//=--------------------------------------------------------------------------------------------------------------
 	private void createEntities(EntityType entType, SuperEntity parent){
 		LinkedList<EntityType> list = entType.getSubEntityType();
 		
@@ -761,13 +777,12 @@ public class FrmTable extends JPanel {
 			}
 		}
 	}
-
+	//=--------------------------------------------------------------------------------------------------------------
 	public class InteractiveTableModelListener implements TableModelListener {
 		public void tableChanged(TableModelEvent evt) {
 			if (evt.getType() == TableModelEvent.UPDATE) {
 				int column = evt.getColumn();
 				int row = evt.getFirstRow();
-				System.out.println("row: " + row + " column: " + column);
 				table.setColumnSelectionInterval(column + 1, column + 1);
 				table.setRowSelectionInterval(row, row);
 				table.repaint();
