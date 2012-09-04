@@ -68,6 +68,8 @@ public class FrmTable extends JPanel {
 	private LinkedList<Color> colors;
 	private LinkedList<String> colorsString;
 	LinkedList<LinkedList<SuperEntity>> data;
+	Boolean[] dataFilter;
+	
 	Project project;
 
 	private LinkedList<Integer> selected = new LinkedList<Integer>();
@@ -86,6 +88,12 @@ public class FrmTable extends JPanel {
 		this.data = data;
 		this.project = project;
 
+		dataFilter = new Boolean[data.size()];
+		for(int x = 0; x< dataFilter.length;x++)
+			dataFilter[x] = true;
+		//++++++++++++++++++++++++++++++++++++
+		dataFilter[3] = false;
+		//++++++++++++++++++++++++++++++++++++
 		colors = new LinkedList<Color>();
 		colorsString = new LinkedList<String>();
 
@@ -124,8 +132,6 @@ public class FrmTable extends JPanel {
 						data.get(tcl.getRow()).get(tcl.getColumn()).getDetails().setValue((String) tcl.getNewValue());
 					} else {
 						try {
-							
-							
 							if(Double.parseDouble((String) tcl.getNewValue()) >= 0 && data.get(tcl.getRow()).get(tcl.getColumn()).getType().getMaxValue() >= Double.parseDouble((String) tcl.getNewValue())){
 								data.get(tcl.getRow()).get(tcl.getColumn()).setMark((Double.parseDouble((String) tcl.getNewValue())));
 							}
@@ -788,7 +794,27 @@ public class FrmTable extends JPanel {
 						data.get(table.getSelectedRow()).get(0));
 			}
 		});
-
+		//----------------------------------------------------------------------------------------------------------------
+		JButton btnFilter = new JButton("Filter");
+		btnFilter.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				boolean filtered = false;
+				for(int x = 0; x < dataFilter.length;x++){
+					if(!dataFilter[x]){
+						filtered = true;
+						tableModel.removeRow(x-1);
+					}
+				}
+				
+				if(!filtered){
+					//tableModel.set
+				}
+			}
+		});
+		
+		eastPanel.add(btnFilter);
 	}
 	//=--------------------------------------------------------------------------------------------------------------
 	private void createEntities(EntityType entType, SuperEntityPointer parent){
