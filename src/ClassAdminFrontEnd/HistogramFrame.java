@@ -26,8 +26,10 @@ import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.NumberTickUnit;
 import org.jfree.chart.entity.ChartEntity;
 import org.jfree.chart.entity.XYItemEntity;
+import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.statistics.HistogramDataset;
 import org.jfree.data.statistics.HistogramType;
@@ -101,8 +103,18 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			plot = chart.getXYPlot();
 			final Plot Nuweplot = chart.getPlot();
 			
-             CustomBarRenderer custombarrenderer3d = new CustomBarRenderer();
-          //   ((XYPlot) Nuweplot).setRenderer((XYItemRenderer) custombarrenderer3d);
+			CustomBarRenderer c = new CustomBarRenderer();
+			plot.setRenderer(c);
+			/*BarRenderer barRenderer = (BarRenderer)plot.getRenderer();
+			barRenderer.setSeriesPaint(0, Color.gray);
+*/
+             //CustomBarRenderer custombarrenderer3d = new CustomBarRenderer();
+            //plot.setRenderer(renderer);
+             //CategoryPlot categoryplot = (CategoryPlot)chart.getPlot();
+             //categoryplot.setRenderer(custombarrenderer3d);
+             //plot.setRenderer(custombarrenderer3d)
+             
+             //   ((XYPlot) Nuweplot).setRenderer((XYItemRenderer) custombarrenderer3d);
              /*custombarrenderer3d.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
              custombarrenderer3d.setBaseItemLabelsVisible(true);
              custombarrenderer3d.setItemLabelAnchorOffset(10D);

@@ -69,6 +69,7 @@ public class BarChart3DDemo4 extends ApplicationFrame
                 custombarrenderer3d.setItemLabelAnchorOffset(10D);
                 custombarrenderer3d.setBasePositiveItemLabelPosition(new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, TextAnchor.BASELINE_LEFT));
                 categoryplot.setRenderer(custombarrenderer3d);
+               
                 ValueMarker valuemarker = new ValueMarker(0.69999999999999996D, new Color(200, 200, 255), new BasicStroke(1.0F), new Color(200, 200, 255), new BasicStroke(1.0F), 1.0F);
                 categoryplot.addRangeMarker(valuemarker, Layer.BACKGROUND);
                 custombarrenderer3d.setBaseItemLabelsVisible(true);
