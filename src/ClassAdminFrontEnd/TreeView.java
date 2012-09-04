@@ -35,6 +35,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.TransferHandler;
 import javax.swing.border.MatteBorder;
 import javax.swing.text.BadLocationException;
@@ -82,6 +83,8 @@ import prefuse.render.AbstractShapeRenderer;
 import prefuse.render.LabelRenderer;
 import prefuse.util.ColorLib;
 import prefuse.util.FontLib;
+import prefuse.util.PrefuseLib;
+import prefuse.util.ui.BrowserLauncher;
 import prefuse.util.ui.JFastLabel;
 import prefuse.util.ui.JSearchPanel;
 import prefuse.visual.VisualItem;
@@ -105,9 +108,7 @@ public class TreeView extends Display {
 
 	private String m_label = "label";
 	private int m_orientation = Constants.ORIENT_LEFT_RIGHT;
-	static VisualItem m_item = null;
 	
-	Point mp;
     static Cursor dc = new Cursor(Cursor.DEFAULT_CURSOR);
     static Cursor yd = DragSource.DefaultMoveDrop;
 
@@ -153,6 +154,8 @@ public class TreeView extends Display {
 		animatePaint.add(new RepaintAction());
 		m_vis.putAction("animatePaint", animatePaint);
 
+		
+		
 		// create the tree layout action
 		NodeLinkTreeLayout treeLayout = new NodeLinkTreeLayout(tree,
 				m_orientation, 50, 0, 8);
@@ -207,7 +210,7 @@ public class TreeView extends Display {
 		addControlListener(new WheelZoomControl());
 		addControlListener(new PanControl());
 		addControlListener(new FocusControl(1, "filter"));
-
+		addControlListener(new TreeViewControl());
 		registerKeyboardAction(new OrientAction(Constants.ORIENT_LEFT_RIGHT),
 				"left-to-right", KeyStroke.getKeyStroke("ctrl 1"), WHEN_FOCUSED);
 		registerKeyboardAction(new OrientAction(Constants.ORIENT_TOP_BOTTOM),
@@ -284,19 +287,12 @@ public class TreeView extends Display {
 	}
 
 	// ------------------------------------------------------------------------
-	public static void addMouseListeners(TreeView treeView)
-	{
-		VisualItem item;
-		Component c = treeView.getComponent(0);
-		System.out.println(c.getName());
-//		System.out.println(i);
-	}
+	
 	
 	public static void createStudentFrm(String label, SuperEntity treeHead) {
 		JComponent treeview = createPanelTreeView(label, treeHead);
 
 		JFrame frame = new JFrame();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		frame.setContentPane(treeview);
 		frame.pack();
@@ -343,7 +339,6 @@ public class TreeView extends Display {
 		} else {
 			System.out.println("File deleted.");
 		}
-		System.out.println(str);
 
 		// create a new treemap
 		final TreeView tview = new TreeView(t, label);
@@ -358,32 +353,17 @@ public class TreeView extends Display {
 		title.setBackground(BACKGROUND);
 		title.setForeground(FOREGROUND);
 
-		MouseListener ml = new MouseAdapter(){
+		final MouseListener ml = new MouseAdapter(){
 			public void mousePressed(MouseEvent e){
-				JComponent jc = (JComponent)e.getSource();
+				System.out.println(e.getX());
+/*				JComponent jc = (JComponent)e.getSource();
 				TransferHandler th = jc.getTransferHandler();
 				th.exportAsDrag(jc, e, TransferHandler.MOVE);
-			}
+*/			}
 		};
 		
 		
-		tview.addControlListener(new ControlAdapter() {
-			public void itemPressed(VisualItem item, MouseEvent e)
-			{
-				if (item.canGetString(label))
-				{
-					System.out.println(item.getString(label));
-				}
-			}
-			public void itemEntered(VisualItem item, MouseEvent e) {
-				if (item.canGetString(label))
-					title.setText(item.getString(label));
-			}
-
-			public void itemExited(VisualItem item, MouseEvent e) {
-				title.setText(null);
-			}
-		});
+		
 
 		Box box = new Box(BoxLayout.X_AXIS);
 		box.add(Box.createHorizontalStrut(10));
@@ -398,7 +378,7 @@ public class TreeView extends Display {
 		panel.setForeground(FOREGROUND);
 		panel.add(tview, BorderLayout.CENTER);
 		panel.add(box, BorderLayout.SOUTH);
-		addMouseListeners(tview);
+		
 		
 		return panel;
 	}
@@ -479,6 +459,83 @@ public class TreeView extends Display {
 		}
 
 	} // end of inner class TreeMapColorAction
+	
+    public class TreeViewControl extends ControlAdapter {
+        private VisualItem activeItem;
+        private Point2D down = new Point2D.Double();
+        private Point2D tmp = new Point2D.Double();
+        private boolean wasFixed, dragged;
+        private boolean repaint = false;
+        
+        public void itemEntered(VisualItem item, MouseEvent e) {
+            activeItem = item;
+            if (item.canGetString("name"))
+            {
+                System.out.println("item");
+            }
+            else
+            	System.out.println("no");
+            wasFixed = item.isFixed();
+        }
+        
+        public void itemExited(VisualItem item, MouseEvent e) {
+            if ( activeItem == item ) {
+                activeItem = null;
+                item.setFixed(wasFixed);
+            }
+        }
+        
+        public void itemPressed(VisualItem item, MouseEvent e) {
+            if (!SwingUtilities.isLeftMouseButton(e)) return;
+            
+            // set the focus to the current node
+            Visualization vis = item.getVisualization();
+            vis.getFocusGroup(Visualization.FOCUS_ITEMS).setTuple(item);
+            item.setFixed(true);
+            dragged = false;
+            Display d = (Display)e.getComponent();
+            down = d.getAbsoluteCoordinate(e.getPoint(), down);
+            
+            vis.run("forces");
+        }
+        
+        public void itemReleased(VisualItem item, MouseEvent e) {
+            if (!SwingUtilities.isLeftMouseButton(e)) return;
+            if ( dragged ) {
+                activeItem = null;
+                item.setFixed(wasFixed);
+                dragged = false;
+            }
+            // clear the focus
+            Visualization vis = item.getVisualization();
+            vis.getFocusGroup(Visualization.FOCUS_ITEMS).clear();
+
+            vis.cancel("forces");
+        }
+        
+        public void itemClicked(VisualItem item, MouseEvent e) {
+            if (!SwingUtilities.isLeftMouseButton(e)) return;
+            if ( e.getClickCount() == 2 ) {
+                String id = item.getString("id");
+            }
+        }
+        
+        public void itemDragged(VisualItem item, MouseEvent e) {
+            if (!SwingUtilities.isLeftMouseButton(e)) return;
+            dragged = true;
+            Display d = (Display)e.getComponent();
+            tmp = d.getAbsoluteCoordinate(e.getPoint(), tmp);
+            double dx = tmp.getX()-down.getX();
+            double dy = tmp.getY()-down.getY();
+            
+            PrefuseLib.setX(item, null, item.getX()+dx);
+            PrefuseLib.setY(item, null, item.getY()+dy);
+            down.setLocation(tmp);
+            System.out.println(repaint);
+            //if ( repaint )
+                item.getVisualization().repaint();
+        }
+    } 
 
 } // end of class TreeMap
 
