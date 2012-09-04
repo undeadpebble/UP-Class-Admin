@@ -120,18 +120,19 @@ public class FrmTable extends JPanel {
 				TableCellListener tcl = (TableCellListener) e.getSource();
 				
 				if (tcl.getOldValue() != tcl.getNewValue()) {
-					if (data.get(tcl.getRow()).get(tcl.getColumn())
-							.getDetails().getType().getIsTextField()) {
-						data.get(tcl.getRow()).get(tcl.getColumn())
-								.getDetails()
-								.setValue((String) tcl.getNewValue());
+					if (data.get(tcl.getRow()).get(tcl.getColumn()).getDetails().getType().getIsTextField()) {
+						data.get(tcl.getRow()).get(tcl.getColumn()).getDetails().setValue((String) tcl.getNewValue());
 					} else {
 						try {
-							data.get(tcl.getRow())
-									.get(tcl.getColumn())
-									.setMark(
-											(Double.parseDouble((String) tcl
-													.getNewValue())));
+							
+							
+							if(Double.parseDouble((String) tcl.getNewValue()) >= 0 && data.get(tcl.getRow()).get(tcl.getColumn()).getType().getMaxValue() >= Double.parseDouble((String) tcl.getNewValue())){
+								data.get(tcl.getRow()).get(tcl.getColumn()).setMark((Double.parseDouble((String) tcl.getNewValue())));
+							}
+							else{
+								table.getModel().setValueAt(tcl.getOldValue(),
+										tcl.getRow(), tcl.getColumn());
+							}
 						} catch (Exception ex) {
 							table.getModel().setValueAt(tcl.getOldValue(),
 									tcl.getRow(), tcl.getColumn());
@@ -527,6 +528,37 @@ public class FrmTable extends JPanel {
 				}		
 			}
 		});
+		//---------------------------------------------------------------------------------------------------------------
+		JButton btnSetMaxVal = new JButton("Set the max value");
+		SpinnerNumberModel SNMmaxVal = new SpinnerNumberModel(new Integer(
+				0), // value
+				new Integer(0), // min
+				new Integer(100), // max
+				new Integer(1) // step
+		);
+		final JSpinner setMaxValOfColumn = new JSpinner(SNMmaxVal);
+		final JComboBox MaxValEditing = new JComboBox(headers);
+		
+		JPanel maxValOfCol = new JPanel();
+		maxValOfCol.add(MaxValEditing);
+		maxValOfCol.add(btnSetMaxVal);
+		maxValOfCol.add(setMaxValOfColumn);
+		
+		
+		eastPanel.add(maxValOfCol);
+		
+		btnSetMaxVal.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println(data.get(0).get(MaxValEditing.getSelectedIndex()).getType().getMaxValue());
+				if(!data.get(0).get(MaxValEditing.getSelectedIndex()).getType().getIsTextField()){
+					data.get(0).get(MaxValEditing.getSelectedIndex()).getType().setMaxValue(Integer.parseInt(setMaxValOfColumn.getValue().toString()));
+					
+					
+				}
+			}
+		});
+
 		//=--------------------------------------------------------------------------------------------------------------
 		btnAddConditionalFormatting.addActionListener(new ActionListener() {
 			@Override

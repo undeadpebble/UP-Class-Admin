@@ -20,6 +20,14 @@ public class EntityType {
 	private Date date;	 
 	private Double defaultWeight;
 	private long ID;
+	private int maxValue = 100;
+	public int getMaxValue() {
+		return maxValue;
+	}
+	public void setMaxValue(int maxValue) {
+		this.maxValue = maxValue;
+	}
+	
 	public EntityType getParentEntitytype() {
 		return parentEntitytype;
 	}

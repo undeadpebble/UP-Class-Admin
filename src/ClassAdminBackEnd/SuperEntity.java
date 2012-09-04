@@ -20,13 +20,7 @@ public class SuperEntity {
 	private EntityType type;
 	private String field = "";
 	private SuperEntityPointer thisPointer;
-	private int maxValue = 100;
-	public int getMaxValue() {
-		return maxValue;
-	}
-	public void setMaxValue(int maxValue) {
-		this.maxValue = maxValue;
-	}
+
 	/**
 	 * @return the type
 	 */
