@@ -290,7 +290,7 @@ public class FrmTable extends JPanel {
 					}
 
 				});
-
+		
 		pane.setViewportView(table);
 		JPanel eastPanel = new JPanel();
 
@@ -660,4 +660,9 @@ public class FrmTable extends JPanel {
 			}
 		}
 	}
+	
+	public JTable getTable() {
+		return table;
+	}
 }
+	

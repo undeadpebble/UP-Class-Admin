@@ -45,6 +45,8 @@ public class ReflectionButton extends JButton implements MouseListener {
 		installUI(this);
 		entered = false;
 		this.setBorder(new EmptyBorder(0, 0, 0, 0));
+		Cursor cursor = new Cursor(Cursor.HAND_CURSOR);
+		this.setCursor(cursor);
 	}
 
 	public void createReflectionButton(Graphics g) {

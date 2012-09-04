@@ -9,8 +9,10 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
@@ -22,13 +24,17 @@ import javax.swing.JMenu;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.BadLocationException;
 
 import ClassAdminBackEnd.FileHandler;
 import ClassAdminBackEnd.Global;
+import ClassAdminBackEnd.SuperEntity;
 import ClassAdminBackEnd.UnsupportedFileTypeException;
 import org.jdesktop.swingx.JXPanel;
 
@@ -72,7 +78,7 @@ public class Frame extends JFrame {
 	private FadePanel importInfoPanel;
 	private FadePanel exportInfoPanel;
 	private ShadowPanel studentPanel;
-	
+
 	private JButton button;
 
 	private final int HOME_SPACE_LEFT_X = 3;
@@ -130,6 +136,33 @@ public class Frame extends JFrame {
 
 			});
 		}
+	}
+
+	class SelectionListener implements ListSelectionListener {
+		JTable table;
+
+		SelectionListener(JTable table) {
+			this.table = table;
+		}
+
+		public void valueChanged(ListSelectionEvent e) {
+			if (e.getSource() == table.getSelectionModel()
+					&& table.getRowSelectionAllowed()) {
+				int first = e.getFirstIndex();
+				int last = e.getLastIndex();
+				System.out.println("listen");
+			} else if (e.getSource() == table.getColumnModel()
+					.getSelectionModel() && table.getColumnSelectionAllowed()) {
+				int first = e.getFirstIndex();
+				int last = e.getLastIndex();
+				System.out.println("listen2");
+			}
+			if (e.getValueIsAdjusting()) {
+				System.out
+						.println("The mouse button has not yet been released");
+			}
+		}
+
 	}
 
 	public Frame() {
@@ -247,14 +280,15 @@ public class Frame extends JFrame {
 					scatterplotChartImage.setBounds(tabBar.getWidth() - 140,
 							15, 50, 40);
 				}
-				if (infoPanel != null)
-				{
-					infoPanel.setBounds(0, workspacePanel.getHeight() - 112, getWidth(),43);
+				if (infoPanel != null) {
+					infoPanel.setBounds(0, workspacePanel.getHeight() - 112,
+							getWidth(), 43);
 				}
 				if (studentPanel != null) {
-					studentPanel.setBounds(frame.getWidth()-45, 0, 250, getHeight()-20);
-					studentPanel.setNewX(getWidth()-45);
-					studentPanel.setOldX(getWidth()-250);
+					studentPanel.setBounds(frame.getWidth() - 45, 0, 250,
+							getHeight() - 20);
+					studentPanel.setNewX(getWidth() - 45);
+					studentPanel.setOldX(getWidth() - 250);
 				}
 			}
 
@@ -269,7 +303,7 @@ public class Frame extends JFrame {
 
 	public void setupHomeScreen() {
 
-		homePanel = new FadePanel(false,800,400);
+		homePanel = new FadePanel(false, 800, 400);
 		homePanel.setBounds(0, 0, backgroundPanel.getWidth(),
 				backgroundPanel.getHeight());
 		backgroundPanel.add(homePanel);
@@ -367,109 +401,104 @@ public class Frame extends JFrame {
 
 	private void setupWorkspaceScreen() {
 		// create background pane for workspace screen
-		workspacePanel = new FadePanel(false,800,400);
+		workspacePanel = new FadePanel(false, 800, 400);
 		workspacePanel.setBounds(0, 0, backgroundPanel.getWidth(),
 				backgroundPanel.getHeight());
 		backgroundPanel.add(workspacePanel);
 		workspacePanel.setLayout(null);
 
-		//create navigation bar
-		navBar = new FadePanel(true,800,400);
+		// create navigation bar
+		navBar = new FadePanel(true, 800, 400);
 		navBar.setBounds(0, workspacePanel.getHeight() - 40 - 40, getWidth(),
 				80);
 		workspacePanel.add(navBar);
 		navBar.setLayout(null);
-		
-		//create transparent panel on which info bubbles will be shown
-		infoPanel = new FadePanel(false,200,200);
-		infoPanel.setBounds(0, workspacePanel.getHeight() - 112, getWidth(),43);
+
+		// create transparent panel on which info bubbles will be shown
+		infoPanel = new FadePanel(false, 200, 200);
+		infoPanel
+				.setBounds(0, workspacePanel.getHeight() - 112, getWidth(), 43);
 		workspacePanel.add(infoPanel);
 		infoPanel.setLayout(null);
 		infoPanel.fadeIn();
-		
+
 		createStudentView();
-		
+
 		try {
-			
-			//create buttons on nav bar and add their respective mouselisteners
+
+			// create buttons on nav bar and add their respective mouselisteners
 			homeButton = new ReflectionButton(ImageIO.read(getClass()
 					.getResource("Home.png")));
 			homeButton.setBounds(8, 8, 68, 80);
 			navBar.add(homeButton);
-			
 
 			importButton = new ReflectionButton(ImageIO.read(getClass()
 					.getResource("Import.png")));
 			importButton.setBounds(84, 8, 68, 80);
 			navBar.add(importButton);
 
-			
-
 			exportButton = new ReflectionButton(ImageIO.read(getClass()
 					.getResource("Export.png")));
 			exportButton.setBounds(150, 8, 68, 80);
 			navBar.add(exportButton);
-			
-			//create info bubbles panel
-			homeInfoPanel = new FadePanel(false,200,200);
+
+			// create info bubbles panel
+			homeInfoPanel = new FadePanel(false, 200, 200);
 			homeInfoPanel.setBounds(8, 0, 62, infoPanel.getHeight());
 			homeInfoPanel.setLayout(null);
 			infoPanel.add(homeInfoPanel);
-			
-			
-			//create info bubble image
+
+			// create info bubble image
 			ImagePanel infoBubble = new ImagePanel(ImageIO.read(getClass()
-					.getResource("HomeInfo.png")),false);
-			infoBubble.setBounds(0, 0, infoPanel.getWidth(), infoPanel.getHeight());
+					.getResource("HomeInfo.png")), false);
+			infoBubble.setBounds(0, 0, infoPanel.getWidth(),
+					infoPanel.getHeight());
 			infoBubble.setLayout(null);
 			homeInfoPanel.add(infoBubble);
-			
-			//create import bubbles panel
-			importInfoPanel = new FadePanel(false,200,200);
+
+			// create import bubbles panel
+			importInfoPanel = new FadePanel(false, 200, 200);
 			importInfoPanel.setBounds(80, 0, 62, infoPanel.getHeight());
 			importInfoPanel.setLayout(null);
 			infoPanel.add(importInfoPanel);
-			
-			
-			//create import bubble image
+
+			// create import bubble image
 			ImagePanel importBubble = new ImagePanel(ImageIO.read(getClass()
-					.getResource("ImportInfo.png")),false);
-			importBubble.setBounds(0, 0, infoPanel.getWidth(), infoPanel.getHeight());
+					.getResource("ImportInfo.png")), false);
+			importBubble.setBounds(0, 0, infoPanel.getWidth(),
+					infoPanel.getHeight());
 			importBubble.setLayout(null);
 			importInfoPanel.add(importBubble);
-			
-			//create export bubbles panel
-			exportInfoPanel = new FadePanel(false,200,200);
+
+			// create export bubbles panel
+			exportInfoPanel = new FadePanel(false, 200, 200);
 			exportInfoPanel.setBounds(150, 0, 62, infoPanel.getHeight());
 			exportInfoPanel.setLayout(null);
 			infoPanel.add(exportInfoPanel);
-			
-			
-			//create export bubble image
+
+			// create export bubble image
 			ImagePanel exportBubble = new ImagePanel(ImageIO.read(getClass()
-					.getResource("ExportInfo.png")),false);
-			exportBubble.setBounds(0, 0, infoPanel.getWidth(), infoPanel.getHeight());
+					.getResource("ExportInfo.png")), false);
+			exportBubble.setBounds(0, 0, infoPanel.getWidth(),
+					infoPanel.getHeight());
 			exportBubble.setLayout(null);
 			exportInfoPanel.add(exportBubble);
-			
-			
-			
+
 			homeButton.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mousePressed(MouseEvent arg0) {
 					workspaceToHomeTransition();
 				}
-				
+
 				public void mouseEntered(MouseEvent arg0) {
 					homeInfoPanel.fadeIn();
 				}
-				
+
 				public void mouseExited(MouseEvent arg0) {
 					homeInfoPanel.fadeOut();
 				}
 			});
-			
-			
+
 			importButton.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mousePressed(MouseEvent arg0) {
@@ -483,26 +512,31 @@ public class Frame extends JFrame {
 						e.printStackTrace();
 					}
 				}
-				
+
 				public void mouseEntered(MouseEvent arg0) {
 					importInfoPanel.fadeIn();
 				}
-				
+
 				public void mouseExited(MouseEvent arg0) {
 					importInfoPanel.fadeOut();
 				}
 			});
-			
+
 			exportButton.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mousePressed(MouseEvent arg0) {
-					
+					try {
+						saveFileAs();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
-				
+
 				public void mouseEntered(MouseEvent arg0) {
 					exportInfoPanel.fadeIn();
 				}
-				
+
 				public void mouseExited(MouseEvent arg0) {
 					exportInfoPanel.fadeOut();
 				}
@@ -542,10 +576,41 @@ public class Frame extends JFrame {
 			createTab(file);
 			homeToWorkspaceTransition();
 			tabBar.fadeIn();
-			
-			//studentPanel.moveIn();
+
+			// studentPanel.moveIn();
 		} else {
 			blur.fadeOut();
+		}
+	}
+
+	public void saveFileAs() throws IOException {
+
+		File file;
+		// set the file extentions that may be chosen
+		FileFilter filter = new FileNameExtensionFilter(
+				"Supported files types: pdat, csv", "pdat", "csv");
+
+		// Create a file chooser
+		final JFileChooser filechooser = new JFileChooser();
+		// remove the "All Files" type
+		// filechooser.setAcceptAllFileFilterUsed(false);
+		// add the filter to the file chooser
+		filechooser.addChoosableFileFilter(filter);
+
+		// shows the dialog, return value specifies file
+		int returnVal = filechooser.showSaveDialog(this);
+
+		// if the chosen file is valid
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			file = filechooser.getSelectedFile();
+			try {
+				FileHandler.get().saveFile(file.getAbsolutePath());
+			} catch (UnsupportedFileTypeException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
+
 		}
 	}
 
@@ -568,14 +633,23 @@ public class Frame extends JFrame {
 	 */
 	public void createTab(File file) {
 		try {
-			fileHandler.openFile(file.getAbsolutePath(),Global.getGlobal().getActiveProject());
+			fileHandler.openFile(file.getAbsolutePath(), Global.getGlobal()
+					.getActiveProject());
 		} catch (UnsupportedFileTypeException e) {
 			e.printStackTrace();
 		}
 		// create table on panel
 		table = new FrmTable(Global.getGlobal().getActiveProject().getHead()
 				.getHeaders(), Global.getGlobal().getActiveProject().getHead()
-				.getDataLinkedList(),Global.getGlobal().getActiveProject());
+				.getDataLinkedList(), Global.getGlobal().getActiveProject());
+
+		// listener for changes of selection in table
+		table.getTable().getSelectionModel()
+				.addListSelectionListener(new ListSelectionListener() {
+					public void valueChanged(ListSelectionEvent e) {
+						showStudent();
+					}
+				});
 
 		// create tabbedPane
 		if (tabbedPane == null) {
@@ -586,7 +660,7 @@ public class Frame extends JFrame {
 
 		// create panel on which tabbedPane will be
 		if (tabBar == null) {
-			tabBar = new FadePanel(false,800,400);
+			tabBar = new FadePanel(false, 800, 400);
 			tabBar.setBounds(0, 0, frame.getWidth(), frame.getHeight());
 			tabBar.setLayout(null);
 			createGraphIcons();
@@ -599,13 +673,12 @@ public class Frame extends JFrame {
 		tabbedPane.addTab(file.getName(), table);
 		tabCount++;
 		tabbedPane.setTabComponentAt(tabCount, new TabButton(file.getName()));
-		
+
 		studentPanel.moveIn();
 	}
 
 	/*
-	 * Function to simulate transitions from home screen to 
-	 * workspace screen 
+	 * Function to simulate transitions from home screen to workspace screen
 	 */
 	public void homeToWorkspaceTransition() {
 		homePanel.fadeOut();
@@ -615,8 +688,7 @@ public class Frame extends JFrame {
 	}
 
 	/*
-	 * Function to simulate transitions from workspace screen to 
-	 * home screen 
+	 * Function to simulate transitions from workspace screen to home screen
 	 */
 	public void workspaceToHomeTransition() {
 		homePanel.fadeIn();
@@ -625,8 +697,7 @@ public class Frame extends JFrame {
 	}
 
 	/*
-	 * Function to create graph icons on top of right side of 
-	 * workspace screen 
+	 * Function to create graph icons on top of right side of workspace screen
 	 */
 	public void createGraphIcons() {
 		try {
@@ -650,38 +721,61 @@ public class Frame extends JFrame {
 		}
 
 	}
-	
-	public void createStudentView(){
-		
-		studentPanel = new ShadowPanel(getWidth()-45,0,getWidth()-250,0);
-		studentPanel.setBounds(getWidth(), 0, 250, getHeight()-20);
-		button = new JButton(">");
+
+	public void createStudentView() {
+
+		studentPanel = new ShadowPanel(getWidth() - 45, 0, getWidth() - 250, 0);
+		studentPanel.setBounds(getWidth(), 0, 250, getHeight() - 20);
+		button = new JButton("<");
 		button.setBounds(3, 30, 20, 20);
-		button.setBorder(new EmptyBorder(0,0,0,0));
+		button.setBorder(new EmptyBorder(0, 0, 0, 0));
 		studentPanel.add(button);
 		studentPanel.setLayout(null);
 		studentPanel.setShown(false);
 		backgroundPanel.setLayer(studentPanel, 300);
 		backgroundPanel.add(studentPanel);
 		studentPanel.setVisible(false);
-		
+
 		button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		
+
 		button.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (studentPanel.isShown()) {
 					studentPanel.moveOut();
-					button.setText("<");
+					button.setText(">");
 					studentPanel.setShown(false);
-				}
-				else {
+				} else {
 					studentPanel.moveIn();
 					studentPanel.setShown(true);
-					button.setText(">");
+					button.setText("<");
 				}
-					
+
 			}
 		});
+	}
+
+	public void showStudent() {
+		String[] headers = Global.getGlobal().getActiveProject().getHead().getHeaders();
+		for (int i = 0; i < headers.length; i++) {
+			// System.out.println(headers[i]);
+		}
+
+		int row = table.getTable().getSelectedRow();
+		int colCount = table.getTable().getColumnCount();
+		
+		String[] info = new String[colCount];
+		
+		for (int i=0; i<colCount;i++) {
+			info[i] = table.getTable().getValueAt(row, i).toString(); 
+			System.out.println(info[i]);
+		}
+		
+		BufferedImage img = null;
+		try {
+		    img = ImageIO.read(new File("2927713.jpg"));
+		} catch (IOException e) {
+		}
+		
 	}
 }
