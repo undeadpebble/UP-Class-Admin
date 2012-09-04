@@ -5,11 +5,18 @@ import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Event;
 import java.awt.GridLayout;
+import java.awt.Point;
+import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
+import java.awt.event.MouseMotionAdapter;
 import java.util.LinkedList;
 
 import javax.swing.JButton;
@@ -34,16 +41,20 @@ import javax.swing.table.TableCellRenderer;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.MultiSplitLayout.Leaf;
 
+import prefuse.data.search.SearchTupleSet;
+
 import ClassAdminBackEnd.Global;
 
 import ClassAdminBackEnd.BetweenFormat;
 import ClassAdminBackEnd.BorderCase;
 import ClassAdminBackEnd.EntityType;
 import ClassAdminBackEnd.Format;
+import ClassAdminBackEnd.LeafMarkEntity;
 import ClassAdminBackEnd.LeafStringEntity;
 import ClassAdminBackEnd.Project;
 import ClassAdminBackEnd.StringEntity;
 import ClassAdminBackEnd.SuperEntity;
+import ClassAdminBackEnd.SuperEntityPointer;
 import ClassAdminBackEnd.TableCellListener;
 import ClassAdminBackEnd.GreaterThanFormat;
 import ClassAdminBackEnd.LessThanFormat;
@@ -60,6 +71,15 @@ public class FrmTable extends JPanel {
 	Project project;
 
 	private LinkedList<Integer> selected = new LinkedList<Integer>();
+	
+	private String getColorName(Color c){
+		for(int x = 0; x <colors.size();x++){
+			if(c == colors.get(x)){
+				return(colorsString.get(x));
+			}
+		}
+		return("");
+	}
 
 	public FrmTable(String[] headers, LinkedList<LinkedList<SuperEntity>> data,
 			Project project) {
@@ -85,6 +105,8 @@ public class FrmTable extends JPanel {
 		colorsString.add("Red");
 		colors.add(Color.yellow);
 		colorsString.add("Yellow");
+		colors.add(Color.green);
+		colorsString.add("Green");
 
 		createGUI(headers);
 	}
@@ -96,7 +118,7 @@ public class FrmTable extends JPanel {
 		Action action = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				TableCellListener tcl = (TableCellListener) e.getSource();
-
+				
 				if (tcl.getOldValue() != tcl.getNewValue()) {
 					if (data.get(tcl.getRow()).get(tcl.getColumn())
 							.getDetails().getType().getIsTextField()) {
@@ -121,10 +143,6 @@ public class FrmTable extends JPanel {
 
 		Object[][] temp = new Object[data.size()][data.get(0).size()];
 
-		for (int x = 0; x < data.get(1).size(); x++) {
-			project.getSelected().add(data.get(1).get(x));
-		}
-
 		for (int x = 0; x < data.size(); x++) {
 			for (int y = 0; y < data.get(0).size(); y++) {
 				temp[x][y] = data.get(x).get(y).getValue();
@@ -138,6 +156,14 @@ public class FrmTable extends JPanel {
 						Index_col);
 				// even index, selected or not selected
 				try {
+					
+					LinkedList<Color> backgroundColors = new LinkedList<Color>();
+					LinkedList<Color> textColors = new LinkedList<Color>();
+
+					LinkedList<Format> format = data
+							.get(table.getRowSorter().convertRowIndexToModel(
+									Index_row)).get(Index_col).getType()
+							.getFormatting();
 
 					if (project.getSelected().contains(
 							data.get(
@@ -164,30 +190,28 @@ public class FrmTable extends JPanel {
 								comp.setBackground(Color.white);
 							}
 						} else {
-							comp.setBackground(Color.green);
-							table.addRowSelectionInterval(Index_row, Index_row);
+							backgroundColors.add(Color.orange);
+							comp.setBackground(Color.orange);
+
+							//table.addRowSelectionInterval(Index_row, Index_row);
 						}
 					} else {
 						comp.setBackground(Color.white);
 					}
 
 					if (isCellSelected(Index_row, Index_col)) {
-						comp.setBackground(Color.green);
+						backgroundColors.add(Color.orange);
+						comp.setBackground(Color.orange);
 						project.getSelected().add(
 								data.get(
 										table.getRowSorter()
 												.convertRowIndexToModel(
 														Index_row)).get(
 										Index_col));
+						comp.setForeground(Color.black);
+						table.repaint();
 					}
 
-					LinkedList<Color> backgroundColors = new LinkedList<Color>();
-					LinkedList<Color> textColors = new LinkedList<Color>();
-
-					LinkedList<Format> format = data
-							.get(table.getRowSorter().convertRowIndexToModel(
-									Index_row)).get(Index_col).getType()
-							.getFormatting();
 
 					for (int x = 0; x < format.size(); x++) {
 						if (format.get(x).evaluate(
@@ -268,14 +292,53 @@ public class FrmTable extends JPanel {
 					// TODO: handle exception
 					return null;
 				}
+				
 			}
 		};
+		
+        
+		//---------------------------------------------------------------------------------------------------
+        // tooltip when hovering
+		table.addMouseMotionListener(new MouseMotionAdapter() {
+			   public void mouseMoved(MouseEvent e){
+			        Point p = e.getPoint(); 
+			        int row = table.rowAtPoint(p);
+			        int col = table.columnAtPoint(p);
+			        String toolTip = "";
+			        
+			        try{
+			        
+					LinkedList<Format> format = data
+							.get(table.getRowSorter().convertRowIndexToModel(
+									row)).get(col).getType()
+							.getFormatting();
+					
+					for (int x = 0; x < format.size(); x++) {
+						if (format.get(x).evaluate(data.get(table.getRowSorter().convertRowIndexToModel(row)).get(col).getMark())) {
+							if (format.get(x).getHighlightColor() != null) {
+								toolTip += " Background Color = " + getColorName(format.get(x).getHighlightColor()) + ", due to "+ format.get(x).getDescription();
+								toolTip += "\t";
+							} else if (format.get(x).getTextColor() != null) {
+								toolTip += " Text Color = " +getColorName(format.get(x).getTextColor()) + ", due to "+ format.get(x).getDescription();
+								toolTip += "\t";
+							}
+						}
+					}
+					
+			        table.setToolTipText(toolTip);
+			        }
+			        catch (Exception ex) {
+						// TODO: handle exception
+					}
+			    }//end MouseMoved
+			}); // end MouseMotionAdapter
+			//=---------------------------------------------------------------------------------------------
 		table.setAutoCreateRowSorter(true);
 
 		TableCellListener tcl = new TableCellListener(table, action);
 
 		table.addPropertyChangeListener(tcl);
-
+//--------------------------------------------------------------------------------------------
 		table.getSelectionModel().addListSelectionListener(
 				new ListSelectionListener() {
 
@@ -290,7 +353,7 @@ public class FrmTable extends JPanel {
 					}
 
 				});
-
+//--------------------------------------------------------------------------------------
 		pane.setViewportView(table);
 		JPanel eastPanel = new JPanel();
 
@@ -302,7 +365,16 @@ public class FrmTable extends JPanel {
 		final LinkedList<SuperEntity> headersList = project.getHead()
 				.getHeadersLinkedList();
 		border.add(cbheaders);
-
+		
+		JPanel searchPnl = new JPanel();
+		final TextField searchTxt = new TextField(20);
+		
+		JButton btnSearch = new JButton("Search");
+		
+		searchPnl.add(btnSearch);
+		searchPnl.add(searchTxt);
+//=--------------------------------------------------------------------------------------------------------------
+		//bordercase button
 		bordercase.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -362,7 +434,7 @@ public class FrmTable extends JPanel {
 				}
 			}
 		});
-
+		//=--------------------------------------------------------------------------------------------------------------
 		JButton btnAddConditionalFormatting = new JButton(
 				"Add conditional formatting");
 		final JComboBox cbFormatting = new JComboBox(headers);
@@ -376,11 +448,14 @@ public class FrmTable extends JPanel {
 		eastPanel.add(btnView);
 
 		eastPanel.add(border);
+		
 
 		JPanel formatting = new JPanel();
 		formatting.add(btnAddConditionalFormatting);
 		formatting.add(cbFormatting);
 		eastPanel.add(formatting);
+		
+		eastPanel.add(searchPnl);
 
 		JPanel northPanel = new JPanel();
 
@@ -401,23 +476,58 @@ public class FrmTable extends JPanel {
 
 		tableModel = new DefaultTableModel(temp, (Object[]) headers);
 		table.setModel(tableModel);
-
+		//=--------------------------------------------------------------------------------------------------------------
 		btnAdd.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				table.repaint();
 				int count = tableModel.getRowCount() + 1;
 
+				EntityType testHead = project.getHeadEntityType();
+				LinkedList<EntityType> list = testHead.getSubEntityType();
+				
+				for(int x = 0; x < list.size();x++){
+					createEntities(list.get(x), new SuperEntityPointer( project.getHead()));
+				}
+				
+				data = project.getHead().getDataLinkedList();
 
-				// data.add(newToAdd);
+				/*tableModel.addRow(new Object[] { txtField1.getText(),
+						txtField1.getText() });*/
+				
+				Object[] temp = new Object[data.get(0).size()];
 
-				tableModel.addRow(new Object[] { txtField1.getText(),
-						txtField1.getText() });
+				for (int y = 0; y < data.get(0).size(); y++) {
+					temp[y] = data.getLast().get(y).getValue();
+				}
+				
+				tableModel.addRow(temp);
 				table.repaint();
-
 			}
 		});
-
+		//=--------------------------------------------------------------------------------------------------------------
+		btnSearch.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				if(searchTxt.getText().compareTo("") != 0){
+					project.getSelected().clear();
+					for(int x = 0; x < data.size();x++){
+						for(int y = 0; y < data.get(0).size();y++){
+							if(data.get(x).get(y).getValue().contains(searchTxt.getText())){
+								if(!project.getSelected().contains(data.get(x).get(0)));
+									for(int z = 0; z < data.get(x).size();z++){
+										project.getSelected().add(data.get(x).get(z));
+										tableModel.fireTableDataChanged();	
+									}
+								tableModel.fireTableDataChanged();	
+							}
+						}
+					}
+				}		
+			}
+		});
+		//=--------------------------------------------------------------------------------------------------------------
 		btnAddConditionalFormatting.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -633,10 +743,12 @@ public class FrmTable extends JPanel {
 			}
 
 		});
-
+		//=--------------------------------------------------------------------------------------------------------------
 		btnView.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
+				
 				table.repaint();
 				table.getSelectedRow();
 
@@ -646,13 +758,34 @@ public class FrmTable extends JPanel {
 		});
 
 	}
-
+	//=--------------------------------------------------------------------------------------------------------------
+	private void createEntities(EntityType entType, SuperEntityPointer parent){
+		LinkedList<EntityType> list = entType.getSubEntityType();
+		
+		if(entType.getIsTextField()){
+			LeafStringEntity head = new LeafStringEntity(entType, parent.getTarget(), "");
+			
+			SuperEntityPointer headPointer = new SuperEntityPointer(head);
+			
+			for(int x = 0; x < list.size();x++){
+				createEntities(list.get(x),headPointer);
+			}
+		}
+		else{
+			LeafMarkEntity head = new LeafMarkEntity(entType, parent.getTarget(), 0);
+			SuperEntityPointer headPointer = new SuperEntityPointer(head);
+			
+			for(int x = 0; x < list.size();x++){
+				createEntities(list.get(x),headPointer);
+			}
+		}
+	}
+	//=--------------------------------------------------------------------------------------------------------------
 	public class InteractiveTableModelListener implements TableModelListener {
 		public void tableChanged(TableModelEvent evt) {
 			if (evt.getType() == TableModelEvent.UPDATE) {
 				int column = evt.getColumn();
 				int row = evt.getFirstRow();
-				System.out.println("row: " + row + " column: " + column);
 				table.setColumnSelectionInterval(column + 1, column + 1);
 				table.setRowSelectionInterval(row, row);
 				table.repaint();
