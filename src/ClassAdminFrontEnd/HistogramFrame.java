@@ -63,7 +63,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			for (int s = 0; s < headers.length; s++) {
 				if (headers[s].equals(kolom[0])) {
 					houerx = s;
-					System.out.println(headers[s]);
+					//System.out.println(headers[s]);
 				}
 
 			}
@@ -72,7 +72,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			for (int q = 0; q < diedata.size(); q++) {
 			
 				values[q] = diedata.get(q).get(houerx).getMark();
-				System.out.println(values[q]);
+				//System.out.println(values[q]);
 				
 			}
 		    
@@ -103,7 +103,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			plot = chart.getXYPlot();
 			final Plot Nuweplot = chart.getPlot();
 			
-			CustomBarRenderer c = new CustomBarRenderer();
+			final CustomBarRenderer c = new CustomBarRenderer();
 			plot.setRenderer(c);
 			/*BarRenderer barRenderer = (BarRenderer)plot.getRenderer();
 			barRenderer.setSeriesPaint(0, Color.gray);
@@ -142,11 +142,17 @@ public class HistogramFrame extends JFrame implements ActionListener {
 
 							XYItemEntity ent = (XYItemEntity) entity;
 							
-
+						
 							int sindex = ent.getSeriesIndex();
 							int iindex = ent.getItem();
-
-							final CircleDrawer cd = new CircleDrawer(Color.red,
+							System.out.println(sindex);
+							System.out.println(iindex);
+						
+							c.selectedx=5.0;
+							c.selectedy=9.0;
+							plot.setRenderer(c);
+							repaint();
+							/*final CircleDrawer cd = new CircleDrawer(Color.red,
 									new BasicStroke(1.0f), null);
 							final XYAnnotation bestBid = new XYDrawableAnnotation(dataset
 									.getXValue(sindex, iindex), dataset.getYValue(sindex,
@@ -156,8 +162,8 @@ public class HistogramFrame extends JFrame implements ActionListener {
 							
 						
 
-							chart.getXYPlot().addAnnotation(bestBid);
-
+							chart.getXYPlot().addAnnotation(bestBid);*/
+							
 							System.out.println("x = " + dataset.getXValue(sindex, iindex));
 							System.out.println("y = " + dataset.getYValue(sindex, iindex));
 						}
