@@ -77,19 +77,16 @@ public class Format {
 			throws SqlJetException {
 		long id = idgen.getID();
 		db.beginTransaction(SqlJetTransactionMode.WRITE);
-		try {
+
 			ISqlJetTable table = db.getTable(PDatExport.FORMAT_TABLE);
 			// insert statements
 
-			table.insert(id + ", " + parentID + ", "
-					+ this.getTextColor().getRGB() + ", "
+			table.insert(id ,parentID,this.getTextColor().getRGB(),this.getHighlightColor().getRGB());
 
-					+ this.getHighlightColor().getRGB());
 
-		} finally {
 			db.commit();
 
-		}
+		
 		return id;
 	}
 

@@ -47,7 +47,7 @@ public class MarkEntity extends SuperEntity{
         	ISqlJetTable table = db.getTable(PDatExport.MARK_ENTITY_TABLE);
         	//insert statements
         	
-        	table.insert(id+", "+this.getMark());
+        	table.insert(id,this.getMark());
         } finally {
             db.commit();
             

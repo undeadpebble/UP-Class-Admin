@@ -3,6 +3,8 @@ package ClassAdminBackEnd;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import org.tmatesoft.sqljet.core.SqlJetException;
+
 public class FileHandler {
 	final double LARGEST_MARK_VALUE = 1000;
 	/**
@@ -30,7 +32,10 @@ public class FileHandler {
 		} else if (filename.substring(filename.indexOf('.')).contains("xls")) {
 			openXls(filename);
 
-		} else
+		} else if (filename.substring(filename.indexOf('.')).contains("pdat")) {
+			openPDat(filename);
+		}
+		else
 			throw new UnsupportedFileTypeException();
 
 	}
@@ -121,20 +126,20 @@ public class FileHandler {
 
 		for (int r = 0; r < numRecords; ++r) {
 			int count = 0;
-			SuperEntity parentEntity;
+			SuperEntityPointer parentEntity;
 			if(parentRowIndex < 0){
-				parentEntity = new LeafStringEntity(project.getHeadEntityType().getSubEntityType().get(0), project.getHead(), "Row"+r);
+				parentEntity = new SuperEntityPointer(new LeafStringEntity(project.getHeadEntityType().getSubEntityType().get(0), project.getHead(), "Row"+r));
 			}
 			else{
 				String record = fileReader.getRecordFieldValue(recordArray, r, parentRowIndex);
-				parentEntity = new StringEntity(project.getHeadEntityType().getSubEntityType().get(0), project.getHead(), record);
+				parentEntity = new SuperEntityPointer(new LeafStringEntity(project.getHeadEntityType().getSubEntityType().get(0), project.getHead(), record));
 			}
 			for (int f = 0; f < headers.size(); ++f) {
 				if(f != parentRowIndex){
 				String record = fileReader.getRecordFieldValue(recordArray, r, f);
-				EntityType fieldType = parentEntity.getType().getSubEntityType().get(count++);
+				EntityType fieldType = parentEntity.getTarget().getType().getSubEntityType().get(count++);
 
-					SuperEntity mE = new SuperEntity(fieldType, parentEntity, 0);
+					SuperEntity mE = new SuperEntity(fieldType, parentEntity.getTarget(), 0);
 
 				if (fieldType.getIsTextField() == true) {
 					mE = new LeafStringEntity(mE, record);
@@ -165,12 +170,14 @@ public class FileHandler {
 		}
 	}
 
-	public void saveFile(String filename) throws UnsupportedFileTypeException {
+	public void saveFile(String filename, Project project) throws UnsupportedFileTypeException {
 		if (filename.substring(filename.indexOf('.')).contains("csv")) {
 			saveCSV(filename);
 		} else if (filename.substring(filename.indexOf('.')).contains("xls")) {
 			saveXls(filename);
 
+		} else if (filename.substring(filename.indexOf('.')).contains("pdat")) {
+			 savePDat(filename);
 		} else
 			throw new UnsupportedFileTypeException();
 	}
@@ -187,7 +194,23 @@ public class FileHandler {
 	}
 
 	private void openPDat(String filename) {
-
+		PDatImport pImport = new PDatImport();
+		try {
+			pImport.importFile(filename, project);
+		} catch (SqlJetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private void savePDat(String filename){
+		PDatExport pExport = new PDatExport();
+		try {
+			pExport.exportFile(project, filename);
+		} catch (SqlJetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

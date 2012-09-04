@@ -51,16 +51,15 @@ public class BorderCase {
 	public long saveToDB(SqlJetDb db, long parentID, PDatIDGenerator idgen) throws SqlJetException {
 
 		db.beginTransaction(SqlJetTransactionMode.WRITE);
-        try {
-        	//TODO
+
         	ISqlJetTable table = db.getTable(PDatExport.ENTITY_TABLE);
         	//insert statements
         	
-        	table.insert(parentID+", "+this.getLowVal()+", "+this.getHighVal());
-        } finally {
+        	table.insert(parentID,this.getLowVal(),this.getHighVal());
+
             db.commit();
             
-        }
+        
         return 0;
 	}
 }
