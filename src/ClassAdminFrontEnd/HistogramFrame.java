@@ -26,13 +26,16 @@ import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.NumberTickUnit;
 import org.jfree.chart.entity.ChartEntity;
 import org.jfree.chart.entity.XYItemEntity;
+import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.statistics.HistogramDataset;
 import org.jfree.data.statistics.HistogramType;
 
 import ClassAdminBackEnd.EntityType;
 import ClassAdminBackEnd.Global;
 import ClassAdminBackEnd.SuperEntity;
+import ClassAdminFrontEnd.Histogram.CustomBarRenderer;
 
 public class HistogramFrame extends JFrame implements ActionListener {
 	static ChartPanel chartpanel ;
@@ -47,17 +50,11 @@ public class HistogramFrame extends JFrame implements ActionListener {
 		    f.setSize(550, 600);
 		    
 		    
-		    final LinkedList<LinkedList<SuperEntity>> diedata = Global.getGlobal()
-					.getActiveProject().getHead().getDataLinkedList();
-		    
-		    
-			final String[] headers = Global.getGlobal().getActiveProject()
-					.getHead().getHeaders();
+		    final LinkedList<LinkedList<SuperEntity>> diedata = Global.getGlobal().getActiveProject().getHead().getDataLinkedList();
+		    final String[] headers = Global.getGlobal().getActiveProject().getHead().getHeaders();
+			String[] kolom = Global.getGlobal().getActiveProject().getHead().getNumberHeaders();
 			
-			String[] kolom = Global.getGlobal().getActiveProject().getHead()
-					.getNumberHeaders();
-			
-			 final HistogramDataset dataset = new HistogramDataset();
+			final HistogramDataset dataset = new HistogramDataset();
 			 
 			String xas = kolom[0];
 			
@@ -68,6 +65,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 				}
 
 			}
+			
 		 values = new double[diedata.size()];
 			for (int q = 0; q < diedata.size(); q++) {
 			
@@ -91,7 +89,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			
 			final Histogram nuweChart = new Histogram();
 			chart = nuweChart.createHistogram(plotTitle, xaxis, yaxis, dataset);
-			
+		
 			NumberAxis rangeAxis = (NumberAxis) chart.getXYPlot().getRangeAxis();
 			
 			((NumberAxis) rangeAxis).setTickUnit(new NumberTickUnit(1));
@@ -101,7 +99,21 @@ public class HistogramFrame extends JFrame implements ActionListener {
 					
 			final XYPlot plot;
 			plot = chart.getXYPlot();
-						
+			final Plot Nuweplot = chart.getPlot();
+			
+             CustomBarRenderer custombarrenderer3d = new CustomBarRenderer();
+          //   ((XYPlot) Nuweplot).setRenderer((XYItemRenderer) custombarrenderer3d);
+             /*custombarrenderer3d.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
+             custombarrenderer3d.setBaseItemLabelsVisible(true);
+             custombarrenderer3d.setItemLabelAnchorOffset(10D);
+             custombarrenderer3d.setBasePositiveItemLabelPosition(new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, TextAnchor.BASELINE_LEFT));
+             categoryplot.setRenderer(custombarrenderer3d);
+             ValueMarker valuemarker = new ValueMarker(0.69999999999999996D, new Color(200, 200, 255), new BasicStroke(1.0F), new Color(200, 200, 255), new BasicStroke(1.0F), 1.0F);
+             categoryplot.addRangeMarker(valuemarker, Layer.BACKGROUND);
+             custombarrenderer3d.setBaseItemLabelsVisible(true);
+             custombarrenderer3d.setMaximumBarWidth(0.050000000000000003D);
+*/
+			
 				chartpanel.addChartMouseListener(new ChartMouseListener() {
 
 					public void chartMouseClicked(ChartMouseEvent e) {
