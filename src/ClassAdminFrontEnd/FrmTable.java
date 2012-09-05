@@ -91,9 +91,6 @@ public class FrmTable extends JPanel {
 		dataFilter = new Boolean[data.size()];
 		for(int x = 0; x< dataFilter.length;x++)
 			dataFilter[x] = true;
-		//++++++++++++++++++++++++++++++++++++
-		dataFilter[3] = false;
-		//++++++++++++++++++++++++++++++++++++
 		colors = new LinkedList<Color>();
 		colorsString = new LinkedList<String>();
 
@@ -796,25 +793,196 @@ public class FrmTable extends JPanel {
 		});
 		//----------------------------------------------------------------------------------------------------------------
 		JButton btnFilter = new JButton("Filter");
+		final JComboBox cbFilter = new JComboBox(headers);
+		
 		btnFilter.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				boolean filtered = false;
-				for(int x = 0; x < dataFilter.length;x++){
-					if(!dataFilter[x]){
-						filtered = true;
-						tableModel.removeRow(x-1);
+
+				final JFrame filterFrame = new JFrame();
+
+				SpinnerNumberModel SNMmax = new SpinnerNumberModel(new Integer(
+						0), // value
+						new Integer(0), // min
+						new Integer(100), // max
+						new Integer(1) // step
+				);
+				final JSpinner maxVal = new JSpinner(SNMmax);
+
+				SpinnerNumberModel SNMmin = new SpinnerNumberModel(new Integer(
+						0), // value
+						new Integer(0), // min
+						new Integer(100), // max
+						new Integer(1) // step
+				);
+				final JSpinner minVal = new JSpinner(SNMmin);
+
+				minVal.setEnabled(false);
+				maxVal.setEnabled(false);
+
+				filterFrame.setLayout(new GridLayout(0, 2));
+
+				String[] formatTypesStr = new String[Format.formatTypes.length + 1];
+				formatTypesStr[0] = "";
+
+				for (int x = 1; x < formatTypesStr.length; x++) {
+					formatTypesStr[x] = Format.formatTypes[x - 1];
+				}
+
+				final JComboBox formatTypes = new JComboBox(formatTypesStr);
+
+				final JButton addFilter = new JButton("Add Filer");
+				addFilter.setEnabled(false);
+
+				filterFrame.add(formatTypes);
+				filterFrame.add(addFilter);
+				filterFrame.add(minVal);
+				filterFrame.add(maxVal);
+
+				filterFrame.setVisible(true);
+				filterFrame.setSize(400, 150);
+
+				formatTypes.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						if (!(formatTypes.getSelectedIndex() == 0)) {
+							if (formatTypes.getSelectedIndex() == 1) {
+								minVal.setEnabled(true);
+								maxVal.setEnabled(true);
+
+								addFilter.setEnabled(true);
+							} else {
+								minVal.setEnabled(true);
+								maxVal.setEnabled(false);
+
+								addFilter.setEnabled(true);
+							}
+						} else {
+							minVal.setEnabled(false);
+							maxVal.setEnabled(false);
+
+							addFilter.setEnabled(false);
+						}
+					}
+				});
+
+				addFilter.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						switch (formatTypes.getSelectedIndex()) {
+						case 1: {
+							for(int x = 0; x < dataFilter.length;x++){
+								if(data.get(x).get(cbFilter.getSelectedIndex()).getMark() > Double.parseDouble(maxVal.getValue().toString()) || data.get(x).get(cbFilter.getSelectedIndex()).getMark()<Double.parseDouble(minVal.getValue().toString())){
+									dataFilter[x] = false;
+								}
+										
+							}
+							table.repaint();
+							filterFrame.setVisible(false);
+							break;
+						}
+						case 2: {
+							for(int x = 0; x < dataFilter.length;x++){
+								if(data.get(x).get(cbFilter.getSelectedIndex()).getMark() < Double.parseDouble(minVal.getValue().toString())){
+									dataFilter[x] = false;
+								}
+										
+							}						
+							
+							table.repaint();
+							filterFrame.setVisible(false);
+							break;
+						}
+						case 3: {
+							for(int x = 0; x < dataFilter.length;x++){
+								if(data.get(x).get(cbFilter.getSelectedIndex()).getMark() > Double.parseDouble(minVal.getValue().toString())){
+									dataFilter[x] = false;
+								}
+										
+							}
+							
+							table.repaint();
+							filterFrame.setVisible(false);
+							break;
+						}
+
+						}
+					
+					boolean filtered = false;
+					LinkedList<Integer> removes = new LinkedList<Integer>();
+					
+					for(int x = 0; x < tableModel.getRowCount();x++){
+						if(!dataFilter[x]){
+							filtered = true;
+							
+							removes.add(x);
+							dataFilter[x] = true;
+						}
+					}
+					
+					
+					for(int x = removes.size()-1; x >= 0;x--){
+						tableModel.removeRow(removes.get(x));
+					}
+					
+					if(!filtered){
+						
+						Object[][] temp = new Object[data.size()][data.get(0).size()];
+
+						for (int x = 0; x < data.size(); x++) {
+							for (int y = 0; y < data.get(0).size(); y++) {
+								temp[x][y] = data.get(x).get(y).getValue();
+							}
+						}
+						
+						int y = tableModel.getRowCount();
+						for(int x = 0; x <y;x++){
+							tableModel.removeRow(0);
+						}
+						for (int x = 0; x < data.size(); x++) {
+							tableModel.addRow(temp[x]);
+						}
+					}
+				}
+					
+				});
+			}
+		});
+		
+		JButton removeFilter = new JButton("Remove filter");
+		
+		removeFilter.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				
+				Object[][] temp = new Object[data.size()][data.get(0).size()];
+
+				for (int x = 0; x < data.size(); x++) {
+					for (int y = 0; y < data.get(0).size(); y++) {
+						temp[x][y] = data.get(x).get(y).getValue();
 					}
 				}
 				
-				if(!filtered){
-					//tableModel.set
+				int y = tableModel.getRowCount();
+				for(int x = 0; x <y;x++){
+					tableModel.removeRow(0);
+				}
+				for (int x = 0; x < data.size(); x++) {
+					tableModel.addRow(temp[x]);
 				}
 			}
 		});
 		
-		eastPanel.add(btnFilter);
+		JPanel Filter = new JPanel();
+		Filter.setLayout(new GridLayout(1,0));
+		
+		Filter.add(btnFilter);
+		Filter.add(cbFilter);
+		Filter.add(removeFilter);
+		eastPanel.add(Filter);
+		
 	}
 	//=--------------------------------------------------------------------------------------------------------------
 	private void createEntities(EntityType entType, SuperEntityPointer parent){
