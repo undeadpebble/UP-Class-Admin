@@ -32,6 +32,14 @@ public class testMain
 			
 			Global.getGlobal().getActiveProject().getHeadEntityType().getSubEntityType().get(0).getSubEntityType().get(2).changeParent(Global.getGlobal().getActiveProject().getHeadEntityType().getSubEntityType().get(0).getSubEntityType().get(1));
 		
+			Global.getGlobal().getActiveProject().getHeadEntityType().getSubEntityType().get(0).getSubEntityType().get(2).changeParent(Global.getGlobal().getActiveProject().getHeadEntityType().getSubEntityType().get(0).getSubEntityType().get(1));
+
+			try {
+				Global.getGlobal().getActiveProject().getHead().calcMark();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
 			fh.saveFile("test.pdat",Global.getGlobal().getActiveProject());
 			
 			

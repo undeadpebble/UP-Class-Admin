@@ -14,7 +14,7 @@ public class LeafStringEntity extends StringEntity{
 		}
 	}
 
-	private Boolean isAbsent(){
+	public Boolean isAbsent(){
 		return true;
 	}
 	
