@@ -5,32 +5,26 @@ import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Event;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseMotionAdapter;
 import java.util.LinkedList;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
-import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
@@ -39,9 +33,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
 import org.jdesktop.swingx.JXTable;
-import org.jdesktop.swingx.MultiSplitLayout.Leaf;
-
-import prefuse.data.search.SearchTupleSet;
 
 import ClassAdminBackEnd.Global;
 
@@ -67,20 +58,60 @@ public class FrmTable extends JPanel {
 	private JTextField txtField2;
 	private LinkedList<Color> colors;
 	private LinkedList<String> colorsString;
+	protected LinkedList<LinkedList<Boolean>> filters = new LinkedList<LinkedList<Boolean>>();
 	LinkedList<LinkedList<SuperEntity>> data;
 	Boolean[] dataFilter;
-	
+
 	Project project;
 
 	private LinkedList<Integer> selected = new LinkedList<Integer>();
-	
-	private String getColorName(Color c){
-		for(int x = 0; x <colors.size();x++){
-			if(c == colors.get(x)){
-				return(colorsString.get(x));
+
+	private String getColorName(Color c) {
+		for (int x = 0; x < colors.size(); x++) {
+			if (c == colors.get(x)) {
+				return (colorsString.get(x));
 			}
 		}
-		return("");
+		return ("");
+	}
+
+	public void filterTable() {
+		boolean filtered = false;
+		LinkedList<Integer> removes = new LinkedList<Integer>();
+
+		//--------------------------------------
+		//adds all the rows to tha table again
+		Object[][] temp = new Object[data.size()][data.get(0).size()];
+
+		for (int x = 0; x < data.size(); x++) {
+			for (int y = 0; y < data.get(0).size(); y++) {
+				temp[x][y] = data.get(x).get(y).getValue();
+			}
+		}
+
+		int rows = tableModel.getRowCount();
+		for (int x = 0; x < rows; x++) {
+			tableModel.removeRow(0);
+		}
+		for (int x = 0; x < data.size(); x++) {
+			tableModel.addRow(temp[x]);
+		}
+		//--------------------------------------------------
+		System.out.println();
+		for (int x = 0; x < filters.size(); x++) {
+			for (int y = 0; y < filters.get(0).size(); y++) {
+				if(filters.get(x).get(y)){
+					removes.add(x);
+					y = filters.get(0).size();
+				}
+			}
+			System.out.println();
+		}
+		System.out.println(removes.size());
+		for (int x = removes.size() - 1; x >= 0; x--) {
+			tableModel.removeRow(removes.get(x));
+		}
+
 	}
 
 	public FrmTable(String[] headers, LinkedList<LinkedList<SuperEntity>> data,
@@ -88,8 +119,19 @@ public class FrmTable extends JPanel {
 		this.data = data;
 		this.project = project;
 
+		// -------------------------------------------------------------------------------------------------------
+		// create the filters array with everything false
+		for (int x = 0; x < data.size(); x++) {
+			LinkedList<Boolean> temp = new LinkedList<Boolean>();
+			for (int y = 0; y < data.get(0).size(); y++) {
+				temp.add(false);
+			}
+			filters.add(temp);
+		}
+
+		// ---------------------------------------------------------------------------------------------------------------
 		dataFilter = new Boolean[data.size()];
-		for(int x = 0; x< dataFilter.length;x++)
+		for (int x = 0; x < dataFilter.length; x++)
 			dataFilter[x] = true;
 		colors = new LinkedList<Color>();
 		colorsString = new LinkedList<String>();
@@ -123,16 +165,27 @@ public class FrmTable extends JPanel {
 		Action action = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				TableCellListener tcl = (TableCellListener) e.getSource();
-				
+
 				if (tcl.getOldValue() != tcl.getNewValue()) {
-					if (data.get(tcl.getRow()).get(tcl.getColumn()).getDetails().getType().getIsTextField()) {
-						data.get(tcl.getRow()).get(tcl.getColumn()).getDetails().setValue((String) tcl.getNewValue());
+					if (data.get(tcl.getRow()).get(tcl.getColumn())
+							.getDetails().getType().getIsTextField()) {
+						data.get(tcl.getRow()).get(tcl.getColumn())
+								.getDetails()
+								.setValue((String) tcl.getNewValue());
 					} else {
 						try {
-							if(Double.parseDouble((String) tcl.getNewValue()) >= 0 && data.get(tcl.getRow()).get(tcl.getColumn()).getType().getMaxValue() >= Double.parseDouble((String) tcl.getNewValue())){
-								data.get(tcl.getRow()).get(tcl.getColumn()).setMark((Double.parseDouble((String) tcl.getNewValue())));
-							}
-							else{
+							if (Double.parseDouble((String) tcl.getNewValue()) >= 0
+									&& data.get(tcl.getRow())
+											.get(tcl.getColumn()).getType()
+											.getMaxValue() >= Double
+											.parseDouble((String) tcl
+													.getNewValue())) {
+								data.get(tcl.getRow())
+										.get(tcl.getColumn())
+										.setMark(
+												(Double.parseDouble((String) tcl
+														.getNewValue())));
+							} else {
 								table.getModel().setValueAt(tcl.getOldValue(),
 										tcl.getRow(), tcl.getColumn());
 							}
@@ -160,7 +213,7 @@ public class FrmTable extends JPanel {
 						Index_col);
 				// even index, selected or not selected
 				try {
-					
+
 					LinkedList<Color> backgroundColors = new LinkedList<Color>();
 					LinkedList<Color> textColors = new LinkedList<Color>();
 
@@ -197,7 +250,8 @@ public class FrmTable extends JPanel {
 							backgroundColors.add(Color.orange);
 							comp.setBackground(Color.orange);
 
-							//table.addRowSelectionInterval(Index_row, Index_row);
+							// table.addRowSelectionInterval(Index_row,
+							// Index_row);
 						}
 					} else {
 						comp.setBackground(Color.white);
@@ -215,7 +269,6 @@ public class FrmTable extends JPanel {
 						comp.setForeground(Color.black);
 						table.repaint();
 					}
-
 
 					for (int x = 0; x < format.size(); x++) {
 						if (format.get(x).evaluate(
@@ -252,11 +305,11 @@ public class FrmTable extends JPanel {
 					if (r != 0 || g != 0 || b != 0) {
 						comp.setBackground(new Color(r, g, b));
 					}
-					
-					r=0;
-					g=0;
-					b=0;
-					
+
+					r = 0;
+					g = 0;
+					b = 0;
+
 					for (int x = 0; x < textColors.size(); x++) {
 						r += textColors.get(x).getRed();
 						g += textColors.get(x).getGreen();
@@ -272,8 +325,6 @@ public class FrmTable extends JPanel {
 					if (r != 0 || g != 0 || b != 0) {
 						comp.setForeground(new Color(r, g, b));
 					}
-					
-					
 
 					LinkedList<BorderCase> bordercases = data
 							.get(table.getRowSorter().convertRowIndexToModel(
@@ -296,53 +347,61 @@ public class FrmTable extends JPanel {
 					// TODO: handle exception
 					return null;
 				}
-				
+
 			}
 		};
-		
-        
-		//---------------------------------------------------------------------------------------------------
-        // tooltip when hovering
+
+		// ---------------------------------------------------------------------------------------------------
+		// tooltip when hovering
 		table.addMouseMotionListener(new MouseMotionAdapter() {
-			   public void mouseMoved(MouseEvent e){
-			        Point p = e.getPoint(); 
-			        int row = table.rowAtPoint(p);
-			        int col = table.columnAtPoint(p);
-			        String toolTip = "";
-			        
-			        try{
-			        
+			public void mouseMoved(MouseEvent e) {
+				Point p = e.getPoint();
+				int row = table.rowAtPoint(p);
+				int col = table.columnAtPoint(p);
+				String toolTip = "";
+
+				try {
+
 					LinkedList<Format> format = data
 							.get(table.getRowSorter().convertRowIndexToModel(
-									row)).get(col).getType()
-							.getFormatting();
-					
+									row)).get(col).getType().getFormatting();
+
 					for (int x = 0; x < format.size(); x++) {
-						if (format.get(x).evaluate(data.get(table.getRowSorter().convertRowIndexToModel(row)).get(col).getMark())) {
+						if (format.get(x).evaluate(
+								data.get(
+										table.getRowSorter()
+												.convertRowIndexToModel(row))
+										.get(col).getMark())) {
 							if (format.get(x).getHighlightColor() != null) {
-								toolTip += " Background Color = " + getColorName(format.get(x).getHighlightColor()) + ", due to "+ format.get(x).getDescription();
+								toolTip += " Background Color = "
+										+ getColorName(format.get(x)
+												.getHighlightColor())
+										+ ", due to "
+										+ format.get(x).getDescription();
 								toolTip += "\t";
 							} else if (format.get(x).getTextColor() != null) {
-								toolTip += " Text Color = " +getColorName(format.get(x).getTextColor()) + ", due to "+ format.get(x).getDescription();
+								toolTip += " Text Color = "
+										+ getColorName(format.get(x)
+												.getTextColor()) + ", due to "
+										+ format.get(x).getDescription();
 								toolTip += "\t";
 							}
 						}
 					}
-					
-			        table.setToolTipText(toolTip);
-			        }
-			        catch (Exception ex) {
-						// TODO: handle exception
-					}
-			    }//end MouseMoved
-			}); // end MouseMotionAdapter
-			//=---------------------------------------------------------------------------------------------
+
+					table.setToolTipText(toolTip);
+				} catch (Exception ex) {
+					// TODO: handle exception
+				}
+			}// end MouseMoved
+		}); // end MouseMotionAdapter
+		// =---------------------------------------------------------------------------------------------
 		table.setAutoCreateRowSorter(true);
 
 		TableCellListener tcl = new TableCellListener(table, action);
 
 		table.addPropertyChangeListener(tcl);
-//--------------------------------------------------------------------------------------------
+		// --------------------------------------------------------------------------------------------
 		table.getSelectionModel().addListSelectionListener(
 				new ListSelectionListener() {
 
@@ -357,7 +416,7 @@ public class FrmTable extends JPanel {
 					}
 
 				});
-//--------------------------------------------------------------------------------------
+		// --------------------------------------------------------------------------------------
 		pane.setViewportView(table);
 		JPanel eastPanel = new JPanel();
 
@@ -369,16 +428,55 @@ public class FrmTable extends JPanel {
 		final LinkedList<SuperEntity> headersList = project.getHead()
 				.getHeadersLinkedList();
 		border.add(cbheaders);
-		
+
 		JPanel searchPnl = new JPanel();
 		final TextField searchTxt = new TextField(20);
 		
+		searchTxt.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+
+				// TODO Auto-generated method stub
+				if (searchTxt.getText().compareTo("") != 0) {
+					project.getSelected().clear();
+					for (int x = 0; x < data.size(); x++) {
+						for (int y = 0; y < data.get(0).size(); y++) {
+							if (data.get(x).get(y).getValue()
+									.contains(searchTxt.getText())) {
+								if (!project.getSelected().contains(
+										data.get(x).get(0)))
+									;
+								for (int z = 0; z < data.get(x).size(); z++) {
+									project.getSelected().add(
+											data.get(x).get(z));
+									tableModel.fireTableDataChanged();
+								}
+								tableModel.fireTableDataChanged();
+							}
+						}
+					}
+				}
+				
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				
+			}
+		});
+
 		JButton btnSearch = new JButton("Search");
-		
+
 		searchPnl.add(btnSearch);
 		searchPnl.add(searchTxt);
-//=--------------------------------------------------------------------------------------------------------------
-		//bordercase button
+		// =--------------------------------------------------------------------------------------------------------------
+		// bordercase button
 		bordercase.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -438,12 +536,12 @@ public class FrmTable extends JPanel {
 				}
 			}
 		});
-		//=--------------------------------------------------------------------------------------------------------------
+		// =--------------------------------------------------------------------------------------------------------------
 		JButton btnAddConditionalFormatting = new JButton(
 				"Add conditional formatting");
 		final JComboBox cbFormatting = new JComboBox(headers);
 
-		eastPanel.setLayout(new GridLayout(6, 2));
+		eastPanel.setLayout(new GridLayout(0, 1));
 
 		btnAdd = new JButton("Add row");
 		eastPanel.add(btnAdd);
@@ -452,13 +550,12 @@ public class FrmTable extends JPanel {
 		eastPanel.add(btnView);
 
 		eastPanel.add(border);
-		
 
 		JPanel formatting = new JPanel();
 		formatting.add(btnAddConditionalFormatting);
 		formatting.add(cbFormatting);
 		eastPanel.add(formatting);
-		
+
 		eastPanel.add(searchPnl);
 
 		JPanel northPanel = new JPanel();
@@ -480,7 +577,7 @@ public class FrmTable extends JPanel {
 
 		tableModel = new DefaultTableModel(temp, (Object[]) headers);
 		table.setModel(tableModel);
-		//=--------------------------------------------------------------------------------------------------------------
+		// =--------------------------------------------------------------------------------------------------------------
 		btnAdd.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -489,80 +586,92 @@ public class FrmTable extends JPanel {
 
 				EntityType testHead = project.getHeadEntityType();
 				LinkedList<EntityType> list = testHead.getSubEntityType();
-				
-				for(int x = 0; x < list.size();x++){
-					createEntities(list.get(x), new SuperEntityPointer( project.getHead()));
+
+				for (int x = 0; x < list.size(); x++) {
+					createEntities(list.get(x),
+							new SuperEntityPointer(project.getHead()));
 				}
-				
+
 				data = project.getHead().getDataLinkedList();
 
-				/*tableModel.addRow(new Object[] { txtField1.getText(),
-						txtField1.getText() });*/
-				
+				/*
+				 * tableModel.addRow(new Object[] { txtField1.getText(),
+				 * txtField1.getText() });
+				 */
+
 				Object[] temp = new Object[data.get(0).size()];
 
 				for (int y = 0; y < data.get(0).size(); y++) {
 					temp[y] = data.getLast().get(y).getValue();
 				}
-				
+
 				tableModel.addRow(temp);
 				table.repaint();
 			}
 		});
-		//=--------------------------------------------------------------------------------------------------------------
+		// =--------------------------------------------------------------------------------------------------------------
 		btnSearch.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
-				if(searchTxt.getText().compareTo("") != 0){
+
+				if (searchTxt.getText().compareTo("") != 0) {
 					project.getSelected().clear();
-					for(int x = 0; x < data.size();x++){
-						for(int y = 0; y < data.get(0).size();y++){
-							if(data.get(x).get(y).getValue().contains(searchTxt.getText())){
-								if(!project.getSelected().contains(data.get(x).get(0)));
-									for(int z = 0; z < data.get(x).size();z++){
-										project.getSelected().add(data.get(x).get(z));
-										tableModel.fireTableDataChanged();	
-									}
-								tableModel.fireTableDataChanged();	
+					for (int x = 0; x < data.size(); x++) {
+						for (int y = 0; y < data.get(0).size(); y++) {
+							if (data.get(x).get(y).getValue()
+									.contains(searchTxt.getText())) {
+								if (!project.getSelected().contains(
+										data.get(x).get(0)))
+									;
+								for (int z = 0; z < data.get(x).size(); z++) {
+									project.getSelected().add(
+											data.get(x).get(z));
+									tableModel.fireTableDataChanged();
+								}
+								tableModel.fireTableDataChanged();
 							}
 						}
 					}
-				}		
+				}
 			}
 		});
-		//---------------------------------------------------------------------------------------------------------------
+		// ---------------------------------------------------------------------------------------------------------------
 		JButton btnSetMaxVal = new JButton("Set the max value");
-		SpinnerNumberModel SNMmaxVal = new SpinnerNumberModel(new Integer(
-				0), // value
+		SpinnerNumberModel SNMmaxVal = new SpinnerNumberModel(new Integer(0), // value
 				new Integer(0), // min
 				new Integer(100), // max
 				new Integer(1) // step
 		);
 		final JSpinner setMaxValOfColumn = new JSpinner(SNMmaxVal);
 		final JComboBox MaxValEditing = new JComboBox(headers);
-		
+
 		JPanel maxValOfCol = new JPanel();
 		maxValOfCol.add(MaxValEditing);
 		maxValOfCol.add(btnSetMaxVal);
 		maxValOfCol.add(setMaxValOfColumn);
-		
-		
+
 		eastPanel.add(maxValOfCol);
-		
+
 		btnSetMaxVal.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println(data.get(0).get(MaxValEditing.getSelectedIndex()).getType().getMaxValue());
-				if(!data.get(0).get(MaxValEditing.getSelectedIndex()).getType().getIsTextField()){
-					data.get(0).get(MaxValEditing.getSelectedIndex()).getType().setMaxValue(Integer.parseInt(setMaxValOfColumn.getValue().toString()));
-					
-					
+				System.out.println(data.get(0)
+						.get(MaxValEditing.getSelectedIndex()).getType()
+						.getMaxValue());
+				if (!data.get(0).get(MaxValEditing.getSelectedIndex())
+						.getType().getIsTextField()) {
+					data.get(0)
+							.get(MaxValEditing.getSelectedIndex())
+							.getType()
+							.setMaxValue(
+									Integer.parseInt(setMaxValOfColumn
+											.getValue().toString()));
+
 				}
 			}
 		});
 
-		//=--------------------------------------------------------------------------------------------------------------
+		// =--------------------------------------------------------------------------------------------------------------
 		btnAddConditionalFormatting.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -778,12 +887,11 @@ public class FrmTable extends JPanel {
 			}
 
 		});
-		//=--------------------------------------------------------------------------------------------------------------
+		// =--------------------------------------------------------------------------------------------------------------
 		btnView.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				
 				table.repaint();
 				table.getSelectedRow();
 
@@ -791,172 +899,212 @@ public class FrmTable extends JPanel {
 						data.get(table.getSelectedRow()).get(0));
 			}
 		});
-		//----------------------------------------------------------------------------------------------------------------
+		// ----------------------------------------------------------------------------------------------------------------
 		JButton btnFilter = new JButton("Filter");
 		final JComboBox cbFilter = new JComboBox(headers);
-		
+
 		btnFilter.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
 
 				final JFrame filterFrame = new JFrame();
 
-				SpinnerNumberModel SNMmax = new SpinnerNumberModel(new Integer(
-						0), // value
-						new Integer(0), // min
-						new Integer(100), // max
-						new Integer(1) // step
-				);
-				final JSpinner maxVal = new JSpinner(SNMmax);
+				if (!data.get(0).get(cbFilter.getSelectedIndex()).getType()
+						.getIsTextField()) {
+					SpinnerNumberModel SNMmax = new SpinnerNumberModel(
+							new Integer(0), // value
+							new Integer(0), // min
+							new Integer(100), // max
+							new Integer(1) // step
+					);
+					final JSpinner maxVal = new JSpinner(SNMmax);
 
-				SpinnerNumberModel SNMmin = new SpinnerNumberModel(new Integer(
-						0), // value
-						new Integer(0), // min
-						new Integer(100), // max
-						new Integer(1) // step
-				);
-				final JSpinner minVal = new JSpinner(SNMmin);
+					SpinnerNumberModel SNMmin = new SpinnerNumberModel(
+							new Integer(0), // value
+							new Integer(0), // min
+							new Integer(100), // max
+							new Integer(1) // step
+					);
+					final JSpinner minVal = new JSpinner(SNMmin);
 
-				minVal.setEnabled(false);
-				maxVal.setEnabled(false);
+					minVal.setEnabled(false);
+					maxVal.setEnabled(false);
 
-				filterFrame.setLayout(new GridLayout(0, 2));
+					filterFrame.setLayout(new GridLayout(0, 2));
 
-				String[] formatTypesStr = new String[Format.formatTypes.length + 1];
-				formatTypesStr[0] = "";
+					String[] formatTypesStr = new String[Format.formatTypes.length + 1];
+					formatTypesStr[0] = "";
 
-				for (int x = 1; x < formatTypesStr.length; x++) {
-					formatTypesStr[x] = Format.formatTypes[x - 1];
-				}
+					for (int x = 1; x < formatTypesStr.length; x++) {
+						formatTypesStr[x] = Format.formatTypes[x - 1];
+					}
 
-				final JComboBox formatTypes = new JComboBox(formatTypesStr);
+					final JComboBox formatTypes = new JComboBox(formatTypesStr);
 
-				final JButton addFilter = new JButton("Add Filer");
-				addFilter.setEnabled(false);
+					final JButton addFilter = new JButton("Add Filer");
+					addFilter.setEnabled(false);
 
-				filterFrame.add(formatTypes);
-				filterFrame.add(addFilter);
-				filterFrame.add(minVal);
-				filterFrame.add(maxVal);
+					filterFrame.add(formatTypes);
+					filterFrame.add(addFilter);
+					filterFrame.add(minVal);
+					filterFrame.add(maxVal);
 
-				filterFrame.setVisible(true);
-				filterFrame.setSize(400, 150);
+					filterFrame.setVisible(true);
+					filterFrame.setSize(400, 150);
 
-				formatTypes.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						if (!(formatTypes.getSelectedIndex() == 0)) {
-							if (formatTypes.getSelectedIndex() == 1) {
-								minVal.setEnabled(true);
-								maxVal.setEnabled(true);
+					formatTypes.addActionListener(new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							if (!(formatTypes.getSelectedIndex() == 0)) {
+								if (formatTypes.getSelectedIndex() == 1) {
+									minVal.setEnabled(true);
+									maxVal.setEnabled(true);
 
-								addFilter.setEnabled(true);
+									addFilter.setEnabled(true);
+								} else {
+									minVal.setEnabled(true);
+									maxVal.setEnabled(false);
+
+									addFilter.setEnabled(true);
+								}
 							} else {
-								minVal.setEnabled(true);
+								minVal.setEnabled(false);
 								maxVal.setEnabled(false);
 
-								addFilter.setEnabled(true);
+								addFilter.setEnabled(false);
 							}
-						} else {
-							minVal.setEnabled(false);
-							maxVal.setEnabled(false);
-
-							addFilter.setEnabled(false);
 						}
-					}
-				});
+					});
 
-				addFilter.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						switch (formatTypes.getSelectedIndex()) {
-						case 1: {
-							for(int x = 0; x < dataFilter.length;x++){
-								if(data.get(x).get(cbFilter.getSelectedIndex()).getMark() > Double.parseDouble(maxVal.getValue().toString()) || data.get(x).get(cbFilter.getSelectedIndex()).getMark()<Double.parseDouble(minVal.getValue().toString())){
-									dataFilter[x] = false;
+					addFilter.addActionListener(new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							switch (formatTypes.getSelectedIndex()) {
+							case 1: {
+								for (int x = 0; x < dataFilter.length; x++) {
+									if (data.get(x)
+											.get(cbFilter.getSelectedIndex())
+											.getMark() > Double
+											.parseDouble(maxVal.getValue()
+													.toString())
+											|| data.get(x)
+													.get(cbFilter
+															.getSelectedIndex())
+													.getMark() < Double
+													.parseDouble(minVal
+															.getValue()
+															.toString())) {
+										filters.get(x).set(cbFormatting.getSelectedIndex(), true);
+									}
+
 								}
-										
+								filterFrame.setVisible(false);
+								break;
 							}
-							table.repaint();
-							filterFrame.setVisible(false);
-							break;
-						}
-						case 2: {
-							for(int x = 0; x < dataFilter.length;x++){
-								if(data.get(x).get(cbFilter.getSelectedIndex()).getMark() < Double.parseDouble(minVal.getValue().toString())){
-									dataFilter[x] = false;
+							case 2: {
+								for (int x = 0; x < dataFilter.length; x++) {
+									if (data.get(x)
+											.get(cbFilter.getSelectedIndex())
+											.getMark() < Double
+											.parseDouble(minVal.getValue()
+													.toString())) {
+										filters.get(x).set(cbFormatting.getSelectedIndex(), true);
+									}
+
 								}
-										
-							}						
-							
-							table.repaint();
-							filterFrame.setVisible(false);
-							break;
-						}
-						case 3: {
-							for(int x = 0; x < dataFilter.length;x++){
-								if(data.get(x).get(cbFilter.getSelectedIndex()).getMark() > Double.parseDouble(minVal.getValue().toString())){
-									dataFilter[x] = false;
-								}
-										
+
+								filterFrame.setVisible(false);
+								break;
 							}
-							
-							table.repaint();
-							filterFrame.setVisible(false);
-							break;
+							case 3: {
+								for (int x = 0; x < dataFilter.length; x++) {
+									if (data.get(x)
+											.get(cbFilter.getSelectedIndex())
+											.getMark() > Double
+											.parseDouble(minVal.getValue()
+													.toString())) {
+										filters.get(x).set(cbFormatting.getSelectedIndex(), true);
+									}
+
+								}
+
+								filterFrame.setVisible(false);
+								break;
+							}
+
+							}
+
+							LinkedList<Integer> removes = new LinkedList<Integer>();
+
+							filterTable();
 						}
 
-						}
-					
-					boolean filtered = false;
-					LinkedList<Integer> removes = new LinkedList<Integer>();
-					
-					for(int x = 0; x < tableModel.getRowCount();x++){
-						if(!dataFilter[x]){
-							filtered = true;
-							
-							removes.add(x);
-							dataFilter[x] = true;
-						}
-					}
-					
-					
-					for(int x = removes.size()-1; x >= 0;x--){
-						tableModel.removeRow(removes.get(x));
-					}
-					
-					if(!filtered){
-						
-						Object[][] temp = new Object[data.size()][data.get(0).size()];
-
-						for (int x = 0; x < data.size(); x++) {
-							for (int y = 0; y < data.get(0).size(); y++) {
-								temp[x][y] = data.get(x).get(y).getValue();
-							}
-						}
-						
-						int y = tableModel.getRowCount();
-						for(int x = 0; x <y;x++){
-							tableModel.removeRow(0);
-						}
-						for (int x = 0; x < data.size(); x++) {
-							tableModel.addRow(temp[x]);
-						}
-					}
+					});
 				}
-					
-				});
+
+				else {
+					final LinkedList<String> dataInCol = new LinkedList<String>();
+
+					for (int x = 0; x < data.size(); x++) {
+						dataInCol.add(data.get(x)
+								.get(cbFilter.getSelectedIndex()).getValue());
+					}
+
+					final JCheckBox[] selectData = new JCheckBox[dataInCol
+							.size()];
+
+					for (int x = 0; x < dataInCol.size(); x++) {
+						selectData[x] = new JCheckBox(dataInCol.get(x));
+					}
+					JComboCheckBox selectAllData = new JComboCheckBox(
+							selectData);
+
+					JButton addFilter = new JButton("Add filter");
+					addFilter.addActionListener(new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							LinkedList<String> selectedValues = new LinkedList<String>();
+
+							for (int x = 0; x < dataInCol.size(); x++) {
+								if (selectData[x].isSelected()) {
+									selectedValues.add(dataInCol.get(x));
+								}
+							}
+
+							for (int x = 0; x < dataFilter.length; x++) {
+								if (!selectedValues.contains(data.get(x)
+										.get(cbFilter.getSelectedIndex())
+										.getValue())) {
+									filters.get(x).set(
+											cbFilter.getSelectedIndex(), true);
+									dataFilter[x] = false;
+								}
+							}
+							
+							filterTable();
+							filterFrame.setVisible(false);
+
+						}
+
+					});
+
+					filterFrame.setSize(400, 400);
+					filterFrame.setVisible(true);
+					filterFrame.setLayout(new GridLayout(0, 1));
+					filterFrame.add(selectAllData);
+					filterFrame.add(addFilter);
+
+					table.repaint();
+				}
 			}
 		});
-		
-		JButton removeFilter = new JButton("Remove filter");
-		
-		removeFilter.addActionListener(new ActionListener() {
+
+		JButton removeAllFilters = new JButton("Remove All Filters");
+
+		removeAllFilters.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				
 				Object[][] temp = new Object[data.size()][data.get(0).size()];
 
 				for (int x = 0; x < data.size(); x++) {
@@ -964,9 +1112,15 @@ public class FrmTable extends JPanel {
 						temp[x][y] = data.get(x).get(y).getValue();
 					}
 				}
-				
+
+				for (int x = 0; x < filters.size(); x++) {
+					for (int y = 0; y < filters.get(0).size(); y++) {
+						filters.get(x).set(y, false);
+					}
+				}
+
 				int y = tableModel.getRowCount();
-				for(int x = 0; x <y;x++){
+				for (int x = 0; x < y; x++) {
 					tableModel.removeRow(0);
 				}
 				for (int x = 0; x < data.size(); x++) {
@@ -974,39 +1128,42 @@ public class FrmTable extends JPanel {
 				}
 			}
 		});
-		
+
 		JPanel Filter = new JPanel();
-		Filter.setLayout(new GridLayout(1,0));
-		
+		Filter.setLayout(new GridLayout(0, 2));
+
 		Filter.add(btnFilter);
 		Filter.add(cbFilter);
-		Filter.add(removeFilter);
+		Filter.add(removeAllFilters);
 		eastPanel.add(Filter);
-		
+
 	}
-	//=--------------------------------------------------------------------------------------------------------------
-	private void createEntities(EntityType entType, SuperEntityPointer parent){
+
+	// =--------------------------------------------------------------------------------------------------------------
+	private void createEntities(EntityType entType, SuperEntityPointer parent) {
 		LinkedList<EntityType> list = entType.getSubEntityType();
-		
-		if(entType.getIsTextField()){
-			LeafStringEntity head = new LeafStringEntity(entType, parent.getTarget(), "");
-			
+
+		if (entType.getIsTextField()) {
+			LeafStringEntity head = new LeafStringEntity(entType,
+					parent.getTarget(), "");
+
 			SuperEntityPointer headPointer = new SuperEntityPointer(head);
-			
-			for(int x = 0; x < list.size();x++){
-				createEntities(list.get(x),headPointer);
+
+			for (int x = 0; x < list.size(); x++) {
+				createEntities(list.get(x), headPointer);
 			}
-		}
-		else{
-			LeafMarkEntity head = new LeafMarkEntity(entType, parent.getTarget(), 0);
+		} else {
+			LeafMarkEntity head = new LeafMarkEntity(entType,
+					parent.getTarget(), 0);
 			SuperEntityPointer headPointer = new SuperEntityPointer(head);
-			
-			for(int x = 0; x < list.size();x++){
-				createEntities(list.get(x),headPointer);
+
+			for (int x = 0; x < list.size(); x++) {
+				createEntities(list.get(x), headPointer);
 			}
 		}
 	}
-	//=--------------------------------------------------------------------------------------------------------------
+
+	// =--------------------------------------------------------------------------------------------------------------
 	public class InteractiveTableModelListener implements TableModelListener {
 		public void tableChanged(TableModelEvent evt) {
 			if (evt.getType() == TableModelEvent.UPDATE) {
