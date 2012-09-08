@@ -35,7 +35,9 @@ public class ReflectionButton extends JButton implements MouseListener {
 
 	private BufferedImage reflection;
 	private BufferedImage highlightreflection;
+	private BufferedImage grayreflection;
 	private boolean entered;
+	private boolean disabled;
 	Image intermediateImage;
 
 	public ReflectionButton(BufferedImage _image) {
@@ -44,6 +46,7 @@ public class ReflectionButton extends JButton implements MouseListener {
 		setOpaque(false);
 		installUI(this);
 		entered = false;
+		disabled = false;
 		this.setBorder(new EmptyBorder(0, 0, 0, 0));
 	}
 
@@ -72,6 +75,16 @@ public class ReflectionButton extends JButton implements MouseListener {
 
 	}
 
+	public void createGrayscaleReflection(Graphics g) {
+		BufferedImage grayImage = image;
+		ReflectionRenderer renderer = new ReflectionRenderer();
+		renderer.setBlurEnabled(true);
+		renderer.setLength(0.5f);
+		GrayscaleFilter grayeffect = new GrayscaleFilter();
+		grayImage = grayeffect.filter(grayImage, null);
+		grayreflection = renderer.appendReflection(grayImage);
+	}
+
 	public void installUI(JComponent c) {
 
 		c.addMouseListener(this);
@@ -80,40 +93,48 @@ public class ReflectionButton extends JButton implements MouseListener {
 	@Override
 	public void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
-		if (!entered) {
-			if (reflection == null) {
-			//	long startTime = System.nanoTime();
-				createReflectionButton(g2);
-				g2.drawImage(reflection, 0, 0, null);
-			//	long endTime = System.nanoTime();
-			//	long totalTime = (endTime - startTime) / 1000000;
-			//	System.out.println("Direct: " + ((float) totalTime / 100));
+		if (!disabled) {
+			if (!entered) {
+				if (reflection == null) {
+					createReflectionButton(g2);
+					g2.drawImage(reflection, 0, 0, null);
+				} else {
+					g2.drawImage(reflection, 0, 0, null);
+				}
 			} else {
-			//	long startTime = System.nanoTime();
-				g2.drawImage(reflection, 0, 0, null);
-			//	long endTime = System.nanoTime();
-			//	long totalTime = (endTime - startTime) / 1000000;
-			//	System.out.println("Intermediate: " + ((float) totalTime / 100));
-			}
-		} else {
-			if (highlightreflection == null) {
-			//	long startTime = System.nanoTime();
-				createReflectionHighlight(g2);
-				g2.drawImage(highlightreflection, 0, 0, null);
-			//	long endTime = System.nanoTime();
-			//	long totalTime = (endTime - startTime) / 1000000;
-			//	System.out.println("Direct: " + ((float) totalTime / 100));
-			} else {
-			//	long startTime = System.nanoTime();
-				g2.drawImage(highlightreflection, 0, 0, null);
-			//	long endTime = System.nanoTime();
-			//	long totalTime = (endTime - startTime) / 1000000;
-			//	System.out.println("Intermediate: " + ((float) totalTime / 100));
+				Cursor cursor = new Cursor(Cursor.HAND_CURSOR);
+				this.setCursor(cursor);
+				if (highlightreflection == null) {
+					createReflectionHighlight(g2);
+					g2.drawImage(highlightreflection, 0, 0, null);
+				} else {
+					g2.drawImage(highlightreflection, 0, 0, null);
+				}
 			}
 		}
-		Cursor cursor = new Cursor(Cursor.HAND_CURSOR);
-		this.setCursor(cursor);
+		else {
+			if (grayreflection == null) {
+				createGrayscaleReflection(g2);
+				g2.drawImage(grayreflection, 0, 0, null);
+			} else {
+				g2.drawImage(grayreflection, 0, 0, null);
+			}
+		}
 
+	}
+	
+	public void setDisabled() {
+		this.disabled = true;
+		repaint();
+	}
+	
+	public void setEnabled() {
+		this.disabled = false;
+		repaint();
+	}
+	
+	public Boolean isDisabled() {
+		return disabled;
 	}
 
 	@Override

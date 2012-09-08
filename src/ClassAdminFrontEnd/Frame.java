@@ -42,29 +42,14 @@ import org.jdesktop.swingx.JXPanel;
 public class Frame extends JFrame {
 
 	private JPanel contentPane;
-	private FadePanel homePanel;
-	private FadePanel workspacePanel;
-	private FadePanel navBar;
-	private FadePanel tabBar;
-	private FadePanel infoPanel;
+	private FadePanel homePanel, workspacePanel, navBar, tabBar,infoPanel;
 	private ThreeStopGradientPanel bottomPanel;
 	private BackgroundGradientPanel backgroundPanel;
 	private GradientMenuBar menuBarWindows;
 	private JMenuBar menuBarMAC;
-	private ReflectionImagePanel container;
-	private ReflectionImagePanel containerRecentDocs;
-	private ReflectionImagePanel containerImportImage;
-	private ReflectionImagePanel containerWorkspace;
-	private ReflectionImagePanel containerStudents;
-	private MenuImagePanel containerImportText;
-	private ImagePanel containerImportTextSub;
-	private MenuImagePanel containerStudentsText;
-	private ImagePanel containerStudentsTextSub;
-	private MenuImagePanel containerWorkspaceText;
-	private ImagePanel containerWorkspaceTextSub;
-	private ImagePanel boxChartImage;
-	private ImagePanel histogramChartImage;
-	private ImagePanel scatterplotChartImage;
+	private ReflectionImagePanel container, containerRecentDocs, containerImportImage, containerWorkspace, containerStudents;
+	private MenuImagePanel containerImportText, containerWorkspaceText, containerStudentsText, studentsViewArrowOut, studentsViewArrowIn;
+	private ImagePanel containerImportTextSub, containerStudentsTextSub, containerWorkspaceTextSub, boxChartImage, histogramChartImage, scatterplotChartImage;
 	private JFileChooser filechooser;
 	private JFrame frame = this;
 	private File currentFilePath;
@@ -73,14 +58,8 @@ public class Frame extends JFrame {
 	private JTabbedPane tabbedPane;
 	private FileHandler fileHandler;
 	private BlurBackground blur;
-	private ReflectionButton homeButton;
-	private ReflectionButton importButton;
-	private ReflectionButton exportButton;
-	private ReflectionButton studentsButton;
-	private FadePanel homeInfoPanel;
-	private FadePanel importInfoPanel;
-	private FadePanel exportInfoPanel;
-	private FadePanel studentsInfoPanel;
+	private ReflectionButton homeButton, importButton, exportButton, studentsButton;
+	private FadePanel homeInfoPanel, importInfoPanel, exportInfoPanel, studentsInfoPanel;
 	private ShadowPanel studentPanel;
 
 	private JButton button;
@@ -124,8 +103,15 @@ public class Frame extends JFrame {
 				public void mousePressed(MouseEvent e) {
 					tabbedPane.remove(tabbedPane.indexOfTabComponent(tabbutton));
 					tabCount--;
-					// if (tabCount == -1)
-					// contentPane.remove(tabbedPane);
+					if (tabCount == -1) {
+						if (studentsButton != null) {
+							studentsButton.setDisabled();
+						}
+						if (studentPanel != null) {
+							studentPanel.setVisible(false);
+						}
+					}
+					
 				}
 
 				@Override
@@ -512,6 +498,7 @@ public class Frame extends JFrame {
 					.getResource("Students.png")));
 			studentsButton.setBounds(217, 8, 68, 80);
 			navBar.add(studentsButton);
+			studentsButton.setDisabled();
 
 			// create info bubbles panel
 			homeInfoPanel = new FadePanel(false, 200, 200);
@@ -557,7 +544,7 @@ public class Frame extends JFrame {
 
 			// create students bubbles panel
 			studentsInfoPanel = new FadePanel(false, 200, 200);
-			studentsInfoPanel.setBounds(212, 0, 75, infoPanel.getHeight());
+			studentsInfoPanel.setBounds(195, 0, 105, infoPanel.getHeight());
 			studentsInfoPanel.setLayout(null);
 			infoPanel.add(studentsInfoPanel);
 
@@ -630,7 +617,12 @@ public class Frame extends JFrame {
 			studentsButton.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mousePressed(MouseEvent arg0) {
-					
+					if (!studentsButton.isDisabled()) {
+						table.getTable().getSelectedRow();
+
+						TreeView.createStudentFrm("name",
+								table.getData().get(table.getTable().getSelectedRow()).get(0));
+					}					
 				}
 
 				public void mouseEntered(MouseEvent arg0) {
@@ -775,6 +767,8 @@ public class Frame extends JFrame {
 		tabCount++;
 		tabbedPane.setTabComponentAt(tabCount, new TabButton(file.getName()));
 
+		studentsButton.setEnabled();
+		
 		studentPanel.moveIn();
 	}
 
@@ -828,31 +822,43 @@ public class Frame extends JFrame {
 
 		studentPanel = new ShadowPanel(getWidth() - 45, 0, getWidth() - 250, 0);
 		studentPanel.setBounds(getWidth(), 0, 250, getHeight() - 20);
-		button = new JButton("<");
-		button.setBounds(3, 30, 20, 20);
-		button.setBorder(new EmptyBorder(0, 0, 0, 0));
-		studentPanel.add(button);
+		try {
+			studentsViewArrowOut = new MenuImagePanel(ImageIO.read(getClass().getResource("studentsViewArrowOut.png")));
+			studentsViewArrowIn = new MenuImagePanel(ImageIO.read(getClass().getResource("studentsViewArrowIn.png")));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		studentsViewArrowOut.setBounds(3, 3, 20, 20);
+		studentsViewArrowIn.setBounds(3, 3, 20, 20);
+		
+		studentPanel.add(studentsViewArrowOut);
+		studentPanel.add(studentsViewArrowIn);
+		
 		studentPanel.setLayout(null);
+		
 		studentPanel.setShown(false);
+		studentsViewArrowIn.setVisible(false);
+		
 		backgroundPanel.setLayer(studentPanel, 300);
 		backgroundPanel.add(studentPanel);
 		studentPanel.setVisible(false);
 
-		button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-		button.addMouseListener(new MouseAdapter() {
+		studentsViewArrowOut.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				if (studentPanel.isShown()) {
-					studentPanel.moveOut();
-					button.setText(">");
-					studentPanel.setShown(false);
-				} else {
-					studentPanel.moveIn();
-					studentPanel.setShown(true);
-					button.setText("<");
-				}
-
+				studentPanel.moveOut();				
+				studentsViewArrowOut.setVisible(false);
+				studentsViewArrowIn.setVisible(true);
+			}
+		});
+		
+		studentsViewArrowIn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				studentPanel.moveIn();				
+				studentsViewArrowIn.setVisible(false);
+				studentsViewArrowOut.setVisible(true);
 			}
 		});
 	}

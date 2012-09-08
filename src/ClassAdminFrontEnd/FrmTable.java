@@ -664,5 +664,9 @@ public class FrmTable extends JPanel {
 	public JTable getTable() {
 		return table;
 	}
+	
+	public LinkedList<LinkedList<SuperEntity>> getData() {
+		return data;
+	}
 }
 	
