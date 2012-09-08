@@ -21,6 +21,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -48,7 +49,8 @@ public class Frame extends JFrame {
 	private FadePanel infoPanel;
 	private ThreeStopGradientPanel bottomPanel;
 	private BackgroundGradientPanel backgroundPanel;
-	private GradientMenuBar menuBar;
+	private GradientMenuBar menuBarWindows;
+	private JMenuBar menuBarMAC;
 	private ReflectionImagePanel container;
 	private ReflectionImagePanel containerRecentDocs;
 	private ReflectionImagePanel containerImportImage;
@@ -81,10 +83,10 @@ public class Frame extends JFrame {
 
 	private JButton button;
 
-	private final int HOME_SPACE_LEFT_X = 3;
-	private final int HOME_SPACE_Y = 55;
-	private final int HOME_BOTTOM_SPACE_Y = 53;
-	private final int HOME_SPACE_RIGHT_X = 22;
+	private int HOME_SPACE_LEFT_X;
+	private int HOME_SPACE_Y;
+	private int HOME_BOTTOM_SPACE_Y;
+	private int HOME_SPACE_RIGHT_X;
 
 	private static String currentOs;
 	private static String MAC_OS = "MAC";
@@ -170,6 +172,9 @@ public class Frame extends JFrame {
 		// set frame title
 		setTitle("UP Admin");
 
+		// get OS
+		determineOS();
+
 		// frame setup
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1200, 700);
@@ -197,16 +202,12 @@ public class Frame extends JFrame {
 		contentPane.setBackground(new Color(0x212121));
 		contentPane.setLayout(null);
 
-		// create menubar
-		menuBar = new GradientMenuBar();
-		menuBar.setBounds(0, 0, getWidth(), 30);
-		contentPane.add(menuBar);
-
-		// create menu
-		JMenu mnFile = new JMenu("File");
-		mnFile.setForeground(Color.white);
-		menuBar.add(mnFile);
-
+		if (currentOs == MAC_OS) {
+			setupMAC();
+		} else {
+			setupWindows();
+		}
+		
 		// create little bottom bar of home screen
 		bottomPanel = new ThreeStopGradientPanel(new Color(0xA1A1A1),
 				new Color(0x696969), new Color(0x000000), contentPane);
@@ -216,14 +217,7 @@ public class Frame extends JFrame {
 				bottomPanel.getHeight());
 		contentPane.add(bottomPanel);
 
-		backgroundPanel = new BackgroundGradientPanel(contentPane);
-		backgroundPanel.setSize(getWidth() - HOME_SPACE_RIGHT_X, getHeight()
-				- HOME_SPACE_Y - menuBar.getHeight());
-		backgroundPanel.setBounds(HOME_SPACE_LEFT_X, menuBar.getHeight(),
-				backgroundPanel.getWidth(), backgroundPanel.getHeight());
-		backgroundPanel.setLayout(null);
-		contentPane.add(backgroundPanel);
-
+		
 		setupHomeScreen();
 		setupWorkspaceScreen();
 
@@ -244,19 +238,36 @@ public class Frame extends JFrame {
 			@Override
 			public void componentResized(ComponentEvent arg0) {
 
-				backgroundPanel.setBounds(HOME_SPACE_LEFT_X,
-						menuBar.getHeight(), frame.getWidth()
-								- HOME_SPACE_RIGHT_X, frame.getHeight()
-								- HOME_SPACE_Y - menuBar.getHeight());
-				workspacePanel.setBounds(0, 0, backgroundPanel.getWidth(),
-						backgroundPanel.getHeight());
 				bottomPanel.setBounds(HOME_SPACE_LEFT_X, frame.getHeight()
 						- HOME_BOTTOM_SPACE_Y, frame.getWidth()
 						- HOME_SPACE_RIGHT_X, 12);
-				menuBar.setBounds(0, 0, getWidth(), 30);
+				
+				if (currentOs != MAC_OS) {
+					backgroundPanel.setBounds(HOME_SPACE_LEFT_X,
+							menuBarWindows.getHeight(), frame.getWidth()
+									- HOME_SPACE_RIGHT_X, frame.getHeight()
+									- HOME_SPACE_Y - menuBarWindows.getHeight());
+				} else {
+					
+					backgroundPanel.setSize(frame.getWidth()-HOME_SPACE_RIGHT_X, frame.getHeight()-HOME_SPACE_Y);
+					backgroundPanel.rerenderBackground();
+					
+					bottomPanel.rerenderBackground();
+				}
+				
+				workspacePanel.setBounds(0, 0, backgroundPanel.getWidth(),
+						backgroundPanel.getHeight());
+				
+				
+				
+				if (currentOs != MAC_OS) {
+					menuBarWindows.setBounds(0, 0, getWidth(), 30);
+				}
+				
 				navBar.setBounds(0, backgroundPanel.getHeight() - 40 - 40,
 						getWidth(), 80);
 				workspacePanel.add(navBar);
+				
 				if (tabbedPane != null) {
 					tabbedPane.setBounds(
 							20,
@@ -290,6 +301,7 @@ public class Frame extends JFrame {
 					studentPanel.setNewX(getWidth() - 45);
 					studentPanel.setOldX(getWidth() - 250);
 				}
+				
 			}
 
 			@Override
@@ -300,6 +312,60 @@ public class Frame extends JFrame {
 
 		fileHandler = FileHandler.get();
 	}
+
+	public void setupWindows() {
+		// create menubar
+		menuBarWindows = new GradientMenuBar();
+		menuBarWindows.setBounds(0, 0, getWidth(), 30);
+		setJMenuBar(menuBarWindows);
+		contentPane.add(menuBarWindows);
+
+		// create menu
+		JMenu mnFile = new JMenu("File");
+		mnFile.setForeground(Color.white);
+		menuBarWindows.add(mnFile);
+
+		HOME_SPACE_LEFT_X = 3;
+		HOME_SPACE_Y = 55;
+		HOME_BOTTOM_SPACE_Y = 53;
+		HOME_SPACE_RIGHT_X = 22;
+
+		backgroundPanel = new BackgroundGradientPanel(contentPane);
+		backgroundPanel.setSize(getWidth() - HOME_SPACE_RIGHT_X, getHeight()
+				- HOME_SPACE_Y - menuBarWindows.getHeight());
+		backgroundPanel.setBounds(HOME_SPACE_LEFT_X,
+				menuBarWindows.getHeight(), backgroundPanel.getWidth(),
+				backgroundPanel.getHeight());
+		backgroundPanel.setLayout(null);
+		contentPane.add(backgroundPanel);
+	}
+
+	public void setupMAC() {
+		// create menubar
+		menuBarMAC = new JMenuBar();
+		contentPane.add(menuBarMAC);
+		setJMenuBar(menuBarMAC);
+
+		// create menu
+		JMenu mnFile = new JMenu("File");
+		menuBarMAC.add(mnFile);
+
+		JMenu mnEdit = new JMenu("Edit");
+		menuBarMAC.add(mnEdit);
+		
+		HOME_SPACE_LEFT_X = 3;
+		HOME_SPACE_Y = 41;
+		HOME_BOTTOM_SPACE_Y = 39;
+		HOME_SPACE_RIGHT_X = 6;
+
+		backgroundPanel = new BackgroundGradientPanel(contentPane);
+		backgroundPanel.setSize(getWidth() - HOME_SPACE_RIGHT_X, getHeight()
+				- HOME_SPACE_Y);
+		backgroundPanel.setBounds(HOME_SPACE_LEFT_X, 0,
+				backgroundPanel.getWidth(), backgroundPanel.getHeight());
+		backgroundPanel.setLayout(null);
+		contentPane.add(backgroundPanel);
+}
 
 	public void setupHomeScreen() {
 
@@ -716,6 +782,7 @@ public class Frame extends JFrame {
 			scatterplotChartImage
 					.setBounds(tabBar.getWidth() - 140, 15, 50, 40);
 			tabBar.add(scatterplotChartImage);
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -756,26 +823,27 @@ public class Frame extends JFrame {
 	}
 
 	public void showStudent() {
-		String[] headers = Global.getGlobal().getActiveProject().getHead().getHeaders();
+		String[] headers = Global.getGlobal().getActiveProject().getHead()
+				.getHeaders();
 		for (int i = 0; i < headers.length; i++) {
 			// System.out.println(headers[i]);
 		}
 
 		int row = table.getTable().getSelectedRow();
 		int colCount = table.getTable().getColumnCount();
-		
+
 		String[] info = new String[colCount];
-		
-		for (int i=0; i<colCount;i++) {
-			info[i] = table.getTable().getValueAt(row, i).toString(); 
+
+		for (int i = 0; i < colCount; i++) {
+			info[i] = table.getTable().getValueAt(row, i).toString();
 			System.out.println(info[i]);
 		}
-		
+
 		BufferedImage img = null;
 		try {
-		    img = ImageIO.read(new File("2927713.jpg"));
+			img = ImageIO.read(new File("2927713.jpg"));
 		} catch (IOException e) {
 		}
-		
+
 	}
 }

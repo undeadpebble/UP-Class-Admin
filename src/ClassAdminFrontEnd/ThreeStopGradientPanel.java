@@ -40,7 +40,7 @@ public class ThreeStopGradientPanel extends JXPanel {
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
 
-		float[] x = { 0.0f, .2f, 1.0f};
+		float[] x = { 0.0f, .2f, 1.0f };
 		Color[] c = { c1, c2, c3 };
 		LinearGradientPaint p = new LinearGradientPaint(new Point(0, 0),
 				new Point(0, getHeight()), x, c);
@@ -49,7 +49,7 @@ public class ThreeStopGradientPanel extends JXPanel {
 		g2.fillRect(0, 0, getWidth(), getHeight());
 		g2.setPaint(oldPaint);
 	}
-	
+
 	@Override
 	public void paintComponent(Graphics g) {
 		if ((intermediateImage == null)
@@ -77,5 +77,10 @@ public class ThreeStopGradientPanel extends JXPanel {
 			// long totalTime = (endTime - startTime) / 1000000;
 			// System.out.println("Intermediate: " + ((float)totalTime/100));
 		}
-		}
+	}
+
+	public void rerenderBackground() {
+		intermediateImage = null;
+		repaint();
+	}
 }

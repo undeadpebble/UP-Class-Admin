@@ -73,4 +73,9 @@ public class BackgroundGradientPanel extends JLayeredPane {
 			// System.out.println("Intermediate: " + ((float)totalTime/100));
 		}
 	}
+	
+	public void rerenderBackground() {
+		intermediateImage = null;
+		repaint();
+	}
 }

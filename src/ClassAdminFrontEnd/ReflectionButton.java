@@ -45,8 +45,6 @@ public class ReflectionButton extends JButton implements MouseListener {
 		installUI(this);
 		entered = false;
 		this.setBorder(new EmptyBorder(0, 0, 0, 0));
-		Cursor cursor = new Cursor(Cursor.HAND_CURSOR);
-		this.setCursor(cursor);
 	}
 
 	public void createReflectionButton(Graphics g) {
@@ -72,8 +70,6 @@ public class ReflectionButton extends JButton implements MouseListener {
 		highlightImage = apply.filter(highlightImage, null);
 		highlightreflection = renderer.appendReflection(highlightImage);
 
-		Cursor cursor = new Cursor(Cursor.HAND_CURSOR);
-		this.setCursor(cursor);
 	}
 
 	public void installUI(JComponent c) {
@@ -115,6 +111,8 @@ public class ReflectionButton extends JButton implements MouseListener {
 			//	System.out.println("Intermediate: " + ((float) totalTime / 100));
 			}
 		}
+		Cursor cursor = new Cursor(Cursor.HAND_CURSOR);
+		this.setCursor(cursor);
 
 	}
 
