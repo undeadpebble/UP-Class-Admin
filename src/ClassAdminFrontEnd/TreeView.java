@@ -91,12 +91,6 @@ import prefuse.visual.VisualItem;
 import prefuse.visual.expression.InGroupPredicate;
 import prefuse.visual.sort.TreeDepthItemSorter;
 
-/**
- * Demonstration of a node-link tree viewer
- * 
- * @version 1.0
- * @author <a href="http://jheer.org">jeffrey heer</a>
- */
 public class TreeView extends Display {
 
 	private static final String tree = "tree";
@@ -353,18 +347,6 @@ public class TreeView extends Display {
 		title.setBackground(BACKGROUND);
 		title.setForeground(FOREGROUND);
 
-		final MouseListener ml = new MouseAdapter(){
-			public void mousePressed(MouseEvent e){
-				System.out.println(e.getX());
-/*				JComponent jc = (JComponent)e.getSource();
-				TransferHandler th = jc.getTransferHandler();
-				th.exportAsDrag(jc, e, TransferHandler.MOVE);
-*/			}
-		};
-		
-		
-		
-
 		Box box = new Box(BoxLayout.X_AXIS);
 		box.add(Box.createHorizontalStrut(10));
 		box.add(title);
@@ -495,7 +477,6 @@ public class TreeView extends Display {
             dragged = false;
             Display d = (Display)e.getComponent();
             down = d.getAbsoluteCoordinate(e.getPoint(), down);
-            
             vis.run("forces");
         }
         
@@ -531,9 +512,7 @@ public class TreeView extends Display {
             PrefuseLib.setX(item, null, item.getX()+dx);
             PrefuseLib.setY(item, null, item.getY()+dy);
             down.setLocation(tmp);
-            System.out.println(repaint);
-            //if ( repaint )
-                item.getVisualization().repaint();
+            item.getVisualization().repaint();
         }
     } 
 

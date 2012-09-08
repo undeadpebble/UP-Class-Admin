@@ -212,5 +212,11 @@ public class FileHandler {
 			e.printStackTrace();
 		}
 	}
+	
+
+	public void setXLSImport(XlsImport i) {
+//		i.recordData();
+		
+	}
 
 }

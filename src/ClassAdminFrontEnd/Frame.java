@@ -529,7 +529,7 @@ public class Frame extends JFrame {
 		}
 
 		// add the filter to the file chooser
-		filechooser.addChoosableFileFilter(fileFilter);
+		//filechooser.addChoosableFileFilter(fileFilter);
 
 		// shows the dialog, return value specifies file
 		int returnVal = filechooser.showOpenDialog(this);
@@ -537,7 +537,7 @@ public class Frame extends JFrame {
 		// if the chosen file is valid
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			file = filechooser.getSelectedFile();
-			currentFilePath = filechooser.getSelectedFile();
+			currentFilePath = filechooser.getSelectedFile();	
 			blur.fadeOut();
 			createTab(file);
 			homeToWorkspaceTransition();
