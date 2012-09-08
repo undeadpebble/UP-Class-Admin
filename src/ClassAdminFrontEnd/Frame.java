@@ -76,9 +76,11 @@ public class Frame extends JFrame {
 	private ReflectionButton homeButton;
 	private ReflectionButton importButton;
 	private ReflectionButton exportButton;
+	private ReflectionButton studentsButton;
 	private FadePanel homeInfoPanel;
 	private FadePanel importInfoPanel;
 	private FadePanel exportInfoPanel;
+	private FadePanel studentsInfoPanel;
 	private ShadowPanel studentPanel;
 
 	private JButton button;
@@ -207,7 +209,7 @@ public class Frame extends JFrame {
 		} else {
 			setupWindows();
 		}
-		
+
 		// create little bottom bar of home screen
 		bottomPanel = new ThreeStopGradientPanel(new Color(0xA1A1A1),
 				new Color(0x696969), new Color(0x000000), contentPane);
@@ -217,7 +219,6 @@ public class Frame extends JFrame {
 				bottomPanel.getHeight());
 		contentPane.add(bottomPanel);
 
-		
 		setupHomeScreen();
 		setupWorkspaceScreen();
 
@@ -241,33 +242,33 @@ public class Frame extends JFrame {
 				bottomPanel.setBounds(HOME_SPACE_LEFT_X, frame.getHeight()
 						- HOME_BOTTOM_SPACE_Y, frame.getWidth()
 						- HOME_SPACE_RIGHT_X, 12);
-				
+
 				if (currentOs != MAC_OS) {
 					backgroundPanel.setBounds(HOME_SPACE_LEFT_X,
 							menuBarWindows.getHeight(), frame.getWidth()
 									- HOME_SPACE_RIGHT_X, frame.getHeight()
 									- HOME_SPACE_Y - menuBarWindows.getHeight());
 				} else {
-					
-					backgroundPanel.setSize(frame.getWidth()-HOME_SPACE_RIGHT_X, frame.getHeight()-HOME_SPACE_Y);
+
+					backgroundPanel.setSize(frame.getWidth()
+							- HOME_SPACE_RIGHT_X, frame.getHeight()
+							- HOME_SPACE_Y);
 					backgroundPanel.rerenderBackground();
-					
+
 					bottomPanel.rerenderBackground();
 				}
-				
+
 				workspacePanel.setBounds(0, 0, backgroundPanel.getWidth(),
 						backgroundPanel.getHeight());
-				
-				
-				
+
 				if (currentOs != MAC_OS) {
 					menuBarWindows.setBounds(0, 0, getWidth(), 30);
 				}
-				
+
 				navBar.setBounds(0, backgroundPanel.getHeight() - 40 - 40,
 						getWidth(), 80);
 				workspacePanel.add(navBar);
-				
+
 				if (tabbedPane != null) {
 					tabbedPane.setBounds(
 							20,
@@ -301,7 +302,7 @@ public class Frame extends JFrame {
 					studentPanel.setNewX(getWidth() - 45);
 					studentPanel.setOldX(getWidth() - 250);
 				}
-				
+
 			}
 
 			@Override
@@ -317,7 +318,6 @@ public class Frame extends JFrame {
 		// create menubar
 		menuBarWindows = new GradientMenuBar();
 		menuBarWindows.setBounds(0, 0, getWidth(), 30);
-		setJMenuBar(menuBarWindows);
 		contentPane.add(menuBarWindows);
 
 		// create menu
@@ -352,7 +352,7 @@ public class Frame extends JFrame {
 
 		JMenu mnEdit = new JMenu("Edit");
 		menuBarMAC.add(mnEdit);
-		
+
 		HOME_SPACE_LEFT_X = 3;
 		HOME_SPACE_Y = 41;
 		HOME_BOTTOM_SPACE_Y = 39;
@@ -365,7 +365,7 @@ public class Frame extends JFrame {
 				backgroundPanel.getWidth(), backgroundPanel.getHeight());
 		backgroundPanel.setLayout(null);
 		contentPane.add(backgroundPanel);
-}
+	}
 
 	public void setupHomeScreen() {
 
@@ -508,6 +508,11 @@ public class Frame extends JFrame {
 			exportButton.setBounds(150, 8, 68, 80);
 			navBar.add(exportButton);
 
+			studentsButton = new ReflectionButton(ImageIO.read(getClass()
+					.getResource("Students.png")));
+			studentsButton.setBounds(217, 8, 68, 80);
+			navBar.add(studentsButton);
+
 			// create info bubbles panel
 			homeInfoPanel = new FadePanel(false, 200, 200);
 			homeInfoPanel.setBounds(8, 0, 62, infoPanel.getHeight());
@@ -549,6 +554,20 @@ public class Frame extends JFrame {
 					infoPanel.getHeight());
 			exportBubble.setLayout(null);
 			exportInfoPanel.add(exportBubble);
+
+			// create students bubbles panel
+			studentsInfoPanel = new FadePanel(false, 200, 200);
+			studentsInfoPanel.setBounds(212, 0, 75, infoPanel.getHeight());
+			studentsInfoPanel.setLayout(null);
+			infoPanel.add(studentsInfoPanel);
+
+			// create students bubble image
+			ImagePanel studentsBubble = new ImagePanel(ImageIO.read(getClass()
+					.getResource("StudentsInfo.png")), false);
+			studentsBubble.setBounds(0, 0, infoPanel.getWidth(),
+					infoPanel.getHeight());
+			studentsBubble.setLayout(null);
+			studentsInfoPanel.add(studentsBubble);
 
 			homeButton.addMouseListener(new MouseAdapter() {
 				@Override
@@ -607,6 +626,22 @@ public class Frame extends JFrame {
 					exportInfoPanel.fadeOut();
 				}
 			});
+			
+			studentsButton.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mousePressed(MouseEvent arg0) {
+					
+				}
+
+				public void mouseEntered(MouseEvent arg0) {
+					studentsInfoPanel.fadeIn();
+				}
+
+				public void mouseExited(MouseEvent arg0) {
+					studentsInfoPanel.fadeOut();
+				}
+			});
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -782,7 +817,7 @@ public class Frame extends JFrame {
 			scatterplotChartImage
 					.setBounds(tabBar.getWidth() - 140, 15, 50, 40);
 			tabBar.add(scatterplotChartImage);
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
