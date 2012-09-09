@@ -408,7 +408,6 @@ public class FrmTable extends JPanel {
 				table.repaint();
 				int count = tableModel.getRowCount() + 1;
 
-				
 
 				// data.add(newToAdd);
 

@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.util.Date;
 import java.util.LinkedList;
 
+import javax.activity.InvalidActivityException;
+
 import org.tmatesoft.sqljet.core.SqlJetException;
 import org.tmatesoft.sqljet.core.SqlJetTransactionMode;
 import org.tmatesoft.sqljet.core.table.ISqlJetTable;
@@ -19,6 +21,7 @@ public class SuperEntity {
 	private int rowFollowCount = 0;
 	private EntityType type;
 	private String field = "";
+	private SuperEntityPointer thisPointer;
 	/**
 	 * @return the type
 	 */
@@ -95,8 +98,8 @@ public class SuperEntity {
 	 */
 	
 	public SuperEntity(EntityType type, SuperEntity parentEntity, double mark) {
-		this.setType(type);
 		this.parentEntity = parentEntity.unLeaf();
+		this.setType(type);
 		this.mark = mark;
 		this.parentEntity.getSubEntity().add(this);
 		this.weight = this.getType().getDefaultWeight();
@@ -104,15 +107,24 @@ public class SuperEntity {
 	}
 	
 	public SuperEntity(SuperEntity replacedEntity){
+
 		this.setType(replacedEntity.getType());
 		replacedEntity.getType().getEntityList().remove(replacedEntity);
+		this.setThisPointer(replacedEntity.getThisPointer());
+		
+		if(this.getThisPointer() != null)
+			this.getThisPointer().setTarget(this);
 		
 		this.parentEntity = replacedEntity.getParentEntity();
 		this.mark = replacedEntity.getMark();
 		this.field = replacedEntity.getField();
 		this.subEntity = replacedEntity.getSubEntity();
+		for(int x = 0;x<subEntity.size();++x){
+			this.subEntity.get(x).setParentEntity(this);
+		}
 		this.weight = replacedEntity.getWeight();
 		int index = replacedEntity.getParentEntity().getSubEntity().indexOf(replacedEntity);
+
 		replacedEntity.getParentEntity().getSubEntity().set(index, this);
 	}
 	public SuperEntity(EntityType type, double mark){
@@ -173,6 +185,12 @@ public class SuperEntity {
 		this.weight = weight;
 	}
 
+	public SuperEntityPointer getThisPointer() {
+		return thisPointer;
+	}
+	public void setThisPointer(SuperEntityPointer thisPointer) {
+		this.thisPointer = thisPointer;
+	}
 	/**
 	 * @return the mark
 	 */
@@ -363,16 +381,15 @@ public class SuperEntity {
 	public long saveToDB(SqlJetDb db, long parentID, PDatIDGenerator idgen) throws SqlJetException{
 		db.beginTransaction(SqlJetTransactionMode.WRITE);
 		long id = idgen.getID();
-        try {
-        	//TODO
+
         	ISqlJetTable table = db.getTable(PDatExport.ENTITY_TABLE);
         	//insert statements
         	
-        	table.insert(id+", "+parentID+", "+this.type.getID());
-        } finally {
+        	table.insert(id,parentID,this.getType().getID());
+
             db.commit();
             
-        }
+        
         for(int x = 0;x<this.getSubEntity().size();++x){
         	this.getSubEntity().get(x).saveToDB(db, id, idgen);
         }
@@ -413,5 +430,39 @@ public class SuperEntity {
 		}
 		str +="</branch>";
 		return str;
+	}
+	
+	public SuperEntity findEntityOfType(EntityType type){
+		if(type.getEntityList().contains(this))
+			return this;
+		
+		else{
+			for(int x = 0;x<this.getSubEntity().size();++x){
+				
+				SuperEntity temp = this.getSubEntity().get(x).findEntityOfType(type);
+				if(temp != null)
+					return temp;
+			}
+			return null;
+		}
+		
+	}
+	
+	public void changeParentTotype(EntityType newParentType) throws InvalidActivityException{
+		SuperEntity oldParent = this.getParentEntity();
+		SuperEntity newParent = null;
+		SuperEntity temp = this;
+		while(newParent == null && temp != null){
+			newParent = temp.findEntityOfType(newParentType);
+			temp = temp.getParentEntity();
+		}
+		
+		if(newParent == null)
+			throw new InvalidActivityException();
+		
+		oldParent.getSubEntity().remove(this);
+		newParent.getSubEntity().add(this);
+		this.setParentEntity(newParent);
+		
 	}
 }

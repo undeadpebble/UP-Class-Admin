@@ -63,7 +63,7 @@ public class EntityTypePanel extends JPanel {
 		btnCreateEntityType.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+
 			}
 		});
 	}

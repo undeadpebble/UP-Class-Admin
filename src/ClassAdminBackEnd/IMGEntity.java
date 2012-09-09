@@ -37,7 +37,7 @@ public class IMGEntity extends SuperEntity {
         	ISqlJetTable table = db.getTable(PDatExport.IMG_ENTITY_TABLE);
         	//insert statements
         	
-        	table.insert(id+", "+this.getField());
+        	table.insert(id,this.getField());
         } finally {
             db.commit();
             

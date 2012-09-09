@@ -28,7 +28,7 @@ public class GreaterThanFormat extends Format {
         	ISqlJetTable table = db.getTable(PDatExport.GREATER_THAN_FORMAT_TABLE);
         	//insert statements
         	long id = super.saveToDB(db, parentID, idgen);
-        	table.insert(id+", "+this.getValue1());
+        	table.insert(id,this.getValue1());
         } finally {
             db.commit();
             

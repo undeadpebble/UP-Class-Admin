@@ -10,6 +10,8 @@ import java.awt.event.ComponentListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -824,8 +826,124 @@ public class Frame extends JFrame {
 		studentPanel = new ShadowPanel(getWidth() - 45, 0, getWidth() - 250, 0);
 		studentPanel.setBounds(getWidth(), 0, 250, getHeight() - 20);
 		try {
+<<<<<<< HEAD
 			studentsViewArrowOut = new MenuImagePanel(ImageIO.read(getClass().getResource("studentsViewArrowOut.png")));
 			studentsViewArrowIn = new MenuImagePanel(ImageIO.read(getClass().getResource("studentsViewArrowIn.png")));
+=======
+			boxChartImage = new ImagePanel(ImageIO.read(getClass().getResource(
+					"Box.png")), true);
+			boxChartImage.setBounds(tabBar.getWidth() - 70, 15, 60, 40);
+			tabBar.add(boxChartImage);
+
+			boxChartImage.addMouseListener( new  MouseListener() {
+				
+				@Override
+				public void mouseReleased(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mousePressed(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseExited(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseEntered(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseClicked(MouseEvent arg0) {
+					BoxPlotFrame x = new BoxPlotFrame();
+					x.createBoxPlotFrame();
+					
+				}
+			});
+			histogramChartImage = new ImagePanel(ImageIO.read(getClass()
+					.getResource("Histogram.png")), true);
+			histogramChartImage.setBounds(tabBar.getWidth() - 105, 15, 50, 40);
+			tabBar.add(histogramChartImage);
+histogramChartImage.addMouseListener(new MouseListener() {
+	
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void mouseClicked(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		HistogramFrame x = new HistogramFrame();
+	}
+});
+			
+			scatterplotChartImage = new ImagePanel(ImageIO.read(getClass()
+					.getResource("Scatterplot.png")), true);
+			scatterplotChartImage
+					.setBounds(tabBar.getWidth() - 140, 15, 50, 40);
+			tabBar.add(scatterplotChartImage);
+			
+			scatterplotChartImage.addMouseListener(new MouseListener() {
+				
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mousePressed(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseExited(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					// TODO Auto-generated method stub
+				ScatterPlotFrame x = new ScatterPlotFrame();	
+				}
+			});
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
