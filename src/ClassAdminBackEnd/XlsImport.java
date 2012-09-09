@@ -1,6 +1,7 @@
 package ClassAdminBackEnd;
 
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
@@ -20,6 +22,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+
+import ClassAdminFrontEnd.Frame;
 
 import jxl.Cell;
 import jxl.CellType;
@@ -30,7 +34,6 @@ import jxl.read.biff.WorkbookParser;
 
 public class XlsImport extends FileImport {
 	ArrayList arr = null;
-	JFrame frame = new JFrame("XSL Import");
 	JComboBox cmbSheet = new JComboBox();
 	boolean b = false;
 	final JComboBox cmbHeaders = new JComboBox();
@@ -39,6 +42,9 @@ public class XlsImport extends FileImport {
 	Sheet sheet = null;
 	int headerLine = -1;
 	FileHandler fileHandler;
+	final Object monitor = new Object();
+	JDialog frame = null;
+	JDialog dialog = null;
 
 	public XlsImport() {
 		fileHandler = FileHandler.get();
@@ -125,102 +131,98 @@ public class XlsImport extends FileImport {
 	}
 
 	public ArrayList recordData() {
-		b = false;
-		if(!b)
-		{
-			createImport();
-		}
-		else
-		{
-			System.out.println("*********************ACTIVE");
-		}
-		return importData();
+		
+		arr = null;
+		createImport();
+		return arr;
 	}
 
 	public void createImport() {
-		frame.setLayout(new FlowLayout());
-		JLabel lblSheets = new JLabel("Sheet:");
-		JLabel lblHeader = new JLabel("HeaderLine:");
-		JPanel pnlSheets = new JPanel();
-		JPanel pnlHeaders = new JPanel();
-		JButton btnImport = new JButton("Import");
 
-		btnImport.addMouseListener(new MouseListener() {
+					
+					frame = new JDialog(new Frame(),true);
+					frame.setLayout(new FlowLayout());
+					JLabel lblSheets = new JLabel("Sheet:");
+					JLabel lblHeader = new JLabel("HeaderLine:");
+					JPanel pnlSheets = new JPanel();
+					JPanel pnlHeaders = new JPanel();
+					JButton btnImport = new JButton("Import");
 
-			@Override
-			public void mouseReleased(MouseEvent arg0) {
-				// TODO Auto-generated method stub
+					btnImport.addMouseListener(new MouseListener() {
 
-			}
+						@Override
+						public void mouseReleased(MouseEvent arg0) {
+							// TODO Auto-generated method stub
 
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-				setSheet((Integer) cmbSheet.getSelectedItem() - 1);
-				setHeaderLine((Integer) cmbHeaders.getSelectedItem());
-				arr = importData();
-				b= true;
-				frame.dispose();
-				// TODO Auto-generated method stub
+						}
 
-			}
+						@Override
+						public void mousePressed(MouseEvent arg0) {
+							setSheet((Integer) cmbSheet.getSelectedItem() - 1);
+							setHeaderLine((Integer) cmbHeaders.getSelectedItem()-1);
+							arr = importData();
+							frame.dispose();
+							// TODO Auto-generated method stub
 
-			@Override
-			public void mouseExited(MouseEvent arg0) {
-				// TODO Auto-generated method stub
+						}
 
-			}
+						@Override
+						public void mouseExited(MouseEvent arg0) {
+							// TODO Auto-generated method stub
 
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-				// TODO Auto-generated method stub
+						}
 
-			}
+						@Override
+						public void mouseEntered(MouseEvent arg0) {
+							// TODO Auto-generated method stub
 
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				// TODO Auto-generated method stub
+						}
 
-			}
-		});
+						@Override
+						public void mouseClicked(MouseEvent arg0) {
+							// TODO Auto-generated method stub
 
-		final JTextArea textArea2 = new JTextArea();
-		textArea2.setPreferredSize(new Dimension(640, 480));
-		Sheet s = null;
-		int sheet = -1;
-		int sheetcount = w.getNumberOfSheets();
+						}
+						
+					});
+					final JTextArea textArea2 = new JTextArea();
+					textArea2.setPreferredSize(new Dimension(640, 480));
+					Sheet s = null;
+					int sheet = -1;
+					int sheetcount = w.getNumberOfSheets();
 
-		for (int k = 0; k < sheetcount; k++) { // loop through sheets
-			sheet = k + 1;
-			s = w.getSheet(0);
-			cmbSheet.addItem(sheet);
-		}
-		printSheet(0, textArea2, cmbHeaders);
+					for (int k = 0; k < sheetcount; k++) { // loop through sheets
+						sheet = k + 1;
+						s = w.getSheet(0);
+						cmbSheet.addItem(sheet);
+					}
+					printSheet(0, textArea2, cmbHeaders);
 
-		cmbSheet.addActionListener(new ActionListener() {
+					cmbSheet.addActionListener(new ActionListener() {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JComboBox cb = (JComboBox) e.getSource();
-				int selectedSheet = (Integer) cb.getSelectedItem();
-				printSheet(selectedSheet - 1, textArea2, cmbHeaders);
-			}
-		});
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							JComboBox cb = (JComboBox) e.getSource();
+							int selectedSheet = (Integer) cb.getSelectedItem();
+							printSheet(selectedSheet - 1, textArea2, cmbHeaders);
+						}
+					});
 
-		JScrollPane scrollPane = new JScrollPane(textArea2,
-				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		pnlSheets.add(lblSheets);
-		pnlSheets.add(cmbSheet);
-		pnlHeaders.add(lblHeader);
-		pnlHeaders.add(cmbHeaders);
-		frame.add(scrollPane);
-		frame.add(pnlSheets);
-		frame.add(pnlHeaders);
-		frame.add(btnImport);
-		frame.pack();
-		frame.setVisible(true);
+					JScrollPane scrollPane = new JScrollPane(textArea2,
+							JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+							JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+					pnlSheets.add(lblSheets);
+					pnlSheets.add(cmbSheet);
+					pnlHeaders.add(lblHeader);
+					pnlHeaders.add(cmbHeaders);
+					frame.add(scrollPane);
+					frame.add(pnlSheets);
+					frame.add(pnlHeaders);
+					frame.add(btnImport);
+					frame.pack();
+					frame.setVisible(true);
+
 	}
-
 	public void printAllSheets() {
 
 		Sheet s = null;
@@ -246,9 +248,11 @@ public class XlsImport extends FileImport {
 
 	public void printSheet(int sheet, JTextArea textArea, JComboBox cmb) {
 		textArea.setText("");
+		textArea.append("Line #\n");
 		Sheet s = w.getSheet(sheet); // select sheet to be printed
 		for (int j = 0; j < s.getRows(); j++) { // loop through rows
-			cmb.addItem(j);
+			textArea.append(j+1 + "\t");
+			cmb.addItem(j+1);
 			for (int i = 0; i < s.getColumns(); i++) { // loop through columns
 				Cell cell = s.getCell(i, j);
 				textArea.append(cell.getContents() + "\t");
