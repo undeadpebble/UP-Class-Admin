@@ -46,7 +46,7 @@ import org.jdesktop.swingx.JXPanel;
 public class Frame extends JFrame {
 
 	private JPanel contentPane;
-	private FadePanel homePanel, workspacePanel, navBar, tabBar, infoPanel;
+	private FadePanel homePanel, workspacePanel, navBar, tabBar, infoPanel, scatterplotInfoPanel;
 	private ThreeStopGradientPanel bottomPanel;
 	private BackgroundGradientPanel backgroundPanel;
 	private GradientMenuBar menuBarWindows;
@@ -613,18 +613,18 @@ public class Frame extends JFrame {
 			boxplotInfoPanel.add(boxplotBubble);
 
 			// create scatter plot bubbles panel
-			boxplotInfoPanel = new FadePanel(false, 200, 200);
-			boxplotInfoPanel.setBounds(345, 0, 125, infoPanel.getHeight());
-			boxplotInfoPanel.setLayout(null);
-			infoPanel.add(boxplotInfoPanel);
+			scatterplotInfoPanel = new FadePanel(false, 200, 200);
+			scatterplotInfoPanel.setBounds(415, 0, 125, infoPanel.getHeight());
+			scatterplotInfoPanel.setLayout(null);
+			infoPanel.add(scatterplotInfoPanel);
 
-			// create histogram bubble image
-		/*	ImagePanel boxplotBubble = new ImagePanel(ImageIO.read(getClass()
+			// create scatterplot bubble image
+			ImagePanel scatterplotBubble = new ImagePanel(ImageIO.read(getClass()
 					.getResource("InfoBoxPlot.png")));
-			boxplotBubble.setBounds(0, 0, infoPanel.getWidth(),
+			scatterplotBubble.setBounds(0, 0, infoPanel.getWidth(),
 					infoPanel.getHeight());
-			boxplotBubble.setLayout(null);
-			boxplotInfoPanel.add(boxplotBubble);
+			scatterplotBubble.setLayout(null);
+			scatterplotInfoPanel.add(scatterplotBubble);
 
 			homeButton.addMouseListener(new MouseAdapter() {
 				@Override
@@ -640,7 +640,7 @@ public class Frame extends JFrame {
 					homeInfoPanel.fadeOut();
 				}
 			});
-			*/
+			
 
 			importButton.addMouseListener(new MouseAdapter() {
 				@Override
@@ -752,11 +752,11 @@ public class Frame extends JFrame {
 				}
 
 				public void mouseEntered(MouseEvent arg0) {
-
+					scatterplotInfoPanel.fadeIn();
 				}
 
 				public void mouseExited(MouseEvent arg0) {
-
+					scatterplotInfoPanel.fadeOut();
 				}
 			});
 
