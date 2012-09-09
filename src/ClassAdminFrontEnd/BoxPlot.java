@@ -11,6 +11,7 @@ public class BoxPlot {
 	{
 		
 	}
+	//Create boxplotchart with the parameters
 	public JFreeChart createBoxPlot(String title, String xaxis, String yaxis,BoxAndWhiskerCategoryDataset dataset )
 	{
 		return ChartFactory.createBoxAndWhiskerChart(title, xaxis, yaxis, dataset, false);

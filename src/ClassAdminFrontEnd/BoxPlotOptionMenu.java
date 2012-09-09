@@ -18,7 +18,9 @@ public class BoxPlotOptionMenu extends JFrame implements ActionListener {
 	final String[] headers = Global.getGlobal().getActiveProject()
 			.getHead().getHeaders();
 	protected final static JComboBox choosecombo = new JComboBox();
-	protected String toets="";
+	protected String comboSelect="";
+	
+	
 	public void createFrame()
 	{
 		JFrame f = new JFrame("BoxPlot");
@@ -94,7 +96,7 @@ public class BoxPlotOptionMenu extends JFrame implements ActionListener {
 	@Override
 	 public void actionPerformed(ActionEvent e) {
         JComboBox cb = (JComboBox)e.getSource();
-        toets = (String)cb.getSelectedItem();
+        comboSelect = (String)cb.getSelectedItem();
       
     }
 

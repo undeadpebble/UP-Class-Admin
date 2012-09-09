@@ -22,6 +22,7 @@ public class SuperEntity {
 	private EntityType type;
 	private String field = "";
 	private SuperEntityPointer thisPointer;
+
 	/**
 	 * @return the type
 	 */

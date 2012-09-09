@@ -39,12 +39,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 		final String[] headers = Global.getGlobal().getActiveProject()
 				.getHead().getHeaders();
 		final ScatterPlot nuweChart = new ScatterPlot();
-		/*
-		 * for(int k=0; k < diedata.size();k++) { for(int l =0
-		 * ;l<diedata.get(0).size();l++) {
-		 * System.out.print(diedata.get(k).get(l).getValue()+"\t"); }
-		 * System.out.println(""); }
-		 */
+		
 		String[] kolom = Global.getGlobal().getActiveProject().getHead()
 				.getNumberHeaders();
 		String xas = kolom[0];
@@ -71,8 +66,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 		for (int q = 0; q < diedata.size(); q++) {
 			series.add(diedata.get(q).get(houerx).getMark(), diedata.get(q)
 					.get(houery).getMark());
-			// System.out.println(diedata.get(q).get(2).getMark() + " " +
-			// diedata.get(q).get(4).getMark());
+			
 		}
 
 		dataset.addSeries(series);
@@ -107,8 +101,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 				for (int q = 0; q < diedata.size() - 1; q++) {
 					series.add(diedata.get(q).get(houerx).getMark(), diedata
 							.get(q).get(houery).getMark());
-					System.out.println(diedata.get(houerx).get(q).getMark()
-							+ " " + diedata.get(houery).get(q).getMark());
+					
 				}
 
 				nuwedataset.addSeries(series);
@@ -216,8 +209,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 				for (int q = 0; q < diedata.size() - 1; q++) {
 					series.add(diedata.get(q).get(houerx).getMark(), diedata
 							.get(q).get(houery).getMark());
-					// System.out.println(diedata.get(houerx).get(q).getMark()
-					// +" "+ diedata.get(houery).get(q).getMark());
+					
 
 				}
 
