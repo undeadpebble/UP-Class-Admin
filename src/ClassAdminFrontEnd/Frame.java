@@ -37,6 +37,8 @@ import ClassAdminBackEnd.FileHandler;
 import ClassAdminBackEnd.Global;
 import ClassAdminBackEnd.SuperEntity;
 import ClassAdminBackEnd.UnsupportedFileTypeException;
+
+import org.imgscalr.Scalr;
 import org.jdesktop.swingx.JXPanel;
 
 public class Frame extends JFrame {
@@ -49,7 +51,7 @@ public class Frame extends JFrame {
 	private JMenuBar menuBarMAC;
 	private ReflectionImagePanel container, containerRecentDocs, containerImportImage, containerWorkspace, containerStudents;
 	private MenuImagePanel containerImportText, containerWorkspaceText, containerStudentsText, studentsViewArrowOut, studentsViewArrowIn;
-	private ImagePanel containerImportTextSub, containerStudentsTextSub, containerWorkspaceTextSub, boxChartImage, histogramChartImage, scatterplotChartImage;
+	private ImagePanel containerImportTextSub, containerStudentsTextSub, containerWorkspaceTextSub, boxChartImage, histogramChartImage, scatterplotChartImage, studentPhoto;
 	private JFileChooser filechooser;
 	private JFrame frame = this;
 	private File currentFilePath;
@@ -58,7 +60,7 @@ public class Frame extends JFrame {
 	private JTabbedPane tabbedPane;
 	private FileHandler fileHandler;
 	private BlurBackground blur;
-	private ReflectionButton homeButton, importButton, exportButton, studentsButton;
+	private ReflectionButton homeButton, importButton, exportButton, studentsButton, histogramButton, boxButton, scatterButton;
 	private FadePanel homeInfoPanel, importInfoPanel, exportInfoPanel, studentsInfoPanel;
 	private ShadowPanel studentPanel;
 
@@ -207,7 +209,7 @@ public class Frame extends JFrame {
 
 		setupHomeScreen();
 		setupWorkspaceScreen();
-
+		
 		// frame resize listener to put nav bar at bottom of frame on resize
 		this.addComponentListener(new ComponentListener() {
 
@@ -399,7 +401,7 @@ public class Frame extends JFrame {
 			homePanel.add(containerImportText);
 
 			containerImportTextSub = new ImagePanel(ImageIO.read(getClass()
-					.getResource("ImportSub.png")), false);
+					.getResource("ImportSub.png")));
 			containerImportTextSub.setBounds(210, 166, 129, 32);
 			homePanel.add(containerImportTextSub);
 
@@ -409,7 +411,7 @@ public class Frame extends JFrame {
 			homePanel.add(containerStudentsText);
 
 			containerStudentsTextSub = new ImagePanel(ImageIO.read(getClass()
-					.getResource("StudentsSub.png")), false);
+					.getResource("StudentsSub.png")));
 			containerStudentsTextSub.setBounds(600, 166, 147, 32);
 			homePanel.add(containerStudentsTextSub);
 
@@ -419,7 +421,7 @@ public class Frame extends JFrame {
 			homePanel.add(containerWorkspaceText);
 
 			containerWorkspaceTextSub = new ImagePanel(ImageIO.read(getClass()
-					.getResource("WorkspaceSub.png")), false);
+					.getResource("WorkspaceSub.png")));
 			containerWorkspaceTextSub.setBounds(210, 259, 238, 32);
 			homePanel.add(containerWorkspaceTextSub);
 		} catch (IOException e) {
@@ -499,7 +501,25 @@ public class Frame extends JFrame {
 			studentsButton.setBounds(217, 8, 68, 80);
 			navBar.add(studentsButton);
 			studentsButton.setDisabled();
+			
+			histogramButton  = new ReflectionButton(ImageIO.read(getClass()
+					.getResource("Histogram.png")));
+			histogramButton.setBounds(285, 12, 68, 80);
+			navBar.add(histogramButton);
+			histogramButton.setDisabled();
 
+			boxButton  = new ReflectionButton(ImageIO.read(getClass()
+					.getResource("Box.png")));
+			boxButton.setBounds(355, 12, 68, 80);
+			navBar.add(boxButton);
+			boxButton.setDisabled();
+		
+			scatterButton = new ReflectionButton(ImageIO.read(getClass()
+					.getResource("Scatter.png")));
+			scatterButton.setBounds(420, 12, 68, 80);
+			navBar.add(scatterButton);
+			scatterButton.setDisabled();			       
+			
 			// create info bubbles panel
 			homeInfoPanel = new FadePanel(false, 200, 200);
 			homeInfoPanel.setBounds(8, 0, 62, infoPanel.getHeight());
@@ -508,7 +528,7 @@ public class Frame extends JFrame {
 
 			// create info bubble image
 			ImagePanel infoBubble = new ImagePanel(ImageIO.read(getClass()
-					.getResource("HomeInfo.png")), false);
+					.getResource("HomeInfo.png")));
 			infoBubble.setBounds(0, 0, infoPanel.getWidth(),
 					infoPanel.getHeight());
 			infoBubble.setLayout(null);
@@ -522,7 +542,7 @@ public class Frame extends JFrame {
 
 			// create import bubble image
 			ImagePanel importBubble = new ImagePanel(ImageIO.read(getClass()
-					.getResource("ImportInfo.png")), false);
+					.getResource("ImportInfo.png")));
 			importBubble.setBounds(0, 0, infoPanel.getWidth(),
 					infoPanel.getHeight());
 			importBubble.setLayout(null);
@@ -536,7 +556,7 @@ public class Frame extends JFrame {
 
 			// create export bubble image
 			ImagePanel exportBubble = new ImagePanel(ImageIO.read(getClass()
-					.getResource("ExportInfo.png")), false);
+					.getResource("ExportInfo.png")));
 			exportBubble.setBounds(0, 0, infoPanel.getWidth(),
 					infoPanel.getHeight());
 			exportBubble.setLayout(null);
@@ -550,7 +570,7 @@ public class Frame extends JFrame {
 
 			// create students bubble image
 			ImagePanel studentsBubble = new ImagePanel(ImageIO.read(getClass()
-					.getResource("StudentsInfo.png")), false);
+					.getResource("StudentsInfo.png")));
 			studentsBubble.setBounds(0, 0, infoPanel.getWidth(),
 					infoPanel.getHeight());
 			studentsBubble.setLayout(null);
@@ -756,7 +776,6 @@ public class Frame extends JFrame {
 			tabBar = new FadePanel(false, 800, 400);
 			tabBar.setBounds(0, 0, frame.getWidth(), frame.getHeight());
 			tabBar.setLayout(null);
-			createGraphIcons();
 		}
 		tabBar.add(tabbedPane);
 
@@ -768,6 +787,9 @@ public class Frame extends JFrame {
 		tabbedPane.setTabComponentAt(tabCount, new TabButton(file.getName()));
 
 		studentsButton.setEnabled();
+		histogramButton.setEnabled();
+		boxButton.setEnabled();
+		scatterButton.setEnabled();
 		
 		studentPanel.moveIn();
 	}
@@ -789,34 +811,13 @@ public class Frame extends JFrame {
 		homePanel.fadeIn();
 		workspacePanel.fadeOut();
 		navBar.fadeOut();
-	}
-
-	/*
-	 * Function to create graph icons on top of right side of workspace screen
-	 */
-	public void createGraphIcons() {
-		try {
-			boxChartImage = new ImagePanel(ImageIO.read(getClass().getResource(
-					"Box.png")), true);
-			boxChartImage.setBounds(tabBar.getWidth() - 70, 15, 60, 40);
-			tabBar.add(boxChartImage);
-
-			histogramChartImage = new ImagePanel(ImageIO.read(getClass()
-					.getResource("Histogram.png")), true);
-			histogramChartImage.setBounds(tabBar.getWidth() - 105, 15, 50, 40);
-			tabBar.add(histogramChartImage);
-
-			scatterplotChartImage = new ImagePanel(ImageIO.read(getClass()
-					.getResource("Scatterplot.png")), true);
-			scatterplotChartImage
-					.setBounds(tabBar.getWidth() - 140, 15, 50, 40);
-			tabBar.add(scatterplotChartImage);
-
-		} catch (IOException e) {
-			e.printStackTrace();
+		
+		if (studentPanel != null) {
+			studentPanel.setVisible(false);
 		}
-
+		
 	}
+
 
 	public void createStudentView() {
 
@@ -880,11 +881,15 @@ public class Frame extends JFrame {
 			System.out.println(info[i]);
 		}
 
-		BufferedImage img = null;
 		try {
-			img = ImageIO.read(new File("2927713.jpg"));
+			BufferedImage photo = (ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/StudentPhotos/10092120.JPG")));
+			photo = Scalr.resize(photo, 150);
+			studentPhoto = new ImagePanel(photo);
+			studentPanel.add(studentPhoto);
+			studentPhoto.setBounds(57,50,photo.getWidth(),photo.getHeight());
 		} catch (IOException e) {
-		}
-
+			e.printStackTrace();
+		} 		
 	}
+	
 }

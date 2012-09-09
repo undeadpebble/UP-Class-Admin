@@ -21,7 +21,7 @@ public class ImagePanel extends JXPanel {
 
 	private BufferedImage image = null;
 
-	ImagePanel(BufferedImage _image, Boolean _highlight) {
+	ImagePanel(BufferedImage _image) {
 		image = _image;
 		setOpaque(false);
 	}
