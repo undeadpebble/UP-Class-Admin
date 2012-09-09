@@ -45,6 +45,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 	int houerx =0;
 	double[] values;
 	int widthbar = 10;
+	
 	public HistogramFrame()
 	{
 			JFrame f = new JFrame("Histogram");
@@ -126,8 +127,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 						
 							int sindex = ent.getSeriesIndex();
 							int iindex = ent.getItem();
-							System.out.println(sindex);
-							System.out.println(iindex);
+						
 						
 							c.selectedx=5.0;
 							c.selectedy=9.0;

@@ -42,13 +42,14 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 		
 		String[] kolom = Global.getGlobal().getActiveProject().getHead()
 				.getNumberHeaders();
+		
 		String xas = kolom[0];
 		String yas = kolom[1];
 
 		for (int s = 0; s < headers.length; s++) {
 			if (headers[s].equals(kolom[0])) {
 				houerx = s;
-				System.out.println(headers[s]);
+				
 			}
 
 		}
@@ -56,7 +57,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 		for (int s = 0; s < headers.length; s++) {
 			if (headers[s].equals(kolom[1])) {
 				houery = s;
-				System.out.println(headers[s]);
+				
 			}
 
 		}
@@ -90,7 +91,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 				for (int s = 0; s < headers.length; s++) {
 					if (headers[s].equals(cb.getSelectedItem().toString())) {
 						houerx = s;
-						System.out.println(headers[s]);
+						
 					}
 
 				}

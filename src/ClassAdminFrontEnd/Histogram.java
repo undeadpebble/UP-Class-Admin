@@ -27,11 +27,21 @@ public class Histogram {
              {
                      
             	 HistogramDataset x = (HistogramDataset) getPlot().getDataset();
-            	// double d = x.getStartXValue(i, j);
+            	 
+            	 System.out.println("Series" +x.getX(0, 5));
+            	
+            	 // double d = x.getStartXValue(i, j);
             	
             	// x.
-            	// System.out.println(x.getXValue(i, j));
-            	// System.out.println(x.getYValue(i, j));
+   
+            	 
+            	 //System.out.println(x.getXValue(i, j));
+            	 //System.out.println(x.getYValue(i, j)+"asdasd");
+            /*	 for(int q=0;q<x.getItemCount(0)-1;q++)
+            	 {
+            		 System.out.println(x.getY(0, q));
+            	 }*/
+            	 
             
             	if(x.getXValue(i, j) == selectedx && x.getYValue(i, j)== selectedy)	
             	 	// CategoryDataset categorydataset = getPlot().getDataset();
