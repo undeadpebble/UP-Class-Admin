@@ -55,31 +55,15 @@ public class BoxPlotFrame extends JFrame implements ActionListener {
 		f.setSize(450, 500);
 
 		
-
-		/*for (int s = 0; s < headers.length; s++) {
-			if (headers[s].equals(kolom[0])) {
-				houerx = s;
-			}
-		}
-
-		final ArrayList list = new ArrayList();
-		for (int k = 0; k < entityCount; k++) {
-
-			list.add(diedata.get(k).get(houerx).getMark());
-		}
-
-		dataset.add(list, "Series" + 1, headers[houerx]);*/
-
 		final BoxPlot nuweChart = new BoxPlot();
 		chart = nuweChart.createBoxPlot("BoxPlot", "", "", dataset);
 		chartpanel = new ChartPanel(chart, 400, 400, 100, 100, 400, 400, true,
 				true, true, true, true, true);
 		
 		
-		/*for(int x= 0 ; x<kolom.length  ; x++)
-		{ System.out.println(x+" "+kolom[x]);}*/
+	
 		JButton addseries = new JButton("Add a series");
-
+		//Series can be added dynamically
 		addseries.addMouseListener(new MouseListener() {
 
 			@Override
@@ -110,36 +94,11 @@ public class BoxPlotFrame extends JFrame implements ActionListener {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				
-				/*headerindex +=1;
-				System.out.println(headerindex);
-				System.out.println(kolom.length);
-				for (int s = 0; s < headers.length; s++) {
-					
-					
-					if(headerindex <= kolom.length-1)
-					{
-					if (headers[s].equals(kolom[headerindex])) {
-						houerx = s;
-						System.out.println(headers[s]);
-					}
-					}
-				}*/
+			
 				
 			box.createFrame();
-				/*ArrayList nuwe = new ArrayList();
-			//	System.out.println(headerindex);
-			//	System.out.println(headers[houerx]);
-				for (int k = 0; k < diedata.size(); k++) {
-
-					nuwe.add(diedata.get(k).get(x.getIndexOfHeader()).getMark());
-
-					System.out.println(diedata.get(k).get(x.getIndexOfHeader()).getMark());
-				}
-				dataset.add(nuwe, "Series" + 2, headers[x.getIndexOfHeader()]);
-				chartpanel.getChart().getCategoryPlot().setDataset(dataset);*/
-			//}
-				
-				//System.out.println(headers[]);
+							
+			
 			}
 		});
 
@@ -178,7 +137,7 @@ public class BoxPlotFrame extends JFrame implements ActionListener {
 			}
 
 		});
-
+		//Extract chart to JPG
 		JButton extractPic = new JButton("Extract");
 		extractPic.addMouseListener(new MouseListener() {
 
@@ -223,8 +182,6 @@ public class BoxPlotFrame extends JFrame implements ActionListener {
 		content.setLayout(new FlowLayout());
 		content.add(chartpanel);
 		content.add(addseries);
-		// content.add(lblNewLabel);
-		 //content.add(xascb);
 		content.add(rotate);
 		content.add(extractPic);
 
@@ -232,15 +189,14 @@ public class BoxPlotFrame extends JFrame implements ActionListener {
 	}
 	public void addBoxSeries()
 	{
-	//	System.out.println(box.getIndexOfHeader());
+	
 		ArrayList nuwe = new ArrayList();
-		//	System.out.println(headerindex);
-		//	System.out.println(headers[houerx]);
+	
 			for (int k = 0; k < diedata.size(); k++) {
 
 				nuwe.add(diedata.get(k).get(box.getIndexOfHeader()).getMark());
 
-				//System.out.println(diedata.get(k).get(box.getIndexOfHeader()).getMark());
+				
 			}
 			teller +=1;
 			dataset.add(nuwe, "Series" + teller, headers[box.getIndexOfHeader()]);
