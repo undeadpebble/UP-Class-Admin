@@ -40,6 +40,10 @@ public class IMGEntity extends SuperEntity {
 
         return id;
 	}
+	
+	public IMGEntity findPortrait(int i){
+		return this;
+	}
 
 	
 }

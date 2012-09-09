@@ -466,4 +466,38 @@ public class SuperEntity {
 		this.setParentEntity(sPointer.getTarget());
 		
 	}
+	
+	public int getDepth(){
+
+		
+		int max = 0;
+		for(int x = 0;x<getSubEntity().size();++x){
+			int tmp = this.getSubEntity().get(x).getDepth();
+			if(tmp > max){
+				max = tmp;
+			}
+		}
+		return ++max;
+	}
+	
+	public IMGEntity IterativeDeepeningfindPortrait(){
+		int depth = 1;
+		int maxDepth = this.getDepth()-1;
+		IMGEntity result = null;
+		while(result == null && depth <= maxDepth){
+			result = findPortrait(depth++);
+		}
+		return result;
+	}
+	
+	public IMGEntity findPortrait(int i){
+		if(i == 0)
+			return null;
+		
+		IMGEntity result = null;
+		while(result == null){
+			result = findPortrait(i-1);
+		}
+		return result;
+	}
 }
