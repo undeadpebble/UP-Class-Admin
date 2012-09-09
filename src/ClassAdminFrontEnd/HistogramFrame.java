@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import javax.swing.DefaultComboBoxModel;
@@ -44,7 +45,22 @@ public class HistogramFrame extends JFrame implements ActionListener {
 	static JFreeChart chart;
 	int houerx =0;
 	double[] values;
+	
+	String[] studentnr;
+	double[][] studentref;
 	int widthbar = 10;
+	/*public ArrayList getSelectedbar(Number bgn, Number einde)
+	{
+	ArrayList selectedindex = new ArrayList();
+		for(int x = 0;x < values.length-1;x++)
+		{
+			if(values[x]>=bgn && values[x]<einde)
+			{
+				selectedindex.add(x)
+;			}
+		}
+		return ;
+	}*/
 	
 	public HistogramFrame()
 	{
@@ -70,16 +86,18 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			}
 			
 		 values = new double[diedata.size()];
+		 studentnr = new String[diedata.size()];
+		
 			for (int q = 0; q < diedata.size(); q++) {
 			
 				values[q] = diedata.get(q).get(houerx).getMark();
 				
+				studentnr[q] =diedata.get(q).get(0).getValue();
 				
 			}
 		    
-		        
-		   
-		    dataset.setType(HistogramType.FREQUENCY);
+		  
+		    	  dataset.setType(HistogramType.FREQUENCY);
 		   
 		    
 		    dataset.addSeries("Histogram", values, 10,0,100);
@@ -127,8 +145,10 @@ public class HistogramFrame extends JFrame implements ActionListener {
 						
 							int sindex = ent.getSeriesIndex();
 							int iindex = ent.getItem();
-						
-						
+							dataset.getStartX(0, iindex);
+							dataset.getEndX(0, iindex);
+							
+			//			int[] selectIndexes=getSelectedbar(dataset.getStartX(0, iindex),dataset.getEndX(0, iindex));
 							c.selectedx=5.0;
 							c.selectedy=9.0;
 							plot.setRenderer(c);
