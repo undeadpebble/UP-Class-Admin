@@ -23,6 +23,15 @@ public class EntityType {
 	private Double defaultWeight;
 	private long ID;
 
+	private int maxValue = 100;
+	public int getMaxValue() {
+		return maxValue;
+	}
+	public void setMaxValue(int maxValue) {
+		this.maxValue = maxValue;
+	}
+	
+
 	public EntityType getParentEntitytype() {
 		return parentEntitytype;
 	}
@@ -151,7 +160,6 @@ public class EntityType {
 		table.insert(this.ID, this.name, parentID, this.isTextField, this.date,
 				this.defaultWeight);
 
-		db.commit();
 
 		for (int x = 0; x < this.getBorderCasing().size(); ++x) {
 			this.getBorderCasing().get(x).saveToDB(db, this.ID, idgen);

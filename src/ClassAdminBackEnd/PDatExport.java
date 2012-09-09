@@ -126,6 +126,8 @@ public class PDatExport {
         			")";
         	db.createTable(createTableQuery);
         	
+        	 project.saveToDB(db);
+        	
         }catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -133,7 +135,7 @@ public class PDatExport {
             db.commit();
         }
         
-        project.saveToDB(db);
+       
         
 	}
 	 private static void printRecords(ISqlJetCursor cursor) throws SqlJetException {
