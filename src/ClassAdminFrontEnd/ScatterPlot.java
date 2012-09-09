@@ -78,7 +78,7 @@ public class ScatterPlot {
 				public void chartMouseClicked(ChartMouseEvent e) {
 					
 					MouseEvent me = e.getTrigger();
-					//System.out.println((me.isShiftDown()));
+					
 				
 					if(me.isShiftDown() == false)
 					chart.getXYPlot().clearAnnotations();

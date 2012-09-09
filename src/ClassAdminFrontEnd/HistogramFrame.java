@@ -63,7 +63,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			for (int s = 0; s < headers.length; s++) {
 				if (headers[s].equals(kolom[0])) {
 					houerx = s;
-					//System.out.println(headers[s]);
+		
 				}
 
 			}
@@ -72,7 +72,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			for (int q = 0; q < diedata.size(); q++) {
 			
 				values[q] = diedata.get(q).get(houerx).getMark();
-				//System.out.println(values[q]);
+				
 				
 			}
 		    
@@ -82,7 +82,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 		   
 		    
 		    dataset.addSeries("Histogram", values, 10,0,100);
-		  //  dataset.addSeries("Histogram",value,number);
+		
 		    
 		    String plotTitle = "Histogram"; 
 		    String xaxis = kolom[0];
@@ -105,33 +105,14 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			
 			final CustomBarRenderer c = new CustomBarRenderer();
 			plot.setRenderer(c);
-			/*BarRenderer barRenderer = (BarRenderer)plot.getRenderer();
-			barRenderer.setSeriesPaint(0, Color.gray);
-*/
-             //CustomBarRenderer custombarrenderer3d = new CustomBarRenderer();
-            //plot.setRenderer(renderer);
-             //CategoryPlot categoryplot = (CategoryPlot)chart.getPlot();
-             //categoryplot.setRenderer(custombarrenderer3d);
-             //plot.setRenderer(custombarrenderer3d)
-             
-             //   ((XYPlot) Nuweplot).setRenderer((XYItemRenderer) custombarrenderer3d);
-             /*custombarrenderer3d.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
-             custombarrenderer3d.setBaseItemLabelsVisible(true);
-             custombarrenderer3d.setItemLabelAnchorOffset(10D);
-             custombarrenderer3d.setBasePositiveItemLabelPosition(new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, TextAnchor.BASELINE_LEFT));
-             categoryplot.setRenderer(custombarrenderer3d);
-             ValueMarker valuemarker = new ValueMarker(0.69999999999999996D, new Color(200, 200, 255), new BasicStroke(1.0F), new Color(200, 200, 255), new BasicStroke(1.0F), 1.0F);
-             categoryplot.addRangeMarker(valuemarker, Layer.BACKGROUND);
-             custombarrenderer3d.setBaseItemLabelsVisible(true);
-             custombarrenderer3d.setMaximumBarWidth(0.050000000000000003D);
-*/
 			
+				//Select a bar
 				chartpanel.addChartMouseListener(new ChartMouseListener() {
 
 					public void chartMouseClicked(ChartMouseEvent e) {
 						
 						MouseEvent me = e.getTrigger();
-						//System.out.println((me.isShiftDown()));
+						
 					
 						if(me.isShiftDown() == false)
 						chart.getXYPlot().clearAnnotations();
@@ -152,20 +133,9 @@ public class HistogramFrame extends JFrame implements ActionListener {
 							c.selectedy=9.0;
 							plot.setRenderer(c);
 							repaint();
-							/*final CircleDrawer cd = new CircleDrawer(Color.red,
-									new BasicStroke(1.0f), null);
-							final XYAnnotation bestBid = new XYDrawableAnnotation(dataset
-									.getXValue(sindex, iindex), dataset.getYValue(sindex,
-									iindex), 11, 11, cd);
 							
 							
 							
-						
-
-							chart.getXYPlot().addAnnotation(bestBid);*/
-							
-							System.out.println("x = " + dataset.getXValue(sindex, iindex));
-							System.out.println("y = " + dataset.getYValue(sindex, iindex));
 						}
 
 					}
@@ -209,7 +179,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 						for (int q = 0; q < diedata.size(); q++) {
 						
 							values[q] = diedata.get(q).get(houerx).getMark();
-							System.out.println(values[q]);
+							
 							
 						}
 						HistogramDataset nuwedataset = new HistogramDataset();
@@ -441,7 +411,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 				
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					System.out.println("ADSDDDD");
+					
 					if(widthbar> 10)
 					widthbar -=10;
 					else if(widthbar >1)
@@ -450,7 +420,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 					HistogramDataset nuwedataset = new HistogramDataset();
 					nuwedataset.addSeries("Histogram", values,widthbar ,0,100);
 			        chartpanel.getChart().getXYPlot().setDataset(nuwedataset);
-			        System.out.println(widthbar);
+			       
 				}
 			});
 		    content.setLayout(new FlowLayout()); 

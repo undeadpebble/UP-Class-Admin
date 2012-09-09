@@ -22,7 +22,7 @@ public class Histogram {
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
-
+			//Color bar
 			public Paint getItemPaint(int i, int j)
              {
                      
