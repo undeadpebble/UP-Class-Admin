@@ -328,11 +328,8 @@ public class TreeView extends Display {
 		File f1 = new File("out.xml");
 		boolean success = f1.delete();
 		if (!success) {
-			System.out.println("Deletion failed.");
 			System.exit(0);
-		} else {
-			System.out.println("File deleted.");
-		}
+		} 
 
 		// create a new treemap
 		final TreeView tview = new TreeView(t, label);
@@ -451,12 +448,6 @@ public class TreeView extends Display {
         
         public void itemEntered(VisualItem item, MouseEvent e) {
             activeItem = item;
-            if (item.canGetString("name"))
-            {
-                System.out.println("item");
-            }
-            else
-            	System.out.println("no");
             wasFixed = item.isFixed();
         }
         
@@ -497,7 +488,8 @@ public class TreeView extends Display {
         public void itemClicked(VisualItem item, MouseEvent e) {
             if (!SwingUtilities.isLeftMouseButton(e)) return;
             if ( e.getClickCount() == 2 ) {
-                String id = item.getString("id");
+                String id = item.getString("name");
+                System.out.println(id);
             }
         }
         
