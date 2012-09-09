@@ -46,14 +46,18 @@ import org.jdesktop.swingx.JXPanel;
 public class Frame extends JFrame {
 
 	private JPanel contentPane;
-	private FadePanel homePanel, workspacePanel, navBar, tabBar,infoPanel;
+	private FadePanel homePanel, workspacePanel, navBar, tabBar, infoPanel;
 	private ThreeStopGradientPanel bottomPanel;
 	private BackgroundGradientPanel backgroundPanel;
 	private GradientMenuBar menuBarWindows;
 	private JMenuBar menuBarMAC;
-	private ReflectionImagePanel container, containerRecentDocs, containerImportImage, containerWorkspace, containerStudents;
-	private MenuImagePanel containerImportText, containerWorkspaceText, containerStudentsText, studentsViewArrowOut, studentsViewArrowIn;
-	private ImagePanel containerImportTextSub, containerStudentsTextSub, containerWorkspaceTextSub, boxChartImage, histogramChartImage, scatterplotChartImage, studentPhoto;
+	private ReflectionImagePanel container, containerRecentDocs,
+			containerImportImage, containerWorkspace, containerStudents;
+	private MenuImagePanel containerImportText, containerWorkspaceText,
+			containerStudentsText, studentsViewArrowOut, studentsViewArrowIn;
+	private ImagePanel containerImportTextSub, containerStudentsTextSub,
+			containerWorkspaceTextSub, boxChartImage, histogramChartImage,
+			scatterplotChartImage, studentPhoto;
 	private JFileChooser filechooser;
 	private JFrame frame = this;
 	private File currentFilePath;
@@ -62,8 +66,10 @@ public class Frame extends JFrame {
 	private JTabbedPane tabbedPane;
 	private FileHandler fileHandler;
 	private BlurBackground blur;
-	private ReflectionButton homeButton, importButton, exportButton, studentsButton, histogramButton, boxButton, scatterButton;
-	private FadePanel homeInfoPanel, importInfoPanel, exportInfoPanel, studentsInfoPanel;
+	private ReflectionButton homeButton, importButton, exportButton,
+			studentsButton, histogramButton, boxButton, scatterButton;
+	private FadePanel homeInfoPanel, importInfoPanel, exportInfoPanel,
+			studentsInfoPanel;
 	private ShadowPanel studentPanel;
 
 	private JButton button;
@@ -115,7 +121,7 @@ public class Frame extends JFrame {
 							studentPanel.setVisible(false);
 						}
 					}
-					
+
 				}
 
 				@Override
@@ -211,7 +217,7 @@ public class Frame extends JFrame {
 
 		setupHomeScreen();
 		setupWorkspaceScreen();
-		
+
 		// frame resize listener to put nav bar at bottom of frame on resize
 		this.addComponentListener(new ComponentListener() {
 
@@ -503,25 +509,25 @@ public class Frame extends JFrame {
 			studentsButton.setBounds(217, 8, 68, 80);
 			navBar.add(studentsButton);
 			studentsButton.setDisabled();
-			
-			histogramButton  = new ReflectionButton(ImageIO.read(getClass()
+
+			histogramButton = new ReflectionButton(ImageIO.read(getClass()
 					.getResource("Histogram.png")));
 			histogramButton.setBounds(285, 12, 68, 80);
 			navBar.add(histogramButton);
 			histogramButton.setDisabled();
 
-			boxButton  = new ReflectionButton(ImageIO.read(getClass()
+			boxButton = new ReflectionButton(ImageIO.read(getClass()
 					.getResource("Box.png")));
 			boxButton.setBounds(355, 12, 68, 80);
 			navBar.add(boxButton);
 			boxButton.setDisabled();
-		
+
 			scatterButton = new ReflectionButton(ImageIO.read(getClass()
 					.getResource("Scatter.png")));
 			scatterButton.setBounds(420, 12, 68, 80);
 			navBar.add(scatterButton);
-			scatterButton.setDisabled();			       
-			
+			scatterButton.setDisabled();
+
 			// create info bubbles panel
 			homeInfoPanel = new FadePanel(false, 200, 200);
 			homeInfoPanel.setBounds(8, 0, 62, infoPanel.getHeight());
@@ -635,16 +641,19 @@ public class Frame extends JFrame {
 					exportInfoPanel.fadeOut();
 				}
 			});
-			
+
 			studentsButton.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mousePressed(MouseEvent arg0) {
 					if (!studentsButton.isDisabled()) {
 						table.getTable().getSelectedRow();
 
-						TreeView.createStudentFrm("name",
-								table.getData().get(table.getTable().getSelectedRow()).get(0));
-					}					
+						TreeView.createStudentFrm(
+								"name",
+								table.getData()
+										.get(table.getTable().getSelectedRow())
+										.get(0));
+					}
 				}
 
 				public void mouseEntered(MouseEvent arg0) {
@@ -655,16 +664,59 @@ public class Frame extends JFrame {
 					studentsInfoPanel.fadeOut();
 				}
 			});
-			
-			/*
-			 * BoxPlotFrame x = new BoxPlotFrame();
-					x.createBoxPlotFrame();
-			 * 
-			 * ScatterPlotFrame x = new ScatterPlotFrame();	
-			 * 
-			 * HistogramFrame x = new HistogramFrame();
-			 */
-			
+
+			histogramButton.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mousePressed(MouseEvent arg0) {
+					if (!histogramButton.isDisabled()) {
+						HistogramFrame x = new HistogramFrame();
+					}
+				}
+
+				public void mouseEntered(MouseEvent arg0) {
+
+				}
+
+				public void mouseExited(MouseEvent arg0) {
+
+				}
+			});
+
+			boxButton.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mousePressed(MouseEvent arg0) {
+					if (!boxButton.isDisabled()) {
+						BoxPlotFrame x = new BoxPlotFrame();
+						x.createBoxPlotFrame();
+					}
+				}
+
+				public void mouseEntered(MouseEvent arg0) {
+
+				}
+
+				public void mouseExited(MouseEvent arg0) {
+
+				}
+			});
+
+			scatterButton.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mousePressed(MouseEvent arg0) {
+					if (!scatterButton.isDisabled()) {
+						ScatterPlotFrame x = new ScatterPlotFrame();
+					}
+				}
+
+				public void mouseEntered(MouseEvent arg0) {
+
+				}
+
+				public void mouseExited(MouseEvent arg0) {
+
+				}
+			});
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -728,7 +780,8 @@ public class Frame extends JFrame {
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			file = filechooser.getSelectedFile();
 			try {
-				FileHandler.get().saveFile(file.getAbsolutePath(), Global.getGlobal().getActiveProject());
+				FileHandler.get().saveFile(file.getAbsolutePath(),
+						Global.getGlobal().getActiveProject());
 			} catch (UnsupportedFileTypeException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -801,7 +854,7 @@ public class Frame extends JFrame {
 		histogramButton.setEnabled();
 		boxButton.setEnabled();
 		scatterButton.setEnabled();
-		
+
 		studentPanel.moveIn();
 	}
 
@@ -822,13 +875,12 @@ public class Frame extends JFrame {
 		homePanel.fadeIn();
 		workspacePanel.fadeOut();
 		navBar.fadeOut();
-		
+
 		if (studentPanel != null) {
 			studentPanel.setVisible(false);
 		}
-		
-	}
 
+	}
 
 	public void createStudentView() {
 
@@ -836,41 +888,43 @@ public class Frame extends JFrame {
 		studentPanel.setBounds(getWidth(), 0, 250, getHeight() - 20);
 		try {
 
-			studentsViewArrowOut = new MenuImagePanel(ImageIO.read(getClass().getResource("studentsViewArrowOut.png")));
-			studentsViewArrowIn = new MenuImagePanel(ImageIO.read(getClass().getResource("studentsViewArrowIn.png")));
-			
+			studentsViewArrowOut = new MenuImagePanel(ImageIO.read(getClass()
+					.getResource("studentsViewArrowOut.png")));
+			studentsViewArrowIn = new MenuImagePanel(ImageIO.read(getClass()
+					.getResource("studentsViewArrowIn.png")));
+
+			studentsViewArrowOut.setBounds(3, 3, 20, 20);
+			studentsViewArrowIn.setBounds(3, 3, 20, 20);
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		studentsViewArrowOut.setBounds(3, 3, 20, 20);
-		studentsViewArrowIn.setBounds(3, 3, 20, 20);
-		
+
 		studentPanel.add(studentsViewArrowOut);
 		studentPanel.add(studentsViewArrowIn);
-		
+
 		studentPanel.setLayout(null);
-		
+
 		studentPanel.setShown(false);
 		studentsViewArrowIn.setVisible(false);
-		
+
 		backgroundPanel.setLayer(studentPanel, 300);
 		backgroundPanel.add(studentPanel);
 		studentPanel.setVisible(false);
 
-
 		studentsViewArrowOut.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				studentPanel.moveOut();				
+				studentPanel.moveOut();
 				studentsViewArrowOut.setVisible(false);
 				studentsViewArrowIn.setVisible(true);
 			}
 		});
-		
+
 		studentsViewArrowIn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				studentPanel.moveIn();				
+				studentPanel.moveIn();
 				studentsViewArrowIn.setVisible(false);
 				studentsViewArrowOut.setVisible(true);
 			}
@@ -895,14 +949,15 @@ public class Frame extends JFrame {
 		}
 
 		try {
-			BufferedImage photo = (ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/StudentPhotos/10092120.JPG")));
+			BufferedImage photo = (ImageIO.read(getClass().getResource(
+					"/ClassAdminFrontEnd/StudentPhotos/10092120.JPG")));
 			photo = Scalr.resize(photo, 150);
 			studentPhoto = new ImagePanel(photo);
 			studentPanel.add(studentPhoto);
-			studentPhoto.setBounds(57,50,photo.getWidth(),photo.getHeight());
+			studentPhoto.setBounds(57, 50, photo.getWidth(), photo.getHeight());
 		} catch (IOException e) {
 			e.printStackTrace();
-		} 		
+		}
 	}
-	
+
 }
