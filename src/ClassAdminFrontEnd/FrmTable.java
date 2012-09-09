@@ -74,6 +74,22 @@ public class FrmTable extends JPanel {
 		}
 		return ("");
 	}
+	
+	public SuperEntity[] getFirstSelectedStudent(){
+		if(table.getSelectedRow() != -1){
+			SuperEntity[] tempForReturn = new SuperEntity[data.get(0).size()];
+			int selected = table.getSelectedRow();
+			
+			for(int x = 0; x < data.get(0).size();x++){
+				tempForReturn[x] = data.get(selected).get(x);
+			}
+			
+			return tempForReturn;
+		}
+		else{
+			return null;
+		}
+	}
 
 	public void filterTable() {
 		boolean filtered = false;

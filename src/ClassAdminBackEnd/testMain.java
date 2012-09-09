@@ -29,10 +29,11 @@ public class testMain
 		
 		try {
 			fh.openFile("test.csv", Global.getGlobal().getActiveProject());
-		
-			fh.saveFile("c:/test.pdat",Global.getGlobal().getActiveProject());
 			
-			fh.openFile("test.pdat", Global.getGlobal().getActiveProject());
+			Global.getGlobal().getActiveProject().getHeadEntityType().getSubEntityType().get(0).getSubEntityType().get(2).changeParent(Global.getGlobal().getActiveProject().getHeadEntityType().getSubEntityType().get(0).getSubEntityType().get(1));
+		
+			fh.saveFile("test.pdat",Global.getGlobal().getActiveProject());
+			
 			
 		} catch (UnsupportedFileTypeException e) {
 			// TODO Auto-generated catch block

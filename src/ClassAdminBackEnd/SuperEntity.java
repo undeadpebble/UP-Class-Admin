@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.util.Date;
 import java.util.LinkedList;
 
+import javax.activity.InvalidActivityException;
+
 import org.tmatesoft.sqljet.core.SqlJetException;
 import org.tmatesoft.sqljet.core.SqlJetTransactionMode;
 import org.tmatesoft.sqljet.core.table.ISqlJetTable;
@@ -429,5 +431,39 @@ public class SuperEntity {
 		}
 		str +="</branch>";
 		return str;
+	}
+	
+	public SuperEntity findEntityOfType(EntityType type){
+		if(type.getEntityList().contains(this))
+			return this;
+		
+		else{
+			for(int x = 0;x<this.getSubEntity().size();++x){
+				
+				SuperEntity temp = this.getSubEntity().get(x).findEntityOfType(type);
+				if(temp != null)
+					return temp;
+			}
+			return null;
+		}
+		
+	}
+	
+	public void changeParentTotype(EntityType newParentType) throws InvalidActivityException{
+		SuperEntity oldParent = this.getParentEntity();
+		SuperEntity newParent = null;
+		SuperEntity temp = this;
+		while(newParent == null && temp != null){
+			newParent = temp.findEntityOfType(newParentType);
+			temp = temp.getParentEntity();
+		}
+		
+		if(newParent == null)
+			throw new InvalidActivityException();
+		
+		oldParent.getSubEntity().remove(this);
+		newParent.getSubEntity().add(this);
+		this.setParentEntity(newParent);
+		
 	}
 }
