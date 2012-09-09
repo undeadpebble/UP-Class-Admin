@@ -69,7 +69,7 @@ public class Frame extends JFrame {
 	private ReflectionButton homeButton, importButton, exportButton,
 			studentsButton, histogramButton, boxButton, scatterButton;
 	private FadePanel homeInfoPanel, importInfoPanel, exportInfoPanel,
-			studentsInfoPanel;
+			studentsInfoPanel, histogramInfoPanel, boxplotInfoPanel;
 	private ShadowPanel studentPanel;
 
 	private JButton button;
@@ -572,7 +572,7 @@ public class Frame extends JFrame {
 
 			// create students bubbles panel
 			studentsInfoPanel = new FadePanel(false, 200, 200);
-			studentsInfoPanel.setBounds(195, 0, 105, infoPanel.getHeight());
+			studentsInfoPanel.setBounds(195, 0, 125, infoPanel.getHeight());
 			studentsInfoPanel.setLayout(null);
 			infoPanel.add(studentsInfoPanel);
 
@@ -583,6 +583,48 @@ public class Frame extends JFrame {
 					infoPanel.getHeight());
 			studentsBubble.setLayout(null);
 			studentsInfoPanel.add(studentsBubble);
+
+			// create histogram bubbles panel
+			histogramInfoPanel = new FadePanel(false, 200, 200);
+			histogramInfoPanel.setBounds(262, 0, 125, infoPanel.getHeight());
+			histogramInfoPanel.setLayout(null);
+			infoPanel.add(histogramInfoPanel);
+
+			// create histogram bubble image
+			ImagePanel histogramBubble = new ImagePanel(ImageIO.read(getClass()
+					.getResource("InfoHistogram.png")));
+			histogramBubble.setBounds(0, 0, infoPanel.getWidth(),
+					infoPanel.getHeight());
+			histogramBubble.setLayout(null);
+			histogramInfoPanel.add(histogramBubble);
+
+			// create box plot bubbles panel
+			boxplotInfoPanel = new FadePanel(false, 200, 200);
+			boxplotInfoPanel.setBounds(345, 0, 125, infoPanel.getHeight());
+			boxplotInfoPanel.setLayout(null);
+			infoPanel.add(boxplotInfoPanel);
+
+			// create box plot bubble image
+			ImagePanel boxplotBubble = new ImagePanel(ImageIO.read(getClass()
+					.getResource("InfoBoxPlot.png")));
+			boxplotBubble.setBounds(0, 0, infoPanel.getWidth(),
+					infoPanel.getHeight());
+			boxplotBubble.setLayout(null);
+			boxplotInfoPanel.add(boxplotBubble);
+
+			// create scatter plot bubbles panel
+			boxplotInfoPanel = new FadePanel(false, 200, 200);
+			boxplotInfoPanel.setBounds(345, 0, 125, infoPanel.getHeight());
+			boxplotInfoPanel.setLayout(null);
+			infoPanel.add(boxplotInfoPanel);
+
+			// create histogram bubble image
+		/*	ImagePanel boxplotBubble = new ImagePanel(ImageIO.read(getClass()
+					.getResource("InfoBoxPlot.png")));
+			boxplotBubble.setBounds(0, 0, infoPanel.getWidth(),
+					infoPanel.getHeight());
+			boxplotBubble.setLayout(null);
+			boxplotInfoPanel.add(boxplotBubble);
 
 			homeButton.addMouseListener(new MouseAdapter() {
 				@Override
@@ -598,6 +640,7 @@ public class Frame extends JFrame {
 					homeInfoPanel.fadeOut();
 				}
 			});
+			*/
 
 			importButton.addMouseListener(new MouseAdapter() {
 				@Override
@@ -674,11 +717,11 @@ public class Frame extends JFrame {
 				}
 
 				public void mouseEntered(MouseEvent arg0) {
-
+					histogramInfoPanel.fadeIn();
 				}
 
 				public void mouseExited(MouseEvent arg0) {
-
+					histogramInfoPanel.fadeOut();
 				}
 			});
 
@@ -692,11 +735,11 @@ public class Frame extends JFrame {
 				}
 
 				public void mouseEntered(MouseEvent arg0) {
-
+					boxplotInfoPanel.fadeIn();
 				}
 
 				public void mouseExited(MouseEvent arg0) {
-
+					boxplotInfoPanel.fadeOut();
 				}
 			});
 
