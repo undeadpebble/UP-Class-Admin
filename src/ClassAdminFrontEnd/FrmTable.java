@@ -91,6 +91,10 @@ public class FrmTable extends JPanel {
 		}
 	}
 
+	public String getFirstSelectedStudentNr(){
+		return(data.get(table.getSelectedRow()).get(0).getValue());
+	}
+	
 	public void filterTable() {
 		boolean filtered = false;
 		LinkedList<Integer> removes = new LinkedList<Integer>();
