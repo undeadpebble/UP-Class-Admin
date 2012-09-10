@@ -113,13 +113,13 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			
 			final Histogram nuweChart = new Histogram();
 			chart = nuweChart.createHistogram(plotTitle, xaxis, yaxis, dataset);
-		
+		/*
 			NumberAxis rangeAxis = (NumberAxis) chart.getXYPlot().getRangeAxis();
 			
 			((NumberAxis) rangeAxis).setTickUnit(new NumberTickUnit(1));
-			rangeAxis.setRange(0,10);
+			rangeAxis.setRange(0,10);*/
 		
-			chartpanel = new ChartPanel(chart,500,500,400,400,500,500,true,true,true,true,true,true);
+			/*chartpanel = new ChartPanel(chart,500,500,400,400,500,500,true,true,true,true,true,true);
 					
 			final XYPlot plot;
 			plot = chart.getXYPlot();
@@ -150,13 +150,18 @@ public class HistogramFrame extends JFrame implements ActionListener {
 							int iindex = ent.getItem();
 							dataset.getStartX(0, iindex);
 							dataset.getEndX(0, iindex);
-							Global.getGlobal().getActiveProject().setSelected(9);
-							System.out.println("SET SELECTED");
+							
+							
 							selectedindex=getSelectedbar(dataset.getStartX(0, iindex),dataset.getEndX(0, iindex));
 							for(int z = 0 ; z<selectedindex.size();z++)
 								System.out.println("Selected punt se index "+selectedindex.get(z).toString());
 							c.selectedx=5.0;
 							c.selectedy=9.0;
+							for(int o = 0;o<selectedindex.size();o++)
+							{
+								Global.getGlobal().getActiveProject().setSelected((Integer) selectedindex.get(o));
+							System.out.println("SET SELECTED" + (Integer) selectedindex.get(o) );
+							}
 							plot.setRenderer(c);
 							repaint();
 							
@@ -172,7 +177,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 
 					}
 					
-				});
+				});*/
 			
 			
 			

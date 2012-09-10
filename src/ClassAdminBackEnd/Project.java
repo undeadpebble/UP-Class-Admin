@@ -23,6 +23,7 @@ public class Project {
 	public void setSelected(int x)
 	{
 		selectedIndexes.add(x);
+		
 	}
 	public ArrayList getSelectedIndexes()
 	{

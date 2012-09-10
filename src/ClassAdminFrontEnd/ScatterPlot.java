@@ -68,7 +68,22 @@ public class ScatterPlot {
 		
 		return chart;
 	}	
-	
+	public void updateSelectedvalues()
+	{
+		ArrayList u= Global.getGlobal().getActiveProject().getSelectedIndexes();
+		final CircleDrawer cd = new CircleDrawer(Color.red,
+				new BasicStroke(1.0f), null);
+		
+		for(int x=0;x<u.size();x++)
+		{
+		
+		final XYAnnotation selectPlots = new XYDrawableAnnotation(datasetMain
+				.getXValue(0, (Integer) u.get(x)), datasetMain.getYValue(0,
+						(Integer) u.get(x)), 11, 11, cd);
+
+		chart.getXYPlot().addAnnotation(selectPlots);
+		}
+	}
 	public ChartPanel createPanel()
 	{
 		chartPanel = new ChartPanel(chart);
@@ -79,14 +94,7 @@ public class ScatterPlot {
 			chartPanel.addChartMouseListener(new ChartMouseListener() {
 
 				public void chartMouseClicked(ChartMouseEvent e) {
-					final CircleDrawer cd = new CircleDrawer(Color.red,
-							new BasicStroke(1.0f), null);
-					ArrayList u= Global.getGlobal().getActiveProject().getSelectedIndexes();
-					final XYAnnotation bestBid = new XYDrawableAnnotation(datasetMain
-							.getXValue(0, (Integer) u.get(0)), datasetMain.getYValue(0,
-									(Integer) u.get(0)), 11, 11, cd);
-
-					chart.getXYPlot().addAnnotation(bestBid);
+					
 					MouseEvent me = e.getTrigger();
 					
 				
@@ -96,18 +104,18 @@ public class ScatterPlot {
 					ChartEntity entity = ((ChartMouseEvent) e).getEntity();
 				
 					if (entity instanceof XYItemEntity && entity != null) {
-
+						updateSelectedvalues();
 						XYItemEntity ent = (XYItemEntity) entity;
 						
 
 						int sindex = ent.getSeriesIndex();
 						int iindex = ent.getItem();
 						System.out.println("Punt se index"+iindex);
-					/*	final CircleDrawer cd = new CircleDrawer(Color.red,
+						final CircleDrawer cd = new CircleDrawer(Color.red,
 								new BasicStroke(1.0f), null);
 						final XYAnnotation bestBid = new XYDrawableAnnotation(datasetMain
 								.getXValue(sindex, iindex), datasetMain.getYValue(sindex,
-								iindex), 11, 11, cd);*/
+								iindex), 11, 11, cd);
 
 						chart.getXYPlot().addAnnotation(bestBid);
 
