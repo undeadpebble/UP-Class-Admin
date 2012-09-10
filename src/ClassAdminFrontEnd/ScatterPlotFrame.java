@@ -35,6 +35,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 		f.setSize(550, 500);
 		final LinkedList<LinkedList<SuperEntity>> diedata = Global.getGlobal()
 				.getActiveProject().getHead().getDataLinkedList();
+		
 		final XYSeriesCollection dataset = new XYSeriesCollection();
 		final String[] headers = Global.getGlobal().getActiveProject()
 				.getHead().getHeaders();

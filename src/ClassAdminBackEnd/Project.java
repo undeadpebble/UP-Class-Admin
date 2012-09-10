@@ -3,6 +3,7 @@
  */
 package ClassAdminBackEnd;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import org.tmatesoft.sqljet.core.SqlJetException;
@@ -16,8 +17,17 @@ public class Project {
 	private SuperEntity head;
 	private LinkedList<SuperEntity> selected;
 	private EntityType headEntityType;
+	private ArrayList selectedIndexes = new ArrayList();
 	
 	
+	public void setSelected(int x)
+	{
+		selectedIndexes.add(x);
+	}
+	public ArrayList getSelectedIndexes()
+	{
+		return selectedIndexes;
+	}
 	/**
 	 * @return the headEntityType
 	 */

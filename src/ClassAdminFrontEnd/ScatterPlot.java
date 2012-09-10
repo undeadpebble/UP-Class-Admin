@@ -14,6 +14,7 @@ import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -37,6 +38,8 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RefineryUtilities;
+
+import ClassAdminBackEnd.Global;
 
 
 
@@ -76,7 +79,14 @@ public class ScatterPlot {
 			chartPanel.addChartMouseListener(new ChartMouseListener() {
 
 				public void chartMouseClicked(ChartMouseEvent e) {
-					
+					final CircleDrawer cd = new CircleDrawer(Color.red,
+							new BasicStroke(1.0f), null);
+					ArrayList u= Global.getGlobal().getActiveProject().getSelectedIndexes();
+					final XYAnnotation bestBid = new XYDrawableAnnotation(datasetMain
+							.getXValue(0, (Integer) u.get(0)), datasetMain.getYValue(0,
+									(Integer) u.get(0)), 11, 11, cd);
+
+					chart.getXYPlot().addAnnotation(bestBid);
 					MouseEvent me = e.getTrigger();
 					
 				
@@ -84,7 +94,7 @@ public class ScatterPlot {
 					chart.getXYPlot().clearAnnotations();
 					
 					ChartEntity entity = ((ChartMouseEvent) e).getEntity();
-					
+				
 					if (entity instanceof XYItemEntity && entity != null) {
 
 						XYItemEntity ent = (XYItemEntity) entity;
@@ -92,12 +102,12 @@ public class ScatterPlot {
 
 						int sindex = ent.getSeriesIndex();
 						int iindex = ent.getItem();
-
-						final CircleDrawer cd = new CircleDrawer(Color.red,
+						System.out.println("Punt se index"+iindex);
+					/*	final CircleDrawer cd = new CircleDrawer(Color.red,
 								new BasicStroke(1.0f), null);
 						final XYAnnotation bestBid = new XYDrawableAnnotation(datasetMain
 								.getXValue(sindex, iindex), datasetMain.getYValue(sindex,
-								iindex), 11, 11, cd);
+								iindex), 11, 11, cd);*/
 
 						chart.getXYPlot().addAnnotation(bestBid);
 

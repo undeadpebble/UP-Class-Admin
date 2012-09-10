@@ -59,7 +59,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			double qeinde = (Double)einde;
 			if(values[x] >= qbgn && values[x] < qeinde)
 			{
-				selectedindex.add(values[x]);	
+				selectedindex.add(x);	
 			}
 		}
 		return selectedindex;
@@ -150,10 +150,11 @@ public class HistogramFrame extends JFrame implements ActionListener {
 							int iindex = ent.getItem();
 							dataset.getStartX(0, iindex);
 							dataset.getEndX(0, iindex);
-						
+							Global.getGlobal().getActiveProject().setSelected(9);
+							System.out.println("SET SELECTED");
 							selectedindex=getSelectedbar(dataset.getStartX(0, iindex),dataset.getEndX(0, iindex));
 							for(int z = 0 ; z<selectedindex.size();z++)
-								System.out.println("Selected "+selectedindex.get(z).toString());
+								System.out.println("Selected punt se index "+selectedindex.get(z).toString());
 							c.selectedx=5.0;
 							c.selectedy=9.0;
 							plot.setRenderer(c);
