@@ -49,18 +49,21 @@ public class HistogramFrame extends JFrame implements ActionListener {
 	String[] studentnr;
 	double[][] studentref;
 	int widthbar = 10;
-	/*public ArrayList getSelectedbar(Number bgn, Number einde)
-	{
 	ArrayList selectedindex = new ArrayList();
-		for(int x = 0;x < values.length-1;x++)
+	public ArrayList getSelectedbar(Number bgn, Number einde)
+	{
+		
+		for(int x = 0;x < values.length;x++)
 		{
-			if(values[x]>=bgn && values[x]<einde)
+			double qbgn =(Double) bgn;
+			double qeinde = (Double)einde;
+			if(values[x] >= qbgn && values[x] < qeinde)
 			{
-				selectedindex.add(x)
-;			}
+				selectedindex.add(values[x]);	
+			}
 		}
-		return ;
-	}*/
+		return selectedindex;
+	}
 	
 	public HistogramFrame()
 	{
@@ -147,8 +150,10 @@ public class HistogramFrame extends JFrame implements ActionListener {
 							int iindex = ent.getItem();
 							dataset.getStartX(0, iindex);
 							dataset.getEndX(0, iindex);
-							
-			//			int[] selectIndexes=getSelectedbar(dataset.getStartX(0, iindex),dataset.getEndX(0, iindex));
+						
+							selectedindex=getSelectedbar(dataset.getStartX(0, iindex),dataset.getEndX(0, iindex));
+							for(int z = 0 ; z<selectedindex.size();z++)
+								System.out.println("Selected "+selectedindex.get(z).toString());
 							c.selectedx=5.0;
 							c.selectedy=9.0;
 							plot.setRenderer(c);

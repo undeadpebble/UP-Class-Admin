@@ -28,7 +28,7 @@ public class Histogram {
                      
             	 HistogramDataset x = (HistogramDataset) getPlot().getDataset();
             	 
-            	 System.out.println("Series" +x.getEndXValue(0, 2));
+            	// System.out.println("Series" +x.getEndXValue(0, 2));
             	
             	 // double d = x.getStartXValue(i, j);
             	
