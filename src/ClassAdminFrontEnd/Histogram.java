@@ -81,12 +81,14 @@ public class Histogram {
 		
 		((NumberAxis) rangeAxis).setTickUnit(new NumberTickUnit(1));
 		rangeAxis.setRange(0,10);
-	    
+	    return chart;
 	}
    
 	public ChartPanel createPanel()
 	{
-		chartpanel = new ChartPanel(chart,500,500,400,400,500,500,true,true,true,true,true,true);
+		return null;
+		
+		/*chartpanel = new ChartPanel(chart,500,500,400,400,500,500,true,true,true,true,true,true);
 		
 		final XYPlot plot;
 		plot = chart.getXYPlot();
@@ -144,11 +146,10 @@ public class Histogram {
 
 				}
 				
-			});
+			});*/
 	}
 	}
    
     
     
  
-}
