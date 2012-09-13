@@ -2,22 +2,53 @@ package ClassAdminFrontEnd;
 
 import java.awt.Color;
 import java.awt.Paint;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartMouseEvent;
+import org.jfree.chart.ChartMouseListener;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.NumberTickUnit;
+import org.jfree.chart.entity.ChartEntity;
+import org.jfree.chart.entity.XYItemEntity;
+import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.xy.XYBarRenderer;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.statistics.HistogramDataset;
+import org.jfree.data.statistics.HistogramType;
+
+import ClassAdminBackEnd.Global;
+import ClassAdminBackEnd.SuperEntity;
 
 public class Histogram {
 	static double q = 4.0;
 	JFreeChart chart; 
+	HistogramDataset maindataset;
+	ArrayList selectedindex = new ArrayList();
+double[] values;
+	
+	String[] studentnr;
+	public ArrayList getSelectedbar(Number bgn, Number einde)
+	{
+		
+		for(int x = 0;x < values.length;x++)
+		{
+			double qbgn =(Double) bgn;
+			double qeinde = (Double)einde;
+			if(values[x] >= qbgn && values[x] < qeinde)
+			{
+				selectedindex.add(x);	
+			}
+		}
+		return selectedindex;
+	}
 	 static class CustomBarRenderer extends XYBarRenderer
      {
 		public double selectedx =0;
@@ -64,7 +95,7 @@ public class Histogram {
 
 	public Histogram()
 	{
-		
+		maindataset = new HistogramDataset();
 	}
 	
 	public JFreeChart createHistogram(String plotTitle,String xaxis,String yaxis,HistogramDataset dataset)
@@ -76,7 +107,7 @@ public class Histogram {
 	    
 	    chart = ChartFactory.createHistogram( plotTitle, xaxis, yaxis, 
 	             dataset, orientation, show, toolTips, urls);
-
+	    maindataset =dataset;
 		NumberAxis rangeAxis = (NumberAxis) chart.getXYPlot().getRangeAxis();
 		
 		((NumberAxis) rangeAxis).setTickUnit(new NumberTickUnit(1));
@@ -86,9 +117,9 @@ public class Histogram {
    
 	public ChartPanel createPanel()
 	{
-		return null;
+		ChartPanel panel =new ChartPanel(chart,500,500,400,400,500,500,true,true,true,true,true,true);;
 		
-		/*chartpanel = new ChartPanel(chart,500,500,400,400,500,500,true,true,true,true,true,true);
+		
 		
 		final XYPlot plot;
 		plot = chart.getXYPlot();
@@ -98,7 +129,7 @@ public class Histogram {
 		plot.setRenderer(c);
 		
 			//Select a bar
-			chartpanel.addChartMouseListener(new ChartMouseListener() {
+			panel.addChartMouseListener(new ChartMouseListener() {
 
 				public void chartMouseClicked(ChartMouseEvent e) {
 					
@@ -117,11 +148,11 @@ public class Histogram {
 					
 						int sindex = ent.getSeriesIndex();
 						int iindex = ent.getItem();
-						dataset.getStartX(0, iindex);
-						dataset.getEndX(0, iindex);
+						maindataset.getStartX(0, iindex);
+						maindataset.getEndX(0, iindex);
 						
 						
-						selectedindex=getSelectedbar(dataset.getStartX(0, iindex),dataset.getEndX(0, iindex));
+						selectedindex=getSelectedbar(maindataset.getStartX(0, iindex),maindataset.getEndX(0, iindex));
 						for(int z = 0 ; z<selectedindex.size();z++)
 							System.out.println("Selected punt se index "+selectedindex.get(z).toString());
 						c.selectedx=5.0;
@@ -132,7 +163,7 @@ public class Histogram {
 						System.out.println("SET SELECTED" + (Integer) selectedindex.get(o) );
 						}
 						plot.setRenderer(c);
-						repaint();
+						
 						
 						
 						
@@ -140,13 +171,63 @@ public class Histogram {
 
 				}
 
-				@Override
 				public void chartMouseMoved(ChartMouseEvent arg0) {
-					// TODO Auto-generated method stub
 
 				}
 				
-			});*/
+			});
+			return panel;
+	}
+	public HistogramDataset createDataset(int houer)
+	{
+		 final LinkedList<LinkedList<SuperEntity>> diedata = Global.getGlobal().getActiveProject().getHead().getDataLinkedList();
+		 values = new double[diedata.size()];
+		 studentnr = new String[diedata.size()];
+		
+		for (int q = 0; q < diedata.size(); q++) {
+			
+			values[q] = diedata.get(q).get(houer).getMark();
+			
+			studentnr[q] =diedata.get(q).get(0).getValue();
+			System.out.println(values[q]);
+			
+		}
+	    
+	  
+	    	  maindataset.setType(HistogramType.FREQUENCY);
+	   
+	    
+	    maindataset.addSeries("Histogram", values, 10,0,100);
+	    return maindataset;
+	}
+	public HistogramDataset changeDataset(int houer)
+	{
+		final LinkedList<LinkedList<SuperEntity>> diedata = Global.getGlobal().getActiveProject().getHead().getDataLinkedList();
+		  values = new double[diedata.size()];
+			for (int q = 0; q < diedata.size(); q++) {
+			
+				values[q] = diedata.get(q).get(houer).getMark();
+				
+				
+			}
+			HistogramDataset nuwedataset = new HistogramDataset();
+			nuwedataset.addSeries("Histogram", values, 10,0,100);
+			return nuwedataset;
+	}
+	public HistogramDataset increaseWidth(int widthbar)
+	{
+		
+		HistogramDataset nuwedataset = new HistogramDataset();
+		nuwedataset.addSeries("Histogram", values,widthbar ,0,100);
+		return nuwedataset;
+	}
+	public HistogramDataset decreaseWidth(int widthbar)
+	{
+		
+			
+		HistogramDataset nuwedataset = new HistogramDataset();
+		nuwedataset.addSeries("Histogram", values,widthbar ,0,100);
+		return nuwedataset;
 	}
 	}
    

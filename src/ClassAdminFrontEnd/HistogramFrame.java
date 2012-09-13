@@ -50,7 +50,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 	double[][] studentref;
 	int widthbar = 10;
 	ArrayList selectedindex = new ArrayList();
-	public ArrayList getSelectedbar(Number bgn, Number einde)
+	/*public ArrayList getSelectedbar(Number bgn, Number einde)
 	{
 		
 		for(int x = 0;x < values.length;x++)
@@ -63,7 +63,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			}
 		}
 		return selectedindex;
-	}
+	}*/
 	
 	public HistogramFrame()
 	{
@@ -76,6 +76,14 @@ public class HistogramFrame extends JFrame implements ActionListener {
 		    final String[] headers = Global.getGlobal().getActiveProject().getHead().getHeaders();
 			String[] kolom = Global.getGlobal().getActiveProject().getHead().getNumberHeaders();
 			
+			 String plotTitle = "Histogram"; 
+			    String xaxis = kolom[0];
+			    String yaxis = "Count"; 
+				
+				
+				final Histogram nuweChart = new Histogram();
+				
+			
 			final HistogramDataset dataset = new HistogramDataset();
 			 
 			String xas = kolom[0];
@@ -87,11 +95,12 @@ public class HistogramFrame extends JFrame implements ActionListener {
 				}
 
 			}
-			
-		 values = new double[diedata.size()];
-		 studentnr = new String[diedata.size()];
+			;
+			chart = nuweChart.createHistogram(plotTitle, xaxis, yaxis, nuweChart.createDataset(houerx));
+		// values = new double[diedata.size()];
+		// studentnr = new String[diedata.size()];
 		
-			for (int q = 0; q < diedata.size(); q++) {
+			/*for (int q = 0; q < diedata.size(); q++) {
 			
 				values[q] = diedata.get(q).get(houerx).getMark();
 				
@@ -103,16 +112,12 @@ public class HistogramFrame extends JFrame implements ActionListener {
 		    	  dataset.setType(HistogramType.FREQUENCY);
 		   
 		    
-		    dataset.addSeries("Histogram", values, 10,0,100);
+		    dataset.addSeries("Histogram", values, 10,0,100);*/
 		
 		    
-		    String plotTitle = "Histogram"; 
-		    String xaxis = kolom[0];
-		    String yaxis = "Count"; 
+		   
 			
-			
-			final Histogram nuweChart = new Histogram();
-			chart = nuweChart.createHistogram(plotTitle, xaxis, yaxis, dataset);
+			chartpanel = nuweChart.createPanel();
 		/*
 			NumberAxis rangeAxis = (NumberAxis) chart.getXYPlot().getRangeAxis();
 			
@@ -206,7 +211,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 						}
 				        
 				        
-				    values = new double[diedata.size()];
+				  /*  values = new double[diedata.size()];
 						for (int q = 0; q < diedata.size(); q++) {
 						
 							values[q] = diedata.get(q).get(houerx).getMark();
@@ -214,8 +219,8 @@ public class HistogramFrame extends JFrame implements ActionListener {
 							
 						}
 						HistogramDataset nuwedataset = new HistogramDataset();
-						nuwedataset.addSeries("Histogram", values, 10,0,100);
-				        chartpanel.getChart().getXYPlot().setDataset(nuwedataset);
+						nuwedataset.addSeries("Histogram", values, 10,0,100);*/
+				        chartpanel.getChart().getXYPlot().setDataset(nuweChart.changeDataset(houerx));
 				      
 				}
 				
@@ -407,10 +412,10 @@ public class HistogramFrame extends JFrame implements ActionListener {
 						widthbar +=10;
 					else
 						widthbar += 9;
-					HistogramDataset nuwedataset = new HistogramDataset();
-					nuwedataset.addSeries("Histogram", values,widthbar ,0,100);
-			        chartpanel.getChart().getXYPlot().setDataset(nuwedataset);
-			        System.out.println(widthbar);
+					/*HistogramDataset nuwedataset = new HistogramDataset();
+					nuwedataset.addSeries("Histogram", values,widthbar ,0,100);*/
+			        chartpanel.getChart().getXYPlot().setDataset(nuweChart.increaseWidth(widthbar));
+			       
 				}
 			});
 		    JButton widthlarge = new JButton(">");
@@ -448,9 +453,9 @@ public class HistogramFrame extends JFrame implements ActionListener {
 					else if(widthbar >1)
 						widthbar-=1;
 						
-					HistogramDataset nuwedataset = new HistogramDataset();
-					nuwedataset.addSeries("Histogram", values,widthbar ,0,100);
-			        chartpanel.getChart().getXYPlot().setDataset(nuwedataset);
+				/*	HistogramDataset nuwedataset = new HistogramDataset();
+					nuwedataset.addSeries("Histogram", values,widthbar ,0,100);*/
+			        chartpanel.getChart().getXYPlot().setDataset(nuweChart.decreaseWidth(widthbar));
 			       
 				}
 			});
