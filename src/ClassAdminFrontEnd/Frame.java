@@ -497,79 +497,7 @@ public class Frame extends JFrame {
 		recentDocsPanel.setLayout(null);
 		homePanel.add(recentDocsPanel);
 
-		SqlJetDb db = SqlJetDb.open(dbFile, true);
-		ISqlJetTable doctable = db.getTable(TABLE_NAME);
-
-		db.beginTransaction(SqlJetTransactionMode.READ_ONLY);
-		try {
-			String[][] recentDocs = new String[5][2];
-			int rowcount = (int) doctable.order(
-					doctable.getPrimaryKeyIndexName()).getRowCount();
-
-			if (rowcount > 0) {
-				recentDocs = getRecentRecords(doctable.order("Documents_Index"));
-
-				for (int i = 0; i < rowcount; i++) {
-
-					recentPathFile = recentDocs[i][1];
-
-					BufferedImage icon = null;
-
-					System.out.println(recentDocs[i][1]);
-					if (recentDocs[i][0].endsWith("csv")) {
-						icon = ImageIO.read(getClass().getResource(
-								"/ClassAdminFrontEnd/resources/csvsmall.png"));
-					} else if (recentDocs[i][0].endsWith("pdat")) {
-						icon = ImageIO.read(getClass().getResource(
-								"/ClassAdminFrontEnd/resources/pdatsmall.png"));
-					} else {
-						icon = ImageIO.read(getClass().getResource(
-								"/ClassAdminFrontEnd/resources/xlssmall.png"));
-					}
-					ReflectionButton recentButton = new ReflectionButton(icon);
-					recentButton.setBounds(8 + (80 * i), 8, 68, 95);
-					recentDocsPanel.add(recentButton);
-
-					label = new JLabel(recentDocs[i][0]);
-					label.setBounds(18 + (80 * i), 25, 80, 80);
-					label.setForeground(new Color(0xE0E0E0));
-					recentDocsPanel.add(label);
-
-					recentButton.addMouseListener(new MouseAdapter() {
-						@Override
-						public void mousePressed(MouseEvent arg0) {
-							try {
-								File testFile = new File(recentPathFile);
-								if (testFile.exists()) {
-									openRecentFile(recentPathFile);
-								} else {
-
-								}
-
-							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} catch (BadLocationException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						}
-
-						public void mouseEntered(MouseEvent arg0) {
-							label.setForeground(Color.white);
-						}
-
-						public void mouseExited(MouseEvent arg0) {
-							label.setForeground(new Color(0xE0E0E0));
-						}
-					});
-
-				}
-
-			}
-		} finally {
-
-		}
+		createRecentDocsView();		
 
 		recentDocsPanel.fadeIn();
 
@@ -1007,7 +935,7 @@ public class Frame extends JFrame {
 		table.getTable().getSelectionModel()
 				.addListSelectionListener(new ListSelectionListener() {
 					public void valueChanged(ListSelectionEvent e) {
-						// showStudent();
+						showStudent();
 					}
 				});
 
@@ -1121,22 +1049,20 @@ public class Frame extends JFrame {
 	}
 
 	public void showStudent() {
-		String[] headers = Global.getGlobal().getActiveProject().getHead()
-				.getHeaders();
-		for (int i = 0; i < headers.length; i++) {
-			// System.out.println(headers[i]);
-		}
-
-		int row = table.getTable().getSelectedRow();
-		int colCount = table.getTable().getColumnCount();
-
-		String[] info = new String[colCount];
-
-		for (int i = 0; i < colCount; i++) {
-			info[i] = table.getTable().getValueAt(row, i).toString();
-			System.out.println(info[i]);
-		}
-
+		/*
+		 * String[] headers = Global.getGlobal().getActiveProject().getHead()
+		 * .getHeaders(); for (int i = 0; i < headers.length; i++) { //
+		 * System.out.println(headers[i]); }
+		 * 
+		 * int row = table.getTable().getSelectedRow(); int colCount =
+		 * table.getTable().getColumnCount();
+		 * 
+		 * String[] info = new String[colCount];
+		 * 
+		 * for (int i = 0; i < colCount; i++) { info[i] =
+		 * table.getTable().getValueAt(row, i).toString();
+		 * System.out.println(info[i]); }
+		 */
 		try {
 			BufferedImage photo = (ImageIO.read(getClass().getResource(
 					"/ClassAdminFrontEnd/StudentPhotos/10092120.JPG")));
@@ -1172,30 +1098,18 @@ public class Frame extends JFrame {
 				String createTableQuery = "CREATE TABLE "
 						+ TABLE_NAME
 						+ " (file_ID INTEGER NOT NULL PRIMARY KEY, filename TEXT NOT NULL, file_path TEXT NOT NULL, file_last_used DATE NOT NULL)";
-				String createDocumentsIndexQuery = "CREATE INDEX Documents_Index ON "
+				String createDateIndexQuery = "CREATE INDEX Date_Index ON "
 						+ TABLE_NAME + "(file_last_used)";
+				String createPathIndexQuery = "CREATE INDEX Path_Index ON "
+						+ TABLE_NAME + "(file_path)";
 
 				db.createTable(createTableQuery);
-				db.createIndex(createDocumentsIndexQuery);
+				db.createIndex(createDateIndexQuery);
+				db.createIndex(createPathIndexQuery);
 			} finally {
 				db.commit();
 			}
 			// close DB and open it again (as part of example code)
-
-			db.beginTransaction(SqlJetTransactionMode.WRITE);
-			try {
-				// delete
-				ISqlJetTable table = db.getTable(TABLE_NAME);
-				ISqlJetCursor deleteCursor = table
-						.scope("filename", null, null);
-
-				while (!deleteCursor.eof()) {
-					deleteCursor.delete();
-				}
-				deleteCursor.close();
-			} finally {
-				db.commit();
-			}
 
 			db.close();
 
@@ -1203,42 +1117,72 @@ public class Frame extends JFrame {
 	}
 
 	public void insertIntoDB(String fname, String fpath) throws SqlJetException {
+		int i = 0;
 		SqlJetDb db = SqlJetDb.open(dbFile, true);
 
-		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		Date date = new Date();
 
-		// insert rows:
-		db.beginTransaction(SqlJetTransactionMode.WRITE);
-
 		ISqlJetTable table = db.getTable(TABLE_NAME);
-		// insert statements
-
-		table.insert(fname, fpath, dateFormat.format(date));
 
 		db.beginTransaction(SqlJetTransactionMode.READ_ONLY);
 		try {
-			printRecords(table.order(table.getPrimaryKeyIndexName()));
+			i = countRecords(table.lookup("Path_Index", fpath));
 		} finally {
 			db.commit();
 		}
-		db.close();
+
+		// if there is not such a file in the database, add it
+		if (i == 0) {
+
+			db.beginTransaction(SqlJetTransactionMode.WRITE);
+			// insert file info
+			table.insert(fname, fpath, dateFormat.format(date));
+
+			db.commit();
+			db.close();
+		}
+		// else update time accessed
+		else {
+			db.beginTransaction(SqlJetTransactionMode.WRITE);
+			// insert file info
+			long rowid = getRecordID(table.lookup("Path_Index", fpath));
+
+			ISqlJetCursor cursor = db.getTable(TABLE_NAME).open();
+			try {
+				if (cursor.goTo(rowid)) {
+					cursor.update(cursor.getValue("file_ID"),cursor.getValue("filename"),
+							cursor.getValue("file_path"),
+							dateFormat.format(date));
+				}
+			} finally {
+				cursor.close();
+			}
+
+			db.commit();
+			db.close();
+		}
+
 	}
 
-	private void printRecords(ISqlJetCursor cursor) throws SqlJetException {
+	private long getRecordID(ISqlJetCursor cursor) throws SqlJetException {
+
+		return cursor.getRowId();
+
+	}
+
+	private int countRecords(ISqlJetCursor cursor) throws SqlJetException {
+		int counter = 0;
 		try {
 			if (!cursor.eof()) {
 				do {
-					/*
-					 * System.out.println(cursor.getRowId() + " : " +
-					 * cursor.getString("file_path") + " " +
-					 * cursor.getString("filename"));
-					 */
+					counter++;
 				} while (cursor.next());
 			}
 		} finally {
 			cursor.close();
 		}
+		return counter;
 	}
 
 	private String[][] getRecentRecords(ISqlJetCursor cursor)
@@ -1257,6 +1201,81 @@ public class Frame extends JFrame {
 			cursor.close();
 		}
 		return recentDocs;
+	}
+	
+	public void createRecentDocsView() throws IOException, SqlJetException {
+		SqlJetDb db = SqlJetDb.open(dbFile, true);
+		ISqlJetTable doctable = db.getTable(TABLE_NAME);
+
+		db.beginTransaction(SqlJetTransactionMode.READ_ONLY);
+		try {
+			String[][] recentDocs = new String[5][2];
+			int rowcount = (int) doctable.order(
+					doctable.getPrimaryKeyIndexName()).getRowCount();
+
+			if (rowcount > 0) {
+				recentDocs = getRecentRecords(doctable.order("Date_Index").reverse());
+
+				for (int i = 0; i < rowcount; i++) {
+
+					recentPathFile = recentDocs[i][1];
+
+					BufferedImage icon = null;
+
+					if (recentDocs[i][0].endsWith("csv")) {
+						icon = ImageIO.read(getClass().getResource(
+								"/ClassAdminFrontEnd/resources/csvsmall.png"));
+					} else if (recentDocs[i][0].endsWith("pdat")) {
+						icon = ImageIO.read(getClass().getResource(
+								"/ClassAdminFrontEnd/resources/pdatsmall.png"));
+					} else {
+						icon = ImageIO.read(getClass().getResource(
+								"/ClassAdminFrontEnd/resources/xlssmall.png"));
+					}
+					ReflectionButton recentButton = new ReflectionButton(icon);
+					recentButton.setBounds(8 + (80 * i), 8, 68, 95);
+					recentDocsPanel.add(recentButton);
+
+					label = new JLabel(recentDocs[i][0]);
+					label.setBounds(18 + (80 * i), 25, 80, 80);
+					label.setForeground(new Color(0xE0E0E0));
+					recentDocsPanel.add(label);
+
+					recentButton.addMouseListener(new MouseAdapter() {
+						@Override
+						public void mousePressed(MouseEvent arg0) {
+							try {
+								File testFile = new File(recentPathFile);
+								if (testFile.exists()) {
+									openRecentFile(recentPathFile);
+								} else {
+
+								}
+
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (BadLocationException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+
+						public void mouseEntered(MouseEvent arg0) {
+							label.setForeground(Color.white);
+						}
+
+						public void mouseExited(MouseEvent arg0) {
+							label.setForeground(new Color(0xE0E0E0));
+						}
+					});
+
+				}
+
+			}
+		} finally {
+
+		}
 	}
 
 }
