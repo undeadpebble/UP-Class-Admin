@@ -16,7 +16,6 @@ public class SuperEntity {
 
 	private SuperEntity parentEntity;
 	private LinkedList<SuperEntity> subEntity = new LinkedList<SuperEntity>();
-	private double weight;
 	private double mark;
 	private int rowFollowCount = 0;
 	private EntityType type;
@@ -103,7 +102,7 @@ public class SuperEntity {
 		this.setType(type);
 		this.mark = mark;
 		this.parentEntity.getSubEntity().add(this);
-		this.weight = this.getType().getDefaultWeight();
+
 
 	}
 	
@@ -123,7 +122,6 @@ public class SuperEntity {
 		for(int x = 0;x<subEntity.size();++x){
 			this.subEntity.get(x).setParentEntity(this);
 		}
-		this.weight = replacedEntity.getWeight();
 		int index = replacedEntity.getParentEntity().getSubEntity().indexOf(replacedEntity);
 
 		replacedEntity.getParentEntity().getSubEntity().set(index, this);
@@ -179,11 +177,7 @@ public class SuperEntity {
 	 */
 	public double getWeight() {
 		
-		return weight;
-	}
-	
-	public void setWeight(double weight){
-		this.weight = weight;
+		return this.getType().getDefaultWeight();
 	}
 
 	public SuperEntityPointer getThisPointer() {
@@ -219,7 +213,7 @@ public class SuperEntity {
 	 *            the details to set
 	 */
 	
-	private Boolean isAbsent(){
+	public Boolean isAbsent(){
 		return this.getType().getDate() != null && this.getType().getDate().after(new Date());
 	}
 	
@@ -227,7 +221,7 @@ public class SuperEntity {
 		return this;
 	}
 	
-	private Double doMarkMath() throws AbsentException{
+	public Double doMarkMath() throws AbsentException{
 		double mTotal = 0;
 		double wTotal = 0;
 		Boolean hasval = false;
@@ -365,7 +359,7 @@ public class SuperEntity {
         	
         	table.insert(id,parentID,this.getType().getID());
 
-            db.commit();
+           
             
         
         for(int x = 0;x<this.getSubEntity().size();++x){
@@ -438,9 +432,50 @@ public class SuperEntity {
 		if(newParent == null)
 			throw new InvalidActivityException();
 		
-		oldParent.getSubEntity().remove(this);
-		newParent.getSubEntity().add(this);
-		this.setParentEntity(newParent);
 		
+		SuperEntityPointer sPointer = new SuperEntityPointer(newParent);
+		LeafMarkEntity temp2 = new LeafMarkEntity(this.getType(), sPointer.getTarget(), 0);
+		newParentType.getEntityList().remove(temp2);
+		sPointer.getTarget().getSubEntity().remove(temp2);
+		temp2.getType().getEntityList().remove(temp2);
+		
+		oldParent.getSubEntity().remove(this);
+		sPointer.getTarget().getSubEntity().add(this);
+		this.setParentEntity(sPointer.getTarget());
+		
+	}
+	
+	public int getDepth(){
+
+		
+		int max = 0;
+		for(int x = 0;x<getSubEntity().size();++x){
+			int tmp = this.getSubEntity().get(x).getDepth();
+			if(tmp > max){
+				max = tmp;
+			}
+		}
+		return ++max;
+	}
+	
+	public IMGEntity IterativeDeepeningfindPortrait(){
+		int depth = 1;
+		int maxDepth = this.getDepth()-1;
+		IMGEntity result = null;
+		while(result == null && depth <= maxDepth){
+			result = findPortrait(depth++);
+		}
+		return result;
+	}
+	
+	public IMGEntity findPortrait(int i){
+		if(i == 0)
+			return null;
+		
+		IMGEntity result = null;
+		while(result == null){
+			result = findPortrait(i-1);
+		}
+		return result;
 	}
 }

@@ -91,12 +91,6 @@ import prefuse.visual.VisualItem;
 import prefuse.visual.expression.InGroupPredicate;
 import prefuse.visual.sort.TreeDepthItemSorter;
 
-/**
- * Demonstration of a node-link tree viewer
- * 
- * @version 1.0
- * @author <a href="http://jheer.org">jeffrey heer</a>
- */
 public class TreeView extends Display {
 
 	private static final String tree = "tree";
@@ -334,11 +328,8 @@ public class TreeView extends Display {
 		File f1 = new File("out.xml");
 		boolean success = f1.delete();
 		if (!success) {
-			System.out.println("Deletion failed.");
 			System.exit(0);
-		} else {
-			System.out.println("File deleted.");
-		}
+		} 
 
 		// create a new treemap
 		final TreeView tview = new TreeView(t, label);
@@ -352,18 +343,6 @@ public class TreeView extends Display {
 		title.setFont(FontLib.getFont("Tahoma", Font.PLAIN, 16));
 		title.setBackground(BACKGROUND);
 		title.setForeground(FOREGROUND);
-
-		final MouseListener ml = new MouseAdapter(){
-			public void mousePressed(MouseEvent e){
-				System.out.println(e.getX());
-/*				JComponent jc = (JComponent)e.getSource();
-				TransferHandler th = jc.getTransferHandler();
-				th.exportAsDrag(jc, e, TransferHandler.MOVE);
-*/			}
-		};
-		
-		
-		
 
 		Box box = new Box(BoxLayout.X_AXIS);
 		box.add(Box.createHorizontalStrut(10));
@@ -469,12 +448,6 @@ public class TreeView extends Display {
         
         public void itemEntered(VisualItem item, MouseEvent e) {
             activeItem = item;
-            if (item.canGetString("name"))
-            {
-                System.out.println("item");
-            }
-            else
-            	System.out.println("no");
             wasFixed = item.isFixed();
         }
         
@@ -495,7 +468,6 @@ public class TreeView extends Display {
             dragged = false;
             Display d = (Display)e.getComponent();
             down = d.getAbsoluteCoordinate(e.getPoint(), down);
-            
             vis.run("forces");
         }
         
@@ -516,7 +488,8 @@ public class TreeView extends Display {
         public void itemClicked(VisualItem item, MouseEvent e) {
             if (!SwingUtilities.isLeftMouseButton(e)) return;
             if ( e.getClickCount() == 2 ) {
-                String id = item.getString("id");
+                String id = item.getString("name");
+                System.out.println(id);
             }
         }
         
@@ -531,9 +504,7 @@ public class TreeView extends Display {
             PrefuseLib.setX(item, null, item.getX()+dx);
             PrefuseLib.setY(item, null, item.getY()+dy);
             down.setLocation(tmp);
-            System.out.println(repaint);
-            //if ( repaint )
-                item.getVisualization().repaint();
+            item.getVisualization().repaint();
         }
     } 
 

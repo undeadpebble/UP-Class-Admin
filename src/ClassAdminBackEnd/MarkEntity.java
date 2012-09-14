@@ -35,23 +35,17 @@ public class MarkEntity extends SuperEntity{
 
 	}
 	
-	private Double doMarkMath() throws AbsentException{
-		return this.getMark();
-	}
+
 
 	public long saveToDB(SqlJetDb db, long parentID, PDatIDGenerator idgen) throws SqlJetException {
 		long id = super.saveToDB(db, parentID, idgen);
 		db.beginTransaction(SqlJetTransactionMode.WRITE);
-        try {
-        	//TODO
+
         	ISqlJetTable table = db.getTable(PDatExport.MARK_ENTITY_TABLE);
         	//insert statements
         	
         	table.insert(id,this.getMark());
-        } finally {
-            db.commit();
-            
-        }
+
         return id;
 	}
 	
