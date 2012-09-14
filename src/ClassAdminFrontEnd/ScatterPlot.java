@@ -49,14 +49,20 @@ public class ScatterPlot {
 	JFreeChart chart; 
 	XYPlot plot;
 	static XYDataset datasetMain;
+	
+	
 	public void ScatterPlot()
 	{
 		
 	}
+	
+	
 	public void setDatasetmain(XYDataset x)
 	{
 		datasetMain = x;
 	}
+	
+	
 	public JFreeChart createScatter(String title,final XYDataset chartdata,String xas,String yas)
 	{
 		chart = ChartFactory.createScatterPlot(
@@ -68,6 +74,8 @@ public class ScatterPlot {
 		
 		return chart;
 	}	
+	
+	
 	public void updateSelectedvalues()
 	{
 		ArrayList u= Global.getGlobal().getActiveProject().getSelectedIndexes();
@@ -110,6 +118,7 @@ public class ScatterPlot {
 
 						int sindex = ent.getSeriesIndex();
 						int iindex = ent.getItem();
+						Global.getGlobal().getActiveProject().setSelected(iindex);
 						System.out.println("Punt se index"+iindex);
 						final CircleDrawer cd = new CircleDrawer(Color.red,
 								new BasicStroke(1.0f), null);

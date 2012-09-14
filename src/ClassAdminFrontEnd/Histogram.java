@@ -1,5 +1,6 @@
 package ClassAdminFrontEnd;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Paint;
 import java.awt.event.MouseEvent;
@@ -11,6 +12,8 @@ import org.jfree.chart.ChartMouseEvent;
 import org.jfree.chart.ChartMouseListener;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.annotations.XYAnnotation;
+import org.jfree.chart.annotations.XYDrawableAnnotation;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.NumberTickUnit;
 import org.jfree.chart.entity.ChartEntity;
@@ -23,6 +26,7 @@ import org.jfree.chart.renderer.xy.XYBarRenderer;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.statistics.HistogramDataset;
 import org.jfree.data.statistics.HistogramType;
+import org.jfree.data.xy.XYDataset;
 
 import ClassAdminBackEnd.Global;
 import ClassAdminBackEnd.SuperEntity;
@@ -33,8 +37,29 @@ public class Histogram {
 	HistogramDataset maindataset;
 	ArrayList selectedindex = new ArrayList();
 double[] values;
-	
+	int currentdata;
 	String[] studentnr;
+	
+	
+	public void updateSelectedValues()
+	{
+		double klein=99999;
+		double groot=-1;
+		final LinkedList<LinkedList<SuperEntity>> diedata = Global.getGlobal().getActiveProject().getHead().getDataLinkedList();
+		ArrayList u= Global.getGlobal().getActiveProject().getSelectedIndexes();
+		for(int x= 0;x<u.size();x++)
+		{
+			if(diedata.get(x).get(currentdata).getMark()< klein)
+				klein = diedata.get(x).get(currentdata).getMark();
+			if(diedata.get(x).get(currentdata).getMark()> groot)
+				groot = diedata.get(x).get(currentdata).getMark();
+		}
+		
+		ArrayList selectedbars = getSelectedbar(klein, groot);
+		
+	}
+	
+	
 	public ArrayList getSelectedbar(Number bgn, Number einde)
 	{
 		
@@ -83,8 +108,8 @@ double[] values;
                     // double d = categorydataset.getValue(i, j).doubleValue();
                     // if (d >= 0.69999999999999996D)
                              return Color.red;
-            	else 
-            		return Color.green;
+				return null;
+            	
              }
 
              public CustomBarRenderer()
@@ -125,8 +150,8 @@ double[] values;
 		plot = chart.getXYPlot();
 		final Plot Nuweplot = chart.getPlot();
 		
-		final CustomBarRenderer c = new CustomBarRenderer();
-		plot.setRenderer(c);
+		final CustomBarRenderer barkleurder = new CustomBarRenderer();
+		plot.setRenderer(barkleurder);
 		
 			//Select a bar
 			panel.addChartMouseListener(new ChartMouseListener() {
@@ -148,22 +173,34 @@ double[] values;
 					
 						int sindex = ent.getSeriesIndex();
 						int iindex = ent.getItem();
+						
 						maindataset.getStartX(0, iindex);
 						maindataset.getEndX(0, iindex);
 						
-						
+						XYDataset currentdataset = ((XYPlot) chart.getPlot()).getDataset();
 						selectedindex=getSelectedbar(maindataset.getStartX(0, iindex),maindataset.getEndX(0, iindex));
 						for(int z = 0 ; z<selectedindex.size();z++)
+						{
 							System.out.println("Selected punt se index "+selectedindex.get(z).toString());
-						c.selectedx=5.0;
-						c.selectedy=9.0;
+							
+						}
+						
+						
+						
+						
+						barkleurder.selectedx=5.0;
+						barkleurder.selectedy=currentdataset.getYValue(0, 0);
 						for(int o = 0;o<selectedindex.size();o++)
 						{
 							Global.getGlobal().getActiveProject().setSelected((Integer) selectedindex.get(o));
 						System.out.println("SET SELECTED" + (Integer) selectedindex.get(o) );
 						}
-						plot.setRenderer(c);
+						plot.setRenderer(barkleurder);
 						
+						CustomBarRenderer x = new CustomBarRenderer();
+						x.selectedx=15.0;
+						x.selectedy=1.0;
+						plot.setRenderer(x);
 						
 						
 						
@@ -180,6 +217,7 @@ double[] values;
 	}
 	public HistogramDataset createDataset(int houer)
 	{
+		currentdata = houer;
 		 final LinkedList<LinkedList<SuperEntity>> diedata = Global.getGlobal().getActiveProject().getHead().getDataLinkedList();
 		 values = new double[diedata.size()];
 		 studentnr = new String[diedata.size()];
