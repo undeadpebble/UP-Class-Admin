@@ -1,10 +1,13 @@
 package ClassAdminBackEnd;
 
 import java.awt.Color;
+import java.awt.EventQueue;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.FileHandler;
 
+import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -18,6 +21,7 @@ import ClassAdminFrontEnd.Frame;
 
 import ClassAdminFrontEnd.EntityTypePanel;
 import ClassAdminFrontEnd.FrmTable;
+import ClassAdminFrontEnd.RapidAssessmentCanvas;
 import ClassAdminFrontEnd.TreeView;
 
 import jxl.*;
@@ -27,26 +31,24 @@ public class testMain
 	public static void main(String[] args) {
 		ClassAdminBackEnd.FileHandler fh = ClassAdminBackEnd.FileHandler.get();
 		
-		try {
-			fh.openFile("test.csv", Global.getGlobal().getActiveProject());
-			
-			Global.getGlobal().getActiveProject().getHeadEntityType().getSubEntityType().get(0).getSubEntityType().get(2).changeParent(Global.getGlobal().getActiveProject().getHeadEntityType().getSubEntityType().get(0).getSubEntityType().get(1));
-		
-			Global.getGlobal().getActiveProject().getHeadEntityType().getSubEntityType().get(0).getSubEntityType().get(2).changeParent(Global.getGlobal().getActiveProject().getHeadEntityType().getSubEntityType().get(0).getSubEntityType().get(1));
 
-			try {
-				Global.getGlobal().getActiveProject().getHead().calcMark();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			EventQueue.invokeLater(new Runnable() {
+				public void run() {
+					try {
+						JFrame frame = new JFrame();
+						BufferedImage background = ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/sheep.jpg"));
+						RapidAssessmentCanvas canvas = new RapidAssessmentCanvas(background, new SuperEntity(new EntityType("test1"), 1.0));
+						frame.setContentPane(canvas);
+						frame.setSize(600,600);
+						frame.setVisible(true);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
 			
-			fh.saveFile("test.pdat",Global.getGlobal().getActiveProject());
-			
-			
-		} catch (UnsupportedFileTypeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
+		
 	}
 
 }
