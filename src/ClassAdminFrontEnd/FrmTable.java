@@ -433,6 +433,17 @@ public class FrmTable extends JPanel {
 
 				});
 		// --------------------------------------------------------------------------------------
+
+		final LinkedList<Integer> headPoints = new LinkedList<Integer>();
+
+		String[] numberHeads = project.getHead().getNumberHeaders();
+		for (int x = 0; x < headers.length; x++) {
+			if (!data.get(0).get(x).getType().getIsTextField()) {
+				headPoints.add(x);
+				numberHeads[headPoints.size() - 1] = headers[x];
+			}
+		}
+
 		pane.setViewportView(table);
 		JPanel eastPanel = new JPanel();
 
@@ -440,7 +451,7 @@ public class FrmTable extends JPanel {
 		JButton bordercase = new JButton("Add bordercase");
 		border.add(bordercase);
 
-		final JComboBox cbheaders = new JComboBox(headers);
+		final JComboBox cbheaders = new JComboBox(numberHeads);
 		final LinkedList<SuperEntity> headersList = project.getHead()
 				.getHeadersLinkedList();
 		border.add(cbheaders);
@@ -478,8 +489,8 @@ public class FrmTable extends JPanel {
 							}
 						}
 					}
-					
-					if(!temp){
+
+					if (!temp) {
 						project.getSelected().clear();
 						tableModel.fireTableDataChanged();
 					}
@@ -502,12 +513,7 @@ public class FrmTable extends JPanel {
 		bordercase.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (headersList.get(cbheaders.getSelectedIndex()).getType()
-						.getIsTextField()) {
-					// Cannot add border cases to a text field
-					System.out
-							.println("Cannot add border cases to a text field");
-				} else {
+				{
 					final JFrame borderFrame = new JFrame();
 
 					SpinnerNumberModel SNMmax = new SpinnerNumberModel(
@@ -541,7 +547,8 @@ public class FrmTable extends JPanel {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							headersList
-									.get(cbheaders.getSelectedIndex())
+									.get(headPoints.get(cbheaders
+											.getSelectedIndex()))
 									.getType()
 									.getBorderCasing()
 									.add(new BorderCase(Double
@@ -561,7 +568,8 @@ public class FrmTable extends JPanel {
 		// =--------------------------------------------------------------------------------------------------------------
 		JButton btnAddConditionalFormatting = new JButton(
 				"Add conditional formatting");
-		final JComboBox cbFormatting = new JComboBox(headers);
+
+		final JComboBox cbFormatting = new JComboBox(numberHeads);
 
 		eastPanel.setLayout(new GridLayout(0, 1));
 
@@ -813,7 +821,8 @@ public class FrmTable extends JPanel {
 						case 1: {
 							if (whatToFormatCombo.getSelectedIndex() == 0) {
 								headersList
-										.get(cbFormatting.getSelectedIndex())
+										.get(headPoints.get(cbFormatting
+												.getSelectedIndex()))
 										.getType()
 										.getFormatting()
 										.add(new BetweenFormat(Double
@@ -827,7 +836,8 @@ public class FrmTable extends JPanel {
 
 							} else {
 								headersList
-										.get(cbFormatting.getSelectedIndex())
+										.get(headPoints.get(cbFormatting
+												.getSelectedIndex()))
 										.getType()
 										.getFormatting()
 										.add(new BetweenFormat(Double
@@ -847,7 +857,8 @@ public class FrmTable extends JPanel {
 						case 2: {
 							if (whatToFormatCombo.getSelectedIndex() == 0) {
 								headersList
-										.get(cbFormatting.getSelectedIndex())
+										.get(headPoints.get(cbFormatting
+												.getSelectedIndex()))
 										.getType()
 										.getFormatting()
 										.add(new GreaterThanFormat(Double
@@ -858,7 +869,8 @@ public class FrmTable extends JPanel {
 												description.getText()));
 							} else {
 								headersList
-										.get(cbFormatting.getSelectedIndex())
+										.get(headPoints.get(cbFormatting
+												.getSelectedIndex()))
 										.getType()
 										.getFormatting()
 										.add(new GreaterThanFormat(Double
@@ -876,7 +888,8 @@ public class FrmTable extends JPanel {
 						case 3: {
 							if (whatToFormatCombo.getSelectedIndex() == 0) {
 								headersList
-										.get(cbFormatting.getSelectedIndex())
+										.get(headPoints.get(cbFormatting
+												.getSelectedIndex()))
 										.getType()
 										.getFormatting()
 										.add(new LessThanFormat(Double
@@ -887,7 +900,8 @@ public class FrmTable extends JPanel {
 												description.getText()));
 							} else {
 								headersList
-										.get(cbFormatting.getSelectedIndex())
+										.get(headPoints.get(cbFormatting
+												.getSelectedIndex()))
 										.getType()
 										.getFormatting()
 										.add(new LessThanFormat(Double
@@ -1206,13 +1220,12 @@ public class FrmTable extends JPanel {
 			}
 		}
 	}
-	
+
 	public JTable getTable() {
 		return table;
 	}
-	
+
 	public LinkedList<LinkedList<SuperEntity>> getData() {
 		return data;
 	}
 }
-	
