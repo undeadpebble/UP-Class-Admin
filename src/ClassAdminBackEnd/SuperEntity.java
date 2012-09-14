@@ -271,18 +271,8 @@ public class SuperEntity {
 	
 	
 	public String[] getHeaders(){
-		/*int max = -1;
-		int maxe =-1;
-		for(int x =0; x < subEntity.size();x++){
-			if(subEntity.get(x).getRowFollowCount() > max){
-				max = subEntity.get(x).getRowFollowCount();
-				maxe = x;
-			}
-		}*/
 		String heads = subEntity.get(0).getHeadersString();		
-		//System.out.println(heads);
-		
-		//System.out.print(heads);
+
 		String[] s = heads.split("bn f3hjjm3734n  5f6 34h 35g635 346n34f f g46345f");
 		return s; 
 			
@@ -297,30 +287,17 @@ public class SuperEntity {
 		
 		return str;
 	}
-	
-	
 
-	
 	public LinkedList<SuperEntity> getHeadersLinkedList(){
 		LinkedList<SuperEntity> lEntity = new LinkedList<SuperEntity>();
 		
-		//lEntity.add(this);
+		LinkedList<LinkedList<SuperEntity>> temp = this.getDataLinkedList();
 		
-		for(int x = 0; x < this.subEntity.size();x++){
-			this.subEntity.get(x).getLinkedListData(lEntity);
+		for(int x = 0; x < temp.get(0).size();x++){
+			lEntity.add(temp.get(0).get(x));
 		}
 		
 		return lEntity;
-	}
-	
-	
-	private void getLinkedListData(LinkedList<SuperEntity> lEntity){		
-		lEntity.add(this);
-		
-		for(int x = 0; x < this.subEntity.size();x++){
-			this.subEntity.get(x).getLinkedListData(lEntity);
-		}
-			
 	}
 	
 	public LinkedList<LinkedList<SuperEntity>> getDataLinkedList(){
