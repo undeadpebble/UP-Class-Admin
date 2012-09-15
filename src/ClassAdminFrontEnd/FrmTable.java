@@ -54,24 +54,13 @@ public class FrmTable extends JPanel {
 	private DefaultTableModel tableModel;
 	private JTextField txtField1;
 	private JTextField txtField2;
-	private LinkedList<Color> colors;
-	private LinkedList<String> colorsString;
 	protected LinkedList<LinkedList<Boolean>> filters = new LinkedList<LinkedList<Boolean>>();
-	LinkedList<LinkedList<SuperEntity>> data;
-	Boolean[] dataFilter;
+	private LinkedList<LinkedList<SuperEntity>> data;
+	private Boolean[] dataFilter;
 
-	Project project;
+	private Project project;
 
 	private LinkedList<Integer> selected = new LinkedList<Integer>();
-
-	private String getColorName(Color c) {
-		for (int x = 0; x < colors.size(); x++) {
-			if (c == colors.get(x)) {
-				return (colorsString.get(x));
-			}
-		}
-		return ("");
-	}
 
 	public SuperEntity[] getFirstSelectedStudent() {
 		if (table.getSelectedRow() != -1) {
@@ -147,27 +136,6 @@ public class FrmTable extends JPanel {
 		dataFilter = new Boolean[data.size()];
 		for (int x = 0; x < dataFilter.length; x++)
 			dataFilter[x] = true;
-		colors = new LinkedList<Color>();
-		colorsString = new LinkedList<String>();
-
-		colors.add(Color.gray);
-		colorsString.add("Gray");
-		colors.add(Color.blue);
-		colorsString.add("Blue");
-		colors.add(Color.lightGray);
-		colorsString.add("LightGray");
-		colors.add(Color.magenta);
-		colorsString.add("Magenta");
-		colors.add(Color.orange);
-		colorsString.add("Orange");
-		colors.add(Color.pink);
-		colorsString.add("Pink");
-		colors.add(Color.red);
-		colorsString.add("Red");
-		colors.add(Color.yellow);
-		colorsString.add("Yellow");
-		colors.add(Color.green);
-		colorsString.add("Green");
 
 		createGUI(headers);
 	}

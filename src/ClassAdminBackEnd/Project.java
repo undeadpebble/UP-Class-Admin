@@ -16,8 +16,14 @@ public class Project {
 	private SuperEntity head;
 	private LinkedList<SuperEntity> selected;
 	private EntityType headEntityType;
+	private LinkedList<Rule> rules = new LinkedList<Rule>();
 	
 	
+	public LinkedList<Rule> getRules() {
+		return rules;
+	}
+
+
 	/**
 	 * @return the headEntityType
 	 */
