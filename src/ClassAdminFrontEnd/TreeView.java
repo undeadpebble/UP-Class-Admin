@@ -717,6 +717,10 @@ public class TreeView extends Display {
 							for (int r = 0; r < edgeTable.getRowCount(); r++) {
 								if ((edgeTable.get(r, 1).equals(iChild))) {
 									edgeTable.set(r, 0, iParent);
+									
+									
+									Global.getGlobal().getActiveProject().getTreeLinkedList().get(iChild).changeParent(Global.getGlobal().getActiveProject().getTreeLinkedList().get(iParent));
+								
 								}
 							}
 						}
