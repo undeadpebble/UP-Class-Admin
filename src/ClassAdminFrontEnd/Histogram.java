@@ -39,15 +39,23 @@ public class Histogram {
 	double[] values;
 	int currentdata;
 	String[] studentnr;
-
+	
+	
+    //Update the values 
 	public void updateSelectedValues() {
+		
+		Global.getGlobal().getActiveProject().setSelected(0);
+		Global.getGlobal().getActiveProject().setSelected(2);
+		Global.getGlobal().getActiveProject().setSelected(9);
 		double klein = 99999;
 		double groot = -1;
 		final LinkedList<LinkedList<SuperEntity>> diedata = Global.getGlobal()
 				.getActiveProject().getHead().getDataLinkedList();
 		ArrayList u = Global.getGlobal().getActiveProject()
 				.getSelectedIndexes();
+	//	System.out.println(currentdata);
 		for (int x = 0; x < u.size(); x++) {
+			System.out.println(x);
 			if (diedata.get(x).get(currentdata).getMark() < klein)
 				klein = diedata.get(x).get(currentdata).getMark();
 			if (diedata.get(x).get(currentdata).getMark() > groot)
@@ -55,7 +63,23 @@ public class Histogram {
 		}
 
 		ArrayList selectedbars = getSelectedbar(klein, groot);
-
+		double beginx;
+		double eindex;
+		double xmidvalue;
+		CustomBarRenderer barkleurder = new CustomBarRenderer();
+		for(int i = 0 ;i<u.size();i++)
+		{
+			 beginx =(Double) maindataset.getStartX(0, i);
+			 eindex =(Double) maindataset.getEndX(0, i);
+			 xmidvalue = (beginx+eindex)/2;
+			XYDataset currentdataset = ((XYPlot) chart.getPlot()).getDataset();
+			System.out.println("X "+xmidvalue+" Y "+currentdataset.getYValue(0, i));
+		barkleurder.addselectedbars(xmidvalue,currentdataset.getYValue(0, i));
+		}
+		
+		
+		//barkleurder.addselectedbars(x, y);
+		chart.getXYPlot().setRenderer(barkleurder);
 	}
 
 	// Get index of values in specific bar
@@ -72,12 +96,18 @@ public class Histogram {
 	}
 
 	static class CustomBarRenderer extends XYBarRenderer {
-		ArrayList<Double> selectedx = new ArrayList<Double>();
-		ArrayList<Double> selectedy = new ArrayList<Double>();
+		private ArrayList<Double> selectedx = new ArrayList<Double>();
+		private ArrayList<Double> selectedy = new ArrayList<Double>();
 
 		/**
 		 * 
 		 */
+		public void clearbars()
+		{
+			selectedx = new ArrayList<Double>();
+			selectedy = new ArrayList<Double>();
+			
+		}
 		public void removeselectedbars(double x, double y) {
 			for(int i =0 ; i < selectedx.size();i++)
 			{
@@ -146,19 +176,19 @@ public class Histogram {
 		final XYPlot plot;
 		plot = chart.getXYPlot();
 		final Plot Nuweplot = chart.getPlot();
-
+		
 		final CustomBarRenderer barkleurder = new CustomBarRenderer();
-		plot.setRenderer(barkleurder);
+		//plot.setRenderer(barkleurder);
 
 		// Select a bar
 		panel.addChartMouseListener(new ChartMouseListener() {
 
 			public void chartMouseClicked(ChartMouseEvent e) {
-
+				updateSelectedValues();
 				MouseEvent me = e.getTrigger();
 
 				if (me.isShiftDown() == false)
-					chart.getXYPlot().clearAnnotations();
+					barkleurder.clearbars();
 
 				ChartEntity entity = ((ChartMouseEvent) e).getEntity();
 
@@ -186,11 +216,11 @@ public class Histogram {
 					
 					
 					// barkleurder.selectedy=currentdataset.getYValue(0, 0);
-					for (int o = 0; o < selectedindex.size(); o++) {
+					/*for (int o = 0; o < selectedindex.size(); o++) {
 						Global.getGlobal().getActiveProject()
 								.setSelected((Integer) selectedindex.get(o));
 						//System.out.println("SET SELECTED" + (Integer) selectedindex.get(o));
-					}
+					}*/
 					plot.setRenderer(barkleurder);
 
 					/*
