@@ -1,10 +1,13 @@
 package ClassAdminFrontEnd;
 
+
 import java.awt.AlphaComposite;
+import java.awt.Color;
 import java.awt.Composite;
 import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Paint;
 import java.awt.event.ActionEvent;
@@ -14,11 +17,14 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.SwingWorker;
 import javax.swing.border.EmptyBorder;
 
 import org.jdesktop.swingx.graphics.BlendComposite;
+import org.jdesktop.swingx.graphics.GraphicsUtilities;
 import org.jdesktop.swingx.graphics.ReflectionRenderer;
+import org.jdesktop.swingx.graphics.ShadowRenderer;
 import org.jdesktop.swingx.painter.GlossPainter;
 
 import com.jhlabs.image.ApplyMaskFilter;
@@ -29,7 +35,7 @@ import com.jhlabs.image.GlowFilter;
 import com.jhlabs.image.GrayscaleFilter;
 import com.jhlabs.image.UnsharpFilter;
 
-public class ReflectionButton extends JButton implements MouseListener {
+public class ReflectionButtonWithLabel extends JButton implements MouseListener {
 
 	private BufferedImage image = null;
 
@@ -38,21 +44,35 @@ public class ReflectionButton extends JButton implements MouseListener {
 	private BufferedImage grayreflection;
 	private boolean entered;
 	private boolean disabled;
-	Image intermediateImage;
+	private Image intermediateImage;
+	private JLabel label;
+	private Color c1;
+	private Color c2;
+	private String path;
 
-	public ReflectionButton(BufferedImage _image) {
+	public ReflectionButtonWithLabel(BufferedImage _image, String lbl, Color _c1, Color _c2, String _path) {
 		image = _image;
 		super.setOpaque(false);
 		setOpaque(false);
 		installUI(this);
 		entered = false;
 		disabled = false;
-		this.setBorder(new EmptyBorder(0, 0, 0, 0));	
+		this.setBorder(new EmptyBorder(0, 0, 0, 0));
+		this.setLayout(null);
+		label = new JLabel(lbl);
+		
+		path = _path;
+		
+		c1 = _c1;
+		c2 = _c2;
+		
+		label.setForeground(c1);
+		
 	}
 
 	public void createReflectionButton(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
-
+		
 		ReflectionRenderer renderer = new ReflectionRenderer();
 		renderer.setBlurEnabled(true);
 		renderer.setLength(0.5f);
@@ -147,12 +167,14 @@ public class ReflectionButton extends JButton implements MouseListener {
 	public void mouseEntered(MouseEvent arg0) {
 		JComponent c = (JComponent) arg0.getComponent();
 		entered = true;
+		label.setForeground(c2);
 		c.repaint();
 	}
 
 	@Override
 	public void mouseExited(MouseEvent arg0) {
 		JComponent c = (JComponent) arg0.getComponent();
+		label.setForeground(c1);
 		entered = false;
 		c.repaint();
 	}
@@ -167,6 +189,23 @@ public class ReflectionButton extends JButton implements MouseListener {
 	public void mouseReleased(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 
+	}
+	
+	@Override
+	public void setBounds(int x, int y, int width, int height) {
+		super.setBounds(x, y, width, height);
+
+		int w = (int)label.getPreferredSize().getWidth();
+		int h = (int)label.getPreferredSize().getHeight();
+	
+		label.setSize(w, h);
+		label.setLocation(getWidth()/2-w/2, (getHeight()/2-h/2)+10);
+		this.add(label);
+		
+	}
+	
+	public String getPath() {
+		return path;
 	}
 
 }
