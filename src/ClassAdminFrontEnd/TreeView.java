@@ -281,6 +281,17 @@ public class TreeView extends Display {
 
 	// ------------------------------------------------------------------------
 
+	public static void createEntityTypeFrm(String label)
+	{
+		JComponent treeview = createPanelEntityTypeTreeView(label, Global.getGlobal().getActiveProject().getHeadEntityType());
+
+		JFrame frame = new JFrame();
+
+		frame.setContentPane(treeview);
+		frame.pack();
+		frame.setVisible(true);
+		
+	}
 	public static void createStudentFrm(String label, SuperEntity treeHead) {
 		JComponent treeview = createPanelTreeView(label, treeHead);
 
@@ -290,9 +301,78 @@ public class TreeView extends Display {
 		frame.pack();
 		frame.setVisible(true);
 	}
+	public static JComponent createPanelEntityTypeTreeView(final String label,
+			EntityType th) 
+	{
+		Color BACKGROUND = Color.WHITE;
+		Color FOREGROUND = Color.BLACK;
+
+		String str = "<tree>" + "<declarations>"
+				+ "<attributeDecl name=\"name\" type=\"String\" />"
+				+ "</declarations>";
+
+		str += th.createTreeFromHead();
+
+		str += "</tree>";
+
+		try {
+			// Create file
+			FileWriter fstream = new FileWriter("out.xml");
+			BufferedWriter out = new BufferedWriter(fstream);
+			out.write(str);
+			// Close the output stream
+			out.close();
+		} catch (Exception e) {// Catch exception if any
+			System.err.println("Error: " + e.getMessage());
+		}
+
+		Tree t = null;
+		try {
+			t = (Tree) new TreeMLReader().readGraph("out.xml");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+
+		File f1 = new File("out.xml");
+		boolean success = f1.delete();
+		if (!success) {
+			System.exit(0);
+		}
+
+		// create a new treemap
+		final TreeView tview = new TreeView(t, label);
+		tview.setBackground(BACKGROUND);
+		tview.setForeground(FOREGROUND);
+
+		final JFastLabel title = new JFastLabel("                 ");
+		title.setPreferredSize(new Dimension(350, 20));
+		title.setVerticalAlignment(SwingConstants.BOTTOM);
+		title.setBorder(BorderFactory.createEmptyBorder(3, 0, 0, 0));
+		title.setFont(FontLib.getFont("Tahoma", Font.PLAIN, 16));
+		title.setBackground(BACKGROUND);
+		title.setForeground(FOREGROUND);
+
+		Box box = new Box(BoxLayout.X_AXIS);
+		box.add(Box.createHorizontalStrut(10));
+		box.add(title);
+		box.add(Box.createHorizontalGlue());
+		// box.add(search);
+		box.add(Box.createHorizontalStrut(3));
+		box.setBackground(BACKGROUND);
+
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.setBackground(BACKGROUND);
+		panel.setForeground(FOREGROUND);
+		panel.add(tview, BorderLayout.CENTER);
+		panel.add(box, BorderLayout.SOUTH);
+
+		return panel;
+	}
 
 	public static JComponent createPanelTreeView(final String label,
-			SuperEntity th) {
+			SuperEntity th) 
+	{
 		Color BACKGROUND = Color.WHITE;
 		Color FOREGROUND = Color.BLACK;
 
@@ -489,28 +569,84 @@ public class TreeView extends Display {
 				return;
 			if (e.getClickCount() == 2) {
 				
-				//GET EDGE
-				String id = item.getClass().getName();
-				System.out.println(id);
-				Table edgeTbl = item.getTable();
-				item.setVisible(false);
+				Tuple edgeTuple = null;
+				Tuple nodeTuple = null;
+				Table edgeTable = null;
+				Table nodeTable = null;
+				String name = null;
+				Visualization vis = item.getVisualization();
 				
-				for (int c = 0; c < edgeTbl.getColumnCount(); c++)
+				//GET EDGE
+				
+				String id = item.getClass().getName();
+				if(id.contains("Edge"))
 				{
-					System.out.print(edgeTbl.getColumnName(c) + "\t");
+					edgeTable = item.getTable();
+					int scolumn = edgeTable.getColumnNumber("source");
+					int tcolumn = edgeTable.getColumnNumber("target");
+					int source = item.getInt(scolumn);
+					int target = item.getInt(tcolumn);
+					
+					System.out.print("SOURCE: " + source + "\tTARGET: " + target + "\n");
+					
+					for (int c = 0; c < edgeTable.getColumnCount(); c++)
+					{
+						System.out.print(edgeTable.getColumnName(c) + "\t");
+					}
+					System.out.print("\n");
+					for(int r = 0; r <edgeTable.getRowCount(); r++)
+					{
+						for (int c = 0; c < edgeTable.getColumnCount(); c++)
+						{
+							System.out.print(edgeTable.getString(r, c) + "\t\t");
+							if((edgeTable.getInt(r, scolumn) == source) && (edgeTable.getInt(r, tcolumn) == target))
+							{
+								edgeTable.setInt(r, scolumn, target+1);
+								edgeTable.setInt(r, tcolumn, target);
+							}
+						}
+						System.out.print("\n");
+					}
+
 				}
-				System.out.print("\n");
-				for (int c = 0; c < edgeTbl.getColumnCount(); c++)
+				else if(id.contains("Node"))
 				{
-					System.out.print(edgeTbl.getString(0, c) + "\t\t");
+					nodeTable = item.getTable();
+					name = item.getString("name");
+
+					int column = nodeTable.getColumnNumber("name");
+					int i = 0;
+					int row = -1;
+					while (row == -1 && i < nodeTable.getRowCount()) {
+						if (nodeTable.getString(i, column) == name)
+							row = i;
+						else
+							i++;
+					}				
+
+					for (int c = 0; c < nodeTable.getColumnCount(); c++)
+					{
+						System.out.print(nodeTable.getColumnName(c) + "\t");
+					}
+					System.out.print("\n");
+					for (int c = 0; c < nodeTable.getColumnCount(); c++)
+					{
+						System.out.print(nodeTable.getString(row, c) + "\t\t");
+					}
 				}
+				
+//				System.out.println(id);
+//				Table edgeTbl = item.getTable();
+//				item.setVisible(false);
+				
+				vis.repaint();
 				System.out.print("\n");
 				//GET NODE
-				/*String id = item.getString("name");
+/*				String id2 = item.getString("name");
 
 				Visualization vis = item.getVisualization();
 
-				System.out.println(id);
+				System.out.println(id2);
 				String str = item.getClass().getName();
 				System.out.println(str);
 				Table tbl = item.getTable();
@@ -521,7 +657,7 @@ public class TreeView extends Display {
 				int i = 0;
 				int row = -1;
 				while (row == -1 && i < tbl.getRowCount()) {
-					if (tbl.getString(i, column) == id)
+					if (tbl.getString(i, column) == id2)
 						row = i;
 					else
 						i++;
@@ -537,8 +673,8 @@ public class TreeView extends Display {
 				}
 				System.out.print("\n");
 				Tuple tuple = tbl.getTuple(row);
-				tuple.revertToDefault("name");*/
-				
+				tuple.revertToDefault("name");
+*/				
 				
 				/*
 				 * for(int i = 0 ; i < tbl.getRowCount(); i++) { for (int k = 0;
