@@ -3,6 +3,7 @@ package ClassAdminBackEnd;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.logging.FileHandler;
 
 import javax.swing.JComponent;
@@ -30,18 +31,14 @@ public class testMain
 		try {
 			fh.openFile("test.csv", Global.getGlobal().getActiveProject());
 			
-			Global.getGlobal().getActiveProject().getHeadEntityType().getSubEntityType().get(0).getSubEntityType().get(2).changeParent(Global.getGlobal().getActiveProject().getHeadEntityType().getSubEntityType().get(0).getSubEntityType().get(1));
-		
-			Global.getGlobal().getActiveProject().getHeadEntityType().getSubEntityType().get(0).getSubEntityType().get(2).changeParent(Global.getGlobal().getActiveProject().getHeadEntityType().getSubEntityType().get(0).getSubEntityType().get(1));
+			JFrame temp = new JFrame();
+			temp.setVisible(true);
+			temp.setSize(1300, 600);
+			
+			FrmTable test = new FrmTable(Global.getGlobal().getActiveProject().getHead().getHeaders(), Global.getGlobal().getActiveProject().getHead().getDataLinkedList(), Global.getGlobal().getActiveProject());
+			
+			temp.add(test);
 
-			try {
-				Global.getGlobal().getActiveProject().getHead().calcMark();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-			fh.saveFile("test.pdat",Global.getGlobal().getActiveProject());
-			
 			
 		} catch (UnsupportedFileTypeException e) {
 			// TODO Auto-generated catch block

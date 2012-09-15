@@ -153,7 +153,6 @@ public class FileHandler {
 				}
 			}
 			}
-			System.out.print("break");
 		}
 	}
 

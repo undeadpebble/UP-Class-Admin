@@ -109,6 +109,7 @@ public class TreeView extends Display {
 	private String m_label = "label";
 	private int m_orientation = Constants.ORIENT_LEFT_RIGHT;
 
+
 	static Cursor dc = new Cursor(Cursor.DEFAULT_CURSOR);
 	static Cursor yd = DragSource.DefaultMoveDrop;
 	static JFastLabel title = new JFastLabel("                 ");
@@ -313,6 +314,7 @@ public class TreeView extends Display {
 
 	}
 
+
 	public static void createStudentFrm(String label, SuperEntity treeHead) {
 		JComponent treeview = createPanelTreeView(label, treeHead);
 
@@ -492,6 +494,7 @@ public class TreeView extends Display {
 			System.exit(0);
 		}
 
+
 		// create a new treemap
 		final TreeView tview = new TreeView(t, label);
 		tview.setBackground(BACKGROUND);
@@ -598,7 +601,7 @@ public class TreeView extends Display {
 		}
 
 	} // end of inner class TreeMapColorAction
-		
+
 	public class TreeViewControl extends ControlAdapter {
 		private VisualItem activeItem;
 		private Point2D down = new Point2D.Double();
