@@ -203,15 +203,16 @@ public class EntityType {
 
 		}
 	}
-	public String createTreeFromHead()
+	public String createTreeFromHead(LinkedList<EntityType> treeLinkedList)
 	{
+		treeLinkedList.add(this);
 		if(this.getSubEntityType().size()>0){
 			String str = "";
 			str += "<branch>" +
 					"<attribute name = \"name\" value= \"" + this.getName() + "\" />";
 			for (int i = 0; i < this.getSubEntityType().size(); i++)
 			{
-				str += this.getSubEntityType().get(i).createTreeFromHead();
+				str += this.getSubEntityType().get(i).createTreeFromHead(treeLinkedList);
 			}
 			str +="</branch>";
 			return str;

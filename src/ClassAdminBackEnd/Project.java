@@ -16,6 +16,7 @@ public class Project {
 	private SuperEntity head;
 	private LinkedList<SuperEntity> selected;
 	private EntityType headEntityType;
+	private LinkedList<EntityType> treeLinkedList;
 	
 	
 	/**
@@ -56,5 +57,12 @@ public class Project {
 		
 		this.head.saveToDB(db, 0, idgen);
 		
+	}
+	
+	public LinkedList<EntityType> getTreeLinkedList()
+	{
+		if(treeLinkedList == null)
+			treeLinkedList = new LinkedList<EntityType>();
+		return treeLinkedList;
 	}
 }
