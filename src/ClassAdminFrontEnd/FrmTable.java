@@ -35,8 +35,6 @@ import javax.swing.table.TableCellRenderer;
 
 import org.jdesktop.swingx.JXTable;
 
-import ClassAdminBackEnd.Global;
-
 import ClassAdminBackEnd.BetweenFormat;
 import ClassAdminBackEnd.BorderCase;
 import ClassAdminBackEnd.EntityType;
@@ -44,7 +42,6 @@ import ClassAdminBackEnd.Format;
 import ClassAdminBackEnd.LeafMarkEntity;
 import ClassAdminBackEnd.LeafStringEntity;
 import ClassAdminBackEnd.Project;
-import ClassAdminBackEnd.StringEntity;
 import ClassAdminBackEnd.SuperEntity;
 import ClassAdminBackEnd.SuperEntityPointer;
 import ClassAdminBackEnd.TableCellListener;
