@@ -14,6 +14,7 @@ import java.awt.Label;
 import java.awt.Point;
 import java.awt.dnd.DragSource;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -30,10 +31,12 @@ import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -112,17 +115,19 @@ public class TreeView extends Display {
 	static JFastLabel lblSelectedParent = new JFastLabel("sParent");
 	static JFastLabel lblSelectedChild = new JFastLabel("sChild");
 	static JFastLabel lblParent = new JFastLabel("Parent: ");
-	static JFastLabel lblChild = new JFastLabel("Child: ");		
-
+	static JFastLabel lblChild = new JFastLabel("Child: ");
+	static JFastLabel lblNew = new JFastLabel("New: ");
+	static JTextField txtNew = new JTextField();
+	static JButton btnNew = new JButton("Add");
 	static private boolean bParent = false;
 	static private boolean bChild = false;
 
 	static int iParent = -1;
 	static int iChild = -1;
-	
+		
 	public TreeView(Tree t, String label) {
 		super(new Visualization());
-		
+
 		myTree = t;
 		m_label = label;
 
@@ -296,17 +301,18 @@ public class TreeView extends Display {
 
 	// ------------------------------------------------------------------------
 
-	public static void createEntityTypeFrm(String label)
-	{
-		JComponent treeview = createPanelEntityTypeTreeView(label, Global.getGlobal().getActiveProject().getHeadEntityType());
+	public static void createEntityTypeFrm(String label) {
+		JComponent treeview = createPanelEntityTypeTreeView(label, Global
+				.getGlobal().getActiveProject().getHeadEntityType());
 
 		JFrame frame = new JFrame();
 
 		frame.setContentPane(treeview);
 		frame.pack();
 		frame.setVisible(true);
-		
+
 	}
+
 	public static void createStudentFrm(String label, SuperEntity treeHead) {
 		JComponent treeview = createPanelTreeView(label, treeHead);
 
@@ -316,9 +322,9 @@ public class TreeView extends Display {
 		frame.pack();
 		frame.setVisible(true);
 	}
+
 	public static JComponent createPanelEntityTypeTreeView(final String label,
-			EntityType th) 
-	{
+			EntityType th) {
 		Color BACKGROUND = Color.WHITE;
 		Color FOREGROUND = Color.BLACK;
 
@@ -327,7 +333,8 @@ public class TreeView extends Display {
 				+ "</declarations>";
 
 		Global.getGlobal().getActiveProject().getTreeLinkedList().clear();
-		str += th.createTreeFromHead(Global.getGlobal().getActiveProject().getTreeLinkedList());
+		str += th.createTreeFromHead(Global.getGlobal().getActiveProject()
+				.getTreeLinkedList());
 
 		str += "</tree>";
 
@@ -361,23 +368,23 @@ public class TreeView extends Display {
 		tview.setBackground(BACKGROUND);
 		tview.setForeground(FOREGROUND);
 
-
 		title.setPreferredSize(new Dimension(200, 20));
 		title.setVerticalAlignment(SwingConstants.BOTTOM);
 		title.setBorder(BorderFactory.createEmptyBorder(3, 0, 0, 0));
 		title.setFont(FontLib.getFont("Tahoma", Font.PLAIN, 16));
 		title.setBackground(BACKGROUND);
 		title.setForeground(FOREGROUND);
-		
+
 		lblParent.setVerticalAlignment(SwingConstants.TOP);
 		lblParent.setBorder(BorderFactory.createEmptyBorder(3, 0, 0, 0));
 		lblParent.setFont(FontLib.getFont("Tahoma", Font.BOLD, 16));
 		lblParent.setBackground(BACKGROUND);
 		lblParent.setForeground(FOREGROUND);
-		
+
 		lblSelectedParent.setPreferredSize(new Dimension(200, 20));
 		lblSelectedParent.setVerticalAlignment(SwingConstants.TOP);
-		lblSelectedParent.setBorder(BorderFactory.createEmptyBorder(3, 0, 0, 0));
+		lblSelectedParent
+				.setBorder(BorderFactory.createEmptyBorder(3, 0, 0, 0));
 		lblSelectedParent.setFont(FontLib.getFont("Tahoma", Font.PLAIN, 16));
 		lblSelectedParent.setBackground(BACKGROUND);
 		lblSelectedParent.setForeground(FOREGROUND);
@@ -395,6 +402,18 @@ public class TreeView extends Display {
 		lblSelectedChild.setBackground(BACKGROUND);
 		lblSelectedChild.setForeground(FOREGROUND);
 
+/*		lblNew.setVerticalAlignment(SwingConstants.TOP);
+		lblNew.setBorder(BorderFactory.createEmptyBorder(3, 0, 0, 0));
+		lblNew.setFont(FontLib.getFont("Tahoma", Font.BOLD, 16));
+		lblNew.setBackground(BACKGROUND);
+		lblNew.setForeground(FOREGROUND);
+*/		
+/*		txtNew.setPreferredSize(new Dimension(200, 20));
+		txtNew.setBorder(BorderFactory.createEmptyBorder(3, 0, 0, 0));
+		txtNew.setFont(FontLib.getFont("Tahoma", Font.PLAIN, 16));
+		txtNew.setBackground(BACKGROUND);
+		txtNew.setForeground(FOREGROUND);
+*/
 		Box topBox = new Box(BoxLayout.X_AXIS);
 		topBox.add(Box.createHorizontalStrut(10));
 		topBox.add(lblParent);
@@ -403,13 +422,24 @@ public class TreeView extends Display {
 		topBox.add(lblSelectedChild);
 		topBox.add(Box.createHorizontalGlue());
 		topBox.add(Box.createHorizontalStrut(3));
-			topBox.setBackground(BACKGROUND);
+		topBox.setBackground(BACKGROUND);
+
+		btnNew.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+			}
+		});
 		
 		
 		Box box = new Box(BoxLayout.X_AXIS);
 		box.add(Box.createHorizontalStrut(10));
 		box.add(title);
 		box.add(Box.createHorizontalGlue());
+		box.add(lblNew);
+		box.add(txtNew);
+		box.add(btnNew);
 		// box.add(search);
 		box.add(Box.createHorizontalStrut(3));
 		box.setBackground(BACKGROUND);
@@ -417,7 +447,7 @@ public class TreeView extends Display {
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.setBackground(BACKGROUND);
 		panel.setForeground(FOREGROUND);
-		panel.add(topBox,BorderLayout.NORTH);
+		panel.add(topBox, BorderLayout.NORTH);
 		panel.add(tview, BorderLayout.CENTER);
 		panel.add(box, BorderLayout.SOUTH);
 
@@ -425,8 +455,7 @@ public class TreeView extends Display {
 	}
 
 	public static JComponent createPanelTreeView(final String label,
-			SuperEntity th) 
-	{
+			SuperEntity th) {
 		Color BACKGROUND = Color.WHITE;
 		Color FOREGROUND = Color.BLACK;
 
@@ -569,7 +598,7 @@ public class TreeView extends Display {
 		}
 
 	} // end of inner class TreeMapColorAction
-
+		
 	public class TreeViewControl extends ControlAdapter {
 		private VisualItem activeItem;
 		private Point2D down = new Point2D.Double();
@@ -580,9 +609,9 @@ public class TreeView extends Display {
 		public void itemEntered(VisualItem item, MouseEvent e) {
 			activeItem = item;
 			wasFixed = item.isFixed();
-			
+
 			String id = item.getClass().getName();
-			if(id.contains("Node"))
+			if (id.contains("Node"))
 				title.setText(" " + item.getString("name"));
 		}
 
@@ -625,77 +654,77 @@ public class TreeView extends Display {
 
 		public void itemClicked(VisualItem item, MouseEvent e) {
 
-			Tuple edgeTuple = null;
-			Tuple nodeTuple = null;
 			Table edgeTable = null;
 			Table nodeTable = null;
 			String name = null;
-			Visualization vis = item.getVisualization();
-				
+
 			if (!SwingUtilities.isLeftMouseButton(e))
-				return;			
-			
+				return;
+
 			String id = item.getClass().getName();
-			
-			
+
 			if (e.isShiftDown() && e.getClickCount() == 1) {
-				
-				if(id.contains("Node"))
-				{
+
+				if (id.contains("Node")) {
 					nodeTable = item.getTable();
 					name = item.getString("name");
-				
+
 					iParent = -1;
 					bParent = false;
-					while(!bParent)
-					{
+					while (!bParent) {
 						iParent++;
-						if(nodeTable.getString(iParent, "name").equals(name))
-						{
+						if (nodeTable.getString(iParent, "name").equals(name)) {
 							bParent = true;
 							break;
-						}//if
-					}//while
+						}// if
+					}// while
 					lblSelectedParent.setText(name);
-				}//if	
+				}// if
 			}
-			
-			if(e.isControlDown() && e.getClickCount() == 1)
-			{
-				if(id.contains("Node"))
-				{
-					nodeTable = item.getTable();
-					name = item.getString("name");
-					
-					iChild = -1;
-					bChild = false;
-					while(!bChild)
-					{
-						iChild++;
-						if(nodeTable.getString(iChild, "name").equals(name))
-						{
-							bChild = true;
-							break;
-						}//if
-					}//while
-					lblSelectedChild.setText(name);
-					edgeTable = myTree.getEdgeTable();
-					//set(row,col)
 
-					System.out.println("\nPARENT: " + iParent + " CHILD: " + iChild);
-					
-					for(int r = 0; r <edgeTable.getRowCount(); r++)
-					{
-						if((edgeTable.get(r,1).equals(iChild)))
-						{
-							edgeTable.set(r, 0, iParent);
+			if (e.isControlDown() && e.getClickCount() == 1) {
+				if (bParent) {
+					if (id.contains("Node")) {
+						nodeTable = item.getTable();
+						name = item.getString("name");
+
+						iChild = -1;
+						bChild = false;
+						while (!bChild) {
+							iChild++;
+							if (nodeTable.getString(iChild, "name")
+									.equals(name)) {
+								bChild = true;
+								break;
+							}// if
+						}// while
+						if (iChild == iParent) {
+							lblSelectedChild
+									.setText("Can't select same parent");
+							bChild = false;
+							iChild = -1;
+						} else
+							lblSelectedChild.setText(name);
+
+						edgeTable = myTree.getEdgeTable();
+
+						// set(row,col)
+
+						if (bChild) {
+							for (int r = 0; r < edgeTable.getRowCount(); r++) {
+								if ((edgeTable.get(r, 1).equals(iChild))) {
+									edgeTable.set(r, 0, iParent);
+								}
+							}
 						}
-					}
-				
-				}//if	
-				
+
+					}// if
+
+				} else {
+					lblSelectedParent.setText("Please select parent");
+				}
 			}
-			
+
 		}
 
 		public void itemDragged(VisualItem item, MouseEvent e) {
