@@ -38,6 +38,7 @@ public class testMain
 						JFrame frame = new JFrame();
 						BufferedImage background = ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/sheep.jpg"));
 						RapidAssessmentCanvas canvas = new RapidAssessmentCanvas(background, new SuperEntity(new EntityType("test1"), 1.0));
+						frame.setLayout(null);
 						frame.setContentPane(canvas);
 						frame.setSize(600,600);
 						frame.setVisible(true);
