@@ -18,6 +18,7 @@ import java.util.LinkedList;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -389,16 +390,11 @@ public class FrmTable extends JPanel {
 												.convertRowIndexToModel(row))
 										.get(col).getMark())) {
 							if (format.get(x).getHighlightColor() != null) {
-								toolTip += " Background Color = "
-										+ getColorName(format.get(x)
-												.getHighlightColor())
-										+ ", due to "
+								toolTip += " Background Color due to "
 										+ format.get(x).getDescription();
 								toolTip += "\t";
 							} else if (format.get(x).getTextColor() != null) {
-								toolTip += " Text Color = "
-										+ getColorName(format.get(x)
-												.getTextColor()) + ", due to "
+								toolTip += " Text Color due to "
 										+ format.get(x).getDescription();
 								toolTip += "\t";
 							}
@@ -706,6 +702,10 @@ public class FrmTable extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				final JFrame formatFrame = new JFrame();
+				
+				
+				final JColorChooser colCombo = new JColorChooser();
+				colCombo.remove(colCombo.getComponent(1));
 
 				SpinnerNumberModel SNMmax = new SpinnerNumberModel(new Integer(
 						0), // value
@@ -737,15 +737,16 @@ public class FrmTable extends JPanel {
 
 				final JComboBox formatTypes = new JComboBox(formatTypesStr);
 
-				String[] cols = new String[colors.size()];
+			/*	String[] cols = new String[colors.size()];
 
 				for (int x = 0; x < cols.length; x++) {
 					cols[x] = colorsString.get(x);
 				}
+				final JComboBox colCombo = new JComboBox(cols);*/
 
 				String[] whatToFormat = { "Background", "Text" };
 
-				final JComboBox colCombo = new JComboBox(cols);
+				
 				final JComboBox whatToFormatCombo = new JComboBox(whatToFormat);
 
 				colCombo.setEnabled(false);
@@ -780,7 +781,7 @@ public class FrmTable extends JPanel {
 								minVal.setEnabled(true);
 								maxVal.setEnabled(true);
 
-								colCombo.setEnabled(true);
+								//colCombo.setEnabled(true);
 								whatToFormatCombo.setEnabled(true);
 
 								description.setEditable(true);
@@ -830,8 +831,7 @@ public class FrmTable extends JPanel {
 														.toString()), Double
 												.parseDouble(maxVal.getValue()
 														.toString()), null,
-												colors.get(colCombo
-														.getSelectedIndex()),
+														colCombo.getColor(),
 												description.getText()));
 
 							} else {
@@ -844,9 +844,7 @@ public class FrmTable extends JPanel {
 												.parseDouble(minVal.getValue()
 														.toString()), Double
 												.parseDouble(maxVal.getValue()
-														.toString()), colors
-												.get(colCombo
-														.getSelectedIndex()),
+														.toString()),colCombo.getColor(),
 												null, description.getText()));
 
 							}
@@ -864,8 +862,7 @@ public class FrmTable extends JPanel {
 										.add(new GreaterThanFormat(Double
 												.parseDouble(minVal.getValue()
 														.toString()), null,
-												colors.get(colCombo
-														.getSelectedIndex()),
+														colCombo.getColor(),
 												description.getText()));
 							} else {
 								headersList
@@ -875,9 +872,7 @@ public class FrmTable extends JPanel {
 										.getFormatting()
 										.add(new GreaterThanFormat(Double
 												.parseDouble(minVal.getValue()
-														.toString()), colors
-												.get(colCombo
-														.getSelectedIndex()),
+														.toString()),colCombo.getColor(),
 												null, description.getText()));
 
 							}
@@ -895,8 +890,7 @@ public class FrmTable extends JPanel {
 										.add(new LessThanFormat(Double
 												.parseDouble(minVal.getValue()
 														.toString()), null,
-												colors.get(colCombo
-														.getSelectedIndex()),
+														colCombo.getColor(),
 												description.getText()));
 							} else {
 								headersList
@@ -906,9 +900,7 @@ public class FrmTable extends JPanel {
 										.getFormatting()
 										.add(new LessThanFormat(Double
 												.parseDouble(minVal.getValue()
-														.toString()), colors
-												.get(colCombo
-														.getSelectedIndex()),
+														.toString()), colCombo.getColor(),
 												null, description.getText()));
 
 							}
