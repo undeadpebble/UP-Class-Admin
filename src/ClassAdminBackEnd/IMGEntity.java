@@ -32,17 +32,17 @@ public class IMGEntity extends SuperEntity {
 	public long saveToDB(SqlJetDb db, long parentID, PDatIDGenerator idgen) throws SqlJetException {
 		long id = super.saveToDB(db, parentID, idgen);
 		db.beginTransaction(SqlJetTransactionMode.WRITE);
-        try {
-        	//TODO
+
         	ISqlJetTable table = db.getTable(PDatExport.IMG_ENTITY_TABLE);
         	//insert statements
         	
         	table.insert(id,this.getField());
-        } finally {
-            db.commit();
-            
-        }
+
         return id;
+	}
+	
+	public IMGEntity findPortrait(int i){
+		return this;
 	}
 
 	

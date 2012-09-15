@@ -17,7 +17,7 @@ public class LeafMarkEntity extends MarkEntity{
 		// TODO Auto-generated constructor stub
 	}
 
-	private Double doMarkMath() throws AbsentException{
+	public Double doMarkMath() throws AbsentException{
 		return this.getMark();
 	}
 	

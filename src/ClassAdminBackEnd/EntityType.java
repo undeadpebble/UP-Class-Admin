@@ -160,7 +160,6 @@ public class EntityType {
 		table.insert(this.ID, this.name, parentID, this.isTextField, this.date,
 				this.defaultWeight);
 
-		db.commit();
 
 		for (int x = 0; x < this.getBorderCasing().size(); ++x) {
 			this.getBorderCasing().get(x).saveToDB(db, this.ID, idgen);

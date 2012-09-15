@@ -71,6 +71,7 @@ import prefuse.data.Node;
 import prefuse.data.Table;
 import prefuse.data.Tree;
 import prefuse.data.Tuple;
+import prefuse.data.column.Column;
 import prefuse.data.event.TupleSetListener;
 import prefuse.data.io.CSVTableReader;
 import prefuse.data.io.DataIOException;
@@ -91,12 +92,6 @@ import prefuse.visual.VisualItem;
 import prefuse.visual.expression.InGroupPredicate;
 import prefuse.visual.sort.TreeDepthItemSorter;
 
-/**
- * Demonstration of a node-link tree viewer
- * 
- * @version 1.0
- * @author <a href="http://jheer.org">jeffrey heer</a>
- */
 public class TreeView extends Display {
 
 	private static final String tree = "tree";
@@ -108,9 +103,9 @@ public class TreeView extends Display {
 
 	private String m_label = "label";
 	private int m_orientation = Constants.ORIENT_LEFT_RIGHT;
-	
-    static Cursor dc = new Cursor(Cursor.DEFAULT_CURSOR);
-    static Cursor yd = DragSource.DefaultMoveDrop;
+
+	static Cursor dc = new Cursor(Cursor.DEFAULT_CURSOR);
+	static Cursor yd = DragSource.DefaultMoveDrop;
 
 	public TreeView(Tree t, String label) {
 		super(new Visualization());
@@ -154,8 +149,6 @@ public class TreeView extends Display {
 		animatePaint.add(new RepaintAction());
 		m_vis.putAction("animatePaint", animatePaint);
 
-		
-		
 		// create the tree layout action
 		NodeLinkTreeLayout treeLayout = new NodeLinkTreeLayout(tree,
 				m_orientation, 50, 0, 8);
@@ -287,8 +280,7 @@ public class TreeView extends Display {
 	}
 
 	// ------------------------------------------------------------------------
-	
-	
+
 	public static void createStudentFrm(String label, SuperEntity treeHead) {
 		JComponent treeview = createPanelTreeView(label, treeHead);
 
@@ -334,10 +326,7 @@ public class TreeView extends Display {
 		File f1 = new File("out.xml");
 		boolean success = f1.delete();
 		if (!success) {
-			System.out.println("Deletion failed.");
 			System.exit(0);
-		} else {
-			System.out.println("File deleted.");
 		}
 
 		// create a new treemap
@@ -353,18 +342,6 @@ public class TreeView extends Display {
 		title.setBackground(BACKGROUND);
 		title.setForeground(FOREGROUND);
 
-		final MouseListener ml = new MouseAdapter(){
-			public void mousePressed(MouseEvent e){
-				System.out.println(e.getX());
-/*				JComponent jc = (JComponent)e.getSource();
-				TransferHandler th = jc.getTransferHandler();
-				th.exportAsDrag(jc, e, TransferHandler.MOVE);
-*/			}
-		};
-		
-		
-		
-
 		Box box = new Box(BoxLayout.X_AXIS);
 		box.add(Box.createHorizontalStrut(10));
 		box.add(title);
@@ -378,8 +355,7 @@ public class TreeView extends Display {
 		panel.setForeground(FOREGROUND);
 		panel.add(tview, BorderLayout.CENTER);
 		panel.add(box, BorderLayout.SOUTH);
-		
-		
+
 		return panel;
 	}
 
@@ -459,83 +435,191 @@ public class TreeView extends Display {
 		}
 
 	} // end of inner class TreeMapColorAction
-	
-    public class TreeViewControl extends ControlAdapter {
-        private VisualItem activeItem;
-        private Point2D down = new Point2D.Double();
-        private Point2D tmp = new Point2D.Double();
-        private boolean wasFixed, dragged;
-        private boolean repaint = false;
-        
-        public void itemEntered(VisualItem item, MouseEvent e) {
-            activeItem = item;
-            if (item.canGetString("name"))
-            {
-                System.out.println("item");
-            }
-            else
-            	System.out.println("no");
-            wasFixed = item.isFixed();
-        }
-        
-        public void itemExited(VisualItem item, MouseEvent e) {
-            if ( activeItem == item ) {
-                activeItem = null;
-                item.setFixed(wasFixed);
-            }
-        }
-        
-        public void itemPressed(VisualItem item, MouseEvent e) {
-            if (!SwingUtilities.isLeftMouseButton(e)) return;
-            
-            // set the focus to the current node
-            Visualization vis = item.getVisualization();
-            vis.getFocusGroup(Visualization.FOCUS_ITEMS).setTuple(item);
-            item.setFixed(true);
-            dragged = false;
-            Display d = (Display)e.getComponent();
-            down = d.getAbsoluteCoordinate(e.getPoint(), down);
-            
-            vis.run("forces");
-        }
-        
-        public void itemReleased(VisualItem item, MouseEvent e) {
-            if (!SwingUtilities.isLeftMouseButton(e)) return;
-            if ( dragged ) {
-                activeItem = null;
-                item.setFixed(wasFixed);
-                dragged = false;
-            }
-            // clear the focus
-            Visualization vis = item.getVisualization();
-            vis.getFocusGroup(Visualization.FOCUS_ITEMS).clear();
 
-            vis.cancel("forces");
-        }
-        
-        public void itemClicked(VisualItem item, MouseEvent e) {
-            if (!SwingUtilities.isLeftMouseButton(e)) return;
-            if ( e.getClickCount() == 2 ) {
-                String id = item.getString("id");
-            }
-        }
-        
-        public void itemDragged(VisualItem item, MouseEvent e) {
-            if (!SwingUtilities.isLeftMouseButton(e)) return;
-            dragged = true;
-            Display d = (Display)e.getComponent();
-            tmp = d.getAbsoluteCoordinate(e.getPoint(), tmp);
-            double dx = tmp.getX()-down.getX();
-            double dy = tmp.getY()-down.getY();
-            
-            PrefuseLib.setX(item, null, item.getX()+dx);
-            PrefuseLib.setY(item, null, item.getY()+dy);
-            down.setLocation(tmp);
-            System.out.println(repaint);
-            //if ( repaint )
-                item.getVisualization().repaint();
-        }
-    } 
+	public class TreeViewControl extends ControlAdapter {
+		private VisualItem activeItem;
+		private Point2D down = new Point2D.Double();
+		private Point2D tmp = new Point2D.Double();
+		private boolean wasFixed, dragged;
+		private boolean repaint = false;
+
+		public void itemEntered(VisualItem item, MouseEvent e) {
+			activeItem = item;
+			wasFixed = item.isFixed();
+		}
+
+		public void itemExited(VisualItem item, MouseEvent e) {
+			if (activeItem == item) {
+				activeItem = null;
+				item.setFixed(wasFixed);
+			}
+		}
+
+		public void itemPressed(VisualItem item, MouseEvent e) {
+			if (!SwingUtilities.isLeftMouseButton(e))
+				return;
+
+			// set the focus to the current node
+			Visualization vis = item.getVisualization();
+			vis.getFocusGroup(Visualization.FOCUS_ITEMS).setTuple(item);
+			item.setFixed(true);
+			dragged = false;
+			Display d = (Display) e.getComponent();
+			down = d.getAbsoluteCoordinate(e.getPoint(), down);
+			vis.run("forces");
+		}
+
+		public void itemReleased(VisualItem item, MouseEvent e) {
+			if (!SwingUtilities.isLeftMouseButton(e))
+				return;
+			if (dragged) {
+				activeItem = null;
+				item.setFixed(wasFixed);
+				dragged = false;
+			}
+			// clear the focus
+			Visualization vis = item.getVisualization();
+			vis.getFocusGroup(Visualization.FOCUS_ITEMS).clear();
+
+			vis.cancel("forces");
+		}
+
+		public void itemClicked(VisualItem item, MouseEvent e) {
+			if (!SwingUtilities.isLeftMouseButton(e))
+				return;
+			if (e.getClickCount() == 2) {
+				
+				Tuple edgeTuple = null;
+				Tuple nodeTuple = null;
+				Table edgeTable = null;
+				Table nodeTable = null;
+				String name = null;
+				Visualization vis = item.getVisualization();
+				
+				//GET EDGE
+				
+				String id = item.getClass().getName();
+				if(id.contains("Edge"))
+				{
+					edgeTable = item.getTable();
+					int scolumn = edgeTable.getColumnNumber("source");
+					int tcolumn = edgeTable.getColumnNumber("target");
+					int source = item.getInt(scolumn);
+					int target = item.getInt(tcolumn);
+					
+					System.out.print("SOURCE: " + source + "\tTARGET: " + target + "\n");
+					
+					for (int c = 0; c < edgeTable.getColumnCount(); c++)
+					{
+						System.out.print(edgeTable.getColumnName(c) + "\t");
+					}
+					System.out.print("\n");
+					for(int r = 0; r <edgeTable.getRowCount(); r++)
+					{
+						for (int c = 0; c < edgeTable.getColumnCount(); c++)
+						{
+							System.out.print(edgeTable.getString(r, c) + "\t\t");
+							if((edgeTable.getInt(r, scolumn) == source) && (edgeTable.getInt(r, tcolumn) == target))
+							{
+								edgeTable.setInt(r, scolumn, target);
+								edgeTable.setInt(r, tcolumn, 4);
+							}
+						}
+						System.out.print("\n");
+					}
+
+				}
+				else if(id.contains("Node"))
+				{
+					nodeTable = item.getTable();
+					name = item.getString("name");
+
+					int column = nodeTable.getColumnNumber("name");
+					int i = 0;
+					int row = -1;
+					while (row == -1 && i < nodeTable.getRowCount()) {
+						if (nodeTable.getString(i, column) == name)
+							row = i;
+						else
+							i++;
+					}				
+
+					for (int c = 0; c < nodeTable.getColumnCount(); c++)
+					{
+						System.out.print(nodeTable.getColumnName(c) + "\t");
+					}
+					System.out.print("\n");
+					for (int c = 0; c < nodeTable.getColumnCount(); c++)
+					{
+						System.out.print(nodeTable.getString(row, c) + "\t\t");
+					}
+				}
+				
+//				System.out.println(id);
+//				Table edgeTbl = item.getTable();
+//				item.setVisible(false);
+				
+				vis.repaint();
+				System.out.print("\n");
+				//GET NODE
+/*				String id2 = item.getString("name");
+
+				Visualization vis = item.getVisualization();
+
+				System.out.println(id2);
+				String str = item.getClass().getName();
+				System.out.println(str);
+				Table tbl = item.getTable();
+				System.out.println(item.getGroup());
+				item.setVisible(false);
+				int column = tbl.getColumnNumber("name");
+				Column coll = tbl.getColumn(column);
+				int i = 0;
+				int row = -1;
+				while (row == -1 && i < tbl.getRowCount()) {
+					if (tbl.getString(i, column) == id2)
+						row = i;
+					else
+						i++;
+				}
+				for (int j = 0; j < tbl.getColumnCount(); j ++)
+				{
+					System.out.print(tbl.getColumnName(j) + "\t");
+				}
+				System.out.print("\n");
+				for (int j = 0; j < tbl.getColumnCount(); j ++)
+				{
+					System.out.print(tbl.getString(row, j) + "\t");
+				}
+				System.out.print("\n");
+				Tuple tuple = tbl.getTuple(row);
+				tuple.revertToDefault("name");
+*/				
+				
+				/*
+				 * for(int i = 0 ; i < tbl.getRowCount(); i++) { for (int k = 0;
+				 * k < tbl.getColumnCount(); k++) {
+				 * System.out.print(tbl.getString(i, k) + "\t"); } }
+				 * System.out.println();
+				 */
+				}
+		}
+
+		public void itemDragged(VisualItem item, MouseEvent e) {
+			if (!SwingUtilities.isLeftMouseButton(e))
+				return;
+			dragged = true;
+			Display d = (Display) e.getComponent();
+			tmp = d.getAbsoluteCoordinate(e.getPoint(), tmp);
+			double dx = tmp.getX() - down.getX();
+			double dy = tmp.getY() - down.getY();
+
+			PrefuseLib.setX(item, null, item.getX() + dx);
+			PrefuseLib.setY(item, null, item.getY() + dy);
+			down.setLocation(tmp);
+			item.getVisualization().repaint();
+		}
+	}
 
 } // end of class TreeMap
 

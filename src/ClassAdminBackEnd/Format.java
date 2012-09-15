@@ -84,7 +84,6 @@ public class Format {
 			table.insert(id ,parentID,this.getTextColor().getRGB(),this.getHighlightColor().getRGB());
 
 
-			db.commit();
 
 		
 		return id;

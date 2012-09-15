@@ -23,8 +23,8 @@ public class BestNMarkEntity extends MarkEntity{
 		// TODO Auto-generated constructor stub
 	}
 
-	@SuppressWarnings("unused")
-	private Double doMarkMath() throws AbsentException{
+	@Override
+	public Double doMarkMath() throws AbsentException{
 		double mTotal = 0;
 		double wTotal = 0;
 		double nthLargest = Double.MAX_VALUE;
@@ -75,16 +75,12 @@ public class BestNMarkEntity extends MarkEntity{
 	public long saveToDB(SqlJetDb db, long parentID, PDatIDGenerator idgen) throws SqlJetException {
 		long id = super.saveToDB(db, parentID, idgen);
 		db.beginTransaction(SqlJetTransactionMode.WRITE);
-        try {
-        	//TODO
+
         	ISqlJetTable table = db.getTable(PDatExport.ENTITY_TABLE);
         	//insert statements
         	
         	table.insert(id,this.N);
-        } finally {
-            db.commit();
-            
-        }
+
         return id;
 	}
 
