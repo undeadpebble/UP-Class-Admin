@@ -14,6 +14,7 @@ import java.awt.Label;
 import java.awt.Point;
 import java.awt.dnd.DragSource;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -30,9 +31,12 @@ import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -98,17 +102,34 @@ public class TreeView extends Display {
 	private static final String treeNodes = "tree.nodes";
 	private static final String treeEdges = "tree.edges";
 
+	private static Tree myTree = null;
 	private LabelRenderer m_nodeRenderer;
 	private EdgeRenderer m_edgeRenderer;
 
 	private String m_label = "label";
 	private int m_orientation = Constants.ORIENT_LEFT_RIGHT;
 
+
 	static Cursor dc = new Cursor(Cursor.DEFAULT_CURSOR);
 	static Cursor yd = DragSource.DefaultMoveDrop;
+	static JFastLabel title = new JFastLabel("                 ");
+	static JFastLabel lblSelectedParent = new JFastLabel("sParent");
+	static JFastLabel lblSelectedChild = new JFastLabel("sChild");
+	static JFastLabel lblParent = new JFastLabel("Parent: ");
+	static JFastLabel lblChild = new JFastLabel("Child: ");
+	static JFastLabel lblNew = new JFastLabel("New: ");
+	static JTextField txtNew = new JTextField();
+	static JButton btnNew = new JButton("Add");
+	static private boolean bParent = false;
+	static private boolean bChild = false;
 
+	static int iParent = -1;
+	static int iChild = -1;
+		
 	public TreeView(Tree t, String label) {
 		super(new Visualization());
+
+		myTree = t;
 		m_label = label;
 
 		m_vis.add(tree, t);
@@ -281,6 +302,19 @@ public class TreeView extends Display {
 
 	// ------------------------------------------------------------------------
 
+	public static void createEntityTypeFrm(String label) {
+		JComponent treeview = createPanelEntityTypeTreeView(label, Global
+				.getGlobal().getActiveProject().getHeadEntityType());
+
+		JFrame frame = new JFrame();
+
+		frame.setContentPane(treeview);
+		frame.pack();
+		frame.setVisible(true);
+
+	}
+
+
 	public static void createStudentFrm(String label, SuperEntity treeHead) {
 		JComponent treeview = createPanelTreeView(label, treeHead);
 
@@ -289,6 +323,137 @@ public class TreeView extends Display {
 		frame.setContentPane(treeview);
 		frame.pack();
 		frame.setVisible(true);
+	}
+
+	public static JComponent createPanelEntityTypeTreeView(final String label,
+			EntityType th) {
+		Color BACKGROUND = Color.WHITE;
+		Color FOREGROUND = Color.BLACK;
+
+		String str = "<tree>" + "<declarations>"
+				+ "<attributeDecl name=\"name\" type=\"String\" />"
+				+ "</declarations>";
+
+		Global.getGlobal().getActiveProject().getTreeLinkedList().clear();
+		str += th.createTreeFromHead(Global.getGlobal().getActiveProject()
+				.getTreeLinkedList());
+
+		str += "</tree>";
+
+		try {
+			// Create file
+			FileWriter fstream = new FileWriter("out.xml");
+			BufferedWriter out = new BufferedWriter(fstream);
+			out.write(str);
+			// Close the output stream
+			out.close();
+		} catch (Exception e) {// Catch exception if any
+			System.err.println("Error: " + e.getMessage());
+		}
+
+		Tree t = null;
+		try {
+			t = (Tree) new TreeMLReader().readGraph("out.xml");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+
+		File f1 = new File("out.xml");
+		boolean success = f1.delete();
+		if (!success) {
+			System.exit(0);
+		}
+
+		// create a new treemap
+		final TreeView tview = new TreeView(t, label);
+		tview.setBackground(BACKGROUND);
+		tview.setForeground(FOREGROUND);
+
+		title.setPreferredSize(new Dimension(200, 20));
+		title.setVerticalAlignment(SwingConstants.BOTTOM);
+		title.setBorder(BorderFactory.createEmptyBorder(3, 0, 0, 0));
+		title.setFont(FontLib.getFont("Tahoma", Font.PLAIN, 16));
+		title.setBackground(BACKGROUND);
+		title.setForeground(FOREGROUND);
+
+		lblParent.setVerticalAlignment(SwingConstants.TOP);
+		lblParent.setBorder(BorderFactory.createEmptyBorder(3, 0, 0, 0));
+		lblParent.setFont(FontLib.getFont("Tahoma", Font.BOLD, 16));
+		lblParent.setBackground(BACKGROUND);
+		lblParent.setForeground(FOREGROUND);
+
+		lblSelectedParent.setPreferredSize(new Dimension(200, 20));
+		lblSelectedParent.setVerticalAlignment(SwingConstants.TOP);
+		lblSelectedParent
+				.setBorder(BorderFactory.createEmptyBorder(3, 0, 0, 0));
+		lblSelectedParent.setFont(FontLib.getFont("Tahoma", Font.PLAIN, 16));
+		lblSelectedParent.setBackground(BACKGROUND);
+		lblSelectedParent.setForeground(FOREGROUND);
+
+		lblChild.setVerticalAlignment(SwingConstants.TOP);
+		lblChild.setBorder(BorderFactory.createEmptyBorder(3, 0, 0, 0));
+		lblChild.setFont(FontLib.getFont("Tahoma", Font.BOLD, 16));
+		lblChild.setBackground(BACKGROUND);
+		lblChild.setForeground(FOREGROUND);
+
+		lblSelectedChild.setPreferredSize(new Dimension(200, 20));
+		lblSelectedChild.setVerticalAlignment(SwingConstants.TOP);
+		lblSelectedChild.setBorder(BorderFactory.createEmptyBorder(3, 0, 0, 0));
+		lblSelectedChild.setFont(FontLib.getFont("Tahoma", Font.PLAIN, 16));
+		lblSelectedChild.setBackground(BACKGROUND);
+		lblSelectedChild.setForeground(FOREGROUND);
+
+/*		lblNew.setVerticalAlignment(SwingConstants.TOP);
+		lblNew.setBorder(BorderFactory.createEmptyBorder(3, 0, 0, 0));
+		lblNew.setFont(FontLib.getFont("Tahoma", Font.BOLD, 16));
+		lblNew.setBackground(BACKGROUND);
+		lblNew.setForeground(FOREGROUND);
+*/		
+/*		txtNew.setPreferredSize(new Dimension(200, 20));
+		txtNew.setBorder(BorderFactory.createEmptyBorder(3, 0, 0, 0));
+		txtNew.setFont(FontLib.getFont("Tahoma", Font.PLAIN, 16));
+		txtNew.setBackground(BACKGROUND);
+		txtNew.setForeground(FOREGROUND);
+*/
+		Box topBox = new Box(BoxLayout.X_AXIS);
+		topBox.add(Box.createHorizontalStrut(10));
+		topBox.add(lblParent);
+		topBox.add(lblSelectedParent);
+		topBox.add(lblChild);
+		topBox.add(lblSelectedChild);
+		topBox.add(Box.createHorizontalGlue());
+		topBox.add(Box.createHorizontalStrut(3));
+		topBox.setBackground(BACKGROUND);
+
+		btnNew.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+			}
+		});
+		
+		
+		Box box = new Box(BoxLayout.X_AXIS);
+		box.add(Box.createHorizontalStrut(10));
+		box.add(title);
+		box.add(Box.createHorizontalGlue());
+		box.add(lblNew);
+		box.add(txtNew);
+		box.add(btnNew);
+		// box.add(search);
+		box.add(Box.createHorizontalStrut(3));
+		box.setBackground(BACKGROUND);
+
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.setBackground(BACKGROUND);
+		panel.setForeground(FOREGROUND);
+		panel.add(topBox, BorderLayout.NORTH);
+		panel.add(tview, BorderLayout.CENTER);
+		panel.add(box, BorderLayout.SOUTH);
+
+		return panel;
 	}
 
 	public static JComponent createPanelTreeView(final String label,
@@ -328,6 +493,7 @@ public class TreeView extends Display {
 		if (!success) {
 			System.exit(0);
 		}
+
 
 		// create a new treemap
 		final TreeView tview = new TreeView(t, label);
@@ -446,6 +612,10 @@ public class TreeView extends Display {
 		public void itemEntered(VisualItem item, MouseEvent e) {
 			activeItem = item;
 			wasFixed = item.isFixed();
+
+			String id = item.getClass().getName();
+			if (id.contains("Node"))
+				title.setText(" " + item.getString("name"));
 		}
 
 		public void itemExited(VisualItem item, MouseEvent e) {
@@ -453,6 +623,7 @@ public class TreeView extends Display {
 				activeItem = null;
 				item.setFixed(wasFixed);
 			}
+			title.setText("");
 		}
 
 		public void itemPressed(VisualItem item, MouseEvent e) {
@@ -485,124 +656,78 @@ public class TreeView extends Display {
 		}
 
 		public void itemClicked(VisualItem item, MouseEvent e) {
+
+			Table edgeTable = null;
+			Table nodeTable = null;
+			String name = null;
+
 			if (!SwingUtilities.isLeftMouseButton(e))
 				return;
-			if (e.getClickCount() == 2) {
-				
-				Tuple edgeTuple = null;
-				Tuple nodeTuple = null;
-				Table edgeTable = null;
-				Table nodeTable = null;
-				String name = null;
-				Visualization vis = item.getVisualization();
-				
-				//GET EDGE
-				
-				String id = item.getClass().getName();
-				if(id.contains("Edge"))
-				{
-					edgeTable = item.getTable();
-					int scolumn = edgeTable.getColumnNumber("source");
-					int tcolumn = edgeTable.getColumnNumber("target");
-					int source = item.getInt(scolumn);
-					int target = item.getInt(tcolumn);
-					
-					System.out.print("SOURCE: " + source + "\tTARGET: " + target + "\n");
-					
-					for (int c = 0; c < edgeTable.getColumnCount(); c++)
-					{
-						System.out.print(edgeTable.getColumnName(c) + "\t");
-					}
-					System.out.print("\n");
-					for(int r = 0; r <edgeTable.getRowCount(); r++)
-					{
-						for (int c = 0; c < edgeTable.getColumnCount(); c++)
-						{
-							System.out.print(edgeTable.getString(r, c) + "\t\t");
-							if((edgeTable.getInt(r, scolumn) == source) && (edgeTable.getInt(r, tcolumn) == target))
-							{
-								edgeTable.setInt(r, scolumn, target);
-								edgeTable.setInt(r, tcolumn, 4);
-							}
-						}
-						System.out.print("\n");
-					}
 
-				}
-				else if(id.contains("Node"))
-				{
+			String id = item.getClass().getName();
+
+			if (e.isShiftDown() && e.getClickCount() == 1) {
+
+				if (id.contains("Node")) {
 					nodeTable = item.getTable();
 					name = item.getString("name");
 
-					int column = nodeTable.getColumnNumber("name");
-					int i = 0;
-					int row = -1;
-					while (row == -1 && i < nodeTable.getRowCount()) {
-						if (nodeTable.getString(i, column) == name)
-							row = i;
-						else
-							i++;
-					}				
+					iParent = -1;
+					bParent = false;
+					while (!bParent) {
+						iParent++;
+						if (nodeTable.getString(iParent, "name").equals(name)) {
+							bParent = true;
+							break;
+						}// if
+					}// while
+					lblSelectedParent.setText(name);
+				}// if
+			}
 
-					for (int c = 0; c < nodeTable.getColumnCount(); c++)
-					{
-						System.out.print(nodeTable.getColumnName(c) + "\t");
-					}
-					System.out.print("\n");
-					for (int c = 0; c < nodeTable.getColumnCount(); c++)
-					{
-						System.out.print(nodeTable.getString(row, c) + "\t\t");
-					}
-				}
-				
-//				System.out.println(id);
-//				Table edgeTbl = item.getTable();
-//				item.setVisible(false);
-				
-				vis.repaint();
-				System.out.print("\n");
-				//GET NODE
-/*				String id2 = item.getString("name");
+			if (e.isControlDown() && e.getClickCount() == 1) {
+				if (bParent) {
+					if (id.contains("Node")) {
+						nodeTable = item.getTable();
+						name = item.getString("name");
 
-				Visualization vis = item.getVisualization();
+						iChild = -1;
+						bChild = false;
+						while (!bChild) {
+							iChild++;
+							if (nodeTable.getString(iChild, "name")
+									.equals(name)) {
+								bChild = true;
+								break;
+							}// if
+						}// while
+						if (iChild == iParent) {
+							lblSelectedChild
+									.setText("Can't select same parent");
+							bChild = false;
+							iChild = -1;
+						} else
+							lblSelectedChild.setText(name);
 
-				System.out.println(id2);
-				String str = item.getClass().getName();
-				System.out.println(str);
-				Table tbl = item.getTable();
-				System.out.println(item.getGroup());
-				item.setVisible(false);
-				int column = tbl.getColumnNumber("name");
-				Column coll = tbl.getColumn(column);
-				int i = 0;
-				int row = -1;
-				while (row == -1 && i < tbl.getRowCount()) {
-					if (tbl.getString(i, column) == id2)
-						row = i;
-					else
-						i++;
+						edgeTable = myTree.getEdgeTable();
+
+						// set(row,col)
+
+						if (bChild) {
+							for (int r = 0; r < edgeTable.getRowCount(); r++) {
+								if ((edgeTable.get(r, 1).equals(iChild))) {
+									edgeTable.set(r, 0, iParent);
+								}
+							}
+						}
+
+					}// if
+
+				} else {
+					lblSelectedParent.setText("Please select parent");
 				}
-				for (int j = 0; j < tbl.getColumnCount(); j ++)
-				{
-					System.out.print(tbl.getColumnName(j) + "\t");
-				}
-				System.out.print("\n");
-				for (int j = 0; j < tbl.getColumnCount(); j ++)
-				{
-					System.out.print(tbl.getString(row, j) + "\t");
-				}
-				System.out.print("\n");
-				Tuple tuple = tbl.getTuple(row);
-				tuple.revertToDefault("name");
-*/				
-				
-				/*
-				 * for(int i = 0 ; i < tbl.getRowCount(); i++) { for (int k = 0;
-				 * k < tbl.getColumnCount(); k++) {
-				 * System.out.print(tbl.getString(i, k) + "\t"); } }
-				 * System.out.println();
-				 */
-				}
+			}
+
 		}
 
 		public void itemDragged(VisualItem item, MouseEvent e) {
