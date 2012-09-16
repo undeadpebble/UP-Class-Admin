@@ -428,7 +428,7 @@ public class TreeView extends Display {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				createNewNode(myTree.getNodeTable());
+				createNewNode();
 
 			}
 		});
@@ -519,10 +519,11 @@ public class TreeView extends Display {
 		return panel;
 	}
 	
-	private static void createNewNode(Table nodes)
+	static JDialog frame = null;
+
+	private static void createNewNode()
 	{
-		
-		JDialog frame = null;
+		final Table nodes = myTree.getNodeTable();
 		try {
 			frame = new JDialog(new Frame(),true);
 		} catch (SqlJetException e) {
@@ -586,41 +587,30 @@ public class TreeView extends Display {
 
 				myTree.addEdge(parent, child);
 
-				
-				System.out.print("PARENT: ");
-				for(int c = 0; c < parent.getColumnCount()-1; c++)
-					System.out.print(parent.get(c) + "\t");
-				System.out.print("\n");
-				
-				System.out.print("CHILD: ");
-				for(int c = 0; c < child.getColumnCount()-1; c++)
-					System.out.print(child.get(c) + "\t");
-				System.out.print("\n");
+				new EntityType(txtName.getText(),Global.getGlobal().getActiveProject().getTreeLinkedList().get(cmbParent.getSelectedIndex()),true, null, 0.0);
+			
+				cmbParent.removeAllItems();
 
-				System.out.println("NODES: " + myTree.getNodeCount());
-				System.out.println("EDGES: " + myTree.getEdgeCount());
-				
-				EntityType entity = new EntityType("test",Global.getGlobal().getActiveProject().getTreeLinkedList().get(iParent),true, null, 0.0);
-				Global.getGlobal().getActiveProject().getTreeLinkedList().get(iChild).changeParent(Global.getGlobal().getActiveProject().getTreeLinkedList().get(iParent));
-				
-
-				/*				for (int r = 0; r < edgeTable.getRowCount(); r++) 
+				for(int r = 0; r <nodes.getRowCount(); r++)
 				{
-					if ((edgeTable.get(r, 1).equals(iChild))) 
+					for (int c = 0; c < nodes.getColumnCount(); c++)
 					{
-						edgeTable.set(r, 0, iParent);
-
-						Global.getGlobal().getActiveProject().getTreeLinkedList().get(iChild).changeParent(Global.getGlobal().getActiveProject().getTreeLinkedList().get(iParent));
-				
+						cmbParent.addItem(nodes.getString(r, c));
 					}
 				}
-*/			}
+				if(iParent != -1)
+					cmbParent.setSelectedIndex(iParent);
+				else
+					cmbParent.setSelectedIndex(0);
+				
+			}
 		});
 		
 		btnClose.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
 				// TODO Auto-generated method stub
 				
 			}
@@ -751,7 +741,7 @@ public class TreeView extends Display {
 			title.setText("");
 		}
 
-		public void itemPressed(VisualItem item, MouseEvent e) {
+		/*public void itemPressed(VisualItem item, MouseEvent e) {
 			if (!SwingUtilities.isLeftMouseButton(e))
 				return;
 
@@ -763,7 +753,7 @@ public class TreeView extends Display {
 			Display d = (Display) e.getComponent();
 			down = d.getAbsoluteCoordinate(e.getPoint(), down);
 			vis.run("forces");
-		}
+		}*/
 
 		public void itemReleased(VisualItem item, MouseEvent e) {
 			if (!SwingUtilities.isLeftMouseButton(e))
@@ -779,7 +769,15 @@ public class TreeView extends Display {
 			vis.cancel("forces");
 		}
 
-		public void itemClicked(VisualItem item, MouseEvent e) {
+		public void itemPressed(VisualItem item, MouseEvent e) {
+
+			Visualization vis = item.getVisualization();
+			vis.getFocusGroup(Visualization.FOCUS_ITEMS).setTuple(item);
+			item.setFixed(true);
+			dragged = false;
+			Display d = (Display) e.getComponent();
+			down = d.getAbsoluteCoordinate(e.getPoint(), down);
+			vis.run("forces");
 
 			Table edgeTable = null;
 			Table nodeTable = null;
@@ -795,16 +793,8 @@ public class TreeView extends Display {
 						nodeTable = item.getTable();
 						name = item.getString("name");
 
-						iParent = -1;
-						bParent = false;
-						while (!bParent) {
-							iParent++;
-							if (nodeTable.getString(iParent, "name").equals(
-									name)) {
-								bParent = true;
-								break;
-							}// if
-						}// while
+						iParent = item.getRow();
+						bParent = true;
 						lblSelectedParent.setText(name);
 					}// if
 				}// if
@@ -815,16 +805,8 @@ public class TreeView extends Display {
 							nodeTable = item.getTable();
 							name = item.getString("name");
 
-							iChild = -1;
-							bChild = false;
-							while (!bChild) {
-								iChild++;
-								if (nodeTable.getString(iChild, "name").equals(
-										name)) {
-									bChild = true;
-									break;
-								}// if
-							}// while
+							iChild = item.getRow();
+							bChild = true;
 							if (iChild == iParent) {
 								lblSelectedChild.setText("can't select same parent");
 								bChild = false;
@@ -881,7 +863,7 @@ public class TreeView extends Display {
 				}// if
 			}// else
 
-		}// itemClicked
+		}// itemPressed
 
 		public void itemDragged(VisualItem item, MouseEvent e) {
 			if (!SwingUtilities.isLeftMouseButton(e))
