@@ -4,16 +4,25 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.FlowLayout;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import javax.lang.model.type.UnknownTypeException;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
@@ -35,6 +44,10 @@ import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.statistics.HistogramDataset;
 import org.jfree.data.statistics.HistogramType;
 
+import com.sun.image.codec.jpeg.JPEGCodec;
+import com.sun.image.codec.jpeg.JPEGEncodeParam;
+import com.sun.image.codec.jpeg.JPEGImageEncoder;
+
 import ClassAdminBackEnd.EntityType;
 import ClassAdminBackEnd.Global;
 import ClassAdminBackEnd.SuperEntity;
@@ -50,20 +63,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 	double[][] studentref;
 	int widthbar = 10;
 	ArrayList selectedindex = new ArrayList();
-	/*public ArrayList getSelectedbar(Number bgn, Number einde)
-	{
-		
-		for(int x = 0;x < values.length;x++)
-		{
-			double qbgn =(Double) bgn;
-			double qeinde = (Double)einde;
-			if(values[x] >= qbgn && values[x] < qeinde)
-			{
-				selectedindex.add(x);	
-			}
-		}
-		return selectedindex;
-	}*/
+	
 	
 	public HistogramFrame()
 	{
@@ -97,95 +97,13 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			}
 			;
 			chart = nuweChart.createHistogram(plotTitle, xaxis, yaxis, nuweChart.createDataset(houerx));
-		// values = new double[diedata.size()];
-		// studentnr = new String[diedata.size()];
 		
-			/*for (int q = 0; q < diedata.size(); q++) {
-			
-				values[q] = diedata.get(q).get(houerx).getMark();
-				
-				studentnr[q] =diedata.get(q).get(0).getValue();
-				
-			}
-		    
-		  
-		    	  dataset.setType(HistogramType.FREQUENCY);
-		   
-		    
-		    dataset.addSeries("Histogram", values, 10,0,100);*/
 		
 		    
 		   
 			
 			chartpanel = nuweChart.createPanel();
-		/*
-			NumberAxis rangeAxis = (NumberAxis) chart.getXYPlot().getRangeAxis();
-			
-			((NumberAxis) rangeAxis).setTickUnit(new NumberTickUnit(1));
-			rangeAxis.setRange(0,10);*/
-		
-			/*chartpanel = new ChartPanel(chart,500,500,400,400,500,500,true,true,true,true,true,true);
-					
-			final XYPlot plot;
-			plot = chart.getXYPlot();
-			final Plot Nuweplot = chart.getPlot();
-			
-			final CustomBarRenderer c = new CustomBarRenderer();
-			plot.setRenderer(c);
-			
-				//Select a bar
-				chartpanel.addChartMouseListener(new ChartMouseListener() {
-
-					public void chartMouseClicked(ChartMouseEvent e) {
-						
-						MouseEvent me = e.getTrigger();
-						
-					
-						if(me.isShiftDown() == false)
-						chart.getXYPlot().clearAnnotations();
-						
-						ChartEntity entity = ((ChartMouseEvent) e).getEntity();
-						
-						if (entity instanceof XYItemEntity && entity != null) {
-
-							XYItemEntity ent = (XYItemEntity) entity;
-							
-						
-							int sindex = ent.getSeriesIndex();
-							int iindex = ent.getItem();
-							dataset.getStartX(0, iindex);
-							dataset.getEndX(0, iindex);
-							
-							
-							selectedindex=getSelectedbar(dataset.getStartX(0, iindex),dataset.getEndX(0, iindex));
-							for(int z = 0 ; z<selectedindex.size();z++)
-								System.out.println("Selected punt se index "+selectedindex.get(z).toString());
-							c.selectedx=5.0;
-							c.selectedy=9.0;
-							for(int o = 0;o<selectedindex.size();o++)
-							{
-								Global.getGlobal().getActiveProject().setSelected((Integer) selectedindex.get(o));
-							System.out.println("SET SELECTED" + (Integer) selectedindex.get(o) );
-							}
-							plot.setRenderer(c);
-							repaint();
-							
-							
-							
-						}
-
-					}
-
-					@Override
-					public void chartMouseMoved(ChartMouseEvent arg0) {
-						// TODO Auto-generated method stub
-
-					}
-					
-				});*/
-			
-			
-			
+				
 			
 			
 			JLabel lblNewLabel = new JLabel("X-axis");
@@ -337,8 +255,8 @@ public class HistogramFrame extends JFrame implements ActionListener {
 		    	
 		    }	
 		    );
-		    
-		    JButton extractPic = new JButton("Extract");
+		     
+		    JButton extractPic = new JButton("Extract chart as jpg");
 		    extractPic.addMouseListener(new MouseListener() {
 				
 				@Override
@@ -368,7 +286,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
 					   try{
-
+						   saveFileAs();
 					     //  saveJPG.saveToFile(chart,"test.jpg",500,300,100);
 					    }catch(Exception e1){
 
@@ -477,4 +395,63 @@ public class HistogramFrame extends JFrame implements ActionListener {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	
+	public void saveFileAs() throws IOException {
+
+		File file;
+	
+
+		// Create a file chooser
+		final JFileChooser filechooser = new JFileChooser();
+	
+
+		// shows the dialog, return value specifies file
+		int returnVal = filechooser.showSaveDialog(this);
+
+		// if the chosen file is valid
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			file = filechooser.getSelectedFile();
+			try {
+				
+				saveToFile(chart, file.getAbsolutePath()+".jpg", 500, 300, 100);
+			} catch (UnknownTypeException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
+
+		}
+	}
+
+ public static void saveToFile(JFreeChart chart,String aFileName,int width,int height, double quality) throws FileNotFoundException, IOException
+	    {
+	            BufferedImage img = draw( chart, width, height );
+	            FileOutputStream fos = new FileOutputStream(aFileName);
+
+	            JPEGImageEncoder encoder2 = JPEGCodec.createJPEGEncoder(fos);
+
+	            JPEGEncodeParam param2 = encoder2.getDefaultJPEGEncodeParam(img);
+
+	            param2.setQuality((float) quality, true);
+
+	            encoder2.encode(img,param2);
+
+	            fos.close();
+
+	    }
+	    
+	    protected static BufferedImage draw(JFreeChart chart, int width, int height)
+
+	    {
+
+	        BufferedImage img = new BufferedImage(width , height, BufferedImage.TYPE_INT_RGB);
+	        Graphics2D g2 = img.createGraphics();
+
+	        chart.draw(g2, new Rectangle2D.Double(0, 0, width, height));
+	        g2.dispose();
+
+	        return img;
+
+	    }
 }
