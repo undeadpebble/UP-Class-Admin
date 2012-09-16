@@ -44,9 +44,7 @@ public class Histogram {
     //Update the values 
 	public void updateSelectedValues() {
 		
-		Global.getGlobal().getActiveProject().setSelected(0);
-		Global.getGlobal().getActiveProject().setSelected(2);
-		Global.getGlobal().getActiveProject().setSelected(9);
+		
 		double klein = 99999;
 		double groot = -1;
 		final LinkedList<LinkedList<SuperEntity>> diedata = Global.getGlobal()
@@ -149,6 +147,9 @@ public class Histogram {
 
 	public Histogram() {
 		maindataset = new HistogramDataset();
+		Global.getGlobal().getActiveProject().setSelected(0);
+		Global.getGlobal().getActiveProject().setSelected(2);
+		Global.getGlobal().getActiveProject().setSelected(9);
 	}
 
 	public JFreeChart createHistogram(String plotTitle, String xaxis,
