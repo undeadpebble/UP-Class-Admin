@@ -15,11 +15,11 @@ import javax.xml.crypto.dsig.spec.XSLTTransformParameterSpec;
 
 import org.tmatesoft.sqljet.core.SqlJetException;
 
-import ClassAdminFrontEnd.Frame;
 
 import ClassAdminFrontEnd.EntityTypePanel;
 import ClassAdminFrontEnd.FrmTable;
 import ClassAdminFrontEnd.TreeView;
+import Frames.Frame;
 
 import jxl.*;
 public class testMain

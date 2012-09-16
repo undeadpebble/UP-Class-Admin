@@ -25,7 +25,7 @@ import javax.swing.JTextArea;
 
 import org.tmatesoft.sqljet.core.SqlJetException;
 
-import ClassAdminFrontEnd.Frame;
+import Frames.Frame;
 
 import jxl.Cell;
 import jxl.CellType;

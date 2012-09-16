@@ -13,7 +13,7 @@ import javax.swing.JMenuBar;
 
 public class GradientMenuBar extends JMenuBar{
 
-	GradientMenuBar()
+	public GradientMenuBar()
 	{
 		setOpaque(false);
 		//this.setFont(new Font());

@@ -26,7 +26,7 @@ public class BlurBackground extends JXPanel{
     private BufferedImage backBuffer;
     private float alpha = 0.0f;
 
-    BlurBackground(JFrame frame) {
+    public BlurBackground(JFrame frame) {
         setLayout(null);
         
         setBounds(0, 0, frame.getWidth(), frame.getHeight());

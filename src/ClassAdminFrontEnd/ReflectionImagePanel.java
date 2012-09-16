@@ -12,7 +12,7 @@ public class ReflectionImagePanel extends JXPanel {
 
 	private BufferedImage image = null;
 
-	ReflectionImagePanel(BufferedImage _image) {
+	public ReflectionImagePanel(BufferedImage _image) {
 		image = _image;
 		setOpaque(false);
 	}

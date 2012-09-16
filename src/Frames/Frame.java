@@ -1,4 +1,4 @@
-package ClassAdminFrontEnd;
+package Frames;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -46,6 +46,22 @@ import ClassAdminBackEnd.FileHandler;
 import ClassAdminBackEnd.Global;
 import ClassAdminBackEnd.PDatExport;
 import ClassAdminBackEnd.UnsupportedFileTypeException;
+import ClassAdminFrontEnd.BackgroundGradientPanel;
+import ClassAdminFrontEnd.BlurBackground;
+import ClassAdminFrontEnd.BoxPlotFrame;
+import ClassAdminFrontEnd.FadePanel;
+import ClassAdminFrontEnd.FrmTable;
+import ClassAdminFrontEnd.GradientMenuBar;
+import ClassAdminFrontEnd.HistogramFrame;
+import ClassAdminFrontEnd.ImagePanel;
+import ClassAdminFrontEnd.MenuImagePanel;
+import ClassAdminFrontEnd.ReflectionButton;
+import ClassAdminFrontEnd.ReflectionButtonWithLabel;
+import ClassAdminFrontEnd.ReflectionImagePanel;
+import ClassAdminFrontEnd.ScatterPlotFrame;
+import ClassAdminFrontEnd.ShadowPanel;
+import ClassAdminFrontEnd.ThreeStopGradientPanel;
+import ClassAdminFrontEnd.TreeView;
 
 public class Frame extends JFrame {
 
