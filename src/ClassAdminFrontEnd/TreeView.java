@@ -157,12 +157,10 @@ public class TreeView extends Display {
 
 		// colors
 		ItemAction nodeColor = new NodeColorAction(treeNodes);
-		ItemAction textColor = new ColorAction(treeNodes, VisualItem.TEXTCOLOR,
-				ColorLib.rgb(0, 0, 0));
+		ItemAction textColor = new ColorAction(treeNodes, VisualItem.TEXTCOLOR, ColorLib.rgb(0, 0, 0));
 		m_vis.putAction("textColor", textColor);
 
-		ItemAction edgeColor = new ColorAction(treeEdges,
-				VisualItem.STROKECOLOR, ColorLib.rgb(200, 200, 200));
+		ItemAction edgeColor = new ColorAction(treeEdges, VisualItem.STROKECOLOR, ColorLib.rgb(200, 200, 200));
 
 		// quick repaint
 		ActionList repaint = new ActionList();
@@ -182,13 +180,11 @@ public class TreeView extends Display {
 		m_vis.putAction("animatePaint", animatePaint);
 
 		// create the tree layout action
-		NodeLinkTreeLayout treeLayout = new NodeLinkTreeLayout(tree,
-				m_orientation, 50, 0, 8);
+		NodeLinkTreeLayout treeLayout = new NodeLinkTreeLayout(tree, m_orientation, 50, 0, 8);
 		treeLayout.setLayoutAnchor(new Point2D.Double(25, 300));
 		m_vis.putAction("treeLayout", treeLayout);
 
-		CollapsedSubtreeLayout subLayout = new CollapsedSubtreeLayout(tree,
-				m_orientation);
+		CollapsedSubtreeLayout subLayout = new CollapsedSubtreeLayout(tree, m_orientation);
 		m_vis.putAction("subLayout", subLayout);
 
 		AutoPanAction autoPan = new AutoPanAction();
@@ -236,14 +232,10 @@ public class TreeView extends Display {
 		addControlListener(new PanControl());
 		addControlListener(new FocusControl(1, "filter"));
 		addControlListener(new TreeViewControl());
-		registerKeyboardAction(new OrientAction(Constants.ORIENT_LEFT_RIGHT),
-				"left-to-right", KeyStroke.getKeyStroke("ctrl 1"), WHEN_FOCUSED);
-		registerKeyboardAction(new OrientAction(Constants.ORIENT_TOP_BOTTOM),
-				"top-to-bottom", KeyStroke.getKeyStroke("ctrl 2"), WHEN_FOCUSED);
-		registerKeyboardAction(new OrientAction(Constants.ORIENT_RIGHT_LEFT),
-				"right-to-left", KeyStroke.getKeyStroke("ctrl 3"), WHEN_FOCUSED);
-		registerKeyboardAction(new OrientAction(Constants.ORIENT_BOTTOM_TOP),
-				"bottom-to-top", KeyStroke.getKeyStroke("ctrl 4"), WHEN_FOCUSED);
+		registerKeyboardAction(new OrientAction(Constants.ORIENT_LEFT_RIGHT), "left-to-right", KeyStroke.getKeyStroke("ctrl 1"), WHEN_FOCUSED);
+		registerKeyboardAction(new OrientAction(Constants.ORIENT_TOP_BOTTOM), "top-to-bottom", KeyStroke.getKeyStroke("ctrl 2"), WHEN_FOCUSED);
+		registerKeyboardAction(new OrientAction(Constants.ORIENT_RIGHT_LEFT), "right-to-left", KeyStroke.getKeyStroke("ctrl 3"), WHEN_FOCUSED);
+		registerKeyboardAction(new OrientAction(Constants.ORIENT_BOTTOM_TOP), "bottom-to-top", KeyStroke.getKeyStroke("ctrl 4"), WHEN_FOCUSED);
 
 		// ------------------------------------------------
 
@@ -265,10 +257,8 @@ public class TreeView extends Display {
 	// ------------------------------------------------------------------------
 
 	public void setOrientation(int orientation) {
-		NodeLinkTreeLayout rtl = (NodeLinkTreeLayout) m_vis
-				.getAction("treeLayout");
-		CollapsedSubtreeLayout stl = (CollapsedSubtreeLayout) m_vis
-				.getAction("subLayout");
+		NodeLinkTreeLayout rtl = (NodeLinkTreeLayout) m_vis.getAction("treeLayout");
+		CollapsedSubtreeLayout stl = (CollapsedSubtreeLayout) m_vis.getAction("subLayout");
 		switch (orientation) {
 		case Constants.ORIENT_LEFT_RIGHT:
 			m_nodeRenderer.setHorizontalAlignment(Constants.LEFT);
@@ -299,8 +289,7 @@ public class TreeView extends Display {
 			m_edgeRenderer.setVerticalAlignment2(Constants.BOTTOM);
 			break;
 		default:
-			throw new IllegalArgumentException(
-					"Unrecognized orientation value: " + orientation);
+			throw new IllegalArgumentException("Unrecognized orientation value: " + orientation);
 		}
 		m_orientation = orientation;
 		rtl.setOrientation(orientation);
@@ -314,8 +303,7 @@ public class TreeView extends Display {
 	// ------------------------------------------------------------------------
 
 	public static void createEntityTypeFrm(String label) {
-		JComponent treeview = createPanelEntityTypeTreeView(label, Global
-				.getGlobal().getActiveProject().getHeadEntityType());
+		JComponent treeview = createPanelEntityTypeTreeView(label, Global.getGlobal().getActiveProject().getHeadEntityType());
 
 		JFrame frame = new JFrame();
 
@@ -335,18 +323,14 @@ public class TreeView extends Display {
 		frame.setVisible(true);
 	}
 
-	public static JComponent createPanelEntityTypeTreeView(final String label,
-			EntityType th) {
+	public static JComponent createPanelEntityTypeTreeView(final String label, EntityType th) {
 		Color BACKGROUND = Color.WHITE;
 		Color FOREGROUND = Color.BLACK;
 
-		String str = "<tree>" + "<declarations>"
-				+ "<attributeDecl name=\"name\" type=\"String\" />"
-				+ "</declarations>";
+		String str = "<tree>" + "<declarations>" + "<attributeDecl name=\"name\" type=\"String\" />" + "</declarations>";
 
 		Global.getGlobal().getActiveProject().getTreeLinkedList().clear();
-		str += th.createTreeFromHead(Global.getGlobal().getActiveProject()
-				.getTreeLinkedList());
+		str += th.createTreeFromHead(Global.getGlobal().getActiveProject().getTreeLinkedList());
 
 		str += "</tree>";
 
@@ -395,8 +379,7 @@ public class TreeView extends Display {
 
 		lblSelectedParent.setPreferredSize(new Dimension(200, 20));
 		lblSelectedParent.setVerticalAlignment(SwingConstants.TOP);
-		lblSelectedParent
-				.setBorder(BorderFactory.createEmptyBorder(3, 0, 0, 0));
+		lblSelectedParent.setBorder(BorderFactory.createEmptyBorder(3, 0, 0, 0));
 		lblSelectedParent.setFont(FontLib.getFont("Tahoma", Font.PLAIN, 16));
 		lblSelectedParent.setBackground(BACKGROUND);
 		lblSelectedParent.setForeground(FOREGROUND);
@@ -451,14 +434,11 @@ public class TreeView extends Display {
 		return panel;
 	}
 
-	public static JComponent createPanelTreeView(final String label,
-			SuperEntity th) {
+	public static JComponent createPanelTreeView(final String label, SuperEntity th) {
 		Color BACKGROUND = Color.WHITE;
 		Color FOREGROUND = Color.BLACK;
 
-		String str = "<tree>" + "<declarations>"
-				+ "<attributeDecl name=\"name\" type=\"String\" />"
-				+ "</declarations>";
+		String str = "<tree>" + "<declarations>" + "<attributeDecl name=\"name\" type=\"String\" />" + "</declarations>";
 
 		str += th.createTreeFromHead();
 
@@ -518,14 +498,13 @@ public class TreeView extends Display {
 
 		return panel;
 	}
-	
+
 	static JDialog frame = null;
 
-	private static void createNewNode()
-	{
+	private static void createNewNode() {
 		final Table nodes = myTree.getNodeTable();
 		try {
-			frame = new JDialog(new Frame(),true);
+			frame = new JDialog(new Frame(), true);
 		} catch (SqlJetException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -533,90 +512,87 @@ public class TreeView extends Display {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		JPanel pnlRad = new JPanel(new GridLayout(1,2));
-		frame.setSize(600,600);
-		
-		frame.setLayout(new GridLayout(10,2));
-		
+		JPanel pnlRad = new JPanel(new GridLayout(1, 2));
+		frame.setSize(600, 600);
+
+		frame.setLayout(new GridLayout(10, 2));
+
 		JLabel lblName = new JLabel("Name:");
 		final JComboBox cmbParent = new JComboBox();
-		for(int r = 0; r <nodes.getRowCount(); r++)
-		{
-			for (int c = 0; c < nodes.getColumnCount(); c++)
-			{
+		for (int r = 0; r < nodes.getRowCount(); r++) {
+			for (int c = 0; c < nodes.getColumnCount(); c++) {
 				cmbParent.addItem(nodes.getString(r, c));
 			}
 		}
 
 		JLabel lblParent = new JLabel("Parent:");
 		final JTextField txtName = new JTextField();
-		txtName.setSize(120,30);
-		
-		
+		txtName.setSize(120, 30);
+
 		JLabel lblText = new JLabel("Text field");
 		JRadioButton rblYes = new JRadioButton("Yes");
 		rblYes.setMnemonic(KeyEvent.VK_Y);
 		JRadioButton rblNo = new JRadioButton("No");
 		rblNo.setMnemonic(KeyEvent.VK_N);
 		rblNo.setSelected(true);
-		
+
 		ButtonGroup group = new ButtonGroup();
 		group.add(rblYes);
 		group.add(rblNo);
-		
+
 		JLabel lblDate = new JLabel("Date of assesment:");
 		JTextArea txtDate = new JTextArea();
-		
+
 		JLabel lblWeight = new JLabel("Weight");
 		JTextArea txtWeight = new JTextArea();
-		
+
 		JButton btnAdd = new JButton("Add");
 		JButton btnClose = new JButton("Close");
 
 		btnAdd.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 
 				Node parent = myTree.getNode(cmbParent.getSelectedIndex());
 				Node child = myTree.addNode();
-				
-				for(int c = 0; c < child.getColumnCount()-1; c++)
-					child.set(c,parent.get(c));
+
+				for (int c = 0; c < child.getColumnCount() - 1; c++)
+					child.set(c, parent.get(c));
 				child.set("name", txtName.getText());
 
 				myTree.addEdge(parent, child);
 
-				new EntityType(txtName.getText(),Global.getGlobal().getActiveProject().getTreeLinkedList().get(cmbParent.getSelectedIndex()),true, null, 0.0);
-			
+				Global.getGlobal().getActiveProject().getTreeLinkedList().add(new EntityType(txtName.getText(), Global.getGlobal().getActiveProject().getTreeLinkedList().get(cmbParent.getSelectedIndex()), true, null, 0.0));
 				cmbParent.removeAllItems();
 
-				for(int r = 0; r <nodes.getRowCount(); r++)
-				{
-					for (int c = 0; c < nodes.getColumnCount(); c++)
-					{
+				for (int r = 0; r < nodes.getRowCount(); r++) {
+					for (int c = 0; c < nodes.getColumnCount(); c++) {
 						cmbParent.addItem(nodes.getString(r, c));
 					}
 				}
-				if(iParent != -1)
+
+				if (iParent != -1)
 					cmbParent.setSelectedIndex(iParent);
 				else
 					cmbParent.setSelectedIndex(0);
-				
+
+				this.notifyAll();
+
 			}
 		});
-		
+
 		btnClose.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
-		
-		if(iParent != -1)
+
+		if (iParent != -1)
 			cmbParent.setSelectedIndex(iParent);
 		else
 			cmbParent.setSelectedIndex(0);
@@ -636,8 +612,8 @@ public class TreeView extends Display {
 		frame.add(btnAdd);
 		frame.add(btnClose);
 		frame.pack();
-		frame.setVisible(true);	
-		
+		frame.setVisible(true);
+
 	}
 
 	// ------------------------------------------------------------------------
@@ -690,9 +666,7 @@ public class TreeView extends Display {
 				getAbsoluteCoordinate(m_cur, m_start);
 				m_end.setLocation(vi.getX() + xbias, vi.getY() + ybias);
 			} else {
-				m_cur.setLocation(m_start.getX() + frac
-						* (m_end.getX() - m_start.getX()), m_start.getY()
-						+ frac * (m_end.getY() - m_start.getY()));
+				m_cur.setLocation(m_start.getX() + frac * (m_end.getX() - m_start.getX()), m_start.getY() + frac * (m_end.getY() - m_start.getY()));
 				panToAbs(m_cur);
 			}
 		}
@@ -741,19 +715,17 @@ public class TreeView extends Display {
 			title.setText("");
 		}
 
-		/*public void itemPressed(VisualItem item, MouseEvent e) {
-			if (!SwingUtilities.isLeftMouseButton(e))
-				return;
-
-			// set the focus to the current node
-			Visualization vis = item.getVisualization();
-			vis.getFocusGroup(Visualization.FOCUS_ITEMS).setTuple(item);
-			item.setFixed(true);
-			dragged = false;
-			Display d = (Display) e.getComponent();
-			down = d.getAbsoluteCoordinate(e.getPoint(), down);
-			vis.run("forces");
-		}*/
+		/*
+		 * public void itemPressed(VisualItem item, MouseEvent e) { if
+		 * (!SwingUtilities.isLeftMouseButton(e)) return;
+		 * 
+		 * // set the focus to the current node Visualization vis =
+		 * item.getVisualization();
+		 * vis.getFocusGroup(Visualization.FOCUS_ITEMS).setTuple(item);
+		 * item.setFixed(true); dragged = false; Display d = (Display)
+		 * e.getComponent(); down = d.getAbsoluteCoordinate(e.getPoint(), down);
+		 * vis.run("forces"); }
+		 */
 
 		public void itemReleased(VisualItem item, MouseEvent e) {
 			if (!SwingUtilities.isLeftMouseButton(e))
@@ -822,17 +794,8 @@ public class TreeView extends Display {
 								for (int r = 0; r < edgeTable.getRowCount(); r++) {
 									if ((edgeTable.get(r, 1).equals(iChild))) {
 										edgeTable.set(r, 0, iParent);
-
-										Global.getGlobal()
-												.getActiveProject()
-												.getTreeLinkedList()
-												.get(iChild)
-												.changeParent(
-														Global.getGlobal()
-																.getActiveProject()
-																.getTreeLinkedList()
-																.get(iParent));
-
+										Global.getGlobal().getActiveProject().getTreeLinkedList().get(iChild).changeParent(Global.getGlobal().getActiveProject().getTreeLinkedList().get(iParent));
+										break;
 									}// if
 								}// for
 							}// if
