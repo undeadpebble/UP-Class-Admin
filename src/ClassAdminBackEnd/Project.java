@@ -6,8 +6,11 @@ package ClassAdminBackEnd;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import org.jfree.chart.JFreeChart;
 import org.tmatesoft.sqljet.core.SqlJetException;
 import org.tmatesoft.sqljet.core.table.SqlJetDb;
+
+import ClassAdminFrontEnd.ScatterPlotFrame;
 
 /**
  * @author undeadpebble
@@ -19,17 +22,26 @@ public class Project {
 	private EntityType headEntityType;
 
 	private ArrayList selectedIndexes = new ArrayList();
-
+	private ArrayList charts = new ArrayList();
+	
 	private LinkedList<Rule> rules = new LinkedList<Rule>();
 	private LinkedList<EntityType> treeLinkedList;
-
+	
+	
+	public void addscattercharts(ScatterPlotFrame x)
+	{
+		System.out.println("Charts selected");
+		charts.add(x);
+	}
 	public void updatecharts()
 	{
-		
+		System.out.println("ADASDDASDASD");
+		((ScatterPlotFrame) charts.get(0)).update();
 	}
 
 	public void setSelected(int x)
 	{
+		System.out.println("Charts selected");
 		selectedIndexes.add(x);
 		
 	}
