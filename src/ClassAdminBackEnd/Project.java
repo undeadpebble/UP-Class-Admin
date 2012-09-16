@@ -8,6 +8,8 @@ import java.util.LinkedList;
 import org.tmatesoft.sqljet.core.SqlJetException;
 import org.tmatesoft.sqljet.core.table.SqlJetDb;
 
+import Rule.Rule;
+
 /**
  * @author undeadpebble
  *
