@@ -54,17 +54,19 @@ import ClassAdminBackEnd.SuperEntity;
 import ClassAdminFrontEnd.Histogram.CustomBarRenderer;
 
 public class HistogramFrame extends JFrame implements ActionListener {
-	static ChartPanel chartpanel ;
-	static JFreeChart chart;
-	int houerx =0;
-	double[] values;
-	
-	String[] studentnr;
-	double[][] studentref;
-	int widthbar = 10;
-	ArrayList selectedindex = new ArrayList();
-	
-	
+	private static ChartPanel chartpanel ;
+	private static JFreeChart chart;
+	private int houerx =0;
+	private double[] values;
+	private String[] studentnr;
+	private double[][] studentref;
+	private int widthbar = 10;
+	private ArrayList selectedindex = new ArrayList();
+	private Histogram nuweChart;
+	public void update()
+	{
+		nuweChart.updateSelectedValues();
+	}
 	public HistogramFrame()
 	{
 			JFrame f = new JFrame("Histogram");
@@ -81,7 +83,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			    String yaxis = "Count"; 
 				
 				
-				final Histogram nuweChart = new Histogram();
+				nuweChart = new Histogram();
 				
 			
 			final HistogramDataset dataset = new HistogramDataset();
@@ -294,6 +296,8 @@ public class HistogramFrame extends JFrame implements ActionListener {
 
 					    }
 				}
+				
+						
 			});
 		    final JLabel width = new JLabel("Width");
 		    JButton widthsmall = new JButton("<");

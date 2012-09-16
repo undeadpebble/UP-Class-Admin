@@ -51,7 +51,7 @@ public class Histogram {
 				.getActiveProject().getHead().getDataLinkedList();
 		ArrayList u = Global.getGlobal().getActiveProject()
 				.getSelectedIndexes();
-	//	System.out.println(currentdata);
+
 		for (int x = 0; x < u.size(); x++) {
 			System.out.println(x);
 			if (diedata.get(x).get(currentdata).getMark() < klein)
@@ -147,9 +147,7 @@ public class Histogram {
 
 	public Histogram() {
 		maindataset = new HistogramDataset();
-		Global.getGlobal().getActiveProject().setSelected(0);
-		Global.getGlobal().getActiveProject().setSelected(2);
-		Global.getGlobal().getActiveProject().setSelected(9);
+		
 	}
 
 	public JFreeChart createHistogram(String plotTitle, String xaxis,
@@ -185,7 +183,7 @@ public class Histogram {
 		panel.addChartMouseListener(new ChartMouseListener() {
 
 			public void chartMouseClicked(ChartMouseEvent e) {
-				updateSelectedValues();
+				Global.getGlobal().getActiveProject().updatecharts();
 				MouseEvent me = e.getTrigger();
 
 				if (me.isShiftDown() == false)
@@ -217,11 +215,11 @@ public class Histogram {
 					
 					
 					// barkleurder.selectedy=currentdataset.getYValue(0, 0);
-					/*for (int o = 0; o < selectedindex.size(); o++) {
+					for (int o = 0; o < selectedindex.size(); o++) {
 						Global.getGlobal().getActiveProject()
 								.setSelected((Integer) selectedindex.get(o));
-						//System.out.println("SET SELECTED" + (Integer) selectedindex.get(o));
-					}*/
+						System.out.println("SET SELECTED" + (Integer) selectedindex.get(o));
+					}
 					plot.setRenderer(barkleurder);
 
 					/*

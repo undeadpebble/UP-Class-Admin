@@ -78,6 +78,7 @@ public class ScatterPlot {
 	
 	public void updateSelectedvalues()
 	{
+		
 		ArrayList u= Global.getGlobal().getActiveProject().getSelectedIndexes();
 		final CircleDrawer cd = new CircleDrawer(Color.red,
 				new BasicStroke(1.0f), null);
@@ -112,7 +113,7 @@ public class ScatterPlot {
 					ChartEntity entity = ((ChartMouseEvent) e).getEntity();
 				
 					if (entity instanceof XYItemEntity && entity != null) {
-						updateSelectedvalues();
+						Global.getGlobal().getActiveProject().updatecharts();
 						XYItemEntity ent = (XYItemEntity) entity;
 					
 						

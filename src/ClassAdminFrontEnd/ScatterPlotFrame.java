@@ -38,11 +38,13 @@ import ClassAdminBackEnd.SuperEntity;
 public class ScatterPlotFrame extends JFrame implements ActionListener {
 	static ChartPanel chartpanel;
 	static JFreeChart chart;
-	int houerx = 0;
-	int houery = 0;
-	ScatterPlot nuweChart;
+	private int houerx = 0;
+	private int houery = 0;
+	private ScatterPlot nuweChart;
 	public void update()
 	{
+		
+	
 		nuweChart.updateSelectedvalues();
 	}
 	public ScatterPlotFrame() {
@@ -55,7 +57,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 		final XYSeriesCollection dataset = new XYSeriesCollection();
 		final String[] headers = Global.getGlobal().getActiveProject()
 				.getHead().getHeaders();
-		final ScatterPlot nuweChart = new ScatterPlot();
+		nuweChart = new ScatterPlot();
 		
 		String[] kolom = Global.getGlobal().getActiveProject().getHead()
 				.getNumberHeaders();

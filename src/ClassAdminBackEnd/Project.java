@@ -10,6 +10,8 @@ import org.jfree.chart.JFreeChart;
 import org.tmatesoft.sqljet.core.SqlJetException;
 import org.tmatesoft.sqljet.core.table.SqlJetDb;
 
+import ClassAdminFrontEnd.BoxPlotFrame;
+import ClassAdminFrontEnd.HistogramFrame;
 import ClassAdminFrontEnd.ScatterPlotFrame;
 
 /**
@@ -22,7 +24,9 @@ public class Project {
 	private EntityType headEntityType;
 
 	private ArrayList selectedIndexes = new ArrayList();
-	private ArrayList charts = new ArrayList();
+	private ArrayList scattercharts = new ArrayList();
+	private ArrayList histogramcharts = new ArrayList();
+	private ArrayList boxplotcharts = new ArrayList();
 	
 	private LinkedList<Rule> rules = new LinkedList<Rule>();
 	private LinkedList<EntityType> treeLinkedList;
@@ -30,13 +34,28 @@ public class Project {
 	
 	public void addscattercharts(ScatterPlotFrame x)
 	{
-		System.out.println("Charts selected");
-		charts.add(x);
+		
+		scattercharts.add(x);
+		
+	}
+	public void addboxplotcharts(BoxPlotFrame x)
+	{
+		
+		scattercharts.add(x);
+		
+	}
+	public void addhistogramcharts(HistogramFrame x)
+	{
+		
+		histogramcharts.add(x);
+		
 	}
 	public void updatecharts()
 	{
-		System.out.println("ADASDDASDASD");
-		((ScatterPlotFrame) charts.get(0)).update();
+		for(int i =0 ; i < scattercharts.size();i++)
+		((ScatterPlotFrame) scattercharts.get(i)).update();
+		for(int i =0 ; i < histogramcharts.size();i++)
+			((HistogramFrame) histogramcharts.get(i)).update();
 	}
 
 	public void setSelected(int x)
