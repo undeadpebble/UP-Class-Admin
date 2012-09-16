@@ -1,7 +1,10 @@
 package ClassAdminFrontEnd;
 
+import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Composite;
+import java.awt.CompositeContext;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -9,11 +12,14 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
 import java.util.EventListener;
 import java.util.LinkedList;
 
@@ -23,9 +29,11 @@ import javax.swing.JPanel;
 
 import org.imgscalr.Scalr;
 
+import com.jhlabs.vecmath.Color4f;
+
 import ClassAdminBackEnd.SuperEntity;
 
-public class RapidAssessmentCanvas extends JPanel {
+public class RapidAssessmentCanvas extends JFrame {
 	/**
 	 * 
 	 */
@@ -38,7 +46,7 @@ public class RapidAssessmentCanvas extends JPanel {
 	private SuperEntity assessedEntity;
 	private MyMarkPoint lastcreated = null;
 	// private LinkedList<MyMarkPoint> marks = new LinkedList<MyMarkPoint>();
-	private RapidAssessmentCanvas parentPanel = this;
+	private ContainerPanel parentPanel;
 	private MyRectangle parentRect;
 
 	public class MyMarkTotalComponent extends JComponent {
@@ -76,9 +84,9 @@ public class RapidAssessmentCanvas extends JPanel {
 					RenderingHints.VALUE_ANTIALIAS_ON);
 			g2.drawRect(0, 0, this.getWidth() + 5, this.getHeight() + 5);
 			g2.setFont(new Font(Font.SANS_SERIF, Font.PLAIN,
-					this.getHeight() - 3));
+					this.getHeight() - 4));
 			g2.drawString("/ " + ((MyComponent) this.getParent()).getMark(),
-					this.getWidth() / 2, this.getHeight() - 3);
+					this.getWidth() / 3, this.getHeight() - 3);
 			g2.dispose();
 		}
 
@@ -93,7 +101,7 @@ public class RapidAssessmentCanvas extends JPanel {
 
 		public MyComponent() {
 			super();
-			// TODO Auto-generated constructor stub
+
 		}
 
 		private double mark;
@@ -126,6 +134,31 @@ public class RapidAssessmentCanvas extends JPanel {
 
 	public class MyMarkPoint extends MyComponent {
 
+		private int editingPosition = 0;
+
+		/**
+		 * @return the editingPosition
+		 */
+		public int getEditingPosition() {
+			return editingPosition;
+		}
+
+		public void incrementEditingPosition() {
+			editingPosition++;
+		}
+
+		public void decrementEditingPosition() {
+			editingPosition--;
+		}
+
+		/**
+		 * @param editingPosition
+		 *            the editingPosition to set
+		 */
+		public void setEditingPosition(int editingPosition) {
+			this.editingPosition = editingPosition;
+		}
+
 		public MyMarkPoint(int x, int y, MyComponent parent) {
 			super();
 			this.setLocation(x, y);
@@ -137,33 +170,34 @@ public class RapidAssessmentCanvas extends JPanel {
 
 				@Override
 				public void mouseReleased(MouseEvent arg0) {
-					// TODO Auto-generated method stub
 
 				}
 
 				@Override
 				public void mousePressed(MouseEvent arg0) {
-					// TODO Auto-generated method stub
+
 				}
 
 				@Override
 				public void mouseExited(MouseEvent arg0) {
-					// TODO Auto-generated method stub
 
 				}
 
 				@Override
 				public void mouseEntered(MouseEvent arg0) {
-					// TODO Auto-generated method stub
 
 				}
 
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
-					// TODO Auto-generated method stub
+
+					if (lastcreated != null)
+						lastcreated.setEditingPosition(0);
 					lastcreated = (MyMarkPoint) arg0.getSource();
-					if (arg0.getButton() == arg0.BUTTON3)
+					if (arg0.getButton() == arg0.BUTTON3) {
+						lastcreated.setMark(0);
 						lastcreated.getParent().remove(lastcreated);
+					}
 					parentPanel.repaint();
 				}
 			});
@@ -171,7 +205,7 @@ public class RapidAssessmentCanvas extends JPanel {
 
 		@Override
 		protected void paintComponent(Graphics arg0) {
-			// TODO Auto-generated method stub
+
 			super.paintComponent(arg0);
 
 			Graphics2D g2 = (Graphics2D) arg0.create();
@@ -185,11 +219,18 @@ public class RapidAssessmentCanvas extends JPanel {
 					RenderingHints.VALUE_ANTIALIAS_ON);
 			g2.drawRect(0, 0, this.getWidth() / 3 - 1, this.getHeight() - 1);
 			g2.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, MARK_SIZE - 2));
-			g2.drawString("" + this.getMark(), this.getWidth() / 3 + 2,
+			String text1 = "" + this.getMark();
+			String text2 = "";
+			if(this.getEditingPosition() >= 0){
+				text2 = text1.substring(this.getEditingPosition());
+				text1 = text1.substring(0, this.getEditingPosition())+'|';
+			}
+			g2.drawString(text1+text2, this.getWidth() / 3 + 2,
 					this.getHeight() - 1);
 			g2.dispose();
 
 		}
+
 
 	}
 
@@ -235,8 +276,47 @@ public class RapidAssessmentCanvas extends JPanel {
 			this.setSize(w, h);
 			this.addMouseListener(new canvasMouseListener());
 			new MyMarkTotalComponent(this);
-			this.setForeground(Color.red);
-			// TODO Auto-generated constructor stub
+			this.addMouseMotionListener(new CanvasMouseMoveListener());
+			this.addKeyListener(new KeyListener() {
+
+				@Override
+				public void keyTyped(KeyEvent arg0) {
+
+				}
+
+				@Override
+				public void keyReleased(KeyEvent arg0) {
+
+				}
+
+				@Override
+				public void keyPressed(KeyEvent arg0) {
+					MyMarkPoint source = lastcreated;
+					System.out.println("press: " + arg0.getKeyChar());
+					if (source.getEditingPosition() >= 0) {
+						String mark = String.valueOf(source.getMark());
+						mark = mark.substring(0, source.getEditingPosition())
+								+ arg0.getKeyChar()
+								+ mark.substring(source.getEditingPosition() + 1);
+						try {
+							source.setMark(Double.parseDouble(mark));
+							source.incrementEditingPosition();
+						} catch (NumberFormatException e) {
+
+						}
+					} else {
+						try {
+							source.setMark(Double.parseDouble(""
+									+ arg0.getKeyChar()));
+							source.incrementEditingPosition();
+						} catch (NumberFormatException e) {
+
+						}
+					}
+
+				}
+			});
+
 		}
 
 		/*
@@ -246,7 +326,7 @@ public class RapidAssessmentCanvas extends JPanel {
 		 */
 		@Override
 		protected void paintComponent(Graphics arg0) {
-			// TODO Auto-generated method stub
+
 			super.paintComponent(arg0);
 			Graphics2D g2 = (Graphics2D) arg0.create();
 			g2.setColor(Color.red);
@@ -255,6 +335,13 @@ public class RapidAssessmentCanvas extends JPanel {
 					RenderingHints.VALUE_ANTIALIAS_ON);
 			g2.drawRoundRect(0, 0, this.getWidth() - 1, this.getHeight() - 1,
 					20, 20);
+			if (this.isPressing()) {
+				g2.setColor(new Color(0.3f, 0.3f, 1.0f));
+				g2.drawRect((int) (this.getOrigin().getX()), (int) (this
+						.getOrigin().getY()),
+						(int) (this.getEnd().getX() - this.getOrigin().getX()),
+						(int) (this.getEnd().getY() - this.getOrigin().getY()));
+			}
 
 			g2.dispose();
 
@@ -314,27 +401,27 @@ public class RapidAssessmentCanvas extends JPanel {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			// TODO Auto-generated method stub
 
 		}
 
 		@Override
 		public void mouseEntered(MouseEvent e) {
-			// TODO Auto-generated method stub
+
 			((MyRectangle) e.getSource()).setPressing(false);
 		}
 
 		@Override
 		public void mouseExited(MouseEvent e) {
-			// TODO Auto-generated method stub
+
 			((MyRectangle) e.getSource()).setPressing(false);
 		}
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
+
 			((MyRectangle) e.getSource()).setOrigin(new Point(e.getX(), e
 					.getY()));
+			((MyRectangle) e.getSource()).setEnd(new Point(e.getX(), e.getY()));
 			((MyRectangle) e.getSource()).setPressing(true);
 			((MyRectangle) e.getSource()).setTimePressed(e.getWhen());
 			System.out.println("press");
@@ -342,7 +429,7 @@ public class RapidAssessmentCanvas extends JPanel {
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
+
 			if (e.getWhen() - ((MyRectangle) e.getSource()).getTimePressed() < 100) {
 				if (e.getButton() == e.BUTTON3 && e.getSource() != parentRect) {
 					MyComponent parent = ((MyComponent) ((MyRectangle) e
@@ -354,7 +441,7 @@ public class RapidAssessmentCanvas extends JPanel {
 
 				return;
 			}
-			((MyRectangle) e.getSource()).setEnd(new Point(e.getX(), e.getY()));
+
 			if (((MyRectangle) e.getSource()).getPressing())
 				createComponent(((MyRectangle) e.getSource()).getOrigin(),
 						((MyRectangle) e.getSource()).getEnd(),
@@ -373,6 +460,8 @@ public class RapidAssessmentCanvas extends JPanel {
 				MyMarkPoint tmp = new MyMarkPoint((int) p1.getX(),
 						(int) p1.getY(), source);
 				source.add(tmp);
+				if (lastcreated != null)
+					lastcreated.setEditingPosition(0);
 				lastcreated = tmp;
 
 			} else {
@@ -388,35 +477,166 @@ public class RapidAssessmentCanvas extends JPanel {
 
 	}
 
+	public class CanvasMouseMoveListener implements MouseMotionListener {
+
+		@Override
+		public void mouseDragged(MouseEvent e) {
+
+			((MyRectangle) e.getSource()).setEnd(new Point(e.getX(), e.getY()));
+			((MyRectangle) e.getSource()).repaint();
+
+			System.out.println(((MyRectangle) e.getSource()).getEnd());
+		}
+
+		@Override
+		public void mouseMoved(MouseEvent e) {
+
+		}
+	}
+
 	public RapidAssessmentCanvas(BufferedImage backGround,
 			SuperEntity assessedEntity) {
+		this.setLayout(null);
+		ContainerPanel canvas = new ContainerPanel();
+		parentPanel = canvas;
+		this.setContentPane(canvas);
+		this.setSize(600, 600);
 		this.backGround = backGround;
 		this.assessedEntity = assessedEntity;
 		parentRect = new MyRectangle(0, 0, 500, 500);
 		parentRect.setVisible(true);
 		this.setLayout(null);
-		this.add(parentRect);
+		canvas.add(parentRect);
+		this.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+
+			}
+
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+
+			}
+
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				MyMarkPoint source = lastcreated;
+				System.out.println("press: " + arg0.getKeyChar());
+				switch (arg0.getKeyCode()) {
+				case '.':
+					if (arg0.getKeyChar() == '.') {
+						String text1 = ""+source.getMark();
+						String text2 = "";
+						int dec = text1.indexOf(".");
+						text2 = text1.substring(dec+1);
+						text1 = text1.substring(0, dec);
+						String text = text1+text2;
+						if(dec < source.getEditingPosition())
+							source.decrementEditingPosition();
+						text2=text.substring(source.getEditingPosition());
+						text1=text.substring(0, source.getEditingPosition())+'.';
+						try {
+							source.setMark(Double.parseDouble(text1+text2));
+							source.incrementEditingPosition();
+						} catch (NumberFormatException e) {
+
+						}
+					}
+
+					break;
+
+				case 8:
+					if (source.getEditingPosition() > 0) {
+						String mark = String.valueOf(source.getMark());
+						if (mark.charAt(source.getEditingPosition() - 1) == '.'){
+							source.decrementEditingPosition();
+							break;
+					}
+						String secondPart = "";
+						try {
+							secondPart = mark.substring(source
+									.getEditingPosition());
+
+						} catch (StringIndexOutOfBoundsException e) {
+
+						}
+						mark = mark.substring(0,
+								source.getEditingPosition() - 1) + secondPart;
+						try {
+							source.setMark(Double.parseDouble(mark));
+							source.decrementEditingPosition();
+						} catch (NumberFormatException e) {
+
+						}
+					}
+					break;
+
+				case 37:
+					source.decrementEditingPosition();
+
+					break;
+				case 39:
+					source.incrementEditingPosition();
+
+					break;
+				default:
+					if (source.getEditingPosition() > 0) {
+						String mark = String.valueOf(source.getMark());
+						String secondPart = "";
+						try {
+							secondPart = mark.substring(source
+									.getEditingPosition());
+
+						} catch (StringIndexOutOfBoundsException e) {
+
+						}
+						mark = mark.substring(0, source.getEditingPosition())
+								+ arg0.getKeyChar() + secondPart;
+						try {
+							source.setMark(Double.parseDouble(mark));
+							source.incrementEditingPosition();
+						} catch (NumberFormatException e) {
+
+						}
+					} else {
+						try {
+							source.setMark(Double.parseDouble(""
+									+ arg0.getKeyChar()));
+							source.incrementEditingPosition();
+						} catch (NumberFormatException e) {
+
+						}
+					}
+					break;
+				}
+
+				parentPanel.repaint();
+			}
+		});
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
-	 */
-	@Override
-	protected void paintComponent(Graphics g) {
-		// TODO Auto-generated method stub
-		super.paintComponent(g);
-		Graphics g2 = g.create();
+	public class ContainerPanel extends JPanel {
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
+		 */
+		@Override
+		protected void paintComponent(Graphics g) {
 
-		if (resizedBackGround == null) {
-			resizedBackGround = Scalr.resize(backGround, this.getWidth(),
-					this.getHeight(), null);
+			super.paintComponent(g);
+			Graphics g2 = g.create();
+
+			if (resizedBackGround == null) {
+				resizedBackGround = Scalr.resize(backGround, this.getWidth(),
+						this.getHeight(), null);
+			}
+
+			g2.drawImage(resizedBackGround, 0, 0, null);
+			g2.dispose();
 		}
-
-		g2.drawImage(resizedBackGround, 0, 0, null);
-		g2.dispose();
 	}
 
 }
