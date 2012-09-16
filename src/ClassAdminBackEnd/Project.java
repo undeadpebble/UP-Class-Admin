@@ -17,8 +17,12 @@ public class Project {
 	private SuperEntity head;
 	private LinkedList<SuperEntity> selected;
 	private EntityType headEntityType;
+
 	private ArrayList selectedIndexes = new ArrayList();
-	
+
+	private LinkedList<Rule> rules = new LinkedList<Rule>();
+	private LinkedList<EntityType> treeLinkedList;
+
 	public void updatecharts()
 	{
 		
@@ -33,6 +37,14 @@ public class Project {
 	{
 		return selectedIndexes;
 	}
+
+	
+	public LinkedList<Rule> getRules() {
+		return rules;
+	}
+
+
+
 	/**
 	 * @return the headEntityType
 	 */
@@ -70,5 +82,13 @@ public class Project {
 
 		
 		this.head.saveToDB(db, 0, idgen);
+		
+	}
+	
+	public LinkedList<EntityType> getTreeLinkedList()
+	{
+		if(treeLinkedList == null)
+			treeLinkedList = new LinkedList<EntityType>();
+		return treeLinkedList;
 	}
 }

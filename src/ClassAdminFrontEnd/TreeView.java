@@ -14,6 +14,7 @@ import java.awt.Label;
 import java.awt.Point;
 import java.awt.dnd.DragSource;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -30,9 +31,12 @@ import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -71,6 +75,7 @@ import prefuse.data.Node;
 import prefuse.data.Table;
 import prefuse.data.Tree;
 import prefuse.data.Tuple;
+import prefuse.data.column.Column;
 import prefuse.data.event.TupleSetListener;
 import prefuse.data.io.CSVTableReader;
 import prefuse.data.io.DataIOException;
@@ -91,29 +96,40 @@ import prefuse.visual.VisualItem;
 import prefuse.visual.expression.InGroupPredicate;
 import prefuse.visual.sort.TreeDepthItemSorter;
 
-/**
- * Demonstration of a node-link tree viewer
- * 
- * @version 1.0
- * @author <a href="http://jheer.org">jeffrey heer</a>
- */
 public class TreeView extends Display {
 
 	private static final String tree = "tree";
 	private static final String treeNodes = "tree.nodes";
 	private static final String treeEdges = "tree.edges";
 
+	private static Tree myTree = null;
 	private LabelRenderer m_nodeRenderer;
 	private EdgeRenderer m_edgeRenderer;
 
 	private String m_label = "label";
 	private int m_orientation = Constants.ORIENT_LEFT_RIGHT;
-	
-    static Cursor dc = new Cursor(Cursor.DEFAULT_CURSOR);
-    static Cursor yd = DragSource.DefaultMoveDrop;
 
+
+	static Cursor dc = new Cursor(Cursor.DEFAULT_CURSOR);
+	static Cursor yd = DragSource.DefaultMoveDrop;
+	static JFastLabel title = new JFastLabel("                 ");
+	static JFastLabel lblSelectedParent = new JFastLabel("sParent");
+	static JFastLabel lblSelectedChild = new JFastLabel("sChild");
+	static JFastLabel lblParent = new JFastLabel("Parent: ");
+	static JFastLabel lblChild = new JFastLabel("Child: ");
+	static JFastLabel lblNew = new JFastLabel("New: ");
+	static JTextField txtNew = new JTextField();
+	static JButton btnNew = new JButton("Add");
+	static private boolean bParent = false;
+	static private boolean bChild = false;
+
+	static int iParent = -1;
+	static int iChild = -1;
+		
 	public TreeView(Tree t, String label) {
 		super(new Visualization());
+
+		myTree = t;
 		m_label = label;
 
 		m_vis.add(tree, t);
@@ -154,8 +170,6 @@ public class TreeView extends Display {
 		animatePaint.add(new RepaintAction());
 		m_vis.putAction("animatePaint", animatePaint);
 
-		
-		
 		// create the tree layout action
 		NodeLinkTreeLayout treeLayout = new NodeLinkTreeLayout(tree,
 				m_orientation, 50, 0, 8);
@@ -287,8 +301,20 @@ public class TreeView extends Display {
 	}
 
 	// ------------------------------------------------------------------------
-	
-	
+
+	public static void createEntityTypeFrm(String label) {
+		JComponent treeview = createPanelEntityTypeTreeView(label, Global
+				.getGlobal().getActiveProject().getHeadEntityType());
+
+		JFrame frame = new JFrame();
+
+		frame.setContentPane(treeview);
+		frame.pack();
+		frame.setVisible(true);
+
+	}
+
+
 	public static void createStudentFrm(String label, SuperEntity treeHead) {
 		JComponent treeview = createPanelTreeView(label, treeHead);
 
@@ -297,6 +323,137 @@ public class TreeView extends Display {
 		frame.setContentPane(treeview);
 		frame.pack();
 		frame.setVisible(true);
+	}
+
+	public static JComponent createPanelEntityTypeTreeView(final String label,
+			EntityType th) {
+		Color BACKGROUND = Color.WHITE;
+		Color FOREGROUND = Color.BLACK;
+
+		String str = "<tree>" + "<declarations>"
+				+ "<attributeDecl name=\"name\" type=\"String\" />"
+				+ "</declarations>";
+
+		Global.getGlobal().getActiveProject().getTreeLinkedList().clear();
+		str += th.createTreeFromHead(Global.getGlobal().getActiveProject()
+				.getTreeLinkedList());
+
+		str += "</tree>";
+
+		try {
+			// Create file
+			FileWriter fstream = new FileWriter("out.xml");
+			BufferedWriter out = new BufferedWriter(fstream);
+			out.write(str);
+			// Close the output stream
+			out.close();
+		} catch (Exception e) {// Catch exception if any
+			System.err.println("Error: " + e.getMessage());
+		}
+
+		Tree t = null;
+		try {
+			t = (Tree) new TreeMLReader().readGraph("out.xml");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+
+		File f1 = new File("out.xml");
+		boolean success = f1.delete();
+		if (!success) {
+			System.exit(0);
+		}
+
+		// create a new treemap
+		final TreeView tview = new TreeView(t, label);
+		tview.setBackground(BACKGROUND);
+		tview.setForeground(FOREGROUND);
+
+		title.setPreferredSize(new Dimension(200, 20));
+		title.setVerticalAlignment(SwingConstants.BOTTOM);
+		title.setBorder(BorderFactory.createEmptyBorder(3, 0, 0, 0));
+		title.setFont(FontLib.getFont("Tahoma", Font.PLAIN, 16));
+		title.setBackground(BACKGROUND);
+		title.setForeground(FOREGROUND);
+
+		lblParent.setVerticalAlignment(SwingConstants.TOP);
+		lblParent.setBorder(BorderFactory.createEmptyBorder(3, 0, 0, 0));
+		lblParent.setFont(FontLib.getFont("Tahoma", Font.BOLD, 16));
+		lblParent.setBackground(BACKGROUND);
+		lblParent.setForeground(FOREGROUND);
+
+		lblSelectedParent.setPreferredSize(new Dimension(200, 20));
+		lblSelectedParent.setVerticalAlignment(SwingConstants.TOP);
+		lblSelectedParent
+				.setBorder(BorderFactory.createEmptyBorder(3, 0, 0, 0));
+		lblSelectedParent.setFont(FontLib.getFont("Tahoma", Font.PLAIN, 16));
+		lblSelectedParent.setBackground(BACKGROUND);
+		lblSelectedParent.setForeground(FOREGROUND);
+
+		lblChild.setVerticalAlignment(SwingConstants.TOP);
+		lblChild.setBorder(BorderFactory.createEmptyBorder(3, 0, 0, 0));
+		lblChild.setFont(FontLib.getFont("Tahoma", Font.BOLD, 16));
+		lblChild.setBackground(BACKGROUND);
+		lblChild.setForeground(FOREGROUND);
+
+		lblSelectedChild.setPreferredSize(new Dimension(200, 20));
+		lblSelectedChild.setVerticalAlignment(SwingConstants.TOP);
+		lblSelectedChild.setBorder(BorderFactory.createEmptyBorder(3, 0, 0, 0));
+		lblSelectedChild.setFont(FontLib.getFont("Tahoma", Font.PLAIN, 16));
+		lblSelectedChild.setBackground(BACKGROUND);
+		lblSelectedChild.setForeground(FOREGROUND);
+
+/*		lblNew.setVerticalAlignment(SwingConstants.TOP);
+		lblNew.setBorder(BorderFactory.createEmptyBorder(3, 0, 0, 0));
+		lblNew.setFont(FontLib.getFont("Tahoma", Font.BOLD, 16));
+		lblNew.setBackground(BACKGROUND);
+		lblNew.setForeground(FOREGROUND);
+*/		
+/*		txtNew.setPreferredSize(new Dimension(200, 20));
+		txtNew.setBorder(BorderFactory.createEmptyBorder(3, 0, 0, 0));
+		txtNew.setFont(FontLib.getFont("Tahoma", Font.PLAIN, 16));
+		txtNew.setBackground(BACKGROUND);
+		txtNew.setForeground(FOREGROUND);
+*/
+		Box topBox = new Box(BoxLayout.X_AXIS);
+		topBox.add(Box.createHorizontalStrut(10));
+		topBox.add(lblParent);
+		topBox.add(lblSelectedParent);
+		topBox.add(lblChild);
+		topBox.add(lblSelectedChild);
+		topBox.add(Box.createHorizontalGlue());
+		topBox.add(Box.createHorizontalStrut(3));
+		topBox.setBackground(BACKGROUND);
+
+		btnNew.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+			}
+		});
+		
+		
+		Box box = new Box(BoxLayout.X_AXIS);
+		box.add(Box.createHorizontalStrut(10));
+		box.add(title);
+		box.add(Box.createHorizontalGlue());
+		box.add(lblNew);
+		box.add(txtNew);
+		box.add(btnNew);
+		// box.add(search);
+		box.add(Box.createHorizontalStrut(3));
+		box.setBackground(BACKGROUND);
+
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.setBackground(BACKGROUND);
+		panel.setForeground(FOREGROUND);
+		panel.add(topBox, BorderLayout.NORTH);
+		panel.add(tview, BorderLayout.CENTER);
+		panel.add(box, BorderLayout.SOUTH);
+
+		return panel;
 	}
 
 	public static JComponent createPanelTreeView(final String label,
@@ -334,11 +491,9 @@ public class TreeView extends Display {
 		File f1 = new File("out.xml");
 		boolean success = f1.delete();
 		if (!success) {
-			System.out.println("Deletion failed.");
 			System.exit(0);
-		} else {
-			System.out.println("File deleted.");
 		}
+
 
 		// create a new treemap
 		final TreeView tview = new TreeView(t, label);
@@ -353,18 +508,6 @@ public class TreeView extends Display {
 		title.setBackground(BACKGROUND);
 		title.setForeground(FOREGROUND);
 
-		final MouseListener ml = new MouseAdapter(){
-			public void mousePressed(MouseEvent e){
-				System.out.println(e.getX());
-/*				JComponent jc = (JComponent)e.getSource();
-				TransferHandler th = jc.getTransferHandler();
-				th.exportAsDrag(jc, e, TransferHandler.MOVE);
-*/			}
-		};
-		
-		
-		
-
 		Box box = new Box(BoxLayout.X_AXIS);
 		box.add(Box.createHorizontalStrut(10));
 		box.add(title);
@@ -378,8 +521,7 @@ public class TreeView extends Display {
 		panel.setForeground(FOREGROUND);
 		panel.add(tview, BorderLayout.CENTER);
 		panel.add(box, BorderLayout.SOUTH);
-		
-		
+
 		return panel;
 	}
 
@@ -459,83 +601,150 @@ public class TreeView extends Display {
 		}
 
 	} // end of inner class TreeMapColorAction
-	
-    public class TreeViewControl extends ControlAdapter {
-        private VisualItem activeItem;
-        private Point2D down = new Point2D.Double();
-        private Point2D tmp = new Point2D.Double();
-        private boolean wasFixed, dragged;
-        private boolean repaint = false;
-        
-        public void itemEntered(VisualItem item, MouseEvent e) {
-            activeItem = item;
-            if (item.canGetString("name"))
-            {
-                System.out.println("item");
-            }
-            else
-            	System.out.println("no");
-            wasFixed = item.isFixed();
-        }
-        
-        public void itemExited(VisualItem item, MouseEvent e) {
-            if ( activeItem == item ) {
-                activeItem = null;
-                item.setFixed(wasFixed);
-            }
-        }
-        
-        public void itemPressed(VisualItem item, MouseEvent e) {
-            if (!SwingUtilities.isLeftMouseButton(e)) return;
-            
-            // set the focus to the current node
-            Visualization vis = item.getVisualization();
-            vis.getFocusGroup(Visualization.FOCUS_ITEMS).setTuple(item);
-            item.setFixed(true);
-            dragged = false;
-            Display d = (Display)e.getComponent();
-            down = d.getAbsoluteCoordinate(e.getPoint(), down);
-            
-            vis.run("forces");
-        }
-        
-        public void itemReleased(VisualItem item, MouseEvent e) {
-            if (!SwingUtilities.isLeftMouseButton(e)) return;
-            if ( dragged ) {
-                activeItem = null;
-                item.setFixed(wasFixed);
-                dragged = false;
-            }
-            // clear the focus
-            Visualization vis = item.getVisualization();
-            vis.getFocusGroup(Visualization.FOCUS_ITEMS).clear();
 
-            vis.cancel("forces");
-        }
-        
-        public void itemClicked(VisualItem item, MouseEvent e) {
-            if (!SwingUtilities.isLeftMouseButton(e)) return;
-            if ( e.getClickCount() == 2 ) {
-                String id = item.getString("id");
-            }
-        }
-        
-        public void itemDragged(VisualItem item, MouseEvent e) {
-            if (!SwingUtilities.isLeftMouseButton(e)) return;
-            dragged = true;
-            Display d = (Display)e.getComponent();
-            tmp = d.getAbsoluteCoordinate(e.getPoint(), tmp);
-            double dx = tmp.getX()-down.getX();
-            double dy = tmp.getY()-down.getY();
-            
-            PrefuseLib.setX(item, null, item.getX()+dx);
-            PrefuseLib.setY(item, null, item.getY()+dy);
-            down.setLocation(tmp);
-            System.out.println(repaint);
-            //if ( repaint )
-                item.getVisualization().repaint();
-        }
-    } 
+	public class TreeViewControl extends ControlAdapter {
+		private VisualItem activeItem;
+		private Point2D down = new Point2D.Double();
+		private Point2D tmp = new Point2D.Double();
+		private boolean wasFixed, dragged;
+		private boolean repaint = false;
+
+		public void itemEntered(VisualItem item, MouseEvent e) {
+			activeItem = item;
+			wasFixed = item.isFixed();
+
+			String id = item.getClass().getName();
+			if (id.contains("Node"))
+				title.setText(" " + item.getString("name"));
+		}
+
+		public void itemExited(VisualItem item, MouseEvent e) {
+			if (activeItem == item) {
+				activeItem = null;
+				item.setFixed(wasFixed);
+			}
+			title.setText("");
+		}
+
+		public void itemPressed(VisualItem item, MouseEvent e) {
+			if (!SwingUtilities.isLeftMouseButton(e))
+				return;
+
+			// set the focus to the current node
+			Visualization vis = item.getVisualization();
+			vis.getFocusGroup(Visualization.FOCUS_ITEMS).setTuple(item);
+			item.setFixed(true);
+			dragged = false;
+			Display d = (Display) e.getComponent();
+			down = d.getAbsoluteCoordinate(e.getPoint(), down);
+			vis.run("forces");
+		}
+
+		public void itemReleased(VisualItem item, MouseEvent e) {
+			if (!SwingUtilities.isLeftMouseButton(e))
+				return;
+			if (dragged) {
+				activeItem = null;
+				item.setFixed(wasFixed);
+				dragged = false;
+			}
+			// clear the focus
+			Visualization vis = item.getVisualization();
+			vis.getFocusGroup(Visualization.FOCUS_ITEMS).clear();
+
+			vis.cancel("forces");
+		}
+
+		public void itemClicked(VisualItem item, MouseEvent e) {
+
+			Table edgeTable = null;
+			Table nodeTable = null;
+			String name = null;
+
+			if (!SwingUtilities.isLeftMouseButton(e))
+				return;
+
+			String id = item.getClass().getName();
+
+			if (e.isShiftDown() && e.getClickCount() == 1) {
+
+				if (id.contains("Node")) {
+					nodeTable = item.getTable();
+					name = item.getString("name");
+
+					iParent = -1;
+					bParent = false;
+					while (!bParent) {
+						iParent++;
+						if (nodeTable.getString(iParent, "name").equals(name)) {
+							bParent = true;
+							break;
+						}// if
+					}// while
+					lblSelectedParent.setText(name);
+				}// if
+			}
+
+			if (e.isControlDown() && e.getClickCount() == 1) {
+				if (bParent) {
+					if (id.contains("Node")) {
+						nodeTable = item.getTable();
+						name = item.getString("name");
+
+						iChild = -1;
+						bChild = false;
+						while (!bChild) {
+							iChild++;
+							if (nodeTable.getString(iChild, "name")
+									.equals(name)) {
+								bChild = true;
+								break;
+							}// if
+						}// while
+						if (iChild == iParent) {
+							lblSelectedChild
+									.setText("Can't select same parent");
+							bChild = false;
+							iChild = -1;
+						} else
+							lblSelectedChild.setText(name);
+
+						edgeTable = myTree.getEdgeTable();
+
+						// set(row,col)
+
+						if (bChild) {
+							for (int r = 0; r < edgeTable.getRowCount(); r++) {
+								if ((edgeTable.get(r, 1).equals(iChild))) {
+									edgeTable.set(r, 0, iParent);
+								}
+							}
+						}
+
+					}// if
+
+				} else {
+					lblSelectedParent.setText("Please select parent");
+				}
+			}
+
+		}
+
+		public void itemDragged(VisualItem item, MouseEvent e) {
+			if (!SwingUtilities.isLeftMouseButton(e))
+				return;
+			dragged = true;
+			Display d = (Display) e.getComponent();
+			tmp = d.getAbsoluteCoordinate(e.getPoint(), tmp);
+			double dx = tmp.getX() - down.getX();
+			double dy = tmp.getY() - down.getY();
+
+			PrefuseLib.setX(item, null, item.getX() + dx);
+			PrefuseLib.setY(item, null, item.getY() + dy);
+			down.setLocation(tmp);
+			item.getVisualization().repaint();
+		}
+	}
 
 } // end of class TreeMap
 

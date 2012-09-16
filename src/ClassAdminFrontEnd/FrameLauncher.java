@@ -19,8 +19,9 @@ public class FrameLauncher {
 		determineOS();
 		if (currentOs == MAC_OS)
 		{
-			System.setProperty("apple.laf.useScreenMenuBar", "true");
 			System.setProperty("com.apple.mrj.application.apple.menu.about.name", "UP-Admin");
+			System.setProperty("apple.laf.useScreenMenuBar", "true");
+			System.setProperty("com.apple.mrj.application.live-resize", "true");
 			
             try {
 				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -53,7 +54,7 @@ public class FrameLauncher {
 						UIManager
 								.put("DesktopIcon.background", new Color(0x171717));
 						UIManager.put("nimbusLightBackground", new Color(0xE3E3E3));
-						
+
 						break;
 					}
 				}

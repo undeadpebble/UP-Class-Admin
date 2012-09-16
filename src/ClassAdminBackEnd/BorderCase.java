@@ -57,7 +57,6 @@ public class BorderCase {
         	
         	table.insert(parentID,this.getLowVal(),this.getHighVal());
 
-            db.commit();
             
         
         return 0;

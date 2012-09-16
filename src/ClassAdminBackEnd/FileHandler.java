@@ -153,7 +153,6 @@ public class FileHandler {
 				}
 			}
 			}
-			System.out.print("break");
 		}
 	}
 
@@ -211,6 +210,12 @@ public class FileHandler {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+
+	public void setXLSImport(XlsImport i) {
+//		i.recordData();
+		
 	}
 
 }
