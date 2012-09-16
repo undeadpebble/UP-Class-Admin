@@ -114,11 +114,13 @@ public class ScatterPlot {
 					if (entity instanceof XYItemEntity && entity != null) {
 						updateSelectedvalues();
 						XYItemEntity ent = (XYItemEntity) entity;
+					
 						
-
+						
 						int sindex = ent.getSeriesIndex();
 						int iindex = ent.getItem();
 						Global.getGlobal().getActiveProject().setSelected(iindex);
+						Global.getGlobal().getActiveProject().updatecharts();
 						System.out.println("Punt se index"+iindex);
 						final CircleDrawer cd = new CircleDrawer(Color.red,
 								new BasicStroke(1.0f), null);

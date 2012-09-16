@@ -741,7 +741,9 @@ histogramChartImage.addMouseListener(new MouseListener() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					// TODO Auto-generated method stub
+					
 				ScatterPlotFrame x = new ScatterPlotFrame();	
+			//	Global.getGlobal().getActiveProject().addcharts();
 				}
 			});
 		} catch (IOException e) {

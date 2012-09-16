@@ -28,7 +28,11 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 	static JFreeChart chart;
 	int houerx = 0;
 	int houery = 0;
-
+	ScatterPlot nuweChart;
+	public void update()
+	{
+		nuweChart.updateSelectedvalues();
+	}
 	public ScatterPlotFrame() {
 		JFrame f = new JFrame("ScatterPlot");
 		final Container content = f.getContentPane();

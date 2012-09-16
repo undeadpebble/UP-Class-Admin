@@ -19,7 +19,11 @@ public class Project {
 	private EntityType headEntityType;
 	private ArrayList selectedIndexes = new ArrayList();
 	
-	
+	public void updatecharts()
+	{
+		
+	}
+
 	public void setSelected(int x)
 	{
 		selectedIndexes.add(x);
