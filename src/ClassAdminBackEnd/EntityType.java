@@ -94,6 +94,8 @@ public class EntityType {
 			Boolean isTextField, Date date, Double defaultWeight) {
 		this.name = name;
 		this.parentEntitytype = parentEntitytype;
+		if(parentEntitytype != null)
+		parentEntitytype.getSubEntityType().add(this);
 		this.isTextField = isTextField;
 		this.date = date;
 		this.defaultWeight = defaultWeight;

@@ -1,5 +1,6 @@
 package ClassAdminFrontEnd;
 
+import java.security.acl.Group;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import ClassAdminBackEnd.*;
@@ -9,12 +10,15 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.Label;
 import java.awt.Point;
 import java.awt.dnd.DragSource;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -31,11 +35,17 @@ import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
@@ -44,6 +54,10 @@ import javax.swing.TransferHandler;
 import javax.swing.border.MatteBorder;
 import javax.swing.text.BadLocationException;
 import javax.swing.tree.TreeNode;
+
+import org.tmatesoft.sqljet.core.SqlJetException;
+
+import jxl.Sheet;
 
 import ClassAdminBackEnd.Global;
 
@@ -109,23 +123,20 @@ public class TreeView extends Display {
 	private String m_label = "label";
 	private int m_orientation = Constants.ORIENT_LEFT_RIGHT;
 
-
 	static Cursor dc = new Cursor(Cursor.DEFAULT_CURSOR);
 	static Cursor yd = DragSource.DefaultMoveDrop;
 	static JFastLabel title = new JFastLabel("                 ");
-	static JFastLabel lblSelectedParent = new JFastLabel("sParent");
-	static JFastLabel lblSelectedChild = new JFastLabel("sChild");
+	static JFastLabel lblSelectedParent = new JFastLabel("no parent selected");
+	static JFastLabel lblSelectedChild = new JFastLabel("no child selected");
 	static JFastLabel lblParent = new JFastLabel("Parent: ");
 	static JFastLabel lblChild = new JFastLabel("Child: ");
-	static JFastLabel lblNew = new JFastLabel("New: ");
-	static JTextField txtNew = new JTextField();
-	static JButton btnNew = new JButton("Add");
+	static JButton btnNew = new JButton("Add Node");
 	static private boolean bParent = false;
 	static private boolean bChild = false;
 
 	static int iParent = -1;
 	static int iChild = -1;
-		
+
 	public TreeView(Tree t, String label) {
 		super(new Visualization());
 
@@ -314,7 +325,6 @@ public class TreeView extends Display {
 
 	}
 
-
 	public static void createStudentFrm(String label, SuperEntity treeHead) {
 		JComponent treeview = createPanelTreeView(label, treeHead);
 
@@ -404,18 +414,6 @@ public class TreeView extends Display {
 		lblSelectedChild.setBackground(BACKGROUND);
 		lblSelectedChild.setForeground(FOREGROUND);
 
-/*		lblNew.setVerticalAlignment(SwingConstants.TOP);
-		lblNew.setBorder(BorderFactory.createEmptyBorder(3, 0, 0, 0));
-		lblNew.setFont(FontLib.getFont("Tahoma", Font.BOLD, 16));
-		lblNew.setBackground(BACKGROUND);
-		lblNew.setForeground(FOREGROUND);
-*/		
-/*		txtNew.setPreferredSize(new Dimension(200, 20));
-		txtNew.setBorder(BorderFactory.createEmptyBorder(3, 0, 0, 0));
-		txtNew.setFont(FontLib.getFont("Tahoma", Font.PLAIN, 16));
-		txtNew.setBackground(BACKGROUND);
-		txtNew.setForeground(FOREGROUND);
-*/
 		Box topBox = new Box(BoxLayout.X_AXIS);
 		topBox.add(Box.createHorizontalStrut(10));
 		topBox.add(lblParent);
@@ -427,22 +425,19 @@ public class TreeView extends Display {
 		topBox.setBackground(BACKGROUND);
 
 		btnNew.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				
+				createNewNode(myTree.getNodeTable());
+
 			}
 		});
-		
-		
+
 		Box box = new Box(BoxLayout.X_AXIS);
 		box.add(Box.createHorizontalStrut(10));
 		box.add(title);
 		box.add(Box.createHorizontalGlue());
-		box.add(lblNew);
-		box.add(txtNew);
 		box.add(btnNew);
-		// box.add(search);
 		box.add(Box.createHorizontalStrut(3));
 		box.setBackground(BACKGROUND);
 
@@ -494,7 +489,6 @@ public class TreeView extends Display {
 			System.exit(0);
 		}
 
-
 		// create a new treemap
 		final TreeView tview = new TreeView(t, label);
 		tview.setBackground(BACKGROUND);
@@ -523,6 +517,137 @@ public class TreeView extends Display {
 		panel.add(box, BorderLayout.SOUTH);
 
 		return panel;
+	}
+	
+	private static void createNewNode(Table nodes)
+	{
+		
+		JDialog frame = null;
+		try {
+			frame = new JDialog(new Frame(),true);
+		} catch (SqlJetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		JPanel pnlRad = new JPanel(new GridLayout(1,2));
+		frame.setSize(600,600);
+		
+		frame.setLayout(new GridLayout(10,2));
+		
+		JLabel lblName = new JLabel("Name:");
+		final JComboBox cmbParent = new JComboBox();
+		for(int r = 0; r <nodes.getRowCount(); r++)
+		{
+			for (int c = 0; c < nodes.getColumnCount(); c++)
+			{
+				cmbParent.addItem(nodes.getString(r, c));
+			}
+		}
+
+		JLabel lblParent = new JLabel("Parent:");
+		final JTextField txtName = new JTextField();
+		txtName.setSize(120,30);
+		
+		
+		JLabel lblText = new JLabel("Text field");
+		JRadioButton rblYes = new JRadioButton("Yes");
+		rblYes.setMnemonic(KeyEvent.VK_Y);
+		JRadioButton rblNo = new JRadioButton("No");
+		rblNo.setMnemonic(KeyEvent.VK_N);
+		rblNo.setSelected(true);
+		
+		ButtonGroup group = new ButtonGroup();
+		group.add(rblYes);
+		group.add(rblNo);
+		
+		JLabel lblDate = new JLabel("Date of assesment:");
+		JTextArea txtDate = new JTextArea();
+		
+		JLabel lblWeight = new JLabel("Weight");
+		JTextArea txtWeight = new JTextArea();
+		
+		JButton btnAdd = new JButton("Add");
+		JButton btnClose = new JButton("Close");
+
+		btnAdd.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+
+				Node parent = myTree.getNode(cmbParent.getSelectedIndex());
+				Node child = myTree.addNode();
+				
+				for(int c = 0; c < child.getColumnCount()-1; c++)
+					child.set(c,parent.get(c));
+				child.set("name", txtName.getText());
+
+				myTree.addEdge(parent, child);
+
+				
+				System.out.print("PARENT: ");
+				for(int c = 0; c < parent.getColumnCount()-1; c++)
+					System.out.print(parent.get(c) + "\t");
+				System.out.print("\n");
+				
+				System.out.print("CHILD: ");
+				for(int c = 0; c < child.getColumnCount()-1; c++)
+					System.out.print(child.get(c) + "\t");
+				System.out.print("\n");
+
+				System.out.println("NODES: " + myTree.getNodeCount());
+				System.out.println("EDGES: " + myTree.getEdgeCount());
+				
+				EntityType entity = new EntityType("test",Global.getGlobal().getActiveProject().getTreeLinkedList().get(iParent),true, null, 0.0);
+				Global.getGlobal().getActiveProject().getTreeLinkedList().get(iChild).changeParent(Global.getGlobal().getActiveProject().getTreeLinkedList().get(iParent));
+				
+
+				/*				for (int r = 0; r < edgeTable.getRowCount(); r++) 
+				{
+					if ((edgeTable.get(r, 1).equals(iChild))) 
+					{
+						edgeTable.set(r, 0, iParent);
+
+						Global.getGlobal().getActiveProject().getTreeLinkedList().get(iChild).changeParent(Global.getGlobal().getActiveProject().getTreeLinkedList().get(iParent));
+				
+					}
+				}
+*/			}
+		});
+		
+		btnClose.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+		if(iParent != -1)
+			cmbParent.setSelectedIndex(iParent);
+		else
+			cmbParent.setSelectedIndex(0);
+
+		frame.add(lblParent);
+		frame.add(cmbParent);
+		frame.add(lblName);
+		frame.add(txtName);
+		frame.add(lblText);
+		pnlRad.add(rblYes);
+		pnlRad.add(rblNo);
+		frame.add(pnlRad);
+		frame.add(lblDate);
+		frame.add(txtDate);
+		frame.add(lblWeight);
+		frame.add(txtWeight);
+		frame.add(btnAdd);
+		frame.add(btnClose);
+		frame.pack();
+		frame.setVisible(true);	
+		
 	}
 
 	// ------------------------------------------------------------------------
@@ -651,7 +776,6 @@ public class TreeView extends Display {
 			// clear the focus
 			Visualization vis = item.getVisualization();
 			vis.getFocusGroup(Visualization.FOCUS_ITEMS).clear();
-
 			vis.cancel("forces");
 		}
 
@@ -661,78 +785,103 @@ public class TreeView extends Display {
 			Table nodeTable = null;
 			String name = null;
 
-			if (!SwingUtilities.isLeftMouseButton(e))
-				return;
+			if (SwingUtilities.isLeftMouseButton(e)) {
 
-			String id = item.getClass().getName();
+				String id = item.getClass().getName();
 
-			if (e.isShiftDown() && e.getClickCount() == 1) {
+				if (e.isShiftDown() && e.getClickCount() == 1) {
 
-				if (id.contains("Node")) {
-					nodeTable = item.getTable();
-					name = item.getString("name");
-
-					iParent = -1;
-					bParent = false;
-					while (!bParent) {
-						iParent++;
-						if (nodeTable.getString(iParent, "name").equals(name)) {
-							bParent = true;
-							break;
-						}// if
-					}// while
-					lblSelectedParent.setText(name);
-				}// if
-			}
-
-			if (e.isControlDown() && e.getClickCount() == 1) {
-				if (bParent) {
 					if (id.contains("Node")) {
 						nodeTable = item.getTable();
 						name = item.getString("name");
 
-						iChild = -1;
-						bChild = false;
-						while (!bChild) {
-							iChild++;
-							if (nodeTable.getString(iChild, "name")
-									.equals(name)) {
-								bChild = true;
+						iParent = -1;
+						bParent = false;
+						while (!bParent) {
+							iParent++;
+							if (nodeTable.getString(iParent, "name").equals(
+									name)) {
+								bParent = true;
 								break;
 							}// if
 						}// while
-						if (iChild == iParent) {
-							lblSelectedChild
-									.setText("Can't select same parent");
-							bChild = false;
-							iChild = -1;
-						} else
-							lblSelectedChild.setText(name);
-
-						edgeTable = myTree.getEdgeTable();
-
-						// set(row,col)
-
-						if (bChild) {
-							for (int r = 0; r < edgeTable.getRowCount(); r++) {
-								if ((edgeTable.get(r, 1).equals(iChild))) {
-									edgeTable.set(r, 0, iParent);
-									
-									
-									Global.getGlobal().getActiveProject().getTreeLinkedList().get(iChild).changeParent(Global.getGlobal().getActiveProject().getTreeLinkedList().get(iParent));
-								
-								}
-							}
-						}
-
+						lblSelectedParent.setText(name);
 					}// if
+				}// if
 
-				} else {
-					lblSelectedParent.setText("Please select parent");
-				}
-			}
+				if (e.isControlDown() && e.getClickCount() == 1) {
+					if (bParent) {
+						if (id.contains("Node")) {
+							nodeTable = item.getTable();
+							name = item.getString("name");
 
-		}
+							iChild = -1;
+							bChild = false;
+							while (!bChild) {
+								iChild++;
+								if (nodeTable.getString(iChild, "name").equals(
+										name)) {
+									bChild = true;
+									break;
+								}// if
+							}// while
+							if (iChild == iParent) {
+								lblSelectedChild.setText("can't select same parent");
+								bChild = false;
+								iChild = -1;
+							} else
+								lblSelectedChild.setText(name);
+
+							edgeTable = myTree.getEdgeTable();
+
+							// set(row,col)
+
+							if (bChild) {
+								for (int r = 0; r < edgeTable.getRowCount(); r++) {
+									if ((edgeTable.get(r, 1).equals(iChild))) {
+										edgeTable.set(r, 0, iParent);
+
+										Global.getGlobal()
+												.getActiveProject()
+												.getTreeLinkedList()
+												.get(iChild)
+												.changeParent(
+														Global.getGlobal()
+																.getActiveProject()
+																.getTreeLinkedList()
+																.get(iParent));
+
+									}// if
+								}// for
+							}// if
+
+						}// if
+
+					} else {
+						lblSelectedParent.setText("no parent selected");
+					}// else
+				}// if
+			}// if
+			else if (SwingUtilities.isRightMouseButton(e)) {
+
+				String id = item.getClass().getName();
+
+				if (e.isShiftDown() && e.getClickCount() == 1) {
+					if (id.contains("Node")) {
+						iParent = -1;
+						bParent = false;
+						lblSelectedParent.setText("no parent selected");
+					}// if
+				}// if
+
+				if (e.isControlDown() && e.getClickCount() == 1) {
+					iChild = -1;
+					bChild = false;
+					lblSelectedChild.setText("no child selected");
+				}// if
+			}// else
+
+		}// itemClicked
 
 		public void itemDragged(VisualItem item, MouseEvent e) {
 			if (!SwingUtilities.isLeftMouseButton(e))
