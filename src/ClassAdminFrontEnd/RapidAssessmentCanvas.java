@@ -3,6 +3,7 @@ package ClassAdminFrontEnd;
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Composite;
 import java.awt.CompositeContext;
 import java.awt.EventQueue;
@@ -127,8 +128,77 @@ public class RapidAssessmentCanvas extends JFrame {
 
 				}
 			}
-			System.out.println("updataing to: " + total);
 			this.setMark(total);
+		}
+
+		public boolean contains(MyComponent rect) {
+			return (this.getX() < rect.getX()
+					&& this.getY() < rect.getY()
+					&& this.getX() + this.getWidth() > rect.getX()
+							+ rect.getWidth() && this.getY() + this.getHeight() > rect
+					.getY() + rect.getHeight());
+		}
+
+		public boolean overlaps(MyComponent rect) {
+
+			Point[] myPoints = new Point[4];
+			Point[] rectPoints = new Point[4];
+
+			myPoints[0] = new Point(this.getLocation());
+			myPoints[1] = new Point(
+					(int) (myPoints[0].getX() + this.getWidth()),
+					(int) myPoints[0].getY());
+			myPoints[2] = new Point((int) (myPoints[1].getX()),
+					(int) myPoints[1].getY() + this.getWidth());
+			myPoints[3] = new Point((int) (myPoints[0].getX()),
+					(int) myPoints[2].getY());
+
+			rectPoints[0] = new Point(rect.getLocation());
+			rectPoints[1] = new Point(
+					(int) (rectPoints[0].getX() + rect.getWidth()),
+					(int) rectPoints[0].getY());
+			rectPoints[2] = new Point((int) (rectPoints[1].getX()),
+					(int) rectPoints[1].getY() + rect.getWidth());
+			rectPoints[3] = new Point((int) (rectPoints[0].getX()),
+					(int) rectPoints[2].getY());
+
+			for (int x = 0; x < 4; ++x) {
+				for (int y = x + 1; y < x + 3; y += 2) {
+					if (x % 2 == 0) {
+						if (myPoints[x].getY() < Math.max(
+								rectPoints[(y) % 4].getY(),
+								rectPoints[(y + 1) % 4].getY())
+								&& myPoints[x].getY() > Math.min(
+										rectPoints[(y) % 4].getY(),
+										rectPoints[(y + 1) % 4].getY())
+								&& rectPoints[y].getX() < Math.max(
+										myPoints[x].getX(),
+										myPoints[(x + 1) % 4].getX())
+								&& rectPoints[y].getX() > Math.min(
+										myPoints[x].getX(),
+										myPoints[(x + 1) % 4].getX())) {
+							return true;
+						}
+					} else {
+						if (myPoints[x].getX() < Math.max(
+								rectPoints[(y) % 4].getX(),
+								rectPoints[(y + 1) % 4].getX())
+								&& myPoints[x].getX() > Math.min(
+										rectPoints[(y) % 4].getX(),
+										rectPoints[(y + 1) % 4].getX())
+								&& rectPoints[(y) % 4].getY() < Math.max(
+										myPoints[x].getY(),
+										myPoints[(x + 1) % 4].getY())
+								&& rectPoints[(y) % 4].getY() > Math.min(
+										myPoints[x].getY(),
+										myPoints[(x + 1) % 4].getY())) {
+							return true;
+						}
+					}
+				}
+			}
+
+			return false;
 		}
 	}
 
@@ -149,6 +219,8 @@ public class RapidAssessmentCanvas extends JFrame {
 
 		public void decrementEditingPosition() {
 			editingPosition--;
+			if (editingPosition < 0)
+				editingPosition = 0;
 		}
 
 		/**
@@ -175,7 +247,15 @@ public class RapidAssessmentCanvas extends JFrame {
 
 				@Override
 				public void mousePressed(MouseEvent arg0) {
-
+					if (lastcreated != null)
+						lastcreated.setEditingPosition(0);
+					lastcreated = (MyMarkPoint) arg0.getSource();
+					if (arg0.getButton() == arg0.BUTTON3) {
+						lastcreated.setMark(0);
+						lastcreated.getParent().remove(lastcreated);
+						lastcreated = null;
+					}
+					parentPanel.repaint();
 				}
 
 				@Override
@@ -191,14 +271,6 @@ public class RapidAssessmentCanvas extends JFrame {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
 
-					if (lastcreated != null)
-						lastcreated.setEditingPosition(0);
-					lastcreated = (MyMarkPoint) arg0.getSource();
-					if (arg0.getButton() == arg0.BUTTON3) {
-						lastcreated.setMark(0);
-						lastcreated.getParent().remove(lastcreated);
-					}
-					parentPanel.repaint();
 				}
 			});
 		}
@@ -221,16 +293,15 @@ public class RapidAssessmentCanvas extends JFrame {
 			g2.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, MARK_SIZE - 2));
 			String text1 = "" + this.getMark();
 			String text2 = "";
-			if(this.getEditingPosition() >= 0){
+			if (this.getEditingPosition() > 0) {
 				text2 = text1.substring(this.getEditingPosition());
-				text1 = text1.substring(0, this.getEditingPosition())+'|';
+				text1 = text1.substring(0, this.getEditingPosition()) + '|';
 			}
-			g2.drawString(text1+text2, this.getWidth() / 3 + 2,
+			g2.drawString(text1 + text2, this.getWidth() / 3 + 2,
 					this.getHeight() - 1);
 			g2.dispose();
 
 		}
-
 
 	}
 
@@ -347,14 +418,6 @@ public class RapidAssessmentCanvas extends JFrame {
 
 		}
 
-		public boolean contains(MyRectangle rect) {
-			return (this.getX() < rect.getX()
-					&& this.getY() < rect.getY()
-					&& this.getX() + this.getWidth() > rect.getX()
-							+ rect.getWidth() && this.getY() + this.getHeight() > rect
-					.getY() + rect.getHeight());
-		}
-
 		public String getName() {
 			return name;
 		}
@@ -407,13 +470,11 @@ public class RapidAssessmentCanvas extends JFrame {
 		@Override
 		public void mouseEntered(MouseEvent e) {
 
-			((MyRectangle) e.getSource()).setPressing(false);
 		}
 
 		@Override
 		public void mouseExited(MouseEvent e) {
 
-			((MyRectangle) e.getSource()).setPressing(false);
 		}
 
 		@Override
@@ -430,8 +491,11 @@ public class RapidAssessmentCanvas extends JFrame {
 		@Override
 		public void mouseReleased(MouseEvent e) {
 
-			if (e.getWhen() - ((MyRectangle) e.getSource()).getTimePressed() < 100) {
-				if (e.getButton() == e.BUTTON3 && e.getSource() != parentRect) {
+			if (e.getButton() == e.BUTTON3) {
+
+				if (e.getWhen()
+						- ((MyRectangle) e.getSource()).getTimePressed() < 150
+						&& e.getSource() != parentRect) {
 					MyComponent parent = ((MyComponent) ((MyRectangle) e
 							.getSource()).getParent());
 					parent.remove(((MyRectangle) e.getSource()));
@@ -465,16 +529,50 @@ public class RapidAssessmentCanvas extends JFrame {
 				lastcreated = tmp;
 
 			} else {
-				JComponent tmp = new MyRectangle((int) p1.getX(),
+				MyComponent tmp = new MyRectangle((int) p1.getX(),
 						(int) p1.getY(), (int) (p2.getX() - p1.getX()),
 						(int) (p2.getY() - p1.getY()));
-				tmp.setName(source.getName() + "."
-						+ source.getAndIncrementCount());
-				source.add(tmp);
+				Component[] siblings = source.getComponents();
+				LinkedList<Component> contained = new LinkedList<Component>();
+				boolean collision = false;
+				for (int x = 0; x < siblings.length; ++x) {
+					try {
+						MyComponent component = (MyComponent) (siblings[x]);
+						if (tmp.overlaps(component)) {
+							System.out.println("overlaps");
+
+							collision = true;
+
+						} else {
+							if (tmp.contains(component)) {
+								contained.add(component);
+								System.out.println("contains");
+							}
+						}
+					} catch (ClassCastException e) {
+
+					}
+				}
+				if (!collision) {
+					tmp.setName(source.getName() + "."
+							+ source.getAndIncrementCount());
+					source.add(tmp);
+					for (int x = 0; x < contained.size(); ++x) {
+
+						Point childLoc = contained.get(x).getLocationOnScreen();
+						Point parentLoc = tmp.getLocationOnScreen();
+
+						contained.get(x).setLocation(
+								(int) (childLoc.getX() - parentLoc.getX()),
+								(int) (childLoc.getY() - parentLoc.getY()));
+						source.remove(contained.get(x));
+						tmp.add(contained.get(x));
+					}
+				}
+
 			}
 			parentPanel.repaint();
 		}
-
 	}
 
 	public class CanvasMouseMoveListener implements MouseMotionListener {
@@ -521,23 +619,25 @@ public class RapidAssessmentCanvas extends JFrame {
 
 			@Override
 			public void keyPressed(KeyEvent arg0) {
+				if (lastcreated == null)
+					return;
 				MyMarkPoint source = lastcreated;
 				System.out.println("press: " + arg0.getKeyChar());
 				switch (arg0.getKeyCode()) {
 				case '.':
 					if (arg0.getKeyChar() == '.') {
-						String text1 = ""+source.getMark();
+						String text1 = "" + source.getMark();
 						String text2 = "";
 						int dec = text1.indexOf(".");
-						text2 = text1.substring(dec+1);
+						text2 = text1.substring(dec + 1);
 						text1 = text1.substring(0, dec);
-						String text = text1+text2;
-						if(dec < source.getEditingPosition())
+						String text = text1 + text2;
+						if (dec < source.getEditingPosition())
 							source.decrementEditingPosition();
-						text2=text.substring(source.getEditingPosition());
-						text1=text.substring(0, source.getEditingPosition())+'.';
+						text2 = text.substring(source.getEditingPosition());
+						text1 = text.substring(0, source.getEditingPosition()) + '.';
 						try {
-							source.setMark(Double.parseDouble(text1+text2));
+							source.setMark(Double.parseDouble(text1 + text2));
 							source.incrementEditingPosition();
 						} catch (NumberFormatException e) {
 
@@ -549,10 +649,10 @@ public class RapidAssessmentCanvas extends JFrame {
 				case 8:
 					if (source.getEditingPosition() > 0) {
 						String mark = String.valueOf(source.getMark());
-						if (mark.charAt(source.getEditingPosition() - 1) == '.'){
+						if (mark.charAt(source.getEditingPosition() - 1) == '.') {
 							source.decrementEditingPosition();
 							break;
-					}
+						}
 						String secondPart = "";
 						try {
 							secondPart = mark.substring(source
