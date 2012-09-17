@@ -57,16 +57,17 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 		this.project = project;
 		final Container content = f.getContentPane();
 		f.setSize(550, 500);
-		final LinkedList<LinkedList<SuperEntity>> diedata = Global.getGlobal()
-				.getActiveProject().getHead().getDataLinkedList();
+		final LinkedList<LinkedList<SuperEntity>> diedata = project.getHead().getDataLinkedList();
+		//final LinkedList<LinkedList<SuperEntity>> diedata = Global.getGlobal().getActiveProject().getHead().getDataLinkedList();
 		
 		final XYSeriesCollection dataset = new XYSeriesCollection();
-		final String[] headers = Global.getGlobal().getActiveProject()
-				.getHead().getHeaders();
+		final String[] headers = project.getHead().getHeaders();
+		//final String[] headers = Global.getGlobal().getActiveProject().getHead().getHeaders();
 		nuweChart = new ScatterPlot(project);
 		
-		String[] kolom = Global.getGlobal().getActiveProject().getHead()
-				.getNumberHeaders();
+		
+		String[] kolom = project.getHead().getNumberHeaders();
+		//String[] kolom = Global.getGlobal().getActiveProject().getHead().getNumberHeaders();
 		
 		String xas = kolom[0];
 		String yas = kolom[1];

@@ -31,6 +31,10 @@ public class Project {
 	private LinkedList<Rule> rules = new LinkedList<Rule>();
 	private LinkedList<EntityType> treeLinkedList;
 	
+	public void clearselected()
+	{
+		selectedIndexes = new ArrayList();
+	}
 	
 	public void addscattercharts(ScatterPlotFrame x)
 	{
@@ -56,15 +60,16 @@ public class Project {
 		((ScatterPlotFrame) scattercharts.get(i)).update();
 		for(int i =0 ; i < histogramcharts.size();i++)
 		{
-			System.out.println("Ek update histogram");
+			//System.out.println("Ek update histogram");
 		((HistogramFrame) histogramcharts.get(i)).update();
 		}
 	}
 
 	public void setSelected(int x)
 	{
-		System.out.println("Charts selected");
+		
 		selectedIndexes.add(x);
+		System.out.println("Set selected" +selectedIndexes.size());
 		
 	}
 	public ArrayList getSelectedIndexes()

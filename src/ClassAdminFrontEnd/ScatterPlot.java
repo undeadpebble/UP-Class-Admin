@@ -79,8 +79,9 @@ public class ScatterPlot {
 	// -------------------------------------------------------------------------------------------------------
 	public void updateSelectedvalues()
 	{
-		
-		ArrayList u= Global.getGlobal().getActiveProject().getSelectedIndexes();
+		System.out.println("Ek update scatterchart");
+		ArrayList u= project.getSelectedIndexes();
+		//ArrayList u= Global.getGlobal().getActiveProject().getSelectedIndexes();
 		final CircleDrawer cd = new CircleDrawer(Color.red,
 				new BasicStroke(1.0f), null);
 		
@@ -97,9 +98,10 @@ public class ScatterPlot {
 	// -------------------------------------------------------------------------------------------------------
 	public ChartPanel createPanel()
 	{
+		
 		chartPanel = new ChartPanel(chart);
 		plot = chart.getXYPlot();
-		
+		updateSelectedvalues();
 		
 		
 			chartPanel.addChartMouseListener(new ChartMouseListener() {
@@ -122,9 +124,9 @@ public class ScatterPlot {
 						
 						int sindex = ent.getSeriesIndex();
 						int iindex = ent.getItem();
-						//project.setSelected(iindex);
-						Global.getGlobal().getActiveProject().setSelected(iindex);
-						Global.getGlobal().getActiveProject().updatecharts();
+						project.setSelected(iindex);
+						//Global.getGlobal().getActiveProject().setSelected(iindex);
+						
 						System.out.println("Punt se index"+iindex);
 						final CircleDrawer cd = new CircleDrawer(Color.red,
 								new BasicStroke(1.0f), null);
@@ -133,7 +135,8 @@ public class ScatterPlot {
 								iindex), 11, 11, cd);
 
 						chart.getXYPlot().addAnnotation(bestBid);
-						Global.getGlobal().getActiveProject().updatecharts();
+						project.updatecharts();
+						//Global.getGlobal().getActiveProject().updatecharts();
 						System.out.println("x = " + datasetMain.getXValue(sindex, iindex));
 						System.out.println("y = " + datasetMain.getYValue(sindex, iindex));
 					}

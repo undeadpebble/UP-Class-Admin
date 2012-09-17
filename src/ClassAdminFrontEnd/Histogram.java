@@ -39,64 +39,95 @@ public class Histogram {
 	private double[] values;
 	private int currentdata;
 	private String[] studentnr;
-	private Project project;
+	protected Project project;
+
 	// -------------------------------------------------------------------------------------------------------
 	public Histogram(Project project) {
 		maindataset = new HistogramDataset();
 		this.project = project;
 	}
+	
 	// -------------------------------------------------------------------------------------------------------
-    //Update the values 
+	// Update the values
 	public void updateSelectedValues() {
-		
-		
+
 		double klein = 99999;
 		double groot = -1;
-		final LinkedList<LinkedList<SuperEntity>> diedata = Global.getGlobal()
-				.getActiveProject().getHead().getDataLinkedList();
-		ArrayList u = Global.getGlobal().getActiveProject()
-				.getSelectedIndexes();
-
-		for (int x = 0; x < u.size(); x++) {
-			System.out.println(x);
+		final LinkedList<LinkedList<SuperEntity>> diedata = project.getHead().getDataLinkedList();
+		//final LinkedList<LinkedList<SuperEntity>> diedata = Global.getGlobal().getActiveProject().getHead().getDataLinkedList();
+		
+		ArrayList u = project.getSelectedIndexes();
+		//ArrayList u = Global.getGlobal().getActiveProject().getSelectedIndexes();
+		System.out.println("Size"+u.size());
+		if(u.size()!=0)
+		{
+		for (int x = 0; x < diedata.size(); x++) {
+		//	System.out.println(x);
 			if (diedata.get(x).get(currentdata).getMark() < klein)
 				klein = diedata.get(x).get(currentdata).getMark();
 			if (diedata.get(x).get(currentdata).getMark() > groot)
 				groot = diedata.get(x).get(currentdata).getMark();
 		}
-
+		System.out.println("KleinSte" + klein);
+		System.out.println("Grootste" + groot);
 		ArrayList selectedbars = getSelectedbar(klein, groot);
-		double beginx;
+		setBarcolor(klein, groot);
+		/*double beginx;
 		double eindex;
 		double xmidvalue;
 		CustomBarRenderer barkleurder = new CustomBarRenderer();
-		for(int i = 0 ;i<u.size();i++)
-		{
-			 beginx =(Double) maindataset.getStartX(0, i);
-			 eindex =(Double) maindataset.getEndX(0, i);
-			 xmidvalue = (beginx+eindex)/2;
+		for (int i = 0; i < u.size(); i++) {
+			beginx = (Double) maindataset.getStartX(0, i);
+			eindex = (Double) maindataset.getEndX(0, i);
+			xmidvalue = (beginx + eindex) / 2;
 			XYDataset currentdataset = ((XYPlot) chart.getPlot()).getDataset();
-			System.out.println("X "+xmidvalue+" Y "+currentdataset.getYValue(0, i));
-		barkleurder.addselectedbars(xmidvalue,currentdataset.getYValue(0, i));
+		//	System.out.println("X " + xmidvalue + " Y "			+ currentdataset.getYValue(0, i));
+			barkleurder.addselectedbars(xmidvalue,currentdataset.getYValue(0, i));
 		}
-		
-		
-		//barkleurder.addselectedbars(x, y);
+
+		// barkleurder.addselectedbars(x, y);
+		chart.getXYPlot().setRenderer(barkleurder);*/
+		}
+	}
+	// -------------------------------------------------------------------------------------------------------
+	// Get the coordinates of the bars
+	public void setBarcolor(Number bgn, Number einde)
+	{
+		CustomBarRenderer barkleurder = new CustomBarRenderer();
+		ArrayList houer = new ArrayList();
+		for (int x = 0; x < values.length; x++) {
+			double qbgn = (Double) bgn;
+			double qeinde = (Double) einde;
+			if (values[x] >= qbgn && values[x] < qeinde) {
+				
+				double beginx = (Double) maindataset.getStartX(0, x);
+				double eindex = (Double) maindataset.getEndX(0, x);
+				System.out.println("EINDE"+ qeinde);
+				System.out.println("Einde van dataset" + eindex);
+				double xmidvalue = (beginx + eindex) / 2;
+				XYDataset currentdataset = ((XYPlot) chart.getPlot()).getDataset();
+				if((Double)einde >= (eindex-1))
+				barkleurder.addselectedbars(xmidvalue,currentdataset.getYValue(0, x));
+				//System.out.println("X " + xmidvalue + " Y "			+ currentdataset.getYValue(0, x));
+			}
+		}
 		chart.getXYPlot().setRenderer(barkleurder);
 	}
 	// -------------------------------------------------------------------------------------------------------
 	// Get index of values in specific bar
 	public ArrayList getSelectedbar(Number bgn, Number einde) {
-
+		ArrayList houer = new ArrayList();
+				
 		for (int x = 0; x < values.length; x++) {
 			double qbgn = (Double) bgn;
 			double qeinde = (Double) einde;
 			if (values[x] >= qbgn && values[x] < qeinde) {
-				selectedindex.add(x);
+				houer.add(x);
 			}
 		}
-		return selectedindex;
+		return houer;
 	}
+
 	// -------------------------------------------------------------------------------------------------------
 	static class CustomBarRenderer extends XYBarRenderer {
 		private ArrayList<Double> selectedx = new ArrayList<Double>();
@@ -105,31 +136,32 @@ public class Histogram {
 		/**
 		 * 
 		 */
-		public void clearbars()
-		{
+		public void clearbars() {
+			
 			selectedx = new ArrayList<Double>();
 			selectedy = new ArrayList<Double>();
-			
+
 		}
+
 		public void removeselectedbars(double x, double y) {
-			for(int i =0 ; i < selectedx.size();i++)
-			{
-			if ((x == selectedx.get(i))
-					&& (y == selectedy.get(i)))
-			{
-				selectedx.remove(i);
-				selectedy.remove(i);
-			}
+			for (int i = 0; i < selectedx.size(); i++) {
+				if ((x == selectedx.get(i)) && (y == selectedy.get(i))) {
+					selectedx.remove(i);
+					selectedy.remove(i);
+				}
 			}
 		}
+
 		// -------------------------------------------------------------------------------------------------------
 		// add bars that are selected
 		public void addselectedbars(double x, double y) {
+			System.out.println("Selected bar se x"+x+"Selected bar se y "+y);
 			selectedx.add(x);
 			selectedy.add(y);
 		}
 
 		private static final long serialVersionUID = 1L;
+
 		// -------------------------------------------------------------------------------------------------------
 		// Color bar
 		public Paint getItemPaint(int i, int j) {
@@ -166,31 +198,36 @@ public class Histogram {
 
 		((NumberAxis) rangeAxis).setTickUnit(new NumberTickUnit(1));
 		rangeAxis.setRange(0, 10);
+		final CustomBarRenderer barkleurder = new CustomBarRenderer();
+		chart.getXYPlot().setRenderer(barkleurder);
 		return chart;
 	}
+
 	// -------------------------------------------------------------------------------------------------------
 	public ChartPanel createPanel() {
 		ChartPanel panel = new ChartPanel(chart, 500, 500, 400, 400, 500, 500,
 				true, true, true, true, true, true);
-		
-
+		updateSelectedValues();
 		final XYPlot plot;
 		plot = chart.getXYPlot();
 		final Plot Nuweplot = chart.getPlot();
-		
-		final CustomBarRenderer barkleurder = new CustomBarRenderer();
-		//plot.setRenderer(barkleurder);
 
+		final CustomBarRenderer barkleurder = new CustomBarRenderer();
+		 
 		// Select a bar
 		panel.addChartMouseListener(new ChartMouseListener() {
 
 			public void chartMouseClicked(ChartMouseEvent e) {
-				Global.getGlobal().getActiveProject().updatecharts();
+				
+				//Global.getGlobal().getActiveProject().updatecharts();
 				MouseEvent me = e.getTrigger();
 
 				if (me.isShiftDown() == false)
+				{
+				//	System.out.println("Word gecall");
 					barkleurder.clearbars();
-
+					project.clearselected();
+				}
 				ChartEntity entity = ((ChartMouseEvent) e).getEntity();
 
 				if (entity instanceof XYItemEntity && entity != null) {
@@ -202,34 +239,34 @@ public class Histogram {
 
 					maindataset.getStartX(0, iindex);
 					maindataset.getEndX(0, iindex);
-					
-					XYDataset currentdataset = ((XYPlot) chart.getPlot()).getDataset();
-					selectedindex = getSelectedbar(maindataset.getStartX(0, iindex),maindataset.getEndX(0, iindex));
-					
-					for (int z = 0; z < selectedindex.size(); z++) {
-						//System.out.println("Selected punt se index "	+ selectedindex.get(z).toString());
+
+					XYDataset currentdataset = ((XYPlot) chart.getPlot())
+							.getDataset();
+					selectedindex = getSelectedbar(
+							maindataset.getStartX(0, iindex),
+							maindataset.getEndX(0, iindex));
+
+/*					for (int z = 0; z < selectedindex.size(); z++) {
+						// System.out.println("Selected punt se index " +
+						// selectedindex.get(z).toString());
 
 					}
-					double beginx =(Double) maindataset.getStartX(0, iindex);
-					double eindex =(Double) maindataset.getEndX(0, iindex);
-					double xmidvalue = (beginx+eindex)/2;
+					double beginx = (Double) maindataset.getStartX(0, iindex);
+					double eindex = (Double) maindataset.getEndX(0, iindex);
+					double xmidvalue = (beginx + eindex) / 2;
 					barkleurder.addselectedbars(xmidvalue,currentdataset.getYValue(0, iindex));
+*/
 					
-					
-					// barkleurder.selectedy=currentdataset.getYValue(0, 0);
 					for (int o = 0; o < selectedindex.size(); o++) {
-						Global.getGlobal().getActiveProject()
-								.setSelected((Integer) selectedindex.get(o));
-						System.out.println("SET SELECTED" + (Integer) selectedindex.get(o));
+						project.setSelected((Integer) selectedindex.get(o));
+						
 					}
 					plot.setRenderer(barkleurder);
-
-					/*
-					 * CustomBarRenderer x = new CustomBarRenderer();
-					 * x.selectedx=15.0; x.selectedy=1.0; plot.setRenderer(x);
-					 */
-
+					project.updatecharts();
+					
+					
 				}
+				
 
 			}
 
@@ -240,11 +277,12 @@ public class Histogram {
 		});
 		return panel;
 	}
+
 	// -------------------------------------------------------------------------------------------------------
 	public HistogramDataset createDataset(int houer) {
 		currentdata = houer;
-		final LinkedList<LinkedList<SuperEntity>> diedata = Global.getGlobal()
-				.getActiveProject().getHead().getDataLinkedList();
+		final LinkedList<LinkedList<SuperEntity>> diedata = project.getHead().getDataLinkedList();
+		//final LinkedList<LinkedList<SuperEntity>> diedata = Global.getGlobal().getActiveProject().getHead().getDataLinkedList();
 		values = new double[diedata.size()];
 		studentnr = new String[diedata.size()];
 
@@ -253,7 +291,7 @@ public class Histogram {
 			values[q] = diedata.get(q).get(houer).getMark();
 
 			studentnr[q] = diedata.get(q).get(0).getValue();
-		//	System.out.println(values[q]);
+			// System.out.println(values[q]);
 
 		}
 
@@ -262,10 +300,11 @@ public class Histogram {
 		maindataset.addSeries("Histogram", values, 10, 0, 100);
 		return maindataset;
 	}
+
 	// -------------------------------------------------------------------------------------------------------
 	public HistogramDataset changeDataset(int houer) {
-		final LinkedList<LinkedList<SuperEntity>> diedata = Global.getGlobal()
-				.getActiveProject().getHead().getDataLinkedList();
+		final LinkedList<LinkedList<SuperEntity>> diedata = project.getHead().getDataLinkedList();
+		//final LinkedList<LinkedList<SuperEntity>> diedata = Global.getGlobal().getActiveProject().getHead().getDataLinkedList();
 		values = new double[diedata.size()];
 		for (int q = 0; q < diedata.size(); q++) {
 
@@ -276,6 +315,7 @@ public class Histogram {
 		nuwedataset.addSeries("Histogram", values, 10, 0, 100);
 		return nuwedataset;
 	}
+
 	// -------------------------------------------------------------------------------------------------------
 	public HistogramDataset increaseWidth(int widthbar) {
 
@@ -283,6 +323,7 @@ public class Histogram {
 		nuwedataset.addSeries("Histogram", values, widthbar, 0, 100);
 		return nuwedataset;
 	}
+
 	// -------------------------------------------------------------------------------------------------------
 	public HistogramDataset decreaseWidth(int widthbar) {
 

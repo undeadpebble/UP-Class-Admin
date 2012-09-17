@@ -78,9 +78,13 @@ public class HistogramFrame extends JFrame implements ActionListener {
 		    f.setSize(550, 600);
 		    
 		    this.project = project;
-		    final LinkedList<LinkedList<SuperEntity>> diedata = Global.getGlobal().getActiveProject().getHead().getDataLinkedList();
-		    final String[] headers = Global.getGlobal().getActiveProject().getHead().getHeaders();
-			String[] kolom = Global.getGlobal().getActiveProject().getHead().getNumberHeaders();
+		    final LinkedList<LinkedList<SuperEntity>> diedata = project.getHead().getDataLinkedList();
+		    //final LinkedList<LinkedList<SuperEntity>> diedata = Global.getGlobal().getActiveProject().getHead().getDataLinkedList();
+		    final String[] headers = project.getHead().getHeaders();
+		    //final String[] headers = Global.getGlobal().getActiveProject().getHead().getHeaders();
+		    String[] kolom = project.getHead().getNumberHeaders();
+		    //String[] kolom = Global.getGlobal().getActiveProject().getHead().getNumberHeaders();
+			
 			
 			 String plotTitle = "Histogram"; 
 			    String xaxis = kolom[0];
@@ -104,14 +108,8 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			;
 			chart = nuweChart.createHistogram(plotTitle, xaxis, yaxis, nuweChart.createDataset(houerx));
 		
-		
-		    
-		   
-			
 			chartpanel = nuweChart.createPanel();
-				
-			
-			
+						
 			JLabel lblNewLabel = new JLabel("X-axis");
 			
 			final JComboBox xascb = new JComboBox();
