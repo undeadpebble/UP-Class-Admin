@@ -66,7 +66,6 @@ public class FrmTable extends JPanel {
 	public void redraw(){
 		this.data = project.getHead().getDataLinkedList();
 		this.headers = project.getHead().getHeaders();
-		
 		this.createGUI();
 	}
 	
