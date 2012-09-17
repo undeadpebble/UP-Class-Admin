@@ -27,6 +27,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -66,7 +67,7 @@ import ClassAdminFrontEnd.TreeView;
 public class Frame extends JFrame {
 
 	private JPanel contentPane;
-	private FadePanel homePanel, workspacePanel, navBar, tabBar, infoPanel, scatterplotInfoPanel, recentDocsPanel;
+	private FadePanel homePanel, workspacePanel, navBar, tabBar, infoPanel, scatterplotInfoPanel, recentDocsPanel, searchPanel;
 	private ThreeStopGradientPanel bottomPanel;
 	private BackgroundGradientPanel backgroundPanel;
 	private GradientMenuBar menuBarWindows;
@@ -295,7 +296,7 @@ public class Frame extends JFrame {
 					infoPanel.setBounds(0, workspacePanel.getHeight() - 112, getWidth(), 43);
 				}
 				if (studentPanel != null) {
-					studentPanel.setBounds(frame.getWidth() - 45, 0, 250, getHeight() - 20);
+					studentPanel.setBounds(frame.getWidth() - 45, 45, 250, getHeight() - 20);
 					studentPanel.setNewX(getWidth() - 45);
 					studentPanel.setOldX(getWidth() - 250);
 				}
@@ -501,6 +502,18 @@ public class Frame extends JFrame {
 		workspacePanel.add(infoPanel);
 		infoPanel.setLayout(null);
 		infoPanel.fadeIn();
+		
+		//create search text field in right hand corner
+		searchPanel = new FadePanel(false, 200, 200);
+		searchPanel.setBounds(workspacePanel.getWidth()-170, 10, 150, 30);
+		searchPanel.setLayout(null);
+		workspacePanel.add(searchPanel);
+		
+		JTextField searchBox = new JTextField();
+		searchBox.setBounds(25,5,124,25);
+		searchPanel.add(searchBox);
+		
+		searchPanel.fadeIn();
 
 		// create student panel on side
 		createStudentView();
@@ -1004,8 +1017,8 @@ public class Frame extends JFrame {
 	 */
 	public void createStudentView() {
 
-		studentPanel = new ShadowPanel(getWidth() - 45, 0, getWidth() - 250, 0);
-		studentPanel.setBounds(getWidth(), 0, 250, getHeight() - 20);
+		studentPanel = new ShadowPanel(getWidth() - 45, 45, getWidth() - 250, 45);
+		studentPanel.setBounds(getWidth(), 40, 250, getHeight() - 20);
 		try {
 
 			studentsViewArrowOut = new MenuImagePanel(ImageIO.read(getClass().getResource(
