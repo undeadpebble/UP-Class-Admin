@@ -83,8 +83,10 @@ public class Frame extends JFrame {
 	private JTabbedPane tabbedPane;
 	private FileHandler fileHandler;
 	private BlurBackground blur;
-	private ReflectionButton homeButton, importButton, exportButton, studentsButton, histogramButton, boxButton, scatterButton, conditionalFormatButton;
-	private FadePanel homeInfoPanel, importInfoPanel, exportInfoPanel, studentsInfoPanel, histogramInfoPanel, boxplotInfoPanel;
+	private ReflectionButton homeButton, importButton, exportButton, studentsButton, histogramButton, boxButton, scatterButton,
+			conditionalFormatButton, bordercaseButton;
+	private FadePanel homeInfoPanel, importInfoPanel, exportInfoPanel, studentsInfoPanel, histogramInfoPanel, boxplotInfoPanel,
+			conditionalFormattingInfoPanel, bordercaseInfoPanel;
 	private ShadowPanel studentPanel;
 	private String recentPathFile;
 	private ReflectionButtonWithLabel[] recentDocsButtonsArray;
@@ -206,7 +208,7 @@ public class Frame extends JFrame {
 		setLocation(x, y);
 
 		// maximize window
-		setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+		//setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
 
 		// create database to hold recently open documents information
 		createRecentDocsDB();
@@ -531,10 +533,15 @@ public class Frame extends JFrame {
 		scatterButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Scatter.png")));
 		scatterButton.setBounds(420, 12, 68, 80);
 		navBar.add(scatterButton);
-		
-		conditionalFormatButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/ConditionalFormatting.png")));
-		conditionalFormatButton.setBounds(485, 12, 68, 80);
+
+		conditionalFormatButton = new ReflectionButton(ImageIO.read(getClass().getResource(
+				"/ClassAdminFrontEnd/resources/ConditionalFormattingAdd.png")));
+		conditionalFormatButton.setBounds(483, 8, 68, 80);
 		navBar.add(conditionalFormatButton);
+
+		bordercaseButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/BordercaseAdd.png")));
+		bordercaseButton.setBounds(545, 8, 68, 80);
+		navBar.add(bordercaseButton);
 
 		setNavButtonsDisabled();
 
@@ -622,6 +629,32 @@ public class Frame extends JFrame {
 		scatterplotBubble.setBounds(0, 0, infoPanel.getWidth(), infoPanel.getHeight());
 		scatterplotBubble.setLayout(null);
 		scatterplotInfoPanel.add(scatterplotBubble);
+
+		// create conditional formatting plot bubbles panel
+		conditionalFormattingInfoPanel = new FadePanel(false, 200, 200);
+		conditionalFormattingInfoPanel.setBounds(450, 0, 129, infoPanel.getHeight());
+		conditionalFormattingInfoPanel.setLayout(null);
+		infoPanel.add(conditionalFormattingInfoPanel);
+
+		// create scatterplot bubble image
+		ImagePanel conditionalFormattingBubble = new ImagePanel(ImageIO.read(getClass().getResource(
+				"/ClassAdminFrontEnd/resources/InfoconditionalFormatting.png")));
+		conditionalFormattingBubble.setBounds(0, 0, infoPanel.getWidth(), infoPanel.getHeight());
+		conditionalFormattingBubble.setLayout(null);
+		conditionalFormattingInfoPanel.add(conditionalFormattingBubble);
+
+		// create bordercase plot bubbles panel
+		bordercaseInfoPanel = new FadePanel(false, 200, 200);
+		bordercaseInfoPanel.setBounds(510, 0, 129, infoPanel.getHeight());
+		bordercaseInfoPanel.setLayout(null);
+		infoPanel.add(bordercaseInfoPanel);
+
+		// create bordercase image
+		ImagePanel bordercaseBubble = new ImagePanel(ImageIO.read(getClass().getResource(
+				"/ClassAdminFrontEnd/resources/InfoBordercase.png")));
+		bordercaseBubble.setBounds(0, 0, infoPanel.getWidth(), infoPanel.getHeight());
+		bordercaseBubble.setLayout(null);
+		bordercaseInfoPanel.add(bordercaseBubble);
 
 		homeButton.addMouseListener(new MouseAdapter() {
 			@Override
@@ -751,22 +784,40 @@ public class Frame extends JFrame {
 				scatterplotInfoPanel.fadeOut();
 			}
 		});
-		
+
 		conditionalFormatButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (!conditionalFormatButton.isDisabled()) {
-					ConditionalFormattingFrame cfFrame = new ConditionalFormattingFrame();
-					cfFrame.setVisible(true);
+					ConditionalFormattingFrame conditionalformatFrame = new ConditionalFormattingFrame();
+					conditionalformatFrame.setVisible(true);
 				}
 			}
 
 			public void mouseEntered(MouseEvent arg0) {
-				
+				conditionalFormattingInfoPanel.fadeIn();
 			}
 
 			public void mouseExited(MouseEvent arg0) {
-				
+				conditionalFormattingInfoPanel.fadeOut();
+			}
+		});
+
+		bordercaseButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				if (!bordercaseButton.isDisabled()) {
+					BordercaseFrame bordercaseFrame = new BordercaseFrame();
+					bordercaseFrame.setVisible(true);
+				}
+			}
+
+			public void mouseEntered(MouseEvent arg0) {
+				bordercaseInfoPanel.fadeIn();
+			}
+
+			public void mouseExited(MouseEvent arg0) {
+				bordercaseInfoPanel.fadeOut();
 			}
 		});
 
@@ -789,7 +840,7 @@ public class Frame extends JFrame {
 		}
 
 		// add the filter to the file chooser
-		//filechooser.addChoosableFileFilter(fileFilter);
+		// filechooser.addChoosableFileFilter(fileFilter);
 
 		// shows the dialog, return value specifies file
 		int returnVal = filechooser.showOpenDialog(this);
@@ -797,7 +848,7 @@ public class Frame extends JFrame {
 		// if the chosen file is valid
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			file = filechooser.getSelectedFile();
-			currentFilePath = filechooser.getSelectedFile();	
+			currentFilePath = filechooser.getSelectedFile();
 			blur.fadeOut();
 			createTab(file);
 			homeToWorkspaceTransition();
@@ -1290,7 +1341,7 @@ public class Frame extends JFrame {
 
 					});
 				}
-				
+
 				if (recentDocsButtonsArray[4] != null) {
 					recentDocsButtonsArray[4].addMouseListener(new MouseAdapter() {
 						@Override
@@ -1330,6 +1381,7 @@ public class Frame extends JFrame {
 		scatterButton.setEnabled();
 		exportButton.setEnabled();
 		conditionalFormatButton.setEnabled();
+		bordercaseButton.setEnabled();
 	}
 
 	/*
@@ -1355,9 +1407,13 @@ public class Frame extends JFrame {
 		if (conditionalFormatButton != null) {
 			conditionalFormatButton.setDisabled();
 		}
+		if (bordercaseButton != null) {
+			bordercaseButton.setDisabled();
+		}
 		if (studentPanel != null) {
 			studentPanel.setVisible(false);
 		}
+
 	}
 
 }
