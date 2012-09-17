@@ -33,6 +33,7 @@ import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
 import ClassAdminBackEnd.EntityType;
 import ClassAdminBackEnd.Global;
+import ClassAdminBackEnd.Project;
 import ClassAdminBackEnd.SuperEntity;
 
 public class ScatterPlotFrame extends JFrame implements ActionListener {
@@ -41,14 +42,19 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 	private int houerx = 0;
 	private int houery = 0;
 	private ScatterPlot nuweChart;
+	private Project project;
+	
+	// -------------------------------------------------------------------------------------------------------
 	public void update()
 	{
 		
 	
 		nuweChart.updateSelectedvalues();
 	}
-	public ScatterPlotFrame() {
+	//----------------------------------------------------------------------------------------------
+	public ScatterPlotFrame(Project project) {
 		JFrame f = new JFrame("ScatterPlot");
+		this.project = project;
 		final Container content = f.getContentPane();
 		f.setSize(550, 500);
 		final LinkedList<LinkedList<SuperEntity>> diedata = Global.getGlobal()
@@ -57,7 +63,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 		final XYSeriesCollection dataset = new XYSeriesCollection();
 		final String[] headers = Global.getGlobal().getActiveProject()
 				.getHead().getHeaders();
-		nuweChart = new ScatterPlot();
+		nuweChart = new ScatterPlot(project);
 		
 		String[] kolom = Global.getGlobal().getActiveProject().getHead()
 				.getNumberHeaders();
@@ -411,7 +417,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 		// TODO Auto-generated method stub
 
 	}
-	
+	//----------------------------------------------------------------------------------------------
 	public void saveFileAs() throws IOException {
 
 		File file;
@@ -438,7 +444,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 
 		}
 	}
-
+	//----------------------------------------------------------------------------------------------
  public static void saveToFile(JFreeChart chart,String aFileName,int width,int height, double quality) throws FileNotFoundException, IOException
 	    {
 	            BufferedImage img = draw( chart, width, height );
@@ -455,7 +461,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 	            fos.close();
 
 	    }
-	    
+//----------------------------------------------------------------------------------------------
 	    protected static BufferedImage draw(JFreeChart chart, int width, int height)
 
 	    {

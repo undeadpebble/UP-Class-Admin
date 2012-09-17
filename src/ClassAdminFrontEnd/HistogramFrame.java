@@ -50,6 +50,7 @@ import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
 import ClassAdminBackEnd.EntityType;
 import ClassAdminBackEnd.Global;
+import ClassAdminBackEnd.Project;
 import ClassAdminBackEnd.SuperEntity;
 import ClassAdminFrontEnd.Histogram.CustomBarRenderer;
 
@@ -63,17 +64,20 @@ public class HistogramFrame extends JFrame implements ActionListener {
 	private int widthbar = 10;
 	private ArrayList selectedindex = new ArrayList();
 	private Histogram nuweChart;
+	private Project project;
+	// -------------------------------------------------------------------------------------------------------
 	public void update()
 	{
 		nuweChart.updateSelectedValues();
 	}
-	public HistogramFrame()
+	// -------------------------------------------------------------------------------------------------------
+	public HistogramFrame(Project project)
 	{
 			JFrame f = new JFrame("Histogram");
 		    final Container content = f.getContentPane();
 		    f.setSize(550, 600);
 		    
-		    
+		    this.project = project;
 		    final LinkedList<LinkedList<SuperEntity>> diedata = Global.getGlobal().getActiveProject().getHead().getDataLinkedList();
 		    final String[] headers = Global.getGlobal().getActiveProject().getHead().getHeaders();
 			String[] kolom = Global.getGlobal().getActiveProject().getHead().getNumberHeaders();
@@ -83,7 +87,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			    String yaxis = "Count"; 
 				
 				
-				nuweChart = new Histogram();
+				nuweChart = new Histogram(project);
 				
 			
 			final HistogramDataset dataset = new HistogramDataset();
@@ -400,7 +404,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 		
 	}
 	
-	
+	// -------------------------------------------------------------------------------------------------------
 	public void saveFileAs() throws IOException {
 
 		File file;
@@ -427,7 +431,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 
 		}
 	}
-
+	// -------------------------------------------------------------------------------------------------------
  public static void saveToFile(JFreeChart chart,String aFileName,int width,int height, double quality) throws FileNotFoundException, IOException
 	    {
 	            BufferedImage img = draw( chart, width, height );
@@ -444,7 +448,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 	            fos.close();
 
 	    }
-	    
+//-------------------------------------------------------------------------------------------------------
 	    protected static BufferedImage draw(JFreeChart chart, int width, int height)
 
 	    {

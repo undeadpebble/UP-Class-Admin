@@ -55,7 +55,10 @@ public class Project {
 		for(int i =0 ; i < scattercharts.size();i++)
 		((ScatterPlotFrame) scattercharts.get(i)).update();
 		for(int i =0 ; i < histogramcharts.size();i++)
-			((HistogramFrame) histogramcharts.get(i)).update();
+		{
+			System.out.println("Ek update histogram");
+		((HistogramFrame) histogramcharts.get(i)).update();
+		}
 	}
 
 	public void setSelected(int x)

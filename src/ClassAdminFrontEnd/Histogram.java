@@ -29,18 +29,23 @@ import org.jfree.data.statistics.HistogramType;
 import org.jfree.data.xy.XYDataset;
 
 import ClassAdminBackEnd.Global;
+import ClassAdminBackEnd.Project;
 import ClassAdminBackEnd.SuperEntity;
 
 public class Histogram {
-	static double q = 4.0;
-	JFreeChart chart;
-	HistogramDataset maindataset;
-	ArrayList selectedindex = new ArrayList();
-	double[] values;
-	int currentdata;
-	String[] studentnr;
-	
-	
+	private JFreeChart chart;
+	private HistogramDataset maindataset;
+	private ArrayList selectedindex = new ArrayList();
+	private double[] values;
+	private int currentdata;
+	private String[] studentnr;
+	private Project project;
+	// -------------------------------------------------------------------------------------------------------
+	public Histogram(Project project) {
+		maindataset = new HistogramDataset();
+		this.project = project;
+	}
+	// -------------------------------------------------------------------------------------------------------
     //Update the values 
 	public void updateSelectedValues() {
 		
@@ -79,7 +84,7 @@ public class Histogram {
 		//barkleurder.addselectedbars(x, y);
 		chart.getXYPlot().setRenderer(barkleurder);
 	}
-
+	// -------------------------------------------------------------------------------------------------------
 	// Get index of values in specific bar
 	public ArrayList getSelectedbar(Number bgn, Number einde) {
 
@@ -92,7 +97,7 @@ public class Histogram {
 		}
 		return selectedindex;
 	}
-
+	// -------------------------------------------------------------------------------------------------------
 	static class CustomBarRenderer extends XYBarRenderer {
 		private ArrayList<Double> selectedx = new ArrayList<Double>();
 		private ArrayList<Double> selectedy = new ArrayList<Double>();
@@ -117,7 +122,7 @@ public class Histogram {
 			}
 			}
 		}
-
+		// -------------------------------------------------------------------------------------------------------
 		// add bars that are selected
 		public void addselectedbars(double x, double y) {
 			selectedx.add(x);
@@ -125,7 +130,7 @@ public class Histogram {
 		}
 
 		private static final long serialVersionUID = 1L;
-
+		// -------------------------------------------------------------------------------------------------------
 		// Color bar
 		public Paint getItemPaint(int i, int j) {
 
@@ -145,10 +150,7 @@ public class Histogram {
 		}
 	}
 
-	public Histogram() {
-		maindataset = new HistogramDataset();
-		
-	}
+	// -------------------------------------------------------------------------------------------------------
 
 	public JFreeChart createHistogram(String plotTitle, String xaxis,
 			String yaxis, HistogramDataset dataset) {
@@ -166,7 +168,7 @@ public class Histogram {
 		rangeAxis.setRange(0, 10);
 		return chart;
 	}
-
+	// -------------------------------------------------------------------------------------------------------
 	public ChartPanel createPanel() {
 		ChartPanel panel = new ChartPanel(chart, 500, 500, 400, 400, 500, 500,
 				true, true, true, true, true, true);
@@ -238,7 +240,7 @@ public class Histogram {
 		});
 		return panel;
 	}
-
+	// -------------------------------------------------------------------------------------------------------
 	public HistogramDataset createDataset(int houer) {
 		currentdata = houer;
 		final LinkedList<LinkedList<SuperEntity>> diedata = Global.getGlobal()
@@ -260,7 +262,7 @@ public class Histogram {
 		maindataset.addSeries("Histogram", values, 10, 0, 100);
 		return maindataset;
 	}
-
+	// -------------------------------------------------------------------------------------------------------
 	public HistogramDataset changeDataset(int houer) {
 		final LinkedList<LinkedList<SuperEntity>> diedata = Global.getGlobal()
 				.getActiveProject().getHead().getDataLinkedList();
@@ -274,14 +276,14 @@ public class Histogram {
 		nuwedataset.addSeries("Histogram", values, 10, 0, 100);
 		return nuwedataset;
 	}
-
+	// -------------------------------------------------------------------------------------------------------
 	public HistogramDataset increaseWidth(int widthbar) {
 
 		HistogramDataset nuwedataset = new HistogramDataset();
 		nuwedataset.addSeries("Histogram", values, widthbar, 0, 100);
 		return nuwedataset;
 	}
-
+	// -------------------------------------------------------------------------------------------------------
 	public HistogramDataset decreaseWidth(int widthbar) {
 
 		HistogramDataset nuwedataset = new HistogramDataset();

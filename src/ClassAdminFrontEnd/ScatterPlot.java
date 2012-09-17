@@ -40,6 +40,7 @@ import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RefineryUtilities;
 
 import ClassAdminBackEnd.Global;
+import ClassAdminBackEnd.Project;
 
 
 
@@ -49,20 +50,20 @@ public class ScatterPlot {
 	JFreeChart chart; 
 	XYPlot plot;
 	static XYDataset datasetMain;
-	
-	
-	public void ScatterPlot()
+	Project project;
+	// -------------------------------------------------------------------------------------------------------
+	public ScatterPlot(Project project)
 	{
-		
+		this.project = project;
 	}
-	
+	// -------------------------------------------------------------------------------------------------------
 	
 	public void setDatasetmain(XYDataset x)
 	{
 		datasetMain = x;
 	}
 	
-	
+	// -------------------------------------------------------------------------------------------------------
 	public JFreeChart createScatter(String title,final XYDataset chartdata,String xas,String yas)
 	{
 		chart = ChartFactory.createScatterPlot(
@@ -75,7 +76,7 @@ public class ScatterPlot {
 		return chart;
 	}	
 	
-	
+	// -------------------------------------------------------------------------------------------------------
 	public void updateSelectedvalues()
 	{
 		
@@ -93,6 +94,7 @@ public class ScatterPlot {
 		chart.getXYPlot().addAnnotation(selectPlots);
 		}
 	}
+	// -------------------------------------------------------------------------------------------------------
 	public ChartPanel createPanel()
 	{
 		chartPanel = new ChartPanel(chart);
@@ -113,13 +115,14 @@ public class ScatterPlot {
 					ChartEntity entity = ((ChartMouseEvent) e).getEntity();
 				
 					if (entity instanceof XYItemEntity && entity != null) {
-						Global.getGlobal().getActiveProject().updatecharts();
+						
 						XYItemEntity ent = (XYItemEntity) entity;
 					
 						
 						
 						int sindex = ent.getSeriesIndex();
 						int iindex = ent.getItem();
+						//project.setSelected(iindex);
 						Global.getGlobal().getActiveProject().setSelected(iindex);
 						Global.getGlobal().getActiveProject().updatecharts();
 						System.out.println("Punt se index"+iindex);
@@ -130,7 +133,7 @@ public class ScatterPlot {
 								iindex), 11, 11, cd);
 
 						chart.getXYPlot().addAnnotation(bestBid);
-
+						Global.getGlobal().getActiveProject().updatecharts();
 						System.out.println("x = " + datasetMain.getXValue(sindex, iindex));
 						System.out.println("y = " + datasetMain.getYValue(sindex, iindex));
 					}

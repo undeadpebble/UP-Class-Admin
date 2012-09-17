@@ -690,7 +690,8 @@ public class Frame extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (!histogramButton.isDisabled()) {
-					HistogramFrame x = new HistogramFrame();
+					HistogramFrame x = new HistogramFrame(Global.getGlobal().getActiveProject());
+					Global.getGlobal().getActiveProject().addhistogramcharts(x);
 				}
 			}
 
@@ -725,7 +726,7 @@ public class Frame extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (!scatterButton.isDisabled()) {
-					ScatterPlotFrame x = new ScatterPlotFrame();//project);
+					ScatterPlotFrame x = new ScatterPlotFrame(Global.getGlobal().getActiveProject());//project);
 					Global.getGlobal().getActiveProject().addscattercharts(x);
 				}
 			}
