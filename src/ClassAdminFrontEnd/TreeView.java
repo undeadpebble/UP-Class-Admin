@@ -553,7 +553,8 @@ public class TreeView extends Display {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-
+				
+				int selectedIndex = cmbParent.getSelectedIndex();
 				Node parent = myTree.getNode(cmbParent.getSelectedIndex());
 				Node child = myTree.addNode();
 
@@ -572,10 +573,7 @@ public class TreeView extends Display {
 					}
 				}
 
-				if (iParent != -1)
-					cmbParent.setSelectedIndex(iParent);
-				else
-					cmbParent.setSelectedIndex(0);
+					cmbParent.setSelectedIndex(selectedIndex);
 
 				this.notifyAll();
 
