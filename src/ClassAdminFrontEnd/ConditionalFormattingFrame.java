@@ -8,12 +8,16 @@ import java.awt.Toolkit;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
+import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JButton;
 
 public class ConditionalFormattingFrame extends JFrame {
 
@@ -72,8 +76,8 @@ public class ConditionalFormattingFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public ConditionalFormattingFrame() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 588, 514);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 561, 755);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(null);
@@ -90,19 +94,64 @@ public class ConditionalFormattingFrame extends JFrame {
 		backgroundPanel.setLayout(null);
 		
 		JComboBox cbxConditionalRuleType = new JComboBox();
-		cbxConditionalRuleType.setBounds(314, 74, 113, 26);
+		cbxConditionalRuleType.setBounds(361, 74, 113, 26);
 		backgroundPanel.add(cbxConditionalRuleType);
 		
+		JColorChooser colCombo = new JColorChooser();
+		colCombo.remove(colCombo.getComponent(1));
+		backgroundPanel.add(colCombo);
+		colCombo.setBounds(58,237,416,269);
 		/*
 		 * add combo box options
 		 */
+		SpinnerNumberModel SNMmin = new SpinnerNumberModel(new Integer(
+				0), // value
+				new Integer(0), // min
+				new Integer(100), // max
+				new Integer(1) // step
+		);
+		final JSpinner minVal = new JSpinner(SNMmin);
+		minVal.setBounds(361, 126, 113, 26);
+		backgroundPanel.add(minVal);
 		
+		SpinnerNumberModel SNMmax = new SpinnerNumberModel(new Integer(
+				0), // value
+				new Integer(0), // min
+				new Integer(100), // max
+				new Integer(1) // step
+		);
+		JSpinner maxVal = new JSpinner(SNMmax);
+		maxVal.setBounds(361, 178, 113, 26);
+		backgroundPanel.add(maxVal);
+		
+		JComboBox whatToFormatCombo = new JComboBox();
+		whatToFormatCombo.setBounds(361, 550, 113, 26);
+		backgroundPanel.add(whatToFormatCombo);
 		
 		JLabel lblConditionalRuleType = new JLabel("Conditional Rule Type");
-		lblConditionalRuleType.setBounds(91, 80, 134, 14);
+		lblConditionalRuleType.setBounds(58, 80, 134, 14);
 		lblConditionalRuleType.setForeground(new Color(0xEDEDED));
 		backgroundPanel.add(lblConditionalRuleType);
 
+		JLabel lblLowerValue = new JLabel("Lower Value");
+		lblLowerValue.setBounds(58, 132, 134, 14);
+		lblLowerValue.setForeground(new Color(0xEDEDED));
+		backgroundPanel.add(lblLowerValue);
+		
+		JLabel lblUpperValue = new JLabel("Bottom Value");
+		lblUpperValue.setBounds(58, 184, 134, 14);
+		lblUpperValue.setForeground(new Color(0xEDEDED));
+		backgroundPanel.add(lblUpperValue);
+		
+		JLabel lblAffectedArea = new JLabel("Affected Area");
+		lblAffectedArea.setBounds(58, 556, 134, 14);
+		lblAffectedArea.setForeground(new Color(0xEDEDED));
+		backgroundPanel.add(lblAffectedArea);
+		
+		JButton btnAddFormatting = new JButton("Add Formatting");
+		btnAddFormatting.setBounds(361, 640, 113, 23);
+		backgroundPanel.add(btnAddFormatting);
+		
 		// frame resize listener adjust components accordingly
 		this.addComponentListener(new ComponentListener() {
 

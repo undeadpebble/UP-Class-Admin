@@ -67,7 +67,7 @@ public class Frame extends JFrame {
 	private JTabbedPane tabbedPane;
 	private FileHandler fileHandler;
 	private BlurBackground blur;
-	private ReflectionButton homeButton, importButton, exportButton, studentsButton, histogramButton, boxButton, scatterButton;
+	private ReflectionButton homeButton, importButton, exportButton, studentsButton, histogramButton, boxButton, scatterButton, conditionalFormatButton;
 	private FadePanel homeInfoPanel, importInfoPanel, exportInfoPanel, studentsInfoPanel, histogramInfoPanel, boxplotInfoPanel;
 	private ShadowPanel studentPanel;
 	private String recentPathFile;
@@ -515,6 +515,10 @@ public class Frame extends JFrame {
 		scatterButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Scatter.png")));
 		scatterButton.setBounds(420, 12, 68, 80);
 		navBar.add(scatterButton);
+		
+		conditionalFormatButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/ConditionalFormatting.png")));
+		conditionalFormatButton.setBounds(485, 12, 68, 80);
+		navBar.add(conditionalFormatButton);
 
 		setNavButtonsDisabled();
 
@@ -729,6 +733,24 @@ public class Frame extends JFrame {
 
 			public void mouseExited(MouseEvent arg0) {
 				scatterplotInfoPanel.fadeOut();
+			}
+		});
+		
+		conditionalFormatButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				if (!conditionalFormatButton.isDisabled()) {
+					ConditionalFormattingFrame cfFrame = new ConditionalFormattingFrame();
+					cfFrame.setVisible(true);
+				}
+			}
+
+			public void mouseEntered(MouseEvent arg0) {
+				
+			}
+
+			public void mouseExited(MouseEvent arg0) {
+				
 			}
 		});
 
@@ -1291,6 +1313,7 @@ public class Frame extends JFrame {
 		boxButton.setEnabled();
 		scatterButton.setEnabled();
 		exportButton.setEnabled();
+		conditionalFormatButton.setEnabled();
 	}
 
 	/*
@@ -1312,6 +1335,9 @@ public class Frame extends JFrame {
 		}
 		if (exportButton != null) {
 			exportButton.setDisabled();
+		}
+		if (conditionalFormatButton != null) {
+			conditionalFormatButton.setDisabled();
 		}
 		if (studentPanel != null) {
 			studentPanel.setVisible(false);
