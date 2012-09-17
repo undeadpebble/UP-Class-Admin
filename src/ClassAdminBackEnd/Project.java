@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import org.tmatesoft.sqljet.core.SqlJetException;
 import org.tmatesoft.sqljet.core.table.SqlJetDb;
 
+import ClassAdminFrontEnd.FrmTable;
 import Rule.Rule;
 
 /**
@@ -20,7 +21,17 @@ public class Project {
 	private EntityType headEntityType;
 	private LinkedList<Rule> rules = new LinkedList<Rule>();
 	private LinkedList<EntityType> treeLinkedList;
+	private LinkedList<FrmTable> tables = new LinkedList<FrmTable>();
 	
+	public void updateTables(){
+		for(int x = 0; x < tables.size();x++){
+			tables.get(x).redraw();
+		}
+	}
+	
+	public LinkedList<FrmTable> getTables(){
+		return tables;
+	}
 	
 	public LinkedList<Rule> getRules() {
 		return rules;
