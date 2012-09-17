@@ -133,6 +133,7 @@ public class TreeView extends Display {
 	static JButton btnNew = new JButton("Add Node");
 	static private boolean bParent = false;
 	static private boolean bChild = false;
+	private static 		Project myProject = null;
 
 	static int iParent = -1;
 	static int iChild = -1;
@@ -142,7 +143,6 @@ public class TreeView extends Display {
 
 		myTree = t;
 		m_label = label;
-
 		m_vis.add(tree, t);
 
 		m_nodeRenderer = new LabelRenderer(m_label);
@@ -302,8 +302,9 @@ public class TreeView extends Display {
 
 	// ------------------------------------------------------------------------
 
-	public static void createEntityTypeFrm(String label) {
-		JComponent treeview = createPanelEntityTypeTreeView(label, Global.getGlobal().getActiveProject().getHeadEntityType());
+	public static void createEntityTypeFrm(String label, Project project) {
+		myProject = project;
+		JComponent treeview = createPanelEntityTypeTreeView(label, myProject.getHeadEntityType());
 
 		JFrame frame = new JFrame();
 
@@ -329,8 +330,8 @@ public class TreeView extends Display {
 
 		String str = "<tree>" + "<declarations>" + "<attributeDecl name=\"name\" type=\"String\" />" + "</declarations>";
 
-		Global.getGlobal().getActiveProject().getTreeLinkedList().clear();
-		str += th.createTreeFromHead(Global.getGlobal().getActiveProject().getTreeLinkedList());
+		myProject.getTreeLinkedList().clear();
+		str += th.createTreeFromHead(myProject.getTreeLinkedList());
 
 		str += "</tree>";
 
@@ -506,10 +507,8 @@ public class TreeView extends Display {
 		try {
 			frame = new JDialog(new Frame(), true);
 		} catch (SqlJetException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		JPanel pnlRad = new JPanel(new GridLayout(1, 2));
@@ -517,7 +516,7 @@ public class TreeView extends Display {
 
 		frame.setLayout(new GridLayout(10, 2));
 
-		JLabel lblName = new JLabel("Name:");
+		final JLabel lblName = new JLabel("Name:");
 		final JComboBox cmbParent = new JComboBox();
 		for (int r = 0; r < nodes.getRowCount(); r++) {
 			for (int c = 0; c < nodes.getColumnCount(); c++) {
@@ -525,14 +524,14 @@ public class TreeView extends Display {
 			}
 		}
 
-		JLabel lblParent = new JLabel("Parent:");
+		final JLabel lblParent = new JLabel("Parent:");
 		final JTextField txtName = new JTextField();
 		txtName.setSize(120, 30);
 
-		JLabel lblText = new JLabel("Text field");
-		JRadioButton rblYes = new JRadioButton("Yes");
+		final JLabel lblText = new JLabel("Text field");
+		final JRadioButton rblYes = new JRadioButton("Yes");
 		rblYes.setMnemonic(KeyEvent.VK_Y);
-		JRadioButton rblNo = new JRadioButton("No");
+		final JRadioButton rblNo = new JRadioButton("No");
 		rblNo.setMnemonic(KeyEvent.VK_N);
 		rblNo.setSelected(true);
 
@@ -540,11 +539,11 @@ public class TreeView extends Display {
 		group.add(rblYes);
 		group.add(rblNo);
 
-		JLabel lblDate = new JLabel("Date of assesment:");
-		JTextArea txtDate = new JTextArea();
+		final JLabel lblDate = new JLabel("Date of assesment:");
+		final JTextArea txtDate = new JTextArea();
 
-		JLabel lblWeight = new JLabel("Weight");
-		JTextArea txtWeight = new JTextArea();
+		final JLabel lblWeight = new JLabel("Weight");
+		final JTextArea txtWeight = new JTextArea();
 
 		JButton btnAdd = new JButton("Add");
 		JButton btnClose = new JButton("Close");
@@ -553,18 +552,43 @@ public class TreeView extends Display {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				boolean b = true;
+				boolean isText = false;
+				Node parent = null;
+				Node child = null;
+				String assDate = "";
+				double wieght = 1.0;
 				
 				int selectedIndex = cmbParent.getSelectedIndex();
-				Node parent = myTree.getNode(cmbParent.getSelectedIndex());
-				Node child = myTree.addNode();
+				if(selectedIndex == 0)
+				{
+					b = false;
+					lblParent.setForeground(Color.red);
+				} 
 
+				if(txtName.getText() == null || txtName.getText().equals(""))
+				{
+					b = false;
+					lblName.setForeground(Color.red);
+				}
+				
+				if(rblYes.isSelected())
+					isText = true;
+				if(txtDate.getText() != null || !txtDate.getText().equals(""))
+					assDate = txtDate.getText();
+/*				if(txtWeight.getText() != null || !txtWeight.getText().equals(""))
+					wieght = (Double.totxtWeight.getText();
+*/				
+				
+				parent = myTree.getNode(cmbParent.getSelectedIndex());				
+				child = myTree.addNode();	
 				for (int c = 0; c < child.getColumnCount() - 1; c++)
 					child.set(c, parent.get(c));
 				child.set("name", txtName.getText());
-
 				myTree.addEdge(parent, child);
-
-				Global.getGlobal().getActiveProject().getTreeLinkedList().add(new EntityType(txtName.getText(), Global.getGlobal().getActiveProject().getTreeLinkedList().get(cmbParent.getSelectedIndex()), true, null, 0.0));
+				
+				
+				myProject.getTreeLinkedList().add(new EntityType(txtName.getText(), myProject.getTreeLinkedList().get(cmbParent.getSelectedIndex()), true, null, 0.0));
 				cmbParent.removeAllItems();
 
 				for (int r = 0; r < nodes.getRowCount(); r++) {
@@ -574,9 +598,6 @@ public class TreeView extends Display {
 				}
 
 					cmbParent.setSelectedIndex(selectedIndex);
-
-				this.notifyAll();
-
 			}
 		});
 
@@ -584,9 +605,8 @@ public class TreeView extends Display {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				myProject.updateTables();
 				frame.dispose();
-				// TODO Auto-generated method stub
-
 			}
 		});
 
@@ -792,7 +812,7 @@ public class TreeView extends Display {
 								for (int r = 0; r < edgeTable.getRowCount(); r++) {
 									if ((edgeTable.get(r, 1).equals(iChild))) {
 										edgeTable.set(r, 0, iParent);
-										Global.getGlobal().getActiveProject().getTreeLinkedList().get(iChild).changeParent(Global.getGlobal().getActiveProject().getTreeLinkedList().get(iParent));
+										myProject.getTreeLinkedList().get(iChild).changeParent(myProject.getTreeLinkedList().get(iParent));
 										break;
 									}// if
 								}// for
