@@ -67,8 +67,12 @@ public class Histogram {
 		int[] barsused = new int[widthbar];
 		for(int x =0;x<u.size();x++)
 		{
-		diedata.get(x).get(currentdata).getMark();
-		
+		for(int q= 0 ; q< widthbar;q++)
+		{
+		if(diedata.get(x).get(currentdata).getMark()<(q*10+9))
+			barsused[q] =1;
+		;
+		}
 		}
 		}
 		
