@@ -60,7 +60,7 @@ public class FrmTable extends JPanel {
 	private String[] headers;
 
 	private Project project;
-
+	private int count =0;
 	private LinkedList<Integer> selected = new LinkedList<Integer>();
 
 	public void redraw(){
@@ -254,11 +254,15 @@ public class FrmTable extends JPanel {
 						backgroundColors.add(Color.orange);
 						comp.setBackground(Color.orange);
 						project.getSelected().add(
-								data.get(
-										table.getRowSorter()
-												.convertRowIndexToModel(
-														Index_row)).get(
-										Index_col));
+								data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col));
+						
+						if(count==0)
+						{
+							project.setSelected(Index_row);
+							count +=1;
+						}
+						
+						//	System.out.println("Table se index"+Index_row);
 						comp.setForeground(Color.black);
 						table.repaint();
 					}

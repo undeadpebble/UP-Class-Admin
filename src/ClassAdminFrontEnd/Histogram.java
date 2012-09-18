@@ -125,6 +125,7 @@ public class Histogram {
 		for (int x = 0; x < barsarray.length; x++) {
 				if(barsarray[x]== 1)
 				{
+					
 				double beginx = (Double) maindataset.getStartX(0, x);
 				double eindex = (Double) maindataset.getEndX(0, x);
 				
@@ -134,6 +135,7 @@ public class Histogram {
 				
 					barkleurder.addselectedbars(xmidvalue,
 							currentdataset.getYValue(0, x));
+					System.out.println("MIDVALUE "+ xmidvalue + "Y_VALUE"+currentdataset.getYValue(0, x));
 				}
 			}
 		
@@ -297,7 +299,7 @@ public class Histogram {
 					selectedindex = getSelectedbar(
 							maindataset.getStartX(0, iindex),
 							maindataset.getEndX(0, iindex));
-
+					System.out.println(maindataset.getStartX(0, iindex) + " " +maindataset.getEndX(0, iindex));
 					/*
 					 * for (int z = 0; z < selectedindex.size(); z++) { //
 					 * System.out.println("Selected punt se index " + //
@@ -313,7 +315,7 @@ public class Histogram {
 
 					for (int o = 0; o < selectedindex.size(); o++) {
 						project.setSelected((Integer) selectedindex.get(o));
-
+						
 					}
 					plot.setRenderer(barkleurder);
 					project.updatecharts();

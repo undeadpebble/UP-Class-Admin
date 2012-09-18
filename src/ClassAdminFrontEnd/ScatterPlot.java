@@ -79,6 +79,7 @@ public class ScatterPlot {
 	// -------------------------------------------------------------------------------------------------------
 	public void updateSelectedvalues()
 	{
+		chart.getXYPlot().clearAnnotations();
 		System.out.println("Ek update scatterchart");
 		ArrayList u= project.getSelectedIndexes();
 		//ArrayList u= Global.getGlobal().getActiveProject().getSelectedIndexes();
