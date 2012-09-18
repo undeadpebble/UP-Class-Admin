@@ -78,7 +78,6 @@ public class FrmTable extends JPanel {
 			filters.add(temp);
 		}
 
-		// ---------------------------------------------------------------------------------------------------------------
 		dataFilter = new Boolean[data.size()];
 		for (int x = 0; x < dataFilter.length; x++)
 			dataFilter[x] = true;

@@ -1,12 +1,14 @@
 package Rule;
 
+import ClassAdminBackEnd.Project;
+
 
 public class StringBoolRule extends BooleanRule{
 	StringRule child1;
 	StringRule child2;
 	
-	public StringBoolRule(StringRule child1, StringRule child2, char opperator,String name) {
-		super(name);
+	public StringBoolRule(StringRule child1, StringRule child2, char opperator,String name,Project project) {
+		super(name, project);
 		this.child1 = child1;
 		this.child2 = child2;
 		this.opperator = opperator;

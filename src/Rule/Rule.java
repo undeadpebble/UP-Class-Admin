@@ -1,16 +1,19 @@
 package Rule;
 
 import ClassAdminBackEnd.EntityType;
+import ClassAdminBackEnd.Project;
 import ClassAdminBackEnd.SuperEntity;
 import ClassAdminFrontEnd.TreeView;
 
 public class Rule extends EntityType{
 	
 	protected String name;
+	private Project project;
 	
-	public Rule(String n) {
+	public Rule(String n, Project project) {
 		super(n);
 		this.name = n;
+		this.project = project;
 	}
 
 	public String getName(){

@@ -1,6 +1,8 @@
 package Rule;
 
 import ClassAdminBackEnd.EntityType;
+import ClassAdminBackEnd.Global;
+import ClassAdminBackEnd.Project;
 
 public class StringRule extends Rule {
 	StringRule child1;
@@ -8,15 +10,17 @@ public class StringRule extends Rule {
 	BooleanRule boolRule;
 	String value;	
 	
-	public StringRule(StringRule child1, StringRule child2, BooleanRule boolRule, String name) {
-		super(name);
+	public StringRule(StringRule child1, StringRule child2, BooleanRule boolRule, String name, Project project) {
+		super(name,project);
 		this.child1 = child1;
 		this.child2 = child2;
 		this.boolRule = boolRule;
+		
+		Global.getGlobal().getActiveProject().getHeadEntityType().getSubEntityType().get(0).getSubEntityType().add(this);
 	}
 	
-	public StringRule(String value, String name){
-		super(name);
+	public StringRule(String value, String name, Project project){
+		super(name, project);
 		this.value = value;
 		boolRule = null;
 	}

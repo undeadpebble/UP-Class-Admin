@@ -1,6 +1,7 @@
 package Rule;
 
 import ClassAdminBackEnd.EntityType;
+import ClassAdminBackEnd.Project;
 import ClassAdminBackEnd.SuperEntity;
 
 public class FloatRule extends Rule {
@@ -10,15 +11,15 @@ public class FloatRule extends Rule {
 	private Double value;
 
 	public FloatRule(char opperator, FloatRule child1, FloatRule child2,
-			String name) {
-		super(name);
+			String name,Project project) {
+		super(name,project);
 		this.opperator = opperator;
 		this.child1 = child1;
 		this.child2 = child2;
 	}
 
-	public FloatRule(char opperator, Double value, String name) {
-		super(name);
+	public FloatRule(char opperator, Double value, String name,Project project) {
+		super(name, project);
 		this.opperator = opperator;
 		this.value = value;
 	}

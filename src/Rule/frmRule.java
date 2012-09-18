@@ -25,7 +25,7 @@ import javax.swing.SpinnerNumberModel;
 public class frmRule extends JFrame {
 
 	private JPanel contentPane;
-	private Project project;
+	private final Project project;
 	LinkedList<Rule> ruleList;
 	LinkedList<Rule> floatBoolRuleList;
 	LinkedList<Rule> StringBoolRuleList;
@@ -61,7 +61,7 @@ public class frmRule extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public frmRule(Project project) {
+	public frmRule(final Project project) {
 		txtStr2.setBounds(387, 106, 178, 20);
 		txtStr2.setColumns(10);
 		txtStr1.setBounds(68, 106, 180, 20);
@@ -138,7 +138,7 @@ public class frmRule extends JFrame {
 				StringRule rule1 = null;
 				StringRule rule2 = null;
 				if (txtStr1.getText() != "") {
-					rule1 = new StringRule(txtStr1.getText(), "reqwuiop");
+					rule1 = new StringRule(txtStr1.getText(), "reqwuiop", project);
 					ruleList.add(rule1);
 				} else {
 					if (StringBoolRuleList.size() > 0) {
@@ -149,7 +149,7 @@ public class frmRule extends JFrame {
 					}
 				}
 				if (txtStr2.getText() != "") {
-					rule2 = new StringRule(txtStr2.getText(), "reqwuiop");
+					rule2 = new StringRule(txtStr2.getText(), "reqwuiop", project);
 					ruleList.add(rule2);
 				} else {
 					if (StringBoolRuleList.size() > 0) {
@@ -163,7 +163,7 @@ public class frmRule extends JFrame {
 				if (valid) {
 					ruleList.add(new StringBoolRule(rule1, rule2,
 							opStringBoolChar[cbxStringComp.getSelectedIndex()],
-							txtName.getText()));
+							txtName.getText(), project));
 
 					exitFrame();
 				} else {
@@ -181,7 +181,7 @@ public class frmRule extends JFrame {
 				FloatRule rule2 = null;
 				if (Double.parseDouble(spinFloat1.getValue().toString()) != -1) {
 					rule1 = new FloatRule('n', Double.parseDouble(spinFloat1
-							.getValue().toString()), "reqwuiop");
+							.getValue().toString()), "reqwuiop", project);
 					ruleList.add(rule1);
 				} else {
 					if (floatRuleList.size() > 0) {
@@ -193,7 +193,7 @@ public class frmRule extends JFrame {
 				}
 				if (Double.parseDouble(spinFloat2.getValue().toString()) != -1) {
 					rule2 = new FloatRule('n', Double.parseDouble(spinFloat2
-							.getValue().toString()), "reqwuiop");
+							.getValue().toString()), "reqwuiop", project);
 					ruleList.add(rule2);
 				} else {
 					if (floatRuleList.size() > 0) {
@@ -207,7 +207,7 @@ public class frmRule extends JFrame {
 				if (valid) {
 					ruleList.add(new FloatBoolRule(opFloatChar[cbxOpperator
 							.getSelectedIndex()], rule1, rule2, txtName
-							.getText()));
+							.getText(), project));
 
 					exitFrame();
 				} else {
@@ -248,7 +248,7 @@ public class frmRule extends JFrame {
 				FloatRule rule2 = null;
 				if (Double.parseDouble(spinFloat1.getValue().toString()) != -1) {
 					rule1 = new FloatRule('n', Double.parseDouble(spinFloat1
-							.getValue().toString()), "reqwuiop");
+							.getValue().toString()), "reqwuiop", project);
 					ruleList.add(rule1);
 				} else {
 					if (floatRuleList.size() > 0) {
@@ -260,7 +260,7 @@ public class frmRule extends JFrame {
 				}
 				if (Double.parseDouble(spinFloat2.getValue().toString()) != -1) {
 					rule2 = new FloatRule('n', Double.parseDouble(spinFloat2
-							.getValue().toString()), "reqwuiop");
+							.getValue().toString()), "reqwuiop", project);
 					ruleList.add(rule2);
 				} else {
 					if (floatRuleList.size() > 0) {
@@ -274,7 +274,7 @@ public class frmRule extends JFrame {
 				if (valid) {
 					ruleList.add(new FloatRule(opFloatChar[cbxOpperator
 							.getSelectedIndex()], rule1, rule2, txtName
-							.getText()));
+							.getText(), project));
 
 					exitFrame();
 				} else {
@@ -294,7 +294,7 @@ public class frmRule extends JFrame {
 				BooleanRule rule3 = null;
 				
 				if (txtStr1.getText() != "") {
-					rule1 = new StringRule(txtStr1.getText(), "reqwuiop");
+					rule1 = new StringRule(txtStr1.getText(), "reqwuiop", project);
 					ruleList.add(rule1);
 				} else {
 					if (StringBoolRuleList.size() > 0) {
@@ -305,7 +305,7 @@ public class frmRule extends JFrame {
 					}
 				}
 				if (txtStr2.getText() != "") {
-					rule2 = new StringRule(txtStr2.getText(), "reqwuiop");
+					rule2 = new StringRule(txtStr2.getText(), "reqwuiop", project);
 					ruleList.add(rule2);
 				} else {
 					if (StringBoolRuleList.size() > 0) {
@@ -321,7 +321,7 @@ public class frmRule extends JFrame {
 				if (valid) {
 					ruleList.add(new StringBoolRule(rule1, rule2,
 							opStringBoolChar[cbxStringComp.getSelectedIndex()],
-							txtName.getText()));
+							txtName.getText(), project));
 
 					exitFrame();
 				} else {

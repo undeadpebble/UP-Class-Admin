@@ -1,12 +1,14 @@
 package Rule;
 
+import ClassAdminBackEnd.Project;
+
 
 public class FloatBoolRule extends BooleanRule{
 	FloatRule child1;
 	FloatRule child2;
 	
-	public FloatBoolRule(char opperator, FloatRule child1, FloatRule child2,  String name) {
-		super(name);
+	public FloatBoolRule(char opperator, FloatRule child1, FloatRule child2,  String name, Project project) {
+		super(name, project);
 		this.child1 = child1;
 		this.child2 = child2;
 		this.opperator = opperator;
