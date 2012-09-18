@@ -19,11 +19,18 @@ public class EntityType {
 	private EntityType parentEntitytype;
 	private LinkedList<EntityType> subEntityType;
 	private Boolean isTextField;
+	private Boolean isRule = false;
 	private Date date;
 	private Double defaultWeight;
 	private long ID;
-
 	private int maxValue = 100;
+	
+	public Boolean getIsRule() {
+		return isRule;
+	}
+	public void setIsRule(Boolean isRule) {
+		this.isRule = isRule;
+	}
 	public int getMaxValue() {
 		return maxValue;
 	}
@@ -203,4 +210,25 @@ public class EntityType {
 
 		}
 	}
+	
+	public void populateTreeWithEntities(){
+		for(int x = 0;x<this.getParentEntitytype().getEntityList().size();++x){
+			SuperEntity parent = this.getParentEntitytype().getEntityList().get(x);
+			if(this.getIsRule()){
+				if(this.getIsTextField()){
+					
+				} else{
+					
+				}
+			} else {
+				if(this.getIsTextField()){
+					new LeafStringEntity(this, parent,"<"+this.getName()+">");
+				} else{
+					new LeafMarkEntity(this, parent, 0);
+				}
+			}
+			
+		}
+	}
+	
 }

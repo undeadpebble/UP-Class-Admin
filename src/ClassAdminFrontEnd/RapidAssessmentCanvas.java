@@ -149,7 +149,7 @@ public class RapidAssessmentCanvas extends JFrame {
 					(int) (myPoints[0].getX() + this.getWidth()),
 					(int) myPoints[0].getY());
 			myPoints[2] = new Point((int) (myPoints[1].getX()),
-					(int) myPoints[1].getY() + this.getWidth());
+					(int) myPoints[1].getY() + this.getHeight());
 			myPoints[3] = new Point((int) (myPoints[0].getX()),
 					(int) myPoints[2].getY());
 
@@ -158,7 +158,7 @@ public class RapidAssessmentCanvas extends JFrame {
 					(int) (rectPoints[0].getX() + rect.getWidth()),
 					(int) rectPoints[0].getY());
 			rectPoints[2] = new Point((int) (rectPoints[1].getX()),
-					(int) rectPoints[1].getY() + rect.getWidth());
+					(int) rectPoints[1].getY() + rect.getHeight());
 			rectPoints[3] = new Point((int) (rectPoints[0].getX()),
 					(int) rectPoints[2].getY());
 
@@ -544,6 +544,9 @@ public class RapidAssessmentCanvas extends JFrame {
 							collision = true;
 
 						} else {
+							System.out.println("not overlap: "
+									+ tmp.getBounds() + "; "
+									+ component.getBounds());
 							if (tmp.contains(component)) {
 								contained.add(component);
 								System.out.println("contains");
