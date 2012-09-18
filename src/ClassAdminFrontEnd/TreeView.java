@@ -1,7 +1,10 @@
 package ClassAdminFrontEnd;
 
 import java.security.acl.Group;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import ClassAdminBackEnd.*;
 
@@ -18,6 +21,8 @@ import java.awt.Point;
 import java.awt.dnd.DragSource;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -45,13 +50,18 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.SpinnerListModel;
+import javax.swing.SpinnerModel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.TransferHandler;
 import javax.swing.border.MatteBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.tree.TreeNode;
 
@@ -133,7 +143,7 @@ public class TreeView extends Display {
 	static JButton btnNew = new JButton("Add Node");
 	static private boolean bParent = false;
 	static private boolean bChild = false;
-	private static 		Project myProject = null;
+	private static Project myProject = null;
 
 	static int iParent = -1;
 	static int iChild = -1;
@@ -157,10 +167,12 @@ public class TreeView extends Display {
 
 		// colors
 		ItemAction nodeColor = new NodeColorAction(treeNodes);
-		ItemAction textColor = new ColorAction(treeNodes, VisualItem.TEXTCOLOR, ColorLib.rgb(0, 0, 0));
+		ItemAction textColor = new ColorAction(treeNodes, VisualItem.TEXTCOLOR,
+				ColorLib.rgb(0, 0, 0));
 		m_vis.putAction("textColor", textColor);
 
-		ItemAction edgeColor = new ColorAction(treeEdges, VisualItem.STROKECOLOR, ColorLib.rgb(200, 200, 200));
+		ItemAction edgeColor = new ColorAction(treeEdges,
+				VisualItem.STROKECOLOR, ColorLib.rgb(200, 200, 200));
 
 		// quick repaint
 		ActionList repaint = new ActionList();
@@ -180,11 +192,13 @@ public class TreeView extends Display {
 		m_vis.putAction("animatePaint", animatePaint);
 
 		// create the tree layout action
-		NodeLinkTreeLayout treeLayout = new NodeLinkTreeLayout(tree, m_orientation, 50, 0, 8);
+		NodeLinkTreeLayout treeLayout = new NodeLinkTreeLayout(tree,
+				m_orientation, 50, 0, 8);
 		treeLayout.setLayoutAnchor(new Point2D.Double(25, 300));
 		m_vis.putAction("treeLayout", treeLayout);
 
-		CollapsedSubtreeLayout subLayout = new CollapsedSubtreeLayout(tree, m_orientation);
+		CollapsedSubtreeLayout subLayout = new CollapsedSubtreeLayout(tree,
+				m_orientation);
 		m_vis.putAction("subLayout", subLayout);
 
 		AutoPanAction autoPan = new AutoPanAction();
@@ -232,10 +246,14 @@ public class TreeView extends Display {
 		addControlListener(new PanControl());
 		addControlListener(new FocusControl(1, "filter"));
 		addControlListener(new TreeViewControl());
-		registerKeyboardAction(new OrientAction(Constants.ORIENT_LEFT_RIGHT), "left-to-right", KeyStroke.getKeyStroke("ctrl 1"), WHEN_FOCUSED);
-		registerKeyboardAction(new OrientAction(Constants.ORIENT_TOP_BOTTOM), "top-to-bottom", KeyStroke.getKeyStroke("ctrl 2"), WHEN_FOCUSED);
-		registerKeyboardAction(new OrientAction(Constants.ORIENT_RIGHT_LEFT), "right-to-left", KeyStroke.getKeyStroke("ctrl 3"), WHEN_FOCUSED);
-		registerKeyboardAction(new OrientAction(Constants.ORIENT_BOTTOM_TOP), "bottom-to-top", KeyStroke.getKeyStroke("ctrl 4"), WHEN_FOCUSED);
+		registerKeyboardAction(new OrientAction(Constants.ORIENT_LEFT_RIGHT),
+				"left-to-right", KeyStroke.getKeyStroke("ctrl 1"), WHEN_FOCUSED);
+		registerKeyboardAction(new OrientAction(Constants.ORIENT_TOP_BOTTOM),
+				"top-to-bottom", KeyStroke.getKeyStroke("ctrl 2"), WHEN_FOCUSED);
+		registerKeyboardAction(new OrientAction(Constants.ORIENT_RIGHT_LEFT),
+				"right-to-left", KeyStroke.getKeyStroke("ctrl 3"), WHEN_FOCUSED);
+		registerKeyboardAction(new OrientAction(Constants.ORIENT_BOTTOM_TOP),
+				"bottom-to-top", KeyStroke.getKeyStroke("ctrl 4"), WHEN_FOCUSED);
 
 		// ------------------------------------------------
 
@@ -257,8 +275,10 @@ public class TreeView extends Display {
 	// ------------------------------------------------------------------------
 
 	public void setOrientation(int orientation) {
-		NodeLinkTreeLayout rtl = (NodeLinkTreeLayout) m_vis.getAction("treeLayout");
-		CollapsedSubtreeLayout stl = (CollapsedSubtreeLayout) m_vis.getAction("subLayout");
+		NodeLinkTreeLayout rtl = (NodeLinkTreeLayout) m_vis
+				.getAction("treeLayout");
+		CollapsedSubtreeLayout stl = (CollapsedSubtreeLayout) m_vis
+				.getAction("subLayout");
 		switch (orientation) {
 		case Constants.ORIENT_LEFT_RIGHT:
 			m_nodeRenderer.setHorizontalAlignment(Constants.LEFT);
@@ -289,7 +309,8 @@ public class TreeView extends Display {
 			m_edgeRenderer.setVerticalAlignment2(Constants.BOTTOM);
 			break;
 		default:
-			throw new IllegalArgumentException("Unrecognized orientation value: " + orientation);
+			throw new IllegalArgumentException(
+					"Unrecognized orientation value: " + orientation);
 		}
 		m_orientation = orientation;
 		rtl.setOrientation(orientation);
@@ -304,7 +325,8 @@ public class TreeView extends Display {
 
 	public static void createEntityTypeFrm(String label, Project project) {
 		myProject = project;
-		JComponent treeview = createPanelEntityTypeTreeView(label, myProject.getHeadEntityType());
+		JComponent treeview = createPanelEntityTypeTreeView(label,
+				myProject.getHeadEntityType());
 
 		JFrame frame = new JFrame();
 
@@ -324,11 +346,14 @@ public class TreeView extends Display {
 		frame.setVisible(true);
 	}
 
-	public static JComponent createPanelEntityTypeTreeView(final String label, EntityType th) {
+	public static JComponent createPanelEntityTypeTreeView(final String label,
+			EntityType th) {
 		Color BACKGROUND = Color.WHITE;
 		Color FOREGROUND = Color.BLACK;
 
-		String str = "<tree>" + "<declarations>" + "<attributeDecl name=\"name\" type=\"String\" />" + "</declarations>";
+		String str = "<tree>" + "<declarations>"
+				+ "<attributeDecl name=\"name\" type=\"String\" />"
+				+ "</declarations>";
 
 		myProject.getTreeLinkedList().clear();
 		str += th.createTreeFromHead(myProject.getTreeLinkedList());
@@ -380,7 +405,8 @@ public class TreeView extends Display {
 
 		lblSelectedParent.setPreferredSize(new Dimension(200, 20));
 		lblSelectedParent.setVerticalAlignment(SwingConstants.TOP);
-		lblSelectedParent.setBorder(BorderFactory.createEmptyBorder(3, 0, 0, 0));
+		lblSelectedParent
+				.setBorder(BorderFactory.createEmptyBorder(3, 0, 0, 0));
 		lblSelectedParent.setFont(FontLib.getFont("Tahoma", Font.PLAIN, 16));
 		lblSelectedParent.setBackground(BACKGROUND);
 		lblSelectedParent.setForeground(FOREGROUND);
@@ -435,11 +461,14 @@ public class TreeView extends Display {
 		return panel;
 	}
 
-	public static JComponent createPanelTreeView(final String label, SuperEntity th) {
+	public static JComponent createPanelTreeView(final String label,
+			SuperEntity th) {
 		Color BACKGROUND = Color.WHITE;
 		Color FOREGROUND = Color.BLACK;
 
-		String str = "<tree>" + "<declarations>" + "<attributeDecl name=\"name\" type=\"String\" />" + "</declarations>";
+		String str = "<tree>" + "<declarations>"
+				+ "<attributeDecl name=\"name\" type=\"String\" />"
+				+ "</declarations>";
 
 		str += th.createTreeFromHead();
 
@@ -516,40 +545,70 @@ public class TreeView extends Display {
 
 		frame.setLayout(new GridLayout(10, 2));
 
+		final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		Date date = new Date();
+		SpinnerListModel listModel = new SpinnerListModel();
 		final JLabel lblName = new JLabel("Name:");
 		final JComboBox cmbParent = new JComboBox();
+		final JLabel lblParent = new JLabel("Parent:");
+		final JTextField txtName = new JTextField();
+		final JLabel lblText = new JLabel("Text field");
+		final JRadioButton rblYes = new JRadioButton("Yes");
+		final JRadioButton rblNo = new JRadioButton("No");
+		final ButtonGroup group = new ButtonGroup();
+		final JLabel lblDate = new JLabel("Date of assesment:");
+		final JTextArea txtDate = new JTextArea();
+		final JButton btnDate = new JButton("change");
+		final JLabel lblWeight = new JLabel("Weight");
+		JButton btnAdd = new JButton("Add");
+		JButton btnClose = new JButton("Close");
+
+		final JSpinner txtWeight = new JSpinner();
+		
+		txtName.setSize(120, 30);
+		txtDate.setText(dateFormat.format(date));
+		rblNo.setSelected(true);
+		group.add(rblYes);
+		group.add(rblNo);
+
+		
+		
+		txtWeight.setValue(new Double(1.00));
+		txtWeight.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent arg0) {
+				if(txtWeight.getValue().equals(new Double(0.0)))
+				{
+					txtWeight.setValue(new Double(0.0));
+				}
+				if(txtWeight.getValue().equals(new Double(100.01)))
+				{
+					txtWeight.setValue(new Double(0.0));
+				}
+			}
+		});
+		
 		for (int r = 0; r < nodes.getRowCount(); r++) {
 			for (int c = 0; c < nodes.getColumnCount(); c++) {
 				cmbParent.addItem(nodes.getString(r, c));
 			}
 		}
 
-		final JLabel lblParent = new JLabel("Parent:");
-		final JTextField txtName = new JTextField();
-		txtName.setSize(120, 30);
+		btnDate.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					txtDate.setText(new DatePicker(new Frame()).setPickedDate());
+				} catch (SqlJetException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		});
 
-		final JLabel lblText = new JLabel("Text field");
-		final JRadioButton rblYes = new JRadioButton("Yes");
-		rblYes.setMnemonic(KeyEvent.VK_Y);
-		final JRadioButton rblNo = new JRadioButton("No");
-		rblNo.setMnemonic(KeyEvent.VK_N);
-		rblNo.setSelected(true);
-
-		ButtonGroup group = new ButtonGroup();
-		group.add(rblYes);
-		group.add(rblNo);
-
-		final JLabel lblDate = new JLabel("Date of assesment:");
-		final JTextArea txtDate = new JTextArea();
-
-		final JLabel lblWeight = new JLabel("Weight");
-		final JTextArea txtWeight = new JTextArea();
-
-		JButton btnAdd = new JButton("Add");
-		JButton btnClose = new JButton("Close");
 
 		btnAdd.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				boolean b = true;
@@ -557,38 +616,45 @@ public class TreeView extends Display {
 				Node parent = null;
 				Node child = null;
 				String assDate = "";
-				double wieght = 1.0;
-				
+				double weight = 1.0;
+
 				int selectedIndex = cmbParent.getSelectedIndex();
-				if(selectedIndex == 0)
-				{
+				if (selectedIndex == 0) {
 					b = false;
 					lblParent.setForeground(Color.red);
-				} 
+				}
 
-				if(txtName.getText() == null || txtName.getText().equals(""))
-				{
+				if (txtName.getText() == null || txtName.getText().equals("")) {
 					b = false;
 					lblName.setForeground(Color.red);
 				}
-				
-				if(rblYes.isSelected())
+
+				if (rblYes.isSelected())
 					isText = true;
-				if(txtDate.getText() != null || !txtDate.getText().equals(""))
-					assDate = txtDate.getText();
-/*				if(txtWeight.getText() != null || !txtWeight.getText().equals(""))
-					wieght = (Double.totxtWeight.getText();
-*/				
-				
-				parent = myTree.getNode(cmbParent.getSelectedIndex());				
-				child = myTree.addNode();	
+
+				try{
+					Date d = dateFormat.parse(txtDate.getText());
+				}catch(Exception e)
+				{
+					b = false;
+					e.printStackTrace();
+				}
+			
+//				if(txtWeight.getText() != null || !txtWeight.getText().equals("")) 
+				 
+
+				parent = myTree.getNode(cmbParent.getSelectedIndex());
+				child = myTree.addNode();
 				for (int c = 0; c < child.getColumnCount() - 1; c++)
 					child.set(c, parent.get(c));
 				child.set("name", txtName.getText());
 				myTree.addEdge(parent, child);
-				
-				
-				myProject.getTreeLinkedList().add(new EntityType(txtName.getText(), myProject.getTreeLinkedList().get(cmbParent.getSelectedIndex()), true, null, 0.0));
+
+				myProject.getTreeLinkedList().add(
+						new EntityType(txtName.getText(), myProject
+								.getTreeLinkedList().get(
+										cmbParent.getSelectedIndex()), true,
+								null, 0.0));
 				cmbParent.removeAllItems();
 
 				for (int r = 0; r < nodes.getRowCount(); r++) {
@@ -597,7 +663,7 @@ public class TreeView extends Display {
 					}
 				}
 
-					cmbParent.setSelectedIndex(selectedIndex);
+				cmbParent.setSelectedIndex(selectedIndex);
 			}
 		});
 
@@ -615,6 +681,9 @@ public class TreeView extends Display {
 		else
 			cmbParent.setSelectedIndex(0);
 
+		JPanel pnlDate = new JPanel(new GridLayout(1, 2));
+		pnlDate.add(txtDate);
+		pnlDate.add(btnDate);
 		frame.add(lblParent);
 		frame.add(cmbParent);
 		frame.add(lblName);
@@ -624,7 +693,7 @@ public class TreeView extends Display {
 		pnlRad.add(rblNo);
 		frame.add(pnlRad);
 		frame.add(lblDate);
-		frame.add(txtDate);
+		frame.add(pnlDate);
 		frame.add(lblWeight);
 		frame.add(txtWeight);
 		frame.add(btnAdd);
@@ -684,7 +753,9 @@ public class TreeView extends Display {
 				getAbsoluteCoordinate(m_cur, m_start);
 				m_end.setLocation(vi.getX() + xbias, vi.getY() + ybias);
 			} else {
-				m_cur.setLocation(m_start.getX() + frac * (m_end.getX() - m_start.getX()), m_start.getY() + frac * (m_end.getY() - m_start.getY()));
+				m_cur.setLocation(m_start.getX() + frac
+						* (m_end.getX() - m_start.getX()), m_start.getY()
+						+ frac * (m_end.getY() - m_start.getY()));
 				panToAbs(m_cur);
 			}
 		}
@@ -798,7 +869,8 @@ public class TreeView extends Display {
 							iChild = item.getRow();
 							bChild = true;
 							if (iChild == iParent) {
-								lblSelectedChild.setText("can't select same parent");
+								lblSelectedChild
+										.setText("can't select same parent");
 								bChild = false;
 								iChild = -1;
 							} else
@@ -812,7 +884,13 @@ public class TreeView extends Display {
 								for (int r = 0; r < edgeTable.getRowCount(); r++) {
 									if ((edgeTable.get(r, 1).equals(iChild))) {
 										edgeTable.set(r, 0, iParent);
-										myProject.getTreeLinkedList().get(iChild).changeParent(myProject.getTreeLinkedList().get(iParent));
+										myProject
+												.getTreeLinkedList()
+												.get(iChild)
+												.changeParent(
+														myProject
+																.getTreeLinkedList()
+																.get(iParent));
 										break;
 									}// if
 								}// for
