@@ -56,6 +56,7 @@ import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SpinnerListModel;
 import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.TransferHandler;
@@ -543,11 +544,10 @@ public class TreeView extends Display {
 		JPanel pnlRad = new JPanel(new GridLayout(1, 2));
 		frame.setSize(600, 600);
 
-		frame.setLayout(new GridLayout(10, 2));
+		frame.setLayout(new GridLayout(6, 2));
 
 		final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		Date date = new Date();
-		SpinnerListModel listModel = new SpinnerListModel();
 		final JLabel lblName = new JLabel("Name:");
 		final JComboBox cmbParent = new JComboBox();
 		final JLabel lblParent = new JLabel("Parent:");
@@ -562,32 +562,18 @@ public class TreeView extends Display {
 		final JLabel lblWeight = new JLabel("Weight");
 		JButton btnAdd = new JButton("Add");
 		JButton btnClose = new JButton("Close");
+		SpinnerNumberModel snmWeight = new SpinnerNumberModel(new Double(1.00), // value
+				new Double(0.00), // min
+				new Double(100.00), // max
+				new Double(0.01)); // step
+		final JSpinner txtWeight = new JSpinner(snmWeight);
 
-		final JSpinner txtWeight = new JSpinner();
-		
 		txtName.setSize(120, 30);
 		txtDate.setText(dateFormat.format(date));
 		rblNo.setSelected(true);
 		group.add(rblYes);
 		group.add(rblNo);
 
-		
-		
-		txtWeight.setValue(new Double(1.00));
-		txtWeight.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent arg0) {
-				if(txtWeight.getValue().equals(new Double(0.0)))
-				{
-					txtWeight.setValue(new Double(0.0));
-				}
-				if(txtWeight.getValue().equals(new Double(100.01)))
-				{
-					txtWeight.setValue(new Double(0.0));
-				}
-			}
-		});
-		
 		for (int r = 0; r < nodes.getRowCount(); r++) {
 			for (int c = 0; c < nodes.getColumnCount(); c++) {
 				cmbParent.addItem(nodes.getString(r, c));
@@ -606,7 +592,6 @@ public class TreeView extends Display {
 				}
 			}
 		});
-
 
 		btnAdd.addActionListener(new ActionListener() {
 			@Override
@@ -632,39 +617,59 @@ public class TreeView extends Display {
 				if (rblYes.isSelected())
 					isText = true;
 
-				try{
-					Date d = dateFormat.parse(txtDate.getText());
-				}catch(Exception e)
-				{
-					b = false;
+				Date d = null;
+				try {
+					d = dateFormat.parse(txtDate.getText());
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
-			
-//				if(txtWeight.getText() != null || !txtWeight.getText().equals("")) 
-				 
 
-				parent = myTree.getNode(cmbParent.getSelectedIndex());
-				child = myTree.addNode();
-				for (int c = 0; c < child.getColumnCount() - 1; c++)
-					child.set(c, parent.get(c));
-				child.set("name", txtName.getText());
-				myTree.addEdge(parent, child);
-
-				myProject.getTreeLinkedList().add(
-						new EntityType(txtName.getText(), myProject
-								.getTreeLinkedList().get(
-										cmbParent.getSelectedIndex()), true,
-								null, 0.0));
-				cmbParent.removeAllItems();
-
-				for (int r = 0; r < nodes.getRowCount(); r++) {
-					for (int c = 0; c < nodes.getColumnCount(); c++) {
-						cmbParent.addItem(nodes.getString(r, c));
-					}
+				if(d == null)
+				{
+					b = false;
+					lblDate.setForeground(Color.RED);
 				}
 
-				cmbParent.setSelectedIndex(selectedIndex);
-			}
+				if (b) {
+					parent = myTree.getNode(cmbParent.getSelectedIndex()); //get parent
+					child = myTree.addNode(); //create child
+					
+					for (int c = 0; c < child.getColumnCount() - 1; c++) //copy parent data
+						child.set(c, parent.get(c));
+					
+					child.set("name", txtName.getText()); //edit child to fit new child
+					
+					myTree.addEdge(parent, child); //add edge between parent and child
+
+					//add child to parent in back end
+					myProject.getTreeLinkedList().add(
+							new EntityType(txtName.getText(), myProject
+									.getTreeLinkedList().get(
+											cmbParent.getSelectedIndex()),
+									isText, d,(Double) txtWeight.getValue()));
+
+					//refresh cmbParent content
+					cmbParent.removeAllItems();
+					for (int r = 0; r < nodes.getRowCount(); r++) {
+						for (int c = 0; c < nodes.getColumnCount(); c++) {
+							cmbParent.addItem(nodes.getString(r, c));
+						}
+					}
+
+					//set selected index to what it was
+					cmbParent.setSelectedIndex(selectedIndex);
+					
+					//reset all values
+					rblNo.setSelected(true);
+					txtWeight.setValue(new Double(1.0));
+					txtName.setText(null);
+					txtDate.setText(dateFormat.format(new Date()));
+					lblParent.setForeground(Color.BLACK);
+					lblName.setForeground(Color.BLACK);
+					lblDate.setForeground(Color.BLACK);
+					isText = false;
+				}//if b
+			}//actionListener
 		});
 
 		btnClose.addActionListener(new ActionListener() {
@@ -891,6 +896,9 @@ public class TreeView extends Display {
 														myProject
 																.getTreeLinkedList()
 																.get(iParent));
+										bChild = false;
+										iChild = -1;
+										lblSelectedChild.setText("please select child");
 										break;
 									}// if
 								}// for
@@ -900,6 +908,9 @@ public class TreeView extends Display {
 
 					} else {
 						lblSelectedParent.setText("no parent selected");
+						bChild = false;
+						iChild = -1;
+						lblSelectedChild.setText("no child selcted");
 					}// else
 				}// if
 			}// if
@@ -912,6 +923,9 @@ public class TreeView extends Display {
 						iParent = -1;
 						bParent = false;
 						lblSelectedParent.setText("no parent selected");
+						iChild = -1;
+						bChild = false;
+						lblSelectedChild.setText("no child selected");
 					}// if
 				}// if
 

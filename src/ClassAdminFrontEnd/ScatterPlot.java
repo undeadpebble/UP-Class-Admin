@@ -14,6 +14,7 @@ import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -38,6 +39,9 @@ import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RefineryUtilities;
 
+import ClassAdminBackEnd.Global;
+import ClassAdminBackEnd.Project;
+
 
 
 public class ScatterPlot {
@@ -46,14 +50,20 @@ public class ScatterPlot {
 	JFreeChart chart; 
 	XYPlot plot;
 	static XYDataset datasetMain;
-	public void ScatterPlot()
+	Project project;
+	// -------------------------------------------------------------------------------------------------------
+	public ScatterPlot(Project project)
 	{
-		
+		this.project = project;
 	}
+	// -------------------------------------------------------------------------------------------------------
+	
 	public void setDatasetmain(XYDataset x)
 	{
 		datasetMain = x;
 	}
+	
+	// -------------------------------------------------------------------------------------------------------
 	public JFreeChart createScatter(String title,final XYDataset chartdata,String xas,String yas)
 	{
 		chart = ChartFactory.createScatterPlot(
@@ -66,11 +76,32 @@ public class ScatterPlot {
 		return chart;
 	}	
 	
+	// -------------------------------------------------------------------------------------------------------
+	public void updateSelectedvalues()
+	{
+		System.out.println("Ek update scatterchart");
+		ArrayList u= project.getSelectedIndexes();
+		//ArrayList u= Global.getGlobal().getActiveProject().getSelectedIndexes();
+		final CircleDrawer cd = new CircleDrawer(Color.red,
+				new BasicStroke(1.0f), null);
+		
+		for(int x=0;x<u.size();x++)
+		{
+		
+		final XYAnnotation selectPlots = new XYDrawableAnnotation(datasetMain
+				.getXValue(0, (Integer) u.get(x)), datasetMain.getYValue(0,
+						(Integer) u.get(x)), 11, 11, cd);
+
+		chart.getXYPlot().addAnnotation(selectPlots);
+		}
+	}
+	// -------------------------------------------------------------------------------------------------------
 	public ChartPanel createPanel()
 	{
+		
 		chartPanel = new ChartPanel(chart);
 		plot = chart.getXYPlot();
-		
+		updateSelectedvalues();
 		
 		
 			chartPanel.addChartMouseListener(new ChartMouseListener() {
@@ -84,15 +115,19 @@ public class ScatterPlot {
 					chart.getXYPlot().clearAnnotations();
 					
 					ChartEntity entity = ((ChartMouseEvent) e).getEntity();
-					
+				
 					if (entity instanceof XYItemEntity && entity != null) {
-
-						XYItemEntity ent = (XYItemEntity) entity;
 						
-
+						XYItemEntity ent = (XYItemEntity) entity;
+					
+						
+						
 						int sindex = ent.getSeriesIndex();
 						int iindex = ent.getItem();
-
+						project.setSelected(iindex);
+						//Global.getGlobal().getActiveProject().setSelected(iindex);
+						
+						System.out.println("Punt se index"+iindex);
 						final CircleDrawer cd = new CircleDrawer(Color.red,
 								new BasicStroke(1.0f), null);
 						final XYAnnotation bestBid = new XYDrawableAnnotation(datasetMain
@@ -100,7 +135,8 @@ public class ScatterPlot {
 								iindex), 11, 11, cd);
 
 						chart.getXYPlot().addAnnotation(bestBid);
-
+						project.updatecharts();
+						//Global.getGlobal().getActiveProject().updatecharts();
 						System.out.println("x = " + datasetMain.getXValue(sindex, iindex));
 						System.out.println("y = " + datasetMain.getYValue(sindex, iindex));
 					}

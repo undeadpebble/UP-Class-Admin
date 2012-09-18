@@ -67,7 +67,8 @@ public class Frame extends JFrame {
 	private JTabbedPane tabbedPane;
 	private FileHandler fileHandler;
 	private BlurBackground blur;
-	private ReflectionButton homeButton, importButton, exportButton, studentsButton, histogramButton, boxButton, scatterButton, conditionalFormatButton;
+	private ReflectionButton homeButton, importButton, exportButton, studentsButton, histogramButton, boxButton, scatterButton,
+			conditionalFormatButton;
 	private FadePanel homeInfoPanel, importInfoPanel, exportInfoPanel, studentsInfoPanel, histogramInfoPanel, boxplotInfoPanel;
 	private ShadowPanel studentPanel;
 	private String recentPathFile;
@@ -515,8 +516,9 @@ public class Frame extends JFrame {
 		scatterButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Scatter.png")));
 		scatterButton.setBounds(420, 12, 68, 80);
 		navBar.add(scatterButton);
-		
-		conditionalFormatButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/ConditionalFormatting.png")));
+
+		conditionalFormatButton = new ReflectionButton(ImageIO.read(getClass().getResource(
+				"/ClassAdminFrontEnd/resources/ConditionalFormatting.png")));
 		conditionalFormatButton.setBounds(485, 12, 68, 80);
 		navBar.add(conditionalFormatButton);
 
@@ -670,7 +672,6 @@ public class Frame extends JFrame {
 			public void mousePressed(MouseEvent arg0) {
 				if (!studentsButton.isDisabled()) {
 					table.getTable().getSelectedRow();
-
 					TreeView.createEntityTypeFrm("name",Global.getGlobal().getActiveProject());
 				}
 			}
@@ -688,7 +689,8 @@ public class Frame extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (!histogramButton.isDisabled()) {
-					HistogramFrame x = new HistogramFrame();
+					HistogramFrame x = new HistogramFrame(Global.getGlobal().getActiveProject());
+					Global.getGlobal().getActiveProject().addhistogramcharts(x);
 				}
 			}
 
@@ -723,7 +725,8 @@ public class Frame extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (!scatterButton.isDisabled()) {
-					ScatterPlotFrame x = new ScatterPlotFrame();
+					ScatterPlotFrame x = new ScatterPlotFrame(Global.getGlobal().getActiveProject());//project);
+					Global.getGlobal().getActiveProject().addscattercharts(x);
 				}
 			}
 
@@ -735,7 +738,7 @@ public class Frame extends JFrame {
 				scatterplotInfoPanel.fadeOut();
 			}
 		});
-		
+
 		conditionalFormatButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
@@ -746,11 +749,11 @@ public class Frame extends JFrame {
 			}
 
 			public void mouseEntered(MouseEvent arg0) {
-				
+
 			}
 
 			public void mouseExited(MouseEvent arg0) {
-				
+
 			}
 		});
 
@@ -773,7 +776,7 @@ public class Frame extends JFrame {
 		}
 
 		// add the filter to the file chooser
-		//filechooser.addChoosableFileFilter(fileFilter);
+		// filechooser.addChoosableFileFilter(fileFilter);
 
 		// shows the dialog, return value specifies file
 		int returnVal = filechooser.showOpenDialog(this);
@@ -781,7 +784,7 @@ public class Frame extends JFrame {
 		// if the chosen file is valid
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			file = filechooser.getSelectedFile();
-			currentFilePath = filechooser.getSelectedFile();	
+			currentFilePath = filechooser.getSelectedFile();
 			blur.fadeOut();
 			createTab(file);
 			homeToWorkspaceTransition();
@@ -1274,7 +1277,7 @@ public class Frame extends JFrame {
 
 					});
 				}
-				
+
 				if (recentDocsButtonsArray[4] != null) {
 					recentDocsButtonsArray[4].addMouseListener(new MouseAdapter() {
 						@Override
