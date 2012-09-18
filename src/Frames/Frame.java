@@ -75,7 +75,7 @@ public class Frame extends JFrame {
 	private ReflectionImagePanel container, containerRecentDocs, containerImportImage, containerWorkspace, containerStudents;
 	private MenuImagePanel containerImportText, containerWorkspaceText, containerStudentsText, studentsViewArrowOut, studentsViewArrowIn;
 	private ImagePanel containerImportTextSub, containerStudentsTextSub, containerWorkspaceTextSub, boxChartImage, histogramChartImage,
-			scatterplotChartImage, studentPhoto;
+			scatterplotChartImage, studentPhoto, searchImage;
 	private JFileChooser filechooser;
 	private JFrame frame = this;
 	private File currentFilePath;
@@ -300,6 +300,9 @@ public class Frame extends JFrame {
 					studentPanel.setNewX(getWidth() - 45);
 					studentPanel.setOldX(getWidth() - 250);
 				}
+				if (searchPanel != null) {
+					searchPanel.setBounds(workspacePanel.getWidth()-170, 10, 150, 30);
+				}
 
 			}
 
@@ -512,6 +515,10 @@ public class Frame extends JFrame {
 		JTextField searchBox = new JTextField();
 		searchBox.setBounds(25,5,124,25);
 		searchPanel.add(searchBox);
+		
+		searchImage = new ImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Search.png")));
+		searchImage.setBounds(0, 8, 30, 30);
+		searchPanel.add(searchImage);
 		
 		searchPanel.fadeIn();
 
