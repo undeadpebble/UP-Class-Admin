@@ -40,6 +40,7 @@ public class Histogram {
 	private int currentdata;
 	private String[] studentnr;
 	protected Project project;
+	private int widthbar = 10;
 
 	// -------------------------------------------------------------------------------------------------------
 	public Histogram(Project project) {
@@ -54,17 +55,34 @@ public class Histogram {
 		double klein = 99999;
 		double groot = -1;
 		final LinkedList<LinkedList<SuperEntity>> diedata = project.getHead().getDataLinkedList();
-		//final LinkedList<LinkedList<SuperEntity>> diedata = Global.getGlobal().getActiveProject().getHead().getDataLinkedList();
+		double verdeling;
+		
+		
+		
 		
 		ArrayList u = project.getSelectedIndexes();
-		//ArrayList u = Global.getGlobal().getActiveProject().getSelectedIndexes();
+		
+		if(u.size()!=0)
+		{
+		int[] barsused = new int[widthbar];
+		for(int x =0;x<u.size();x++)
+		{
+		diedata.get(x).get(currentdata).getMark();
+		
+		}
+		}
+		
+		
+		
+		
+		
 		System.out.println("Size"+u.size());
 		if(u.size()!=0)
 		{
 		for (int x = 0; x < diedata.size(); x++) {
-		//	System.out.println(x);
 			if (diedata.get(x).get(currentdata).getMark() < klein)
 				klein = diedata.get(x).get(currentdata).getMark();
+			
 			if (diedata.get(x).get(currentdata).getMark() > groot)
 				groot = diedata.get(x).get(currentdata).getMark();
 		}
@@ -72,6 +90,8 @@ public class Histogram {
 		System.out.println("Grootste" + groot);
 		ArrayList selectedbars = getSelectedbar(klein, groot);
 		setBarcolor(klein, groot);
+		
+
 		/*double beginx;
 		double eindex;
 		double xmidvalue;
@@ -196,8 +216,8 @@ public class Histogram {
 		maindataset = dataset;
 		NumberAxis rangeAxis = (NumberAxis) chart.getXYPlot().getRangeAxis();
 
-		((NumberAxis) rangeAxis).setTickUnit(new NumberTickUnit(1));
-		rangeAxis.setRange(0, 10);
+	//	((NumberAxis) rangeAxis).setTickUnit(new NumberTickUnit(1));
+		//rangeAxis.setRange(0, );
 		final CustomBarRenderer barkleurder = new CustomBarRenderer();
 		chart.getXYPlot().setRenderer(barkleurder);
 		return chart;
@@ -219,7 +239,7 @@ public class Histogram {
 
 			public void chartMouseClicked(ChartMouseEvent e) {
 				
-				//Global.getGlobal().getActiveProject().updatecharts();
+				
 				MouseEvent me = e.getTrigger();
 
 				if (me.isShiftDown() == false)
@@ -229,7 +249,7 @@ public class Histogram {
 					project.clearselected();
 				}
 				ChartEntity entity = ((ChartMouseEvent) e).getEntity();
-
+				System.out.println(entity.toString());
 				if (entity instanceof XYItemEntity && entity != null) {
 
 					XYItemEntity ent = (XYItemEntity) entity;
@@ -282,7 +302,7 @@ public class Histogram {
 	public HistogramDataset createDataset(int houer) {
 		currentdata = houer;
 		final LinkedList<LinkedList<SuperEntity>> diedata = project.getHead().getDataLinkedList();
-		//final LinkedList<LinkedList<SuperEntity>> diedata = Global.getGlobal().getActiveProject().getHead().getDataLinkedList();
+		
 		values = new double[diedata.size()];
 		studentnr = new String[diedata.size()];
 
@@ -291,7 +311,7 @@ public class Histogram {
 			values[q] = diedata.get(q).get(houer).getMark();
 
 			studentnr[q] = diedata.get(q).get(0).getValue();
-			// System.out.println(values[q]);
+			
 
 		}
 
@@ -304,7 +324,7 @@ public class Histogram {
 	// -------------------------------------------------------------------------------------------------------
 	public HistogramDataset changeDataset(int houer) {
 		final LinkedList<LinkedList<SuperEntity>> diedata = project.getHead().getDataLinkedList();
-		//final LinkedList<LinkedList<SuperEntity>> diedata = Global.getGlobal().getActiveProject().getHead().getDataLinkedList();
+		
 		values = new double[diedata.size()];
 		for (int q = 0; q < diedata.size(); q++) {
 
@@ -317,18 +337,27 @@ public class Histogram {
 	}
 
 	// -------------------------------------------------------------------------------------------------------
-	public HistogramDataset increaseWidth(int widthbar) {
-
+	public HistogramDataset increaseWidth(int widthbarb) {
+		widthbar = widthbarb;
 		HistogramDataset nuwedataset = new HistogramDataset();
 		nuwedataset.addSeries("Histogram", values, widthbar, 0, 100);
 		return nuwedataset;
 	}
 
 	// -------------------------------------------------------------------------------------------------------
-	public HistogramDataset decreaseWidth(int widthbar) {
-
+	public HistogramDataset decreaseWidth(int widthbard) {
+		widthbar = widthbard;
 		HistogramDataset nuwedataset = new HistogramDataset();
 		nuwedataset.addSeries("Histogram", values, widthbar, 0, 100);
 		return nuwedataset;
+	}
+	
+	public int getWidthBar()
+	{
+		return widthbar;
+	}
+	public void setWidthBar(int barwidth)
+	{
+		widthbar = barwidth;
 	}
 }

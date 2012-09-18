@@ -61,7 +61,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 	private double[] values;
 	private String[] studentnr;
 	private double[][] studentref;
-	private int widthbar = 10;
+	//private int widthbar = 10;
 	private ArrayList selectedindex = new ArrayList();
 	private Histogram nuweChart;
 	private Project project;
@@ -80,14 +80,11 @@ public class HistogramFrame extends JFrame implements ActionListener {
 		this.project = project;
 		final LinkedList<LinkedList<SuperEntity>> diedata = project.getHead()
 				.getDataLinkedList();
-		// final LinkedList<LinkedList<SuperEntity>> diedata =
-		// Global.getGlobal().getActiveProject().getHead().getDataLinkedList();
+		
 		final String[] headers = project.getHead().getHeaders();
-		// final String[] headers =
-		// Global.getGlobal().getActiveProject().getHead().getHeaders();
+		
 		String[] kolom = project.getHead().getNumberHeaders();
-		// String[] kolom =
-		// Global.getGlobal().getActiveProject().getHead().getNumberHeaders();
+		
 
 		String plotTitle = "Histogram";
 		String xaxis = kolom[0];
@@ -329,16 +326,18 @@ public class HistogramFrame extends JFrame implements ActionListener {
 
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (widthbar % 10 == 0)
-					widthbar += 10;
+				if (nuweChart.getWidthBar() % 10 == 0)
+					nuweChart.setWidthBar(nuweChart.getWidthBar() +10);
+					//widthbar += 10;
 				else
-					widthbar += 9;
+					nuweChart.setWidthBar(nuweChart.getWidthBar() +9);
+					//widthbar += 9;
 				/*
 				 * HistogramDataset nuwedataset = new HistogramDataset();
 				 * nuwedataset.addSeries("Histogram", values,widthbar ,0,100);
 				 */
 				chartpanel.getChart().getXYPlot()
-						.setDataset(nuweChart.increaseWidth(widthbar));
+						.setDataset(nuweChart.increaseWidth(nuweChart.getWidthBar()));
 
 			}
 		});
@@ -371,18 +370,34 @@ public class HistogramFrame extends JFrame implements ActionListener {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-
-				if (widthbar > 10)
-					widthbar -= 10;
-				else if (widthbar > 1)
-					widthbar -= 1;
-
+				if (nuweChart.getWidthBar() >10)
+					nuweChart.setWidthBar(nuweChart.getWidthBar() -10);
+					//widthbar += 10;
+				else if(nuweChart.getWidthBar()>1)
+					nuweChart.setWidthBar(nuweChart.getWidthBar() -1);
+					//widthbar += 9;
 				/*
 				 * HistogramDataset nuwedataset = new HistogramDataset();
 				 * nuwedataset.addSeries("Histogram", values,widthbar ,0,100);
 				 */
 				chartpanel.getChart().getXYPlot()
-						.setDataset(nuweChart.decreaseWidth(widthbar));
+						.setDataset(nuweChart.increaseWidth(nuweChart.getWidthBar()));
+
+				
+				
+				
+				
+			/*	if (widthbar > 10)
+					widthbar -= 10;
+				else if (widthbar > 1)
+					widthbar -= 1;*/
+
+				/*
+				 * HistogramDataset nuwedataset = new HistogramDataset();
+				 * nuwedataset.addSeries("Histogram", values,widthbar ,0,100);
+				 */
+				/*chartpanel.getChart().getXYPlot()
+						.setDataset(nuweChart.decreaseWidth(widthbar));*/
 
 			}
 		});
