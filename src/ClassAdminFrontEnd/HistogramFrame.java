@@ -66,12 +66,12 @@ public class HistogramFrame extends JFrame implements ActionListener {
 	private Histogram nuweChart;
 	private Project project;
 
-	// -------------------------------------------------------------------------------------------------------
+	//Update the values of the histogram
 	public void update() {
 		nuweChart.updateSelectedValues();
 	}
 
-	// -------------------------------------------------------------------------------------------------------
+	//Create the frame of the histogram
 	public HistogramFrame(Project project) {
 		JFrame f = new JFrame("Histogram");
 		final Container content = f.getContentPane();
@@ -103,7 +103,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			}
 
 		}
-		;
+		
 		chart = nuweChart.createHistogram(plotTitle, xaxis, yaxis,
 				nuweChart.createDataset(houerx));
 
@@ -112,7 +112,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 		JLabel lblNewLabel = new JLabel("X-axis");
 
 		final JComboBox xascb = new JComboBox();
-
+		//Combobox van X-axis
 		xascb.setModel(new DefaultComboBoxModel(kolom));
 		xascb.addActionListener(new ActionListener() {
 
@@ -148,7 +148,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			}
 
 		});
-
+		//Cycle through the data left
 		JButton switchlinksx = new JButton("<");
 		switchlinksx.addMouseListener(new MouseListener() {
 
@@ -183,7 +183,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 
 			}
 		});
-
+		//Cycle through data right
 		JButton switchregsx = new JButton(">");
 		switchregsx.addMouseListener(new MouseListener() {
 
@@ -254,7 +254,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			}
 
 		});
-
+		//Extract the chart  as a jpg
 		JButton extractPic = new JButton("Extract chart as jpg");
 		extractPic.addMouseListener(new MouseListener() {
 
@@ -297,7 +297,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 		});
 		final JLabel width = new JLabel("Width");
 		JButton widthsmall = new JButton("<");
-
+		//Change the widht of the bars smaller
 		widthsmall.addMouseListener(new MouseListener() {
 
 			@Override
@@ -341,7 +341,9 @@ public class HistogramFrame extends JFrame implements ActionListener {
 
 			}
 		});
+		
 		JButton widthlarge = new JButton(">");
+		//Change the width of the bars bigger
 		widthlarge.addMouseListener(new MouseListener() {
 
 			@Override
@@ -401,6 +403,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 
 			}
 		});
+		
 		content.setLayout(new FlowLayout());
 		content.add(chartpanel);
 		content.add(lblNewLabel);
@@ -420,8 +423,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 		// TODO Auto-generated method stub
 
 	}
-
-	// -------------------------------------------------------------------------------------------------------
+	//SaveFileAs for extract
 	public void saveFileAs() throws IOException {
 
 		File file;
@@ -448,7 +450,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 		}
 	}
 
-	// -------------------------------------------------------------------------------------------------------
+	//Save the Jfreechart in a directory as a jpg
 	public static void saveToFile(JFreeChart chart, String aFileName,
 			int width, int height, double quality)
 			throws FileNotFoundException, IOException {
@@ -467,7 +469,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 
 	}
 
-	// -------------------------------------------------------------------------------------------------------
+	// Create jpg image
 	protected static BufferedImage draw(JFreeChart chart, int width, int height)
 
 	{

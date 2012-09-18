@@ -51,19 +51,19 @@ public class ScatterPlot {
 	XYPlot plot;
 	static XYDataset datasetMain;
 	Project project;
-	// -------------------------------------------------------------------------------------------------------
+	//Constructor
 	public ScatterPlot(Project project)
 	{
 		this.project = project;
 	}
-	// -------------------------------------------------------------------------------------------------------
 	
+	//Set the dataset of the chart
 	public void setDatasetmain(XYDataset x)
 	{
 		datasetMain = x;
 	}
 	
-	// -------------------------------------------------------------------------------------------------------
+	//Create the create the scatterplot
 	public JFreeChart createScatter(String title,final XYDataset chartdata,String xas,String yas)
 	{
 		chart = ChartFactory.createScatterPlot(
@@ -76,13 +76,13 @@ public class ScatterPlot {
 		return chart;
 	}	
 	
-	// -------------------------------------------------------------------------------------------------------
+	//Update all the selected values of the scatterplot
 	public void updateSelectedvalues()
 	{
 		chart.getXYPlot().clearAnnotations();
 		System.out.println("Ek update scatterchart");
 		ArrayList u= project.getSelectedIndexes();
-		//ArrayList u= Global.getGlobal().getActiveProject().getSelectedIndexes();
+
 		final CircleDrawer cd = new CircleDrawer(Color.red,
 				new BasicStroke(1.0f), null);
 		
@@ -96,7 +96,7 @@ public class ScatterPlot {
 		chart.getXYPlot().addAnnotation(selectPlots);
 		}
 	}
-	// -------------------------------------------------------------------------------------------------------
+	//Put the chart on the chartpanel
 	public ChartPanel createPanel()
 	{
 		

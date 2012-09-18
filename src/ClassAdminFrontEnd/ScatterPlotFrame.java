@@ -44,30 +44,30 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 	private ScatterPlot nuweChart;
 	private Project project;
 	
-	// -------------------------------------------------------------------------------------------------------
+	//Update all the values of the scatterplot
 	public void update()
 	{
 		
 	
 		nuweChart.updateSelectedvalues();
 	}
-	//----------------------------------------------------------------------------------------------
+	//Create the scatterplotframe
 	public ScatterPlotFrame(Project project) {
 		JFrame f = new JFrame("ScatterPlot");
 		this.project = project;
 		final Container content = f.getContentPane();
 		f.setSize(550, 500);
 		final LinkedList<LinkedList<SuperEntity>> diedata = project.getHead().getDataLinkedList();
-		//final LinkedList<LinkedList<SuperEntity>> diedata = Global.getGlobal().getActiveProject().getHead().getDataLinkedList();
+	
 		
 		final XYSeriesCollection dataset = new XYSeriesCollection();
 		final String[] headers = project.getHead().getHeaders();
-		//final String[] headers = Global.getGlobal().getActiveProject().getHead().getHeaders();
+	
 		nuweChart = new ScatterPlot(project);
 		
 		
 		String[] kolom = project.getHead().getNumberHeaders();
-		//String[] kolom = Global.getGlobal().getActiveProject().getHead().getNumberHeaders();
+		
 		
 		String xas = kolom[0];
 		String yas = kolom[1];
@@ -103,7 +103,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 
 		JLabel lblNewLabel = new JLabel("X-axis");
 		final JComboBox xascb = new JComboBox();
-
+		//Combobox of X-axis
 		xascb.setModel(new DefaultComboBoxModel(kolom));
 		xascb.addActionListener(new ActionListener() {
 			@Override
@@ -138,7 +138,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 			}
 
 		});
-
+		//Cycle of X-axis combobox left
 		JButton switchlinksx = new JButton("<");
 		switchlinksx.addMouseListener(new MouseListener() {
 
@@ -173,7 +173,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 
 			}
 		});
-
+		//Cycle of X-axis combobox right
 		JButton switchregsx = new JButton(">");
 		switchregsx.addMouseListener(new MouseListener() {
 
@@ -214,6 +214,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 		final JComboBox yascb = new JComboBox();
 		yascb.setModel(new DefaultComboBoxModel(kolom));
 		yascb.setSelectedIndex(1);
+		//Combobox of Y-axis
 		yascb.addActionListener(new ActionListener() {
 
 			@Override
@@ -246,7 +247,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 			}
 
 		});
-
+		//Cycle of Y-axis combobox left
 		JButton switchlinksy = new JButton("<");
 		switchlinksy.addMouseListener(new MouseListener() {
 
@@ -281,7 +282,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 
 			}
 		});
-
+		//Cycle of Y-axis combobox right
 		JButton switchregsy = new JButton(">");
 		switchregsy.addMouseListener(new MouseListener() {
 
@@ -353,7 +354,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 			}
 
 		});
-
+		//Extract Jfreechart as a jpg
 		JButton extractPic = new JButton("Extract chart as jpg");
 		extractPic.addMouseListener(new MouseListener() {
 
