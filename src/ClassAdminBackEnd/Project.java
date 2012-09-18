@@ -14,6 +14,9 @@ import ClassAdminFrontEnd.BoxPlotFrame;
 import ClassAdminFrontEnd.HistogramFrame;
 import ClassAdminFrontEnd.ScatterPlotFrame;
 
+import ClassAdminFrontEnd.FrmTable;
+import Rule.Rule;
+
 /**
  * @author undeadpebble
  *
@@ -30,7 +33,9 @@ public class Project {
 	
 	private LinkedList<Rule> rules = new LinkedList<Rule>();
 	private LinkedList<EntityType> treeLinkedList;
+	private LinkedList<FrmTable> tables = new LinkedList<FrmTable>();
 	
+
 	public void clearselected()
 	{
 		selectedIndexes = new ArrayList();
@@ -75,6 +80,17 @@ public class Project {
 	public ArrayList getSelectedIndexes()
 	{
 		return selectedIndexes;
+	}
+
+
+	public void updateTables(){
+		for(int x = 0; x < tables.size();x++){
+			tables.get(x).redraw();
+		}
+	}
+	
+	public LinkedList<FrmTable> getTables(){
+		return tables;
 	}
 
 	
