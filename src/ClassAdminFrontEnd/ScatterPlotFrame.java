@@ -356,7 +356,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 
 		});
 		//Extract Jfreechart as a jpg
-		JButton extractPic = new JButton("Extract chart as jpg");
+		JButton extractPic = new JButton("Extract chart");
 		extractPic.addMouseListener(new MouseListener() {
 
 			@Override
@@ -438,7 +438,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 			file = filechooser.getSelectedFile();
 			try {
 				
-				saveToFile(chart, file.getAbsolutePath()+".jpg", 500, 300, 100);
+				saveToFile(chart, file.getAbsolutePath()+".png", 500, 300, 100);
 			} catch (UnknownTypeException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

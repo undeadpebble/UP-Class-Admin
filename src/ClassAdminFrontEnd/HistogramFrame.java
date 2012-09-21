@@ -259,7 +259,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 
 		});
 		//Extract the chart  as a jpg
-		JButton extractPic = new JButton("Extract chart as jpg");
+		JButton extractPic = new JButton("Extract chart");
 		extractPic.addMouseListener(new MouseListener() {
 
 			@Override
