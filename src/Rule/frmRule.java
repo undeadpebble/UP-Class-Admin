@@ -105,17 +105,16 @@ public class frmRule extends JFrame {
 		btnAddStrBool.setBounds(68, 248, 497, 66);
 		contentPane.add(btnAddStrBool);
 		cbxStringComp.setBounds(260, 106, 113, 20);
-		
+
 		contentPane.add(cbxStringComp);
 		btnAddStringRule.setBounds(68, 248, 497, 66);
-		
+
 		contentPane.add(btnAddStringRule);
 
 		cbxRuleChooser.setModel(new DefaultComboBoxModel(new String[] {
 				"Float Rule", "String Rule", "Float Boolean Rule",
 				"String Boolean Rule" }));
 
-		
 		cbxFloat1.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -138,7 +137,8 @@ public class frmRule extends JFrame {
 				StringRule rule1 = null;
 				StringRule rule2 = null;
 				if (txtStr1.getText() != "") {
-					rule1 = new StringRule(txtStr1.getText(), "reqwuiop", project);
+					rule1 = new StringRule(txtStr1.getText(), "reqwuiop",
+							project);
 					ruleList.add(rule1);
 				} else {
 					if (StringBoolRuleList.size() > 0) {
@@ -149,7 +149,8 @@ public class frmRule extends JFrame {
 					}
 				}
 				if (txtStr2.getText() != "") {
-					rule2 = new StringRule(txtStr2.getText(), "reqwuiop", project);
+					rule2 = new StringRule(txtStr2.getText(), "reqwuiop",
+							project);
 					ruleList.add(rule2);
 				} else {
 					if (StringBoolRuleList.size() > 0) {
@@ -205,9 +206,10 @@ public class frmRule extends JFrame {
 				}
 
 				if (valid) {
-					ruleList.add(new FloatBoolRule(opFloatChar[cbxOpperator
-							.getSelectedIndex()], rule1, rule2, txtName
-							.getText(), project));
+					FloatBoolRule temp = new FloatBoolRule(
+							opFloatChar[cbxOpperator.getSelectedIndex()],
+							rule1, rule2, txtName.getText(), project);
+					ruleList.add(temp);
 
 					exitFrame();
 				} else {
@@ -272,9 +274,17 @@ public class frmRule extends JFrame {
 				}
 
 				if (valid) {
-					ruleList.add(new FloatRule(opFloatChar[cbxOpperator
+					FloatRule temp = new FloatRule(opFloatChar[cbxOpperator
 							.getSelectedIndex()], rule1, rule2, txtName
-							.getText(), project));
+							.getText(), project);
+
+					ruleList.add(temp);
+
+					temp.setParentEntitytype(project.getHeadEntityType()
+							.getSubEntityType().get(0));
+					temp.getParentEntitytype().getSubEntityType().add(temp);
+
+					temp.populateTreeWithEntities();
 
 					exitFrame();
 				} else {
@@ -292,9 +302,10 @@ public class frmRule extends JFrame {
 				StringRule rule1 = null;
 				StringRule rule2 = null;
 				BooleanRule rule3 = null;
-				
+
 				if (txtStr1.getText() != "") {
-					rule1 = new StringRule(txtStr1.getText(), "reqwuiop", project);
+					rule1 = new StringRule(txtStr1.getText(), "reqwuiop",
+							project);
 					ruleList.add(rule1);
 				} else {
 					if (StringBoolRuleList.size() > 0) {
@@ -305,7 +316,8 @@ public class frmRule extends JFrame {
 					}
 				}
 				if (txtStr2.getText() != "") {
-					rule2 = new StringRule(txtStr2.getText(), "reqwuiop", project);
+					rule2 = new StringRule(txtStr2.getText(), "reqwuiop",
+							project);
 					ruleList.add(rule2);
 				} else {
 					if (StringBoolRuleList.size() > 0) {
@@ -315,13 +327,20 @@ public class frmRule extends JFrame {
 						valid = false;
 					}
 				}
-				
-				rule3 = (BooleanRule)BoolRuleList.get(cbxStringComp.getSelectedIndex());
+
+				rule3 = (BooleanRule) BoolRuleList.get(cbxStringComp
+						.getSelectedIndex());
 
 				if (valid) {
-					ruleList.add(new StringBoolRule(rule1, rule2,
-							opStringBoolChar[cbxStringComp.getSelectedIndex()],
-							txtName.getText(), project));
+					StringRule temp = new StringRule(rule1,rule2,rule3,txtName.getText(),project);
+					
+					ruleList.add(temp);
+					
+					temp.setParentEntitytype(project.getHeadEntityType()
+							.getSubEntityType().get(0));
+					temp.getParentEntitytype().getSubEntityType().add(temp);
+
+					temp.populateTreeWithEntities();
 
 					exitFrame();
 				} else {
@@ -329,7 +348,7 @@ public class frmRule extends JFrame {
 				}
 			}
 		});
-		//------------------------------------------------------------------------------------------------------------------------------------------------------------
+		// ------------------------------------------------------------------------------------------------------------------------------------------------------------
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -343,7 +362,9 @@ public class frmRule extends JFrame {
 		cbxStringComp.setVisible(true);
 		txtStr1.setVisible(true);
 		txtStr2.setVisible(true);
-		
+		btnAddStringRule.setVisible(true);
+		btnAddStrBool.setVisible(false);
+
 		ruleList = project.getRules();
 		floatBoolRuleList = new LinkedList<Rule>();
 		StringBoolRuleList = new LinkedList<Rule>();
@@ -385,12 +406,12 @@ public class frmRule extends JFrame {
 		for (int x = 0; x < StringBoolRuleList.size(); x++) {
 			StringBoolRule[x] = StringBoolRuleList.get(x).getName();
 		}
-		
+
 		String[] StringRule = new String[StringRuleList.size()];
 		for (int x = 0; x < StringRuleList.size(); x++) {
 			StringRule[x] = StringRuleList.get(x).getName();
 		}
-		
+
 		cbxFloat1.setModel(new DefaultComboBoxModel(StringRule));
 		cbxFloat2.setModel(new DefaultComboBoxModel(StringRule));
 		cbxStringComp.setModel(new DefaultComboBoxModel(StringBoolRule));
@@ -409,6 +430,7 @@ public class frmRule extends JFrame {
 		txtStr2.setVisible(false);
 		txtStr1.setVisible(false);
 		cbxStringComp.setVisible(false);
+		btnAddStringRule.setVisible(false);
 
 		ruleList = project.getRules();
 		floatBoolRuleList = new LinkedList<Rule>();
@@ -449,7 +471,7 @@ public class frmRule extends JFrame {
 		cbxFloat1.setModel(new DefaultComboBoxModel(floatRules));
 
 		cbxFloat2.setModel(new DefaultComboBoxModel(floatRules));
-		
+
 		cbxOpperator.setModel(new DefaultComboBoxModel(this.opFloatBoolString));
 
 		txtName.setColumns(10);
@@ -514,13 +536,14 @@ public class frmRule extends JFrame {
 		spinFloat1.setVisible(false);
 		spinFloat2.setVisible(false);
 		cbxStringComp.setVisible(true);
+		btnAddStringRule.setVisible(false);
 
 		txtStr2.setVisible(true);
 		txtStr1.setVisible(true);
 
 		btnAddFloatBool.setVisible(false);
 		btnAddStrBool.setVisible(true);
-		
+
 		cbxStringComp.setModel(new DefaultComboBoxModel(opStringBoolString));
 
 		cbxFloat1.setModel(new DefaultComboBoxModel(StringBoolRule));
@@ -536,7 +559,7 @@ public class frmRule extends JFrame {
 		floatRuleList = new LinkedList<Rule>();
 		StringRuleList = new LinkedList<Rule>();
 		BoolRuleList = new LinkedList<Rule>();
-		
+
 		cbxOpperator.setVisible(true);
 		cbxFloat1.setVisible(true);
 		cbxFloat2.setVisible(true);
@@ -548,6 +571,7 @@ public class frmRule extends JFrame {
 		txtStr1.setVisible(false);
 		btnAddFloatBool.setVisible(false);
 		cbxStringComp.setVisible(false);
+		btnAddStringRule.setVisible(false);
 
 		for (int x = 0; x < ruleList.size(); x++) {
 			switch (ruleList.get(x).getType()) {

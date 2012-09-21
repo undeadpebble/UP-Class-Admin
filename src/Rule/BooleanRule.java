@@ -9,6 +9,8 @@ public class BooleanRule extends Rule {
 
 	public BooleanRule(String n,Project project) {
 		super(n,project);
+		this.setIsRule(true);
+		this.setIsTextField(true);
 	}
 
 	public Boolean evaluateBool() {

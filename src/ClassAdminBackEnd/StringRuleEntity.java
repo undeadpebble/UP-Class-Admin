@@ -4,7 +4,7 @@ import Rule.StringRule;
 
 public class StringRuleEntity extends StringEntity {
 
-	public StringRuleEntity(StringRule type, SuperEntity parentEntity,
+	public StringRuleEntity(EntityType type, SuperEntity parentEntity,
 			String text) {
 		super(type, parentEntity, text);
 	}

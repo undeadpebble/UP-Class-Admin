@@ -16,12 +16,16 @@ public class FloatRule extends Rule {
 		this.opperator = opperator;
 		this.child1 = child1;
 		this.child2 = child2;
+		this.setIsRule(true);
+		this.setIsTextField(false);
 	}
 
 	public FloatRule(char opperator, Double value, String name,Project project) {
 		super(name, project);
 		this.opperator = opperator;
 		this.value = value;
+		this.setIsRule(true);
+		this.setIsTextField(false);
 	}
 
 	 @Override

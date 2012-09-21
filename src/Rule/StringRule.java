@@ -16,13 +16,19 @@ public class StringRule extends Rule {
 		this.child2 = child2;
 		this.boolRule = boolRule;
 		
-		Global.getGlobal().getActiveProject().getHeadEntityType().getSubEntityType().get(0).getSubEntityType().add(this);
+		//Global.getGlobal().getActiveProject().getHeadEntityType().getSubEntityType().get(0).getSubEntityType().add(this);
+		
+		this.setIsRule(true);
+		this.setIsTextField(true);
 	}
 	
 	public StringRule(String value, String name, Project project){
 		super(name, project);
 		this.value = value;
 		boolRule = null;
+		
+		this.setIsRule(true);
+		this.setIsTextField(true);
 	}
 
 	@Override

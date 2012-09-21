@@ -12,6 +12,9 @@ public class StringBoolRule extends BooleanRule{
 		this.child1 = child1;
 		this.child2 = child2;
 		this.opperator = opperator;
+		
+		this.setIsRule(true);
+		this.setIsTextField(true);
 	}
 	
 	@Override
