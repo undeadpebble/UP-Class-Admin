@@ -690,6 +690,7 @@ public class RapidAssessmentCanvas extends JFrame {
 					break;
 
 				case 8:
+					
 					if (source.getEditingPosition() > 0) {
 						String mark = String.valueOf(source.getMark());
 						if (mark.charAt(source.getEditingPosition() - 1) == '.') {
