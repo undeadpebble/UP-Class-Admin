@@ -17,6 +17,8 @@ import javax.swing.UIManager;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.LinkedList;
 
 import javax.swing.JButton;
@@ -46,7 +48,7 @@ public class frmRule extends JFrame {
 
 	String[] opStringBoolString = new String[] { "= (equals)", "contains" };
 	char[] opStringBoolChar = new char[] { '=', 'c' };
-	
+
 	private final LinkedList<SuperEntity> heads;
 
 	private final JComboBox cbxOpperator = new JComboBox();
@@ -77,7 +79,7 @@ public class frmRule extends JFrame {
 		txtStr1.setBounds(68, 106, 180, 20);
 		txtStr1.setColumns(10);
 		this.project = project;
-		
+
 		heads = project.getHead().getHeadersLinkedList();
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -126,51 +128,49 @@ public class frmRule extends JFrame {
 		cbxRuleChooser.setModel(new DefaultComboBoxModel(new String[] {
 				"Float Rule", "String Rule", "Float Boolean Rule",
 				"String Boolean Rule" }));
-		
-		
+
 		cbxReference1.setBounds(68, 202, 180, 20);
 		contentPane.add(cbxReference1);
-		
-		
+
 		cbxReference2.setBounds(433, 202, 180, 20);
 		contentPane.add(cbxReference2);
-		
+
 		final Label lblText1 = new Label("->");
 		lblText1.setBackground(Color.ORANGE);
 		lblText1.setForeground(Color.BLACK);
 		lblText1.setBounds(38, 103, 24, 22);
 		contentPane.add(lblText1);
-		
+
 		final Label lblRule1 = new Label("->");
 		lblRule1.setBackground(Color.ORANGE);
 		lblRule1.setForeground(Color.BLACK);
 		lblRule1.setBounds(38, 157, 24, 22);
 		contentPane.add(lblRule1);
-		
+
 		final Label lblEntityType1 = new Label("->");
 		lblEntityType1.setBackground(Color.ORANGE);
 		lblEntityType1.setForeground(Color.BLACK);
 		lblEntityType1.setBounds(38, 200, 24, 22);
 		contentPane.add(lblEntityType1);
-		
+
 		final Label lblText2 = new Label("->");
 		lblText2.setBackground(Color.ORANGE);
 		lblText2.setForeground(Color.BLACK);
 		lblText2.setBounds(403, 103, 24, 22);
 		contentPane.add(lblText2);
-		
+
 		final Label lblRule2 = new Label("->");
 		lblRule2.setBackground(Color.ORANGE);
 		lblRule2.setForeground(Color.BLACK);
 		lblRule2.setBounds(403, 157, 24, 22);
 		contentPane.add(lblRule2);
-		
+
 		final Label lblEntityType2 = new Label("->");
 		lblEntityType2.setBackground(Color.ORANGE);
 		lblEntityType2.setForeground(Color.BLACK);
 		lblEntityType2.setBounds(403, 200, 24, 22);
 		contentPane.add(lblEntityType2);
-		
+
 		lblEntityType1.setVisible(false);
 		lblEntityType2.setVisible(false);
 		lblRule1.setVisible(false);
@@ -181,7 +181,7 @@ public class frmRule extends JFrame {
 		cbxFloat1.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//spinFloat1.setValue(-1);
+				// spinFloat1.setValue(-1);
 				lblRule1.setVisible(true);
 				lblText1.setVisible(false);
 				lblEntityType1.setVisible(false);
@@ -191,17 +191,17 @@ public class frmRule extends JFrame {
 		cbxFloat2.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//spinFloat2.setValue(-1);
+				// spinFloat2.setValue(-1);
 				lblRule2.setVisible(true);
 				lblText2.setVisible(false);
 				lblEntityType2.setVisible(false);
 			}
 		});
-		
+
 		cbxReference1.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//spinFloat1.setValue(-1);
+				// spinFloat1.setValue(-1);
 				lblRule1.setVisible(false);
 				lblText1.setVisible(false);
 				lblEntityType1.setVisible(true);
@@ -211,18 +211,17 @@ public class frmRule extends JFrame {
 		cbxReference2.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//spinFloat2.setValue(-1);
+				// spinFloat2.setValue(-1);
 				lblRule2.setVisible(false);
 				lblText2.setVisible(false);
 				lblEntityType2.setVisible(true);
 			}
 		});
-		
+
 		spinFloat1.addChangeListener(new ChangeListener() {
-			
+
 			@Override
 			public void stateChanged(ChangeEvent arg0) {
-				// TODO Auto-generated method stub
 				lblRule1.setVisible(false);
 				lblText1.setVisible(true);
 				lblEntityType1.setVisible(false);
@@ -230,16 +229,57 @@ public class frmRule extends JFrame {
 		});
 
 		spinFloat2.addChangeListener(new ChangeListener() {
-			
+
 			@Override
 			public void stateChanged(ChangeEvent arg0) {
-				// TODO Auto-generated method stub
 				lblRule2.setVisible(false);
 				lblText2.setVisible(true);
 				lblEntityType2.setVisible(false);
 			}
 		});
-		
+
+		txtStr1.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				lblRule1.setVisible(false);
+				lblText1.setVisible(true);
+				lblEntityType1.setVisible(false);
+			}
+		});
+
+		txtStr2.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				lblRule2.setVisible(false);
+				lblText2.setVisible(true);
+				lblEntityType2.setVisible(false);
+			}
+		});
+
 		// --------------------------------------------------------------------------------------------------------------
 		btnAddStrBool.addActionListener(new ActionListener() {
 			@Override
@@ -365,12 +405,10 @@ public class frmRule extends JFrame {
 							.getValue().toString()), "reqwuiop", project);
 					ruleList.add(rule1);
 				} else {
-					
-					if(lblEntityType1.isVisible()){
-						
-					}
-					else
-					if (lblRule1.isVisible()) {
+
+					if (lblEntityType1.isVisible()) {
+
+					} else if (lblRule1.isVisible()) {
 						rule1 = (FloatRule) floatRuleList.get(cbxFloat1
 								.getSelectedIndex());
 					} else {
@@ -382,11 +420,9 @@ public class frmRule extends JFrame {
 							.getValue().toString()), "reqwuiop", project);
 					ruleList.add(rule2);
 				} else {
-				if(lblEntityType2.isVisible()){
-					
-				}
-				else
-					if (lblRule2.isVisible()) {
+					if (lblEntityType2.isVisible()) {
+
+					} else if (lblRule2.isVisible()) {
 						rule2 = (FloatRule) floatRuleList.get(cbxFloat2
 								.getSelectedIndex());
 					} else {
@@ -453,10 +489,11 @@ public class frmRule extends JFrame {
 						.getSelectedIndex());
 
 				if (valid) {
-					StringRule temp = new StringRule(rule1,rule2,rule3,txtName.getText(),project);
-					
+					StringRule temp = new StringRule(rule1, rule2, rule3,
+							txtName.getText(), project);
+
 					ruleList.add(temp);
-					
+
 					temp.setParentEntitytype(project.getHeadEntityType()
 							.getSubEntityType().get(0));
 					temp.getParentEntitytype().getSubEntityType().add(temp);
@@ -693,24 +730,22 @@ public class frmRule extends JFrame {
 		btnAddFloatBool.setVisible(false);
 		cbxStringComp.setVisible(false);
 		btnAddStringRule.setVisible(false);
-		
-		
-		
+
 		LinkedList<EntityType> headTypes = new LinkedList<EntityType>();
-		
-		for(int x = 0; x < heads.size();x++){
-			if(!heads.get(x).getType().getIsTextField()){
+
+		for (int x = 0; x < heads.size(); x++) {
+			if (!heads.get(x).getType().getIsTextField()) {
 				headTypes.add(heads.get(x).getType());
 			}
 		}
 		String[] headers = new String[headTypes.size()];
-		for(int x = 0; x < headTypes.size();x++){
+		for (int x = 0; x < headTypes.size(); x++) {
 			headers[x] = headTypes.get(x).getName();
 		}
-		
+
 		cbxReference1.setModel(new DefaultComboBoxModel(headers));
 		cbxReference2.setModel(new DefaultComboBoxModel(headers));
-		
+
 		for (int x = 0; x < ruleList.size(); x++) {
 			switch (ruleList.get(x).getType()) {
 			case 1:
