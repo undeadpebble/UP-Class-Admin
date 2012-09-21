@@ -362,6 +362,12 @@ public class Histogram {
 		nuwedataset.addSeries("Histogram", values, 10, 0, 100);
 		return nuwedataset;
 	}
+	
+	//Change the type of Histogram
+	public HistogramDataset changeHistogramType() {
+		maindataset.setType(HistogramType.RELATIVE_FREQUENCY);
+		return maindataset;
+	}
 
 	// Increase the width of the bars
 	public HistogramDataset increaseWidth(int widthbarb) {

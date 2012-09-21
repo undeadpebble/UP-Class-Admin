@@ -408,6 +408,41 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			}
 		});
 		
+		JButton cumPlot = new JButton("Cummulative Plot");
+		cumPlot.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				
+				chartpanel.getChart().getXYPlot()
+				.setDataset(nuweChart.changeHistogramType());
+			}
+		});
+		
 		content.setLayout(new FlowLayout());
 		content.add(chartpanel);
 		content.add(lblNewLabel);
@@ -419,6 +454,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 		content.add(width);
 		content.add(widthsmall);
 		content.add(widthlarge);
+		content.add(cumPlot);
 		f.setVisible(true);
 	}
 
