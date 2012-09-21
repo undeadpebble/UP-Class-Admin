@@ -234,11 +234,12 @@ public class frmRule extends JFrame {
 			@Override
 			public void stateChanged(ChangeEvent arg0) {
 				// TODO Auto-generated method stub
-				lblRule1.setVisible(false);
-				lblText1.setVisible(true);
-				lblEntityType1.setVisible(false);
+				lblRule2.setVisible(false);
+				lblText2.setVisible(true);
+				lblEntityType2.setVisible(false);
 			}
 		});
+		
 		// --------------------------------------------------------------------------------------------------------------
 		btnAddStrBool.addActionListener(new ActionListener() {
 			@Override
