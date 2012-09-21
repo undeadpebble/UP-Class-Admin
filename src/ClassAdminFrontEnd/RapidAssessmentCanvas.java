@@ -21,9 +21,11 @@ import java.awt.event.MouseMotionListener;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
+import java.io.IOException;
 import java.util.EventListener;
 import java.util.LinkedList;
 
+import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -33,6 +35,10 @@ import org.imgscalr.Scalr;
 import com.jhlabs.vecmath.Color4f;
 
 import ClassAdminBackEnd.SuperEntity;
+import ClassAdminFrontEnd.RapidAssessmentTree.TreeContainerNode;
+import ClassAdminFrontEnd.RapidAssessmentTree.TreeMarkNode;
+import ClassAdminFrontEnd.RapidAssessmentTree.TreeNode;
+import ClassAdminFrontEnd.RapidAssessmentTree.TreeRectangleNode;
 
 public class RapidAssessmentCanvas extends JFrame {
 	/**
@@ -40,6 +46,7 @@ public class RapidAssessmentCanvas extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private static final int MARK_SIZE = 15;
+	private String backgroundFileName;
 	private BufferedImage backGround;
 	private BufferedImage resizedBackGround = null;
 	// private LinkedList<MyRectangle> rectangles = new
@@ -103,6 +110,10 @@ public class RapidAssessmentCanvas extends JFrame {
 		public MyComponent() {
 			super();
 
+		}
+		
+		public TreeNode createTreeNode(RapidAssessmentTree tree) throws ClassCastException{
+			throw new ClassCastException();
 		}
 
 		private double mark;
@@ -222,6 +233,17 @@ public class RapidAssessmentCanvas extends JFrame {
 			if (editingPosition < 0)
 				editingPosition = 0;
 		}
+		
+		
+
+		@Override
+		public TreeNode createTreeNode(RapidAssessmentTree tree)
+				throws ClassCastException {
+			TreeMarkNode tmp = tree.new TreeMarkNode(this.getX(), this.getY(), this.getMark());
+
+			
+			return tmp;
+		}
 
 		/**
 		 * @param editingPosition
@@ -336,10 +358,22 @@ public class RapidAssessmentCanvas extends JFrame {
 			return pressing;
 		}
 
-		// private LinkedList<MyRectangle> children = new
-		// LinkedList<MyRectangle>();
-		// private LinkedList<MyMarkPoint> marks = new
-		// LinkedList<MyMarkPoint>();
+		
+
+		@Override
+		public TreeNode createTreeNode(RapidAssessmentTree tree)
+				throws ClassCastException {
+			TreeRectangleNode tmp = tree.new TreeRectangleNode(this.getX(), this.getY(), this.getWidth(), this.getHeight());
+			for(int x = 0;x<this.getComponentCount();++x){
+				try{
+				tmp.getChildNodes().add(((MyComponent)this.getComponent(x)).createTreeNode(tree));
+				}
+				catch(ClassCastException e){
+					
+				}
+			}
+			return tmp;
+		}
 
 		public MyRectangle(int x, int y, int w, int h) {
 			super();
@@ -595,14 +629,20 @@ public class RapidAssessmentCanvas extends JFrame {
 		}
 	}
 
-	public RapidAssessmentCanvas(BufferedImage backGround,
+	public RapidAssessmentCanvas(String backGroundFilename,
 			SuperEntity assessedEntity) {
 		this.setLayout(null);
 		ContainerPanel canvas = new ContainerPanel();
 		parentPanel = canvas;
 		this.setContentPane(canvas);
 		this.setSize(600, 600);
-		this.backGround = backGround;
+		this.backgroundFileName = backGroundFilename;
+		try {
+			this.backGround = ImageIO.read(getClass().getResource(this.backgroundFileName));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		this.assessedEntity = assessedEntity;
 		parentRect = new MyRectangle(0, 0, 500, 500);
 		parentRect.setVisible(true);
@@ -721,6 +761,11 @@ public class RapidAssessmentCanvas extends JFrame {
 	}
 
 	public class ContainerPanel extends JPanel {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		/*
 		 * (non-Javadoc)
 		 * 
@@ -739,6 +784,25 @@ public class RapidAssessmentCanvas extends JFrame {
 
 			g2.drawImage(resizedBackGround, 0, 0, null);
 			g2.dispose();
+		}
+		
+		public RapidAssessmentTree createTree(){
+			RapidAssessmentTree tree = new RapidAssessmentTree(null);
+			tree.setHead(this.createRapidAssessmentTreeNode(tree));
+			return tree;
+		}
+		
+		public TreeContainerNode createRapidAssessmentTreeNode(RapidAssessmentTree tree){
+			TreeContainerNode tmp = tree.new TreeContainerNode(this.getX(), this.getY(), this.getWidth(), this.getHeight(), backgroundFileName);
+			for(int x = 0;x<this.getComponentCount();++x){
+				try{
+				tmp.getChildNodes().add(((MyComponent)this.getComponent(x)).createTreeNode(tree));
+				}
+				catch(ClassCastException e){
+					
+				}
+			}
+			return tmp;
 		}
 	}
 

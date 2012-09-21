@@ -39,8 +39,8 @@ public class testMain
 				public void run() {
 					try {
 						
-						BufferedImage background = ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/sheep.jpg"));
-						JFrame frame = new RapidAssessmentCanvas(background, new SuperEntity(new EntityType("test1"), 1.0));
+						
+						JFrame frame = new RapidAssessmentCanvas("/ClassAdminFrontEnd/sheep.jpg", new SuperEntity(new EntityType("test1"), 1.0));
 						
 						frame.setVisible(true);
 					} catch (Exception e) {
