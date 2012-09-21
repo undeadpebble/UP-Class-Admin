@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -44,9 +45,12 @@ import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.statistics.HistogramDataset;
 import org.jfree.data.statistics.HistogramType;
 
+import com.keypoint.PngEncoder;
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGEncodeParam;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
+import com.sun.imageio.plugins.png.PNGImageReader;
+import com.sun.imageio.plugins.png.PNGImageWriter;
 
 import ClassAdminBackEnd.EntityType;
 import ClassAdminBackEnd.Global;
@@ -439,7 +443,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			file = filechooser.getSelectedFile();
 			try {
 
-				saveToFile(chart, file.getAbsolutePath() + ".jpg", 500, 300,
+				saveToFile(chart, file.getAbsolutePath() + ".png", 500, 300,
 						100);
 			} catch (UnknownTypeException e) {
 				// TODO Auto-generated catch block
@@ -455,18 +459,31 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			int width, int height, double quality)
 			throws FileNotFoundException, IOException {
 		BufferedImage img = draw(chart, width, height);
-		FileOutputStream fos = new FileOutputStream(aFileName);
-
-		JPEGImageEncoder encoder2 = JPEGCodec.createJPEGEncoder(fos);
-
-		JPEGEncodeParam param2 = encoder2.getDefaultJPEGEncodeParam(img);
-
-		param2.setQuality((float) quality, true);
-
-		encoder2.encode(img, param2);
-
-		fos.close();
-
+	
+		 byte[] pngbytes;
+		 PngEncoder png = new PngEncoder(img);
+		
+		 
+		  try
+	        {
+	            FileOutputStream outfile = new FileOutputStream( aFileName );
+	            pngbytes = png.pngEncode();
+	            if (pngbytes == null)
+	            {
+	                System.out.println("Null image");
+	            }
+	            else
+	            {
+	                outfile.write( pngbytes );
+	            }
+	            outfile.flush();
+	            outfile.close();
+	        }
+	        catch (IOException e)
+	        {
+	            e.printStackTrace();
+	        }
+		
 	}
 
 	// Create jpg image

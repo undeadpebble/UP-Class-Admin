@@ -32,6 +32,7 @@ import org.jfree.data.statistics.HistogramType;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
+import com.keypoint.PngEncoder;
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGEncodeParam;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
@@ -190,7 +191,7 @@ public class BoxPlotFrame extends JFrame implements ActionListener {
 			}
 		});
 
-		content.setBackground(Color.white);
+
 		content.setLayout(new FlowLayout());
 		content.add(chartpanel);
 		content.add(addseries);
@@ -250,17 +251,29 @@ public class BoxPlotFrame extends JFrame implements ActionListener {
  public static void saveToFile(JFreeChart chart,String aFileName,int width,int height, double quality) throws FileNotFoundException, IOException
 	    {
 	            BufferedImage img = draw( chart, width, height );
-	            FileOutputStream fos = new FileOutputStream(aFileName);
-
-	            JPEGImageEncoder encoder2 = JPEGCodec.createJPEGEncoder(fos);
-
-	            JPEGEncodeParam param2 = encoder2.getDefaultJPEGEncodeParam(img);
-
-	            param2.setQuality((float) quality, true);
-
-	            encoder2.encode(img,param2);
-
-	            fos.close();
+	            byte[] pngbytes;
+	   		 PngEncoder png = new PngEncoder(img);
+	   		
+	   		 
+	   		  try
+	   	        {
+	   	            FileOutputStream outfile = new FileOutputStream( aFileName );
+	   	            pngbytes = png.pngEncode();
+	   	            if (pngbytes == null)
+	   	            {
+	   	                System.out.println("Null image");
+	   	            }
+	   	            else
+	   	            {
+	   	                outfile.write( pngbytes );
+	   	            }
+	   	            outfile.flush();
+	   	            outfile.close();
+	   	        }
+	   	        catch (IOException e)
+	   	        {
+	   	            e.printStackTrace();
+	   	        }
 
 	    }
 	    
