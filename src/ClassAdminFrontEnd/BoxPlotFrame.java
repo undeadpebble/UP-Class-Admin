@@ -26,6 +26,8 @@ import javax.swing.JPanel;
 
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.renderer.category.BoxAndWhiskerRenderer;
+import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.statistics.DefaultBoxAndWhiskerCategoryDataset;
 import org.jfree.data.statistics.HistogramDataset;
 import org.jfree.data.statistics.HistogramType;
@@ -68,6 +70,7 @@ public class BoxPlotFrame extends JFrame implements ActionListener {
 		final BoxPlot nuweChart = new BoxPlot();
 		chart = nuweChart.createBoxPlot("BoxPlot", "", "", dataset);
 		chartpanel = new ChartPanel(chart, 400, 400, 100, 100, 400, 400, true, true, true, true, true, true);
+
 
 		JButton addseries = new JButton("Add a series");
 		// Series can be added dynamically
