@@ -404,14 +404,14 @@ public class SuperEntity {
 		return str;
 	}
 	
-	public SuperEntity findEntityOfType(EntityType type){
+	public SuperEntity findEntityOfType_Up(EntityType type){
 		if(type.getEntityList().contains(this))
 			return this;
 		
 		else{
 			for(int x = 0;x<this.getSubEntity().size();++x){
 				
-				SuperEntity temp = this.getSubEntity().get(x).findEntityOfType(type);
+				SuperEntity temp = this.getSubEntity().get(x).findEntityOfType_Up(type);
 				if(temp != null)
 					return temp;
 			}
@@ -420,12 +420,19 @@ public class SuperEntity {
 		
 	}
 	
+	public SuperEntity findEntityOfTypeUpDown(EntityType type){
+		
+	}
+	
+	public findEntityOfTypeDown(EntityType type){
+		
+	}
 	public void changeParentTotype(EntityType newParentType) throws InvalidActivityException{
 		SuperEntity oldParent = this.getParentEntity();
 		SuperEntity newParent = null;
 		SuperEntity temp = this;
 		while(newParent == null && temp != null){
-			newParent = temp.findEntityOfType(newParentType);
+			newParent = temp.findEntityOfType_Up(newParentType);
 			temp = temp.getParentEntity();
 		}
 		

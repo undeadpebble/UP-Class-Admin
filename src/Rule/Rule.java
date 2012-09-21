@@ -20,15 +20,15 @@ public class Rule extends EntityType{
 		return name;
 	}
 	
-	public Boolean evaluateBool(){
+	public Boolean evaluateBool(SuperEntity sE){
 		return false;
 	}
 	
-	public Double evaluateDouble(){
+	public Double evaluateDouble(SuperEntity sE){
 		return 0.0;
 	}
 	
-	public String evaluateString(){
+	public String evaluateString(SuperEntity sE){
 		return "";
 	}
 	

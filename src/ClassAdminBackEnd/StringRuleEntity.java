@@ -11,7 +11,7 @@ public class StringRuleEntity extends StringEntity {
 
 	@Override
 	public String getValue() {
-		this.setField(((StringRule)this.getType()).evaluateString());
+		this.setField(((StringRule)this.getType()).evaluateString(this));
 		return(this.getField());
 	}
 }

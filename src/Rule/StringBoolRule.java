@@ -1,6 +1,7 @@
 package Rule;
 
 import ClassAdminBackEnd.Project;
+import ClassAdminBackEnd.SuperEntity;
 
 
 public class StringBoolRule extends BooleanRule{
@@ -18,10 +19,10 @@ public class StringBoolRule extends BooleanRule{
 	}
 	
 	@Override
-	public Boolean evaluateBool(){
+	public Boolean evaluateBool(SuperEntity sE){
 		switch (opperator) {
 		case '=':
-			if(child1.evaluateString().compareTo(child2.evaluateString()) == 0){
+			if(child1.evaluateString(sE).compareTo(child2.evaluateString(sE)) == 0){
 				value = true;
 			}
 			else{
@@ -29,7 +30,7 @@ public class StringBoolRule extends BooleanRule{
 			}
 			break;
 		case 'c':
-			if(child1.evaluateString().contains(child2.evaluateString())){
+			if(child1.evaluateString(sE).contains(child2.evaluateString(sE))){
 				value = true;
 			}
 			else{

@@ -1,6 +1,7 @@
 package Rule;
 
 import ClassAdminBackEnd.Project;
+import ClassAdminBackEnd.SuperEntity;
 
 
 public class FloatBoolRule extends BooleanRule{
@@ -17,10 +18,10 @@ public class FloatBoolRule extends BooleanRule{
 	}
 	
 	@Override
-	public Boolean evaluateBool(){
+	public Boolean evaluateBool(SuperEntity sE){
 		switch (opperator) {
 		case '<':
-			if(child1.evaluateDouble() < child2.evaluateDouble()){
+			if(child1.evaluateDouble(sE) < child2.evaluateDouble(sE)){
 				value = true;
 			}
 			else{
@@ -28,7 +29,7 @@ public class FloatBoolRule extends BooleanRule{
 			}
 			break;
 		case '>':
-			if(child1.evaluateDouble() > child2.evaluateDouble()){
+			if(child1.evaluateDouble(sE) > child2.evaluateDouble(sE)){
 				value = true;
 			}
 			else{
@@ -36,7 +37,7 @@ public class FloatBoolRule extends BooleanRule{
 			}
 			break;
 		case '=':
-			if(child1.evaluateDouble() == child2.evaluateDouble()){
+			if(child1.evaluateDouble(sE) == child2.evaluateDouble(sE)){
 				value = true;
 			}
 			else{
@@ -44,7 +45,7 @@ public class FloatBoolRule extends BooleanRule{
 			}
 			break;
 		case '1':
-			if(child1.evaluateDouble() <= child2.evaluateDouble()){
+			if(child1.evaluateDouble(sE) <= child2.evaluateDouble(sE)){
 				value = true;
 			}
 			else{
@@ -52,7 +53,7 @@ public class FloatBoolRule extends BooleanRule{
 			}
 			break;
 		case '2':
-			if(child1.evaluateDouble() >= child2.evaluateDouble()){
+			if(child1.evaluateDouble(sE) >= child2.evaluateDouble(sE)){
 				value = true;
 			}
 			else{

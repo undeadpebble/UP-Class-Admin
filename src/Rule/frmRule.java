@@ -33,42 +33,43 @@ import java.awt.Label;
 public class frmRule extends JFrame {
 
 	private JPanel contentPane;
-	private final Project project;
-	LinkedList<Rule> ruleList;
-	LinkedList<Rule> floatBoolRuleList;
-	LinkedList<Rule> StringBoolRuleList;
-	LinkedList<Rule> floatRuleList;
-	LinkedList<Rule> StringRuleList;
-	LinkedList<Rule> BoolRuleList;
-	String[] opFloatString = new String[] { "+", "-", "x", "%" };
-	char[] opFloatChar = new char[] { '+', '-', 'x', '%' };
+	private Project project;
+	private LinkedList<Rule> ruleList;
+	private LinkedList<Rule> floatBoolRuleList;
+	private LinkedList<Rule> StringBoolRuleList;
+	private LinkedList<Rule> floatRuleList;
+	private LinkedList<Rule> StringRuleList;
+	private LinkedList<Rule> BoolRuleList;
+	private String[] opFloatString = new String[] { "+", "-", "x", "%" };
+	private char[] opFloatChar = new char[] { '+', '-', 'x', '%' };
 
-	String[] opFloatBoolString = new String[] { "<", ">", "=", "<=", ">=" };
-	char[] opFloatBoolChar = new char[] { '<', '>', '=', '1', '2' };
+	private String[] opFloatBoolString = new String[] { "<", ">", "=", "<=",
+			">=" };
+	private char[] opFloatBoolChar = new char[] { '<', '>', '=', '1', '2' };
 
-	String[] opStringBoolString = new String[] { "= (equals)", "contains" };
-	char[] opStringBoolChar = new char[] { '=', 'c' };
+	private String[] opStringBoolString = new String[] { "= (equals)",
+			"contains" };
+	private char[] opStringBoolChar = new char[] { '=', 'c' };
 
-	private final LinkedList<SuperEntity> heads;
+	private LinkedList<SuperEntity> heads;
+	private LinkedList<EntityType> headTypes = new LinkedList<EntityType>();
 
-	private final JComboBox cbxOpperator = new JComboBox();
-	private final JComboBox cbxRuleChooser = new JComboBox();
-	private final JComboBox cbxFloat1 = new JComboBox();
-	private final JComboBox cbxFloat2 = new JComboBox();
-	private final JButton btnAddFloatRule = new JButton("Add Float Rule");
-	private final JTextField txtName = new JTextField();
-	private final JSpinner spinFloat1 = new JSpinner();
-	private final JSpinner spinFloat2 = new JSpinner();
-	private final JButton btnAddFloatBool = new JButton(
-			"Add Float Boolean Rule");
-	private final JTextField txtStr1 = new JTextField();
-	private final JTextField txtStr2 = new JTextField();
-	private final JButton btnAddStrBool = new JButton(
-			"Add new String boolean rule");
-	private final JComboBox cbxStringComp = new JComboBox();
-	private final JButton btnAddStringRule = new JButton("Add String Rule");
-	JComboBox cbxReference1 = new JComboBox();
-	JComboBox cbxReference2 = new JComboBox();
+	private JComboBox cbxOpperator = new JComboBox();
+	private JComboBox cbxRuleChooser = new JComboBox();
+	private JComboBox cbxFloat1 = new JComboBox();
+	private JComboBox cbxFloat2 = new JComboBox();
+	private JButton btnAddFloatRule = new JButton("Add Float Rule");
+	private JTextField txtName = new JTextField();
+	private JSpinner spinFloat1 = new JSpinner();
+	private JSpinner spinFloat2 = new JSpinner();
+	private JButton btnAddFloatBool = new JButton("Add Float Boolean Rule");
+	private JTextField txtStr1 = new JTextField();
+	private JTextField txtStr2 = new JTextField();
+	private JButton btnAddStrBool = new JButton("Add new String boolean rule");
+	private JComboBox cbxStringComp = new JComboBox();
+	private JButton btnAddStringRule = new JButton("Add String Rule");
+	private JComboBox cbxReference1 = new JComboBox();
+	private JComboBox cbxReference2 = new JComboBox();
 
 	/**
 	 * Create the frame.
@@ -239,18 +240,16 @@ public class frmRule extends JFrame {
 		});
 
 		txtStr1.addKeyListener(new KeyListener() {
-			
+
 			@Override
 			public void keyTyped(KeyEvent arg0) {
-				// TODO Auto-generated method stub
-				
 			}
-			
+
 			@Override
 			public void keyReleased(KeyEvent arg0) {
-				
+
 			}
-			
+
 			@Override
 			public void keyPressed(KeyEvent arg0) {
 				lblRule1.setVisible(false);
@@ -260,18 +259,17 @@ public class frmRule extends JFrame {
 		});
 
 		txtStr2.addKeyListener(new KeyListener() {
-			
+
 			@Override
 			public void keyTyped(KeyEvent arg0) {
-				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void keyReleased(KeyEvent arg0) {
-				
+
 			}
-			
+
 			@Override
 			public void keyPressed(KeyEvent arg0) {
 				lblRule2.setVisible(false);
@@ -407,7 +405,8 @@ public class frmRule extends JFrame {
 				} else {
 
 					if (lblEntityType1.isVisible()) {
-
+						rule1 = new FloatRule("referencespsaiodfhnosaudhf",project,headTypes.get(cbxReference1.getSelectedIndex()));
+						ruleList.add(rule1);
 					} else if (lblRule1.isVisible()) {
 						rule1 = (FloatRule) floatRuleList.get(cbxFloat1
 								.getSelectedIndex());
@@ -421,7 +420,8 @@ public class frmRule extends JFrame {
 					ruleList.add(rule2);
 				} else {
 					if (lblEntityType2.isVisible()) {
-
+						rule1 = new FloatRule("referencespsaiodfhnosaudhf",project,headTypes.get(cbxReference2.getSelectedIndex()));
+						ruleList.add(rule2);
 					} else if (lblRule2.isVisible()) {
 						rule2 = (FloatRule) floatRuleList.get(cbxFloat2
 								.getSelectedIndex());
@@ -731,10 +731,10 @@ public class frmRule extends JFrame {
 		cbxStringComp.setVisible(false);
 		btnAddStringRule.setVisible(false);
 
-		LinkedList<EntityType> headTypes = new LinkedList<EntityType>();
+
 
 		for (int x = 0; x < heads.size(); x++) {
-			if (!heads.get(x).getType().getIsTextField()) {
+			if (!heads.get(x).getType().getIsTextField() && !heads.get(x).getType().getIsRule()) {
 				headTypes.add(heads.get(x).getType());
 			}
 		}

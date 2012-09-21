@@ -3,6 +3,7 @@ package Rule;
 import ClassAdminBackEnd.EntityType;
 import ClassAdminBackEnd.Global;
 import ClassAdminBackEnd.Project;
+import ClassAdminBackEnd.SuperEntity;
 
 public class StringRule extends Rule {
 	StringRule child1;
@@ -32,12 +33,12 @@ public class StringRule extends Rule {
 	}
 
 	@Override
-	public String evaluateString() {
+	public String evaluateString(SuperEntity sE) {
 		if (boolRule != null) {
 			if (boolRule.evaluateBool()) {
-				value = child1.evaluateString();
+				value = child1.evaluateString(sE);
 			} else {
-				value = child2.evaluateString();
+				value = child2.evaluateString(sE);
 			}
 		}
 		
