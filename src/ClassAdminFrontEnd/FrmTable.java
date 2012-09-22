@@ -57,11 +57,19 @@ public class FrmTable extends JPanel {
 	protected LinkedList<LinkedList<Boolean>> filters = new LinkedList<LinkedList<Boolean>>();
 	private LinkedList<LinkedList<SuperEntity>> data;
 	private Boolean[] dataFilter;
+	private String[] headers;
 
 	private Project project;
 
 	private LinkedList<Integer> selected = new LinkedList<Integer>();
 
+	public void redraw(){
+		this.data = project.getHead().getDataLinkedList();
+		this.headers = project.getHead().getHeaders();
+		
+		this.createGUI();
+	}
+	
 	public SuperEntity[] getFirstSelectedStudent() {
 		if (table.getSelectedRow() != -1) {
 			SuperEntity[] tempForReturn = new SuperEntity[data.get(0).size()];
@@ -121,26 +129,29 @@ public class FrmTable extends JPanel {
 			Project project) {
 		this.data = data;
 		this.project = project;
+		this.headers = headers;
+		
+		project.getTables().add(this);
 
-		// -------------------------------------------------------------------------------------------------------
-		// create the filters array with everything false
-		for (int x = 0; x < data.size(); x++) {
-			LinkedList<Boolean> temp = new LinkedList<Boolean>();
-			for (int y = 0; y < data.get(0).size(); y++) {
-				temp.add(false);
-			}
-			filters.add(temp);
-		}
-
-		// ---------------------------------------------------------------------------------------------------------------
-		dataFilter = new Boolean[data.size()];
-		for (int x = 0; x < dataFilter.length; x++)
-			dataFilter[x] = true;
-
-		createGUI(headers);
+		createGUI();
 	}
 
-	private void createGUI(String[] headers) {
+	private void createGUI() {
+		// -------------------------------------------------------------------------------------------------------
+				// create the filters array with everything false
+				for (int x = 0; x < data.size(); x++) {
+					LinkedList<Boolean> temp = new LinkedList<Boolean>();
+					for (int y = 0; y < data.get(0).size(); y++) {
+						temp.add(false);
+					}
+					filters.add(temp);
+				}
+
+				// ---------------------------------------------------------------------------------------------------------------
+				dataFilter = new Boolean[data.size()];
+				for (int x = 0; x < dataFilter.length; x++)
+					dataFilter[x] = true;
+		
 		setLayout(new BorderLayout());
 		JScrollPane pane = new JScrollPane();
 

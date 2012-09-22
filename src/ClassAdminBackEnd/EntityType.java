@@ -19,11 +19,18 @@ public class EntityType {
 	private EntityType parentEntitytype;
 	private LinkedList<EntityType> subEntityType;
 	private Boolean isTextField;
+	private Boolean isRule = false;
 	private Date date;
 	private Double defaultWeight;
 	private long ID;
-
 	private int maxValue = 100;
+	
+	public Boolean getIsRule() {
+		return isRule;
+	}
+	public void setIsRule(Boolean isRule) {
+		this.isRule = isRule;
+	}
 	public int getMaxValue() {
 		return maxValue;
 	}
@@ -94,6 +101,8 @@ public class EntityType {
 			Boolean isTextField, Date date, Double defaultWeight) {
 		this.name = name;
 		this.parentEntitytype = parentEntitytype;
+		if(parentEntitytype != null)
+		parentEntitytype.getSubEntityType().add(this);
 		this.isTextField = isTextField;
 		this.date = date;
 		this.defaultWeight = defaultWeight;
@@ -203,4 +212,48 @@ public class EntityType {
 
 		}
 	}
+
+	public String createTreeFromHead(LinkedList<EntityType> treeLinkedList)
+	{
+		treeLinkedList.add(this);
+		if(this.getSubEntityType().size()>0){
+			String str = "";
+			str += "<branch>" +
+					"<attribute name = \"name\" value= \"" + this.getName() + "\" />";
+			for (int i = 0; i < this.getSubEntityType().size(); i++)
+			{
+				str += this.getSubEntityType().get(i).createTreeFromHead(treeLinkedList);
+			}
+			str +="</branch>";
+			return str;
+		} else{
+			String str = "";
+			str += "<leaf>" +
+					"<attribute name = \"name\" value= \"" + this.getName() + "\" />";
+			str +="</leaf>";
+			return str;
+		}
+	}
+	
+	public void populateTreeWithEntities(){
+		for(int x = 0;x<this.getParentEntitytype().getEntityList().size();++x){
+			SuperEntity parent = this.getParentEntitytype().getEntityList().get(x);
+			if(this.getIsRule()){
+				if(this.getIsTextField()){
+					
+				} else{
+					
+				}
+			} else {
+				if(this.getIsTextField()){
+					new LeafStringEntity(this, parent,"<"+this.getName()+">");
+				} else{
+					new LeafMarkEntity(this, parent, 0);
+				}
+			}
+			
+		}
+	}
+	
+
 }

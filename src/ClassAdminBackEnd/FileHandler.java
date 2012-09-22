@@ -49,13 +49,13 @@ public class FileHandler {
 		if (fileReader.fileExists(filename)) {
 			ArrayList recordArray = fileReader.recordData();
 			headers = fileReader.getHeaders(recordArray);
-			int parentRow = createEntityTypes(headers, recordArray, fileReader);
+			int parentRow = createEntityTypes(headers, recordArray, fileReader, filename);
 			createMarkEntities(parentRow, headers, recordArray, fileReader);
 		}
 	}
 
 	private int createEntityTypes(ArrayList headers, ArrayList recordArray,
-			FileImport fileReader) {
+			FileImport fileReader, String filename) {
 		// header entity
 		int firstStringCol = -1;
 		// EntityTypeFactory eTFactory = new EntityTypeFactory();
@@ -164,7 +164,7 @@ public class FileHandler {
 		if (fileReader.fileExists(filename)) {
 			ArrayList recordArray = fileReader.recordData();
 			headers = fileReader.getHeaders(recordArray);
-			int parentRow = createEntityTypes(headers, recordArray, fileReader);
+			int parentRow = createEntityTypes(headers, recordArray, fileReader, filename);
 			createMarkEntities(parentRow, headers, recordArray, fileReader);
 		}
 	}
