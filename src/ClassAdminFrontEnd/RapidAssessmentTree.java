@@ -94,12 +94,52 @@ public class RapidAssessmentTree {
 			// TODO Auto-generated constructor stub
 		}
 
+		/**
+		 * @return the w
+		 */
+		public double getW() {
+			return w;
+		}
+
+		/**
+		 * @param w the w to set
+		 */
+		public void setW(double w) {
+			this.w = w;
+		}
+
+		/**
+		 * @return the h
+		 */
+		public double getH() {
+			return h;
+		}
+
+		/**
+		 * @param h the h to set
+		 */
+		public void setH(double h) {
+			this.h = h;
+		}
+
 		private LinkedList<TreeNode> childNodes = new LinkedList<RapidAssessmentTree.TreeNode>();
 	}
 	
 	public class TreeContainerNode extends TreeRectangleNode{
 
-		String image;
+		private String image;
+		/**
+		 * @return the image
+		 */
+		public String getImage() {
+			return image;
+		}
+		/**
+		 * @param image the image to set
+		 */
+		public void setImage(String image) {
+			this.image = image;
+		}
 		public TreeContainerNode(double x, double y, double w, double h, String image) {
 			super(x, y, w, h);
 			this.image = image;

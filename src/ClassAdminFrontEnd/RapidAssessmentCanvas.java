@@ -45,7 +45,7 @@ public class RapidAssessmentCanvas extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static final int MARK_SIZE = 15;
+	public static final int MARK_SIZE = 15;
 	private String backgroundFileName;
 	private BufferedImage backGround;
 	private BufferedImage resizedBackGround = null;
