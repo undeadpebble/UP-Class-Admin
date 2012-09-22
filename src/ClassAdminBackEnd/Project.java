@@ -30,7 +30,8 @@ public class Project {
 	private ArrayList scattercharts = new ArrayList();
 	private ArrayList histogramcharts = new ArrayList();
 	private ArrayList boxplotcharts = new ArrayList();
-	
+	private int[] scatterIndexes;
+	private ArrayList scatterArrayListIndexes = new ArrayList();
 	private LinkedList<Rule> rules = new LinkedList<Rule>();
 	private LinkedList<EntityType> treeLinkedList;
 	private LinkedList<FrmTable> tables = new LinkedList<FrmTable>();
@@ -39,6 +40,7 @@ public class Project {
 	public void clearselected()
 	{
 		selectedIndexes = new ArrayList();
+		updatecharts();
 	}
 	
 	public void addscattercharts(ScatterPlotFrame x)
@@ -81,6 +83,8 @@ public class Project {
 		if (duplicate==false)
 		{
 		selectedIndexes.add(x);
+		scatterArrayListIndexes.add(scatterIndexes[x]);
+		System.out.println(scatterIndexes[x]);
 		System.out.println("Set selected index" + x);
 		}
 		
@@ -89,7 +93,14 @@ public class Project {
 	{
 		return selectedIndexes;
 	}
-
+	public void setScatterSelect(int [] x)
+	{
+			scatterIndexes =x;
+	}
+	public ArrayList getScatterIndexes()
+	{
+		return scatterArrayListIndexes;
+	}
 
 	public void updateTables(){
 		for(int x = 0; x < tables.size();x++){

@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import javax.lang.model.type.UnknownTypeException;
@@ -88,14 +89,54 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 			}
 
 		}
-
+		
+		double[] sorteermidq =new double[diedata.size()];
+		double[] sorteermidw =new double[diedata.size()];
+		int[] scattergetalle = new int[diedata.size()];
+		for (int q = 0; q < diedata.size(); q++) {
+			sorteermidq[q]=diedata.get(q).get(houerx).getMark();
+			sorteermidw[q]=diedata.get(q).get(houery).getMark();
+			scattergetalle[q]=q;
+		}
+		
+	    int n = sorteermidq.length;
+       	double temp = 0;
+       double temp2 =0;
+     int temp3 = 0;
+       
+        for(int i=0; i < n; i++){
+                for(int j=1; j < (n-i); j++){
+                       
+                        if(sorteermidq[j-1] > sorteermidq[j]){
+                                //swap the elements!
+	                        	  temp2 = sorteermidw[j-1];
+	                              sorteermidw[j-1] = sorteermidw[j];
+	                              sorteermidw[j] = temp2;
+                              
+                                temp = sorteermidq[j-1];
+                                sorteermidq[j-1] = sorteermidq[j];
+                                sorteermidq[j] = temp;
+                                
+                                temp3 = scattergetalle[j-1];
+                                scattergetalle[j-1] = scattergetalle[j];
+                                scattergetalle[j] = temp3;
+                                
+                        }
+                       
+                }
+        }
+        
+        
+        for(int x=0;x<sorteermidq.length;x++)
+        	System.out.println("Sorteer deeerder "+x+"   "+sorteermidq[x]+" "+ scattergetalle[x]);
 		XYSeries series = new XYSeries("Scatter");
 
 		for (int q = 0; q < diedata.size(); q++) {
-			series.add(diedata.get(q).get(houerx).getMark(), diedata.get(q)
-					.get(houery).getMark());
+			series.add(sorteermidq[q],sorteermidw[q] );
 			
 		}
+		project.setScatterSelect(scattergetalle);
+	
 
 		dataset.addSeries(series);
 

@@ -81,7 +81,7 @@ public class ScatterPlot {
 	{
 		chart.getXYPlot().clearAnnotations();
 		System.out.println("Ek update scatterchart");
-		ArrayList u= project.getSelectedIndexes();
+		ArrayList u= project.getScatterIndexes();
 
 		final CircleDrawer cd = new CircleDrawer(Color.red,
 				new BasicStroke(1.0f), null);
@@ -92,7 +92,10 @@ public class ScatterPlot {
 		final XYAnnotation selectPlots = new XYDrawableAnnotation(datasetMain
 				.getXValue(0, (Integer) u.get(x)), datasetMain.getYValue(0,
 						(Integer) u.get(x)), 11, 11, cd);
-
+		System.out.println(u.get(x));
+		System.out.println("X-AS  "+datasetMain
+				.getXValue(0, (Integer) u.get(x)) + "  Y-as  "+datasetMain.getYValue(0,
+						(Integer) u.get(x)));
 		chart.getXYPlot().addAnnotation(selectPlots);
 		}
 	}
@@ -113,8 +116,10 @@ public class ScatterPlot {
 					
 				
 					if(me.isShiftDown() == false)
+					{
 					chart.getXYPlot().clearAnnotations();
-					
+					project.clearselected();
+					}
 					ChartEntity entity = ((ChartMouseEvent) e).getEntity();
 				
 					if (entity instanceof XYItemEntity && entity != null) {
@@ -128,7 +133,7 @@ public class ScatterPlot {
 						project.setSelected(iindex);
 						//Global.getGlobal().getActiveProject().setSelected(iindex);
 						
-						System.out.println("Punt se index"+iindex);
+					
 						final CircleDrawer cd = new CircleDrawer(Color.red,
 								new BasicStroke(1.0f), null);
 						final XYAnnotation bestBid = new XYDrawableAnnotation(datasetMain
@@ -137,7 +142,11 @@ public class ScatterPlot {
 
 						chart.getXYPlot().addAnnotation(bestBid);
 						project.updatecharts();
-						//Global.getGlobal().getActiveProject().updatecharts();
+						
+						
+					
+						
+						System.out.println("Series"+sindex +" Index"+iindex);
 						System.out.println("x = " + datasetMain.getXValue(sindex, iindex));
 						System.out.println("y = " + datasetMain.getYValue(sindex, iindex));
 					}
