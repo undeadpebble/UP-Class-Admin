@@ -72,10 +72,9 @@ public class Frame extends JFrame {
 	private BackgroundGradientPanel backgroundPanel;
 	private GradientMenuBar menuBarWindows;
 	private JMenuBar menuBarMAC;
-	private ReflectionImagePanel container, containerRecentDocs, containerImportImage, containerWorkspace, containerStudents;
-	private MenuImagePanel containerImportText, containerWorkspaceText, containerStudentsText, studentsViewArrowOut, studentsViewArrowIn;
-	private ImagePanel containerImportTextSub, containerStudentsTextSub, containerWorkspaceTextSub, boxChartImage, histogramChartImage,
-			scatterplotChartImage, studentPhoto, searchImage;
+	private ReflectionImagePanel container, containerRecentDocs;
+	private MenuImagePanel studentsViewArrowOut, studentsViewArrowIn;
+	private ImagePanel boxChartImage, histogramChartImage, scatterplotChartImage, studentPhoto, searchImage;
 	private JFileChooser filechooser;
 	private JFrame frame = this;
 	private File currentFilePath;
@@ -85,7 +84,7 @@ public class Frame extends JFrame {
 	private FileHandler fileHandler;
 	private BlurBackground blur;
 	private ReflectionButton homeButton, importButton, exportButton, studentsButton, histogramButton, boxButton, scatterButton,
-			conditionalFormatButton, bordercaseButton;
+			conditionalFormatButton, bordercaseButton, homeImportButton, homeStudents, ButtonWorkspace;
 	private FadePanel homeInfoPanel, importInfoPanel, exportInfoPanel, studentsInfoPanel, histogramInfoPanel, boxplotInfoPanel,
 			conditionalFormattingInfoPanel, bordercaseInfoPanel;
 	private ShadowPanel studentPanel;
@@ -209,7 +208,7 @@ public class Frame extends JFrame {
 		setLocation(x, y);
 
 		// maximize window
-		//setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+		// setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
 
 		// create database to hold recently open documents information
 		createRecentDocsDB();
@@ -301,7 +300,7 @@ public class Frame extends JFrame {
 					studentPanel.setOldX(getWidth() - 250);
 				}
 				if (searchPanel != null) {
-					searchPanel.setBounds(workspacePanel.getWidth()-170, 10, 150, 30);
+					searchPanel.setBounds(workspacePanel.getWidth() - 170, 10, 150, 30);
 				}
 
 			}
@@ -409,44 +408,20 @@ public class Frame extends JFrame {
 		containerRecentDocs.setBounds(117, 366, 953, 81);
 		homePanel.add(containerRecentDocs);
 
-		containerImportImage = new ReflectionImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Import.png")));
-		containerImportImage.setBounds(163, 139, 75, 138);
-		homePanel.add(containerImportImage);
+		homeImportButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/HomeImport.png")));
+		homeImportButton.setBounds(163, 139, 200, 100);
+		homePanel.add(homeImportButton);
 
-		containerWorkspace = new ReflectionImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Workspace.png")));
-		containerWorkspace.setBounds(163, 235, 75, 102);
-		homePanel.add(containerWorkspace);
+		ButtonWorkspace = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/HomeWorkspace.png")));
+		ButtonWorkspace.setBounds(155, 235, 200, 100);
+		homePanel.add(ButtonWorkspace);
 
-		containerStudents = new ReflectionImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Students.png")));
-		containerStudents.setBounds(544, 124, 75, 102);
-		homePanel.add(containerStudents);
-
-		containerImportText = new MenuImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/ImportText.png")));
-		containerImportText.setBounds(210, 130, 89, 45);
-		homePanel.add(containerImportText);
-
-		containerImportTextSub = new ImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/ImportSub.png")));
-		containerImportTextSub.setBounds(210, 166, 129, 32);
-		homePanel.add(containerImportTextSub);
-
-		containerStudentsText = new MenuImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/StudentsText.png")));
-		containerStudentsText.setBounds(600, 130, 147, 54);
-		homePanel.add(containerStudentsText);
-
-		containerStudentsTextSub = new ImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/StudentsSub.png")));
-		containerStudentsTextSub.setBounds(600, 166, 147, 32);
-		homePanel.add(containerStudentsTextSub);
-
-		containerWorkspaceText = new MenuImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/WorkspaceText.png")));
-		containerWorkspaceText.setBounds(210, 224, 135, 53);
-		homePanel.add(containerWorkspaceText);
-
-		containerWorkspaceTextSub = new ImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/WorkspaceSub.png")));
-		containerWorkspaceTextSub.setBounds(210, 259, 238, 32);
-		homePanel.add(containerWorkspaceTextSub);
+		homeStudents = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/HomeStudents.png")));
+		homeStudents.setBounds(554, 140, 180, 100);
+		homePanel.add(homeStudents);
 
 		// add listener to go to workspace screen
-		containerWorkspaceText.addMouseListener(new MouseAdapter() {
+		ButtonWorkspace.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				homeToWorkspaceTransition();
@@ -454,7 +429,7 @@ public class Frame extends JFrame {
 		});
 
 		// add listener to for import dialog
-		containerImportText.addMouseListener(new MouseAdapter() {
+		homeImportButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				try {
@@ -505,21 +480,21 @@ public class Frame extends JFrame {
 		workspacePanel.add(infoPanel);
 		infoPanel.setLayout(null);
 		infoPanel.fadeIn();
-		
-		//create search text field in right hand corner
+
+		// create search text field in right hand corner
 		searchPanel = new FadePanel(false, 200, 200);
-		searchPanel.setBounds(workspacePanel.getWidth()-170, 10, 150, 30);
+		searchPanel.setBounds(workspacePanel.getWidth() - 170, 10, 150, 30);
 		searchPanel.setLayout(null);
 		workspacePanel.add(searchPanel);
-		
+
 		JTextField searchBox = new JTextField();
-		searchBox.setBounds(25,5,124,25);
+		searchBox.setBounds(25, 5, 124, 25);
 		searchPanel.add(searchBox);
-		
+
 		searchImage = new ImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Search.png")));
 		searchImage.setBounds(0, 8, 30, 30);
 		searchPanel.add(searchImage);
-		
+
 		searchPanel.fadeIn();
 
 		// create student panel on side
@@ -670,8 +645,8 @@ public class Frame extends JFrame {
 		infoPanel.add(bordercaseInfoPanel);
 
 		// create bordercase image
-		ImagePanel bordercaseBubble = new ImagePanel(ImageIO.read(getClass().getResource(
-				"/ClassAdminFrontEnd/resources/InfoBordercase.png")));
+		ImagePanel bordercaseBubble = new ImagePanel(ImageIO.read(getClass()
+				.getResource("/ClassAdminFrontEnd/resources/InfoBordercase.png")));
 		bordercaseBubble.setBounds(0, 0, infoPanel.getWidth(), infoPanel.getHeight());
 		bordercaseBubble.setLayout(null);
 		bordercaseInfoPanel.add(bordercaseBubble);
@@ -1015,6 +990,7 @@ public class Frame extends JFrame {
 		if (studentPanel != null) {
 			studentPanel.setVisible(false);
 		}
+
 		recentDocsPanel.fadeIn();
 
 	}
@@ -1402,6 +1378,7 @@ public class Frame extends JFrame {
 		exportButton.setEnabled();
 		conditionalFormatButton.setEnabled();
 		bordercaseButton.setEnabled();
+		searchPanel.fadeIn();
 	}
 
 	/*
@@ -1429,6 +1406,9 @@ public class Frame extends JFrame {
 		}
 		if (bordercaseButton != null) {
 			bordercaseButton.setDisabled();
+		}
+		if (searchPanel != null) {
+			searchPanel.fadeOut();
 		}
 		if (studentPanel != null) {
 			studentPanel.setVisible(false);
