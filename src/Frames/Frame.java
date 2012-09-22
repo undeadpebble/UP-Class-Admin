@@ -84,9 +84,10 @@ public class Frame extends JFrame {
 	private FileHandler fileHandler;
 	private BlurBackground blur;
 	private ReflectionButton homeButton, importButton, exportButton, studentsButton, histogramButton, boxButton, scatterButton,
-			conditionalFormatButton, bordercaseButton, homeImportButton, homeStudents, ButtonWorkspace;
+			conditionalFormatButton, bordercaseButton, addRowButton, homeImportButton, homeStudents, ButtonWorkspace, filterButton,
+			maxValButton;
 	private FadePanel homeInfoPanel, importInfoPanel, exportInfoPanel, studentsInfoPanel, histogramInfoPanel, boxplotInfoPanel,
-			conditionalFormattingInfoPanel, bordercaseInfoPanel;
+			conditionalFormattingInfoPanel, bordercaseInfoPanel, addRowInfoPanel, filterInfoPanel, maxValInfoPanel;
 	private ShadowPanel studentPanel;
 	private String recentPathFile;
 	private ReflectionButtonWithLabel[] recentDocsButtonsArray;
@@ -506,37 +507,49 @@ public class Frame extends JFrame {
 		navBar.add(homeButton);
 
 		importButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Import.png")));
-		importButton.setBounds(84, 8, 68, 80);
+		importButton.setBounds(75, 8, 68, 80);
 		navBar.add(importButton);
 
 		exportButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Export.png")));
-		exportButton.setBounds(150, 8, 68, 80);
+		exportButton.setBounds(135, 8, 68, 80);
 		navBar.add(exportButton);
 
 		studentsButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Students.png")));
-		studentsButton.setBounds(217, 8, 68, 80);
+		studentsButton.setBounds(200, 8, 68, 80);
 		navBar.add(studentsButton);
 
 		histogramButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Histogram.png")));
-		histogramButton.setBounds(285, 12, 68, 80);
+		histogramButton.setBounds(270, 12, 68, 80);
 		navBar.add(histogramButton);
 
 		boxButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Box.png")));
-		boxButton.setBounds(355, 12, 68, 80);
+		boxButton.setBounds(340, 12, 68, 80);
 		navBar.add(boxButton);
 
 		scatterButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Scatter.png")));
-		scatterButton.setBounds(420, 12, 68, 80);
+		scatterButton.setBounds(405, 12, 68, 80);
 		navBar.add(scatterButton);
 
 		conditionalFormatButton = new ReflectionButton(ImageIO.read(getClass().getResource(
 				"/ClassAdminFrontEnd/resources/ConditionalFormattingAdd.png")));
-		conditionalFormatButton.setBounds(483, 8, 68, 80);
+		conditionalFormatButton.setBounds(470, 8, 68, 80);
 		navBar.add(conditionalFormatButton);
 
 		bordercaseButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/BordercaseAdd.png")));
-		bordercaseButton.setBounds(545, 8, 68, 80);
+		bordercaseButton.setBounds(532, 8, 68, 80);
 		navBar.add(bordercaseButton);
+
+		addRowButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/AddRow.png")));
+		addRowButton.setBounds(592, 8, 68, 80);
+		navBar.add(addRowButton);
+
+		filterButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Filter.png")));
+		filterButton.setBounds(650, 13, 68, 80);
+		navBar.add(filterButton);
+
+		maxValButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/maxValue.png")));
+		maxValButton.setBounds(704, 11, 68, 80);
+		navBar.add(maxValButton);
 
 		setNavButtonsDisabled();
 
@@ -554,7 +567,7 @@ public class Frame extends JFrame {
 
 		// create import bubbles panel
 		importInfoPanel = new FadePanel(false, 200, 200);
-		importInfoPanel.setBounds(80, 0, 62, infoPanel.getHeight());
+		importInfoPanel.setBounds(67, 0, 62, infoPanel.getHeight());
 		importInfoPanel.setLayout(null);
 		infoPanel.add(importInfoPanel);
 
@@ -566,7 +579,7 @@ public class Frame extends JFrame {
 
 		// create export bubbles panel
 		exportInfoPanel = new FadePanel(false, 200, 200);
-		exportInfoPanel.setBounds(150, 0, 62, infoPanel.getHeight());
+		exportInfoPanel.setBounds(135, 0, 62, infoPanel.getHeight());
 		exportInfoPanel.setLayout(null);
 		infoPanel.add(exportInfoPanel);
 
@@ -578,7 +591,7 @@ public class Frame extends JFrame {
 
 		// create students bubbles panel
 		studentsInfoPanel = new FadePanel(false, 200, 200);
-		studentsInfoPanel.setBounds(195, 0, 125, infoPanel.getHeight());
+		studentsInfoPanel.setBounds(175, 0, 125, infoPanel.getHeight());
 		studentsInfoPanel.setLayout(null);
 		infoPanel.add(studentsInfoPanel);
 
@@ -590,7 +603,7 @@ public class Frame extends JFrame {
 
 		// create histogram bubbles panel
 		histogramInfoPanel = new FadePanel(false, 200, 200);
-		histogramInfoPanel.setBounds(262, 0, 125, infoPanel.getHeight());
+		histogramInfoPanel.setBounds(250, 0, 125, infoPanel.getHeight());
 		histogramInfoPanel.setLayout(null);
 		infoPanel.add(histogramInfoPanel);
 
@@ -602,7 +615,7 @@ public class Frame extends JFrame {
 
 		// create box plot bubbles panel
 		boxplotInfoPanel = new FadePanel(false, 200, 200);
-		boxplotInfoPanel.setBounds(345, 0, 125, infoPanel.getHeight());
+		boxplotInfoPanel.setBounds(330, 0, 125, infoPanel.getHeight());
 		boxplotInfoPanel.setLayout(null);
 		infoPanel.add(boxplotInfoPanel);
 
@@ -614,7 +627,7 @@ public class Frame extends JFrame {
 
 		// create scatter plot bubbles panel
 		scatterplotInfoPanel = new FadePanel(false, 200, 200);
-		scatterplotInfoPanel.setBounds(405, 0, 125, infoPanel.getHeight());
+		scatterplotInfoPanel.setBounds(387, 0, 125, infoPanel.getHeight());
 		scatterplotInfoPanel.setLayout(null);
 		infoPanel.add(scatterplotInfoPanel);
 
@@ -627,7 +640,7 @@ public class Frame extends JFrame {
 
 		// create conditional formatting plot bubbles panel
 		conditionalFormattingInfoPanel = new FadePanel(false, 200, 200);
-		conditionalFormattingInfoPanel.setBounds(450, 0, 129, infoPanel.getHeight());
+		conditionalFormattingInfoPanel.setBounds(435, 0, 129, infoPanel.getHeight());
 		conditionalFormattingInfoPanel.setLayout(null);
 		infoPanel.add(conditionalFormattingInfoPanel);
 
@@ -640,7 +653,7 @@ public class Frame extends JFrame {
 
 		// create bordercase plot bubbles panel
 		bordercaseInfoPanel = new FadePanel(false, 200, 200);
-		bordercaseInfoPanel.setBounds(510, 0, 129, infoPanel.getHeight());
+		bordercaseInfoPanel.setBounds(495, 0, 129, infoPanel.getHeight());
 		bordercaseInfoPanel.setLayout(null);
 		infoPanel.add(bordercaseInfoPanel);
 
@@ -650,6 +663,42 @@ public class Frame extends JFrame {
 		bordercaseBubble.setBounds(0, 0, infoPanel.getWidth(), infoPanel.getHeight());
 		bordercaseBubble.setLayout(null);
 		bordercaseInfoPanel.add(bordercaseBubble);
+
+		// create add row bubbles panel
+		addRowInfoPanel = new FadePanel(false, 200, 200);
+		addRowInfoPanel.setBounds(585, 0, 129, infoPanel.getHeight());
+		addRowInfoPanel.setLayout(null);
+		infoPanel.add(addRowInfoPanel);
+
+		// create add row image
+		ImagePanel addRowBubble = new ImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/InfoAddRow.png")));
+		addRowBubble.setBounds(0, 0, infoPanel.getWidth(), infoPanel.getHeight());
+		addRowBubble.setLayout(null);
+		addRowInfoPanel.add(addRowBubble);
+
+		// create filter bubbles panel
+		filterInfoPanel = new FadePanel(false, 200, 200);
+		filterInfoPanel.setBounds(632, 0, 129, infoPanel.getHeight());
+		filterInfoPanel.setLayout(null);
+		infoPanel.add(filterInfoPanel);
+
+		// create filter image
+		ImagePanel filterBubble = new ImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/InfoAddFilter.png")));
+		filterBubble.setBounds(0, 0, infoPanel.getWidth(), infoPanel.getHeight());
+		filterBubble.setLayout(null);
+		filterInfoPanel.add(filterBubble);
+
+		// create max val bubbles panel
+		maxValInfoPanel = new FadePanel(false, 200, 200);
+		maxValInfoPanel.setBounds(668, 0, 129, infoPanel.getHeight());
+		maxValInfoPanel.setLayout(null);
+		infoPanel.add(maxValInfoPanel);
+
+		// create max val image
+		ImagePanel maxValBubble = new ImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/InfoAddMaxValues.png")));
+		maxValBubble.setBounds(0, 0, infoPanel.getWidth(), infoPanel.getHeight());
+		maxValBubble.setLayout(null);
+		maxValInfoPanel.add(maxValBubble);
 
 		homeButton.addMouseListener(new MouseAdapter() {
 			@Override
@@ -813,6 +862,59 @@ public class Frame extends JFrame {
 
 			public void mouseExited(MouseEvent arg0) {
 				bordercaseInfoPanel.fadeOut();
+			}
+		});
+
+		addRowButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				if (!addRowButton.isDisabled()) {
+					// add new row
+				}
+			}
+
+			public void mouseEntered(MouseEvent arg0) {
+				addRowInfoPanel.fadeIn();
+			}
+
+			public void mouseExited(MouseEvent arg0) {
+				addRowInfoPanel.fadeOut();
+			}
+		});
+
+		filterButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				if (!filterButton.isDisabled()) {
+					FilterFrame filterframe = new FilterFrame();
+					filterframe.setVisible(true);
+				}
+			}
+
+			public void mouseEntered(MouseEvent arg0) {
+				filterInfoPanel.fadeIn();
+			}
+
+			public void mouseExited(MouseEvent arg0) {
+				filterInfoPanel.fadeOut();
+			}
+		});
+
+		maxValButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				if (!maxValButton.isDisabled()) {
+					SetMaxValueFrame maxframe = new SetMaxValueFrame();
+					maxframe.setVisible(true);
+				}
+			}
+
+			public void mouseEntered(MouseEvent arg0) {
+				maxValInfoPanel.fadeIn();
+			}
+
+			public void mouseExited(MouseEvent arg0) {
+				maxValInfoPanel.fadeOut();
 			}
 		});
 
@@ -1373,6 +1475,10 @@ public class Frame extends JFrame {
 		exportButton.setEnabled();
 		conditionalFormatButton.setEnabled();
 		bordercaseButton.setEnabled();
+		addRowButton.setEnabled();
+		filterButton.setEnabled();
+		maxValButton.setEnabled();
+
 		searchPanel.fadeIn();
 	}
 
@@ -1401,6 +1507,15 @@ public class Frame extends JFrame {
 		}
 		if (bordercaseButton != null) {
 			bordercaseButton.setDisabled();
+		}
+		if (addRowButton != null) {
+			addRowButton.setDisabled();
+		}
+		if (filterButton != null) {
+			filterButton.setDisabled();
+		}
+		if (maxValButton != null) {
+			maxValButton.setDisabled();
 		}
 		if (searchPanel != null) {
 			searchPanel.fadeOut();
