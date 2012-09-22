@@ -1,5 +1,6 @@
 package Rule;
 
+import ClassAdminBackEnd.EntityType;
 import ClassAdminBackEnd.Project;
 import ClassAdminBackEnd.SuperEntity;
 

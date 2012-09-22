@@ -11,7 +11,7 @@ public class floatRuleEntity extends MarkEntity{
 
 		@Override
 		public String getValue() {
-			return(((FloatRule)this.getType()).evaluateDouble(this)).toString();
+			return((((FloatRule)this.getType()).evaluateDouble(this)).toString());
 		}
 		
 		@Override

@@ -8,7 +8,7 @@ public class FloatRule extends Rule {
 	private char opperator;
 	private FloatRule child1;
 	private FloatRule child2;
-	private Double value;
+	private Double value = 0.0;
 	private EntityType references = null;
 
 	public FloatRule(char opperator, FloatRule child1, FloatRule child2,
@@ -54,7 +54,7 @@ public class FloatRule extends Rule {
 		}
 
 		if(references != null){
-			value = sE.findEntityOfType_Up(references).getMark();
+			value = sE.findEntityOfTypeUpDown(references).getMark();
 		}
 		return value;
 	}

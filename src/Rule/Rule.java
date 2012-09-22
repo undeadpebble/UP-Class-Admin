@@ -21,6 +21,7 @@ public class Rule extends EntityType{
 	}
 	
 	public Boolean evaluateBool(SuperEntity sE){
+		System.out.println("ooooooooo");
 		return false;
 	}
 	

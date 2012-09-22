@@ -2,6 +2,7 @@ package Rule;
 
 import ClassAdminBackEnd.EntityType;
 import ClassAdminBackEnd.Project;
+import ClassAdminBackEnd.SuperEntity;
 
 public class BooleanRule extends Rule {
 	char opperator;
@@ -13,7 +14,7 @@ public class BooleanRule extends Rule {
 		this.setIsTextField(true);
 	}
 
-	public Boolean evaluateBool() {
+	public Boolean evaluateBool(SuperEntity sE) {
 
 		return true;
 	}
