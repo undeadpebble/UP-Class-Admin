@@ -1248,7 +1248,6 @@ public class Frame extends JFrame {
 						public void mousePressed(MouseEvent arg0) {
 							try {
 								File testFile = new File(recentDocsButtonsArray[0].getPath());
-								System.out.println(recentDocsButtonsArray[0].getPath());
 								if (testFile.exists()) {
 									openRecentFile(testFile);
 								} else {
@@ -1272,7 +1271,6 @@ public class Frame extends JFrame {
 						public void mousePressed(MouseEvent arg0) {
 							try {
 								File testFile = new File(recentDocsButtonsArray[1].getPath());
-								System.out.println(recentDocsButtonsArray[1].getPath());
 								if (testFile.exists()) {
 									openRecentFile(testFile);
 								} else {
@@ -1296,7 +1294,6 @@ public class Frame extends JFrame {
 						public void mousePressed(MouseEvent arg0) {
 							try {
 								File testFile = new File(recentDocsButtonsArray[2].getPath());
-								System.out.println(recentDocsButtonsArray[2].getPath());
 								if (testFile.exists()) {
 									openRecentFile(testFile);
 								} else {
@@ -1320,7 +1317,6 @@ public class Frame extends JFrame {
 						public void mousePressed(MouseEvent arg0) {
 							try {
 								File testFile = new File(recentDocsButtonsArray[3].getPath());
-								System.out.println(recentDocsButtonsArray[3].getPath());
 								if (testFile.exists()) {
 									openRecentFile(testFile);
 								} else {
@@ -1344,7 +1340,6 @@ public class Frame extends JFrame {
 						public void mousePressed(MouseEvent arg0) {
 							try {
 								File testFile = new File(recentDocsButtonsArray[4].getPath());
-								System.out.println(recentDocsButtonsArray[4].getPath());
 								if (testFile.exists()) {
 									openRecentFile(testFile);
 								} else {
