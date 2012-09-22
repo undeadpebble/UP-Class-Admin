@@ -111,8 +111,9 @@ public class RapidAssessmentCanvas extends JFrame {
 			super();
 
 		}
-		
-		public TreeNode createTreeNode(RapidAssessmentTree tree) throws ClassCastException{
+
+		public TreeNode createTreeNode(RapidAssessmentTree tree)
+				throws ClassCastException {
 			throw new ClassCastException();
 		}
 
@@ -233,15 +234,13 @@ public class RapidAssessmentCanvas extends JFrame {
 			if (editingPosition < 0)
 				editingPosition = 0;
 		}
-		
-		
 
 		@Override
 		public TreeNode createTreeNode(RapidAssessmentTree tree)
 				throws ClassCastException {
-			TreeMarkNode tmp = tree.new TreeMarkNode(this.getX(), this.getY(), this.getMark());
+			TreeMarkNode tmp = tree.new TreeMarkNode(this.getX(), this.getY(),
+					this.getMark());
 
-			
 			return tmp;
 		}
 
@@ -338,6 +337,22 @@ public class RapidAssessmentCanvas extends JFrame {
 		private Point origin = null;
 		private Point end = null;
 		private long timePressed = 0;
+		private boolean hover;
+
+		/**
+		 * @return the hover
+		 */
+		public boolean isHover() {
+			return hover;
+		}
+
+		/**
+		 * @param hover
+		 *            the hover to set
+		 */
+		public void setHover(boolean hover) {
+			this.hover = hover;
+		}
 
 		/**
 		 * @return the timePressed
@@ -358,18 +373,18 @@ public class RapidAssessmentCanvas extends JFrame {
 			return pressing;
 		}
 
-		
-
 		@Override
 		public TreeNode createTreeNode(RapidAssessmentTree tree)
 				throws ClassCastException {
-			TreeRectangleNode tmp = tree.new TreeRectangleNode(this.getX(), this.getY(), this.getWidth(), this.getHeight());
-			for(int x = 0;x<this.getComponentCount();++x){
-				try{
-				tmp.getChildNodes().add(((MyComponent)this.getComponent(x)).createTreeNode(tree));
-				}
-				catch(ClassCastException e){
-					
+			TreeRectangleNode tmp = tree.new TreeRectangleNode(this.getX(),
+					this.getY(), this.getWidth(), this.getHeight());
+			for (int x = 0; x < this.getComponentCount(); ++x) {
+				try {
+					tmp.getChildNodes().add(
+							((MyComponent) this.getComponent(x))
+									.createTreeNode(tree));
+				} catch (ClassCastException e) {
+
 				}
 			}
 			return tmp;
@@ -382,45 +397,6 @@ public class RapidAssessmentCanvas extends JFrame {
 			this.addMouseListener(new canvasMouseListener());
 			new MyMarkTotalComponent(this);
 			this.addMouseMotionListener(new CanvasMouseMoveListener());
-			this.addKeyListener(new KeyListener() {
-
-				@Override
-				public void keyTyped(KeyEvent arg0) {
-
-				}
-
-				@Override
-				public void keyReleased(KeyEvent arg0) {
-
-				}
-
-				@Override
-				public void keyPressed(KeyEvent arg0) {
-					MyMarkPoint source = lastcreated;
-					System.out.println("press: " + arg0.getKeyChar());
-					if (source.getEditingPosition() >= 0) {
-						String mark = String.valueOf(source.getMark());
-						mark = mark.substring(0, source.getEditingPosition())
-								+ arg0.getKeyChar()
-								+ mark.substring(source.getEditingPosition() + 1);
-						try {
-							source.setMark(Double.parseDouble(mark));
-							source.incrementEditingPosition();
-						} catch (NumberFormatException e) {
-
-						}
-					} else {
-						try {
-							source.setMark(Double.parseDouble(""
-									+ arg0.getKeyChar()));
-							source.incrementEditingPosition();
-						} catch (NumberFormatException e) {
-
-						}
-					}
-
-				}
-			});
 
 		}
 
@@ -436,11 +412,17 @@ public class RapidAssessmentCanvas extends JFrame {
 			Graphics2D g2 = (Graphics2D) arg0.create();
 			g2.setColor(Color.red);
 			g2.setStroke(new BasicStroke(3f));
+			if (hover)
+				g2.setColor(g2.getColor().darker().darker());
+			
+				
+			
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 					RenderingHints.VALUE_ANTIALIAS_ON);
 			g2.drawRoundRect(0, 0, this.getWidth() - 1, this.getHeight() - 1,
 					20, 20);
 			if (this.isPressing()) {
+				g2.setStroke(new BasicStroke(3f));
 				g2.setColor(new Color(0.3f, 0.3f, 1.0f));
 				g2.drawRect((int) (this.getOrigin().getX()), (int) (this
 						.getOrigin().getY()),
@@ -503,12 +485,16 @@ public class RapidAssessmentCanvas extends JFrame {
 
 		@Override
 		public void mouseEntered(MouseEvent e) {
-
+			((MyRectangle) e.getSource()).setHover(true);
+			((MyRectangle) e.getSource()).repaint();
+			System.out.print("hover");
 		}
 
 		@Override
 		public void mouseExited(MouseEvent e) {
-
+			((MyRectangle) e.getSource()).setHover(false);
+			((MyRectangle) e.getSource()).repaint();
+			System.out.print("unhover");
 		}
 
 		@Override
@@ -638,7 +624,8 @@ public class RapidAssessmentCanvas extends JFrame {
 		this.setSize(600, 600);
 		this.backgroundFileName = backGroundFilename;
 		try {
-			this.backGround = ImageIO.read(getClass().getResource(this.backgroundFileName));
+			this.backGround = ImageIO.read(getClass().getResource(
+					this.backgroundFileName));
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -690,7 +677,7 @@ public class RapidAssessmentCanvas extends JFrame {
 					break;
 
 				case 8:
-					
+
 					if (source.getEditingPosition() > 0) {
 						String mark = String.valueOf(source.getMark());
 						if (mark.charAt(source.getEditingPosition() - 1) == '.') {
@@ -786,21 +773,25 @@ public class RapidAssessmentCanvas extends JFrame {
 			g2.drawImage(resizedBackGround, 0, 0, null);
 			g2.dispose();
 		}
-		
-		public RapidAssessmentTree createTree(){
+
+		public RapidAssessmentTree createTree() {
 			RapidAssessmentTree tree = new RapidAssessmentTree(null);
 			tree.setHead(this.createRapidAssessmentTreeNode(tree));
 			return tree;
 		}
-		
-		public TreeContainerNode createRapidAssessmentTreeNode(RapidAssessmentTree tree){
-			TreeContainerNode tmp = tree.new TreeContainerNode(this.getX(), this.getY(), this.getWidth(), this.getHeight(), backgroundFileName);
-			for(int x = 0;x<this.getComponentCount();++x){
-				try{
-				tmp.getChildNodes().add(((MyComponent)this.getComponent(x)).createTreeNode(tree));
-				}
-				catch(ClassCastException e){
-					
+
+		public TreeContainerNode createRapidAssessmentTreeNode(
+				RapidAssessmentTree tree) {
+			TreeContainerNode tmp = tree.new TreeContainerNode(this.getX(),
+					this.getY(), this.getWidth(), this.getHeight(),
+					backgroundFileName);
+			for (int x = 0; x < this.getComponentCount(); ++x) {
+				try {
+					tmp.getChildNodes().add(
+							((MyComponent) this.getComponent(x))
+									.createTreeNode(tree));
+				} catch (ClassCastException e) {
+
 				}
 			}
 			return tmp;
