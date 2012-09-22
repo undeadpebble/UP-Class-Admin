@@ -219,10 +219,10 @@ public class Histogram {
 			for (int q = 0; q < selectedx.size(); q++) {
 				if ((x.getXValue(i, j) == selectedx.get(q)) && (x.getYValue(i, j) == selectedy.get(q)))
 
-					return Color.red;
+					return new Color(0xFF8400);
 
 			}
-			return Color.blue;
+			return new Color(0x00B2E3);
 		}
 
 		public CustomBarRenderer() {
@@ -232,7 +232,7 @@ public class Histogram {
 	// Creating the histogram jfreechart
 	public JFreeChart createHistogram(String plotTitle, String xaxis, String yaxis, HistogramDataset dataset) {
 		PlotOrientation orientation = PlotOrientation.VERTICAL;
-		boolean show = true;
+		boolean show = false;
 		boolean toolTips = false;
 		boolean urls = false;
 
@@ -248,7 +248,7 @@ public class Histogram {
 		
 		
 		
-		barkleurder.setOutlinePaint(Color.yellow);
+		
 		barkleurder.setDrawBarOutline(true);
 		chart.getXYPlot().setRenderer(barkleurder);
 		return chart;
@@ -368,6 +368,12 @@ public class Histogram {
 		maindataset.setType(HistogramType.RELATIVE_FREQUENCY);
 		return maindataset;
 	}
+	
+	//Change the type of Histogram
+		public HistogramDataset changeToNormalHistogramType() {
+			maindataset.setType(HistogramType.FREQUENCY);
+			return maindataset;
+		}
 
 	// Increase the width of the bars
 	public HistogramDataset increaseWidth(int widthbarb) {

@@ -65,16 +65,24 @@ public class Project {
 		((ScatterPlotFrame) scattercharts.get(i)).update();
 		for(int i =0 ; i < histogramcharts.size();i++)
 		{
-			//System.out.println("Ek update histogram");
+			
 		((HistogramFrame) histogramcharts.get(i)).update();
 		}
 	}
 
 	public void setSelected(int x)
 	{
-		
+		boolean duplicate =false;
+		for(int i=0;i<selectedIndexes.size();i++)
+		{
+			if((Integer)selectedIndexes.get(i)==x)
+				duplicate = true;
+		}
+		if (duplicate==false)
+		{
 		selectedIndexes.add(x);
-		System.out.println("Set selected" +selectedIndexes.size());
+		System.out.println("Set selected index" + x);
+		}
 		
 	}
 	public ArrayList getSelectedIndexes()

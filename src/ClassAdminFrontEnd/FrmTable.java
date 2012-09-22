@@ -255,16 +255,11 @@ public class FrmTable extends JPanel {
 						comp.setBackground(Color.orange);
 						project.getSelected().add(
 								data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col));
+					
 						
-						if(count==0)
-						{
-							project.setSelected(Index_row);
-							count +=1;
-						}
-						
-						//	System.out.println("Table se index"+Index_row);
+						project.setSelected(Index_row);
 						comp.setForeground(Color.black);
-						table.repaint();
+						//table.repaint();
 					}
 
 					for (int x = 0; x < format.size(); x++) {
@@ -460,6 +455,7 @@ public class FrmTable extends JPanel {
 								for (int z = 0; z < data.get(x).size(); z++) {
 									project.getSelected().add(
 											data.get(x).get(z));
+									project.setSelected(x);
 								}
 								tableModel.fireTableDataChanged();
 							}
@@ -632,6 +628,7 @@ public class FrmTable extends JPanel {
 								for (int z = 0; z < data.get(x).size(); z++) {
 									project.getSelected().add(
 											data.get(x).get(z));
+									project.setSelected(x);
 									tableModel.fireTableDataChanged();
 								}
 								tableModel.fireTableDataChanged();

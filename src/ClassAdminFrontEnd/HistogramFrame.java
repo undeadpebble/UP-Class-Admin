@@ -408,40 +408,31 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			}
 		});
 		
-		JButton cumPlot = new JButton("Cummulative Plot");
-		cumPlot.addMouseListener(new MouseListener() {
-			
+		final JLabel histogramtypelabel = new JLabel("Histogram Type");
+		
+		String[] HistogramTypeString = { "Normal Histogram", "Cummulative Plot" };
+		final JComboBox histogramType = new JComboBox();
+		//Combobox van X-axis
+		histogramType.setModel(new DefaultComboBoxModel(HistogramTypeString));
+		histogramType.addActionListener(new ActionListener() {
+
 			@Override
-			public void mouseReleased(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
+			public void actionPerformed(ActionEvent e) {
+				JComboBox cb = (JComboBox) e.getSource();
+				String axis = (String) cb.getSelectedItem();
+				if(axis.compareTo("Cummulative Plot")==0)
+					chartpanel.getChart().getXYPlot()
+					.setDataset(nuweChart.changeHistogramType());
+				else
+					chartpanel.getChart().getXYPlot()
+					.setDataset(nuweChart.changeToNormalHistogramType());
+
 			}
-			
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseExited(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				
-				chartpanel.getChart().getXYPlot()
-				.setDataset(nuweChart.changeHistogramType());
-			}
+
 		});
+		
+		
+		
 		
 		content.setLayout(new FlowLayout());
 		content.add(chartpanel);
@@ -454,7 +445,9 @@ public class HistogramFrame extends JFrame implements ActionListener {
 		content.add(width);
 		content.add(widthsmall);
 		content.add(widthlarge);
-		content.add(cumPlot);
+		content.add(histogramtypelabel);
+		content.add(histogramType);
+		
 		f.setVisible(true);
 	}
 

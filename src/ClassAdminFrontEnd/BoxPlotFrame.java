@@ -26,6 +26,8 @@ import javax.swing.JPanel;
 
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.labels.BoxAndWhiskerToolTipGenerator;
+import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.renderer.category.BoxAndWhiskerRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.statistics.DefaultBoxAndWhiskerCategoryDataset;
@@ -67,11 +69,21 @@ public class BoxPlotFrame extends JFrame implements ActionListener {
 		final Container content = f.getContentPane();
 		f.setSize(450, 500);
 
+		
+        
+		
+		
 		final BoxPlot nuweChart = new BoxPlot();
 		chart = nuweChart.createBoxPlot("BoxPlot", "", "", dataset);
 		chartpanel = new ChartPanel(chart, 400, 400, 100, 100, 400, 400, true, true, true, true, true, true);
+		
+		final BoxAndWhiskerRenderer renderer = new BoxAndWhiskerRenderer();
 
-
+        renderer.setToolTipGenerator(new BoxAndWhiskerToolTipGenerator());
+        
+        chartpanel.getChart().getCategoryPlot().setRenderer(renderer);
+		
+		
 		JButton addseries = new JButton("Add a series");
 		// Series can be added dynamically
 		addseries.addMouseListener(new MouseListener() {
@@ -143,7 +155,7 @@ public class BoxPlotFrame extends JFrame implements ActionListener {
 			}
 
 		});
-		// Extract chart to JPG
+		// Extract chart to PNG
 		JButton extractPic = new JButton("Extract chart");
 		extractPic.addMouseListener(new MouseListener() {
 
@@ -196,15 +208,16 @@ public class BoxPlotFrame extends JFrame implements ActionListener {
 	public void addBoxSeries() {
 
 		ArrayList nuwe = new ArrayList();
-
+		
 		for (int k = 0; k < diedata.size(); k++) {
-
+			
 			nuwe.add(diedata.get(k).get(box.getIndexOfHeader()).getMark());
-
+			
 		}
 		teller += 1;
+		
 		dataset.add(nuwe, "Series" + teller, headers[box.getIndexOfHeader()]);
-
+		
 		chartpanel.getChart().getCategoryPlot().setDataset(dataset);
 	}
 
