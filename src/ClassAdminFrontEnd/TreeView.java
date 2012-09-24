@@ -334,7 +334,7 @@ public class TreeView extends Display {
 				myProject.getHeadEntityType());
 
 		JFrame frame = new JFrame();
-
+		PopUpMenu p = new PopUpMenu(frame);
 		frame.setContentPane(treeview);
 		frame.pack();
 		frame.setVisible(true);
