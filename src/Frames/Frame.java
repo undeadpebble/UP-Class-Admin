@@ -764,7 +764,11 @@ public class Frame extends JFrame {
 				if (!studentsButton.isDisabled()) {
 					table.getTable().getSelectedRow();
 
-					TreeView.createEntityTypeFrm("name",Global.getGlobal().getActiveProject());				}
+					//kom by build tree btn
+					TreeView.createEntityTypeFrm("name",Global.getGlobal().getActiveProject());				
+					//moet hier bly
+//					TreeView.createStudentFrm("name", table.getData().get(table.getTable().getSelectedRow()).get(0));
+				}
 			}
 
 			public void mouseEntered(MouseEvent arg0) {
