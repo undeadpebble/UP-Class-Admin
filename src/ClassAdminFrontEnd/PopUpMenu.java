@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
 
 public class PopUpMenu {
 
@@ -33,9 +34,12 @@ public class PopUpMenu {
 	Tree activeTree = null;
 	Project activeProject;
 	JDialog frame = null;
-
+	LinkedList<EntityType> activeTreeLinkedList = null;
+	
 	public PopUpMenu() {
 		activeProject = Global.getGlobal().getActiveProject();
+		activeTreeLinkedList = activeProject.getTreeLinkedList();
+		
 		pMenu = new JPopupMenu();
 		JMenuItem miAddChild = new JMenuItem("Add Child");
 		pMenu.add(miAddChild);
@@ -60,12 +64,14 @@ public class PopUpMenu {
 		miRemoveWC.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				activeTree.removeNode(activeItem.getRow());
+				activeTreeLinkedList.get(activeItem.getRow()).removeDeletingChildren();				
 			}
 		});
 
 		miRemoveWOC.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				activeTree.removeNode(activeItem.getRow());
+				activeTreeLinkedList.get(activeItem.getRow()).removeSavingChildren();
 			}
 		});
 
