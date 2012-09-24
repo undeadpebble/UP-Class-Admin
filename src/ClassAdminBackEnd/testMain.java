@@ -34,15 +34,15 @@ import ClassAdminFrontEnd.EntityTypePanel;
 import ClassAdminFrontEnd.FrmTable;
 import ClassAdminFrontEnd.RapidAssessmentCanvas;
 import ClassAdminFrontEnd.TreeView;
-<<<<<<< HEAD
+
 import Frames.Frame;
-=======
+
 
 import Rule.frmRule;
 
 import ClassAdminFrontEnd.RapidAssessmentCanvas.MyMarkPoint;
 
->>>>>>> refs/remotes/origin/dev
+
 
 import jxl.*;
 public class testMain
@@ -50,38 +50,24 @@ public class testMain
 	
 	public static void main(String[] args) {
 		ClassAdminBackEnd.FileHandler fh = ClassAdminBackEnd.FileHandler.get();
-		
-		try {
-			fh.openFile("test.csv", Global.getGlobal().getActiveProject());
-			
-			JFrame temp = new JFrame();
-			temp.setVisible(true);
-			temp.setSize(1300, 600);
-			
-			final FrmTable test = new FrmTable(Global.getGlobal().getActiveProject().getHead().getHeaders(), Global.getGlobal().getActiveProject().getHead().getDataLinkedList(), Global.getGlobal().getActiveProject());
-			
-			
 
-			temp.setLayout(new FlowLayout());
-			JButton adder = new JButton("Add");
-			temp.add(test);
-			temp.add(adder);
-			
-			adder.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					// TODO Auto-generated method stub\
-					test.redraw();
-					frmRule rule = new frmRule(Global.getGlobal().getActiveProject());
-					rule.setVisible(true);
-					
+		
+
+			EventQueue.invokeLater(new Runnable() {
+				public void run() {
+					try {
+						
+						
+						JFrame frame = new RapidAssessmentCanvas("/ClassAdminFrontEnd/sheep.jpg", new SuperEntity(new EntityType("test1"), 1.0));
+						
+						frame.setVisible(true);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+
 				}
 			});
 
-		} catch (UnsupportedFileTypeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 	}
 

@@ -108,10 +108,37 @@ public class EntityType {
 		this.defaultWeight = defaultWeight;
 	}
 
+	public EntityType() {
+		// TODO Auto-generated constructor stub
+	}
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * @param formatting the formatting to set
+	 */
+	public void setFormatting(LinkedList<Format> formatting) {
+		this.formatting = formatting;
+	}
+	/**
+	 * @param borderCasing the borderCasing to set
+	 */
+	public void setBorderCasing(LinkedList<BorderCase> borderCasing) {
+		this.borderCasing = borderCasing;
+	}
+	/**
+	 * @param entityList the entityList to set
+	 */
+	public void setEntityList(LinkedList<SuperEntity> entityList) {
+		this.entityList = entityList;
+	}
+	/**
+	 * @param subEntityType the subEntityType to set
+	 */
+	public void setSubEntityType(LinkedList<EntityType> subEntityType) {
+		this.subEntityType = subEntityType;
+	}
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -255,6 +282,26 @@ public class EntityType {
 			
 		}
 	}
+	public void removeDeletingChildren(){
+		for(int x = 0;x<this.getEntityList().size();++x){
+			this.getEntityList().get(x).getParentEntity().getSubEntity().remove(this.getEntityList().get(x));
+			this.getParentEntitytype().getSubEntityType().remove(this);
+			this.getEntityList().clear();
+		}
+	}
 	
+	public void removeSavingChildren(){
+		for(int x = 0;x<this.getEntityList().size();++x){
+			for(int y = 0;y<this.getEntityList().get(x).getSubEntity().size();++x){
+				this.getEntityList().get(x).getParentEntity().getSubEntity().add(this.getEntityList().get(x).getSubEntity().get(y));
+				this.getEntityList().get(x).getSubEntity().get(y).setParentEntity(this.getEntityList().get(x).getParentEntity());
+			}
+		}
+		for(int x = 0;x<this.getSubEntityType().size();++x){
+			this.getSubEntityType().get(x).setParentEntitytype(this.getParentEntitytype());
+			this.getParentEntitytype().getSubEntityType().add(this.getSubEntityType().get(x));
+		}
+		removeDeletingChildren();
+	}
 
 }

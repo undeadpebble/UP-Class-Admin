@@ -85,9 +85,9 @@ public class Frame extends JFrame {
 	private BlurBackground blur;
 	private ReflectionButton homeButton, importButton, exportButton, studentsButton, histogramButton, boxButton, scatterButton,
 			conditionalFormatButton, bordercaseButton, addRowButton, homeImportButton, homeStudents, ButtonWorkspace, filterButton,
-			maxValButton;
+			maxValButton, rulesButton, homeRapidAssessment;
 	private FadePanel homeInfoPanel, importInfoPanel, exportInfoPanel, studentsInfoPanel, histogramInfoPanel, boxplotInfoPanel,
-			conditionalFormattingInfoPanel, bordercaseInfoPanel, addRowInfoPanel, filterInfoPanel, maxValInfoPanel;
+			conditionalFormattingInfoPanel, bordercaseInfoPanel, addRowInfoPanel, filterInfoPanel, maxValInfoPanel, rulesInfoPanel;
 	private ShadowPanel studentPanel;
 	private String recentPathFile;
 	private ReflectionButtonWithLabel[] recentDocsButtonsArray;
@@ -421,6 +421,11 @@ public class Frame extends JFrame {
 		homeStudents.setBounds(554, 140, 180, 100);
 		homePanel.add(homeStudents);
 
+		homeRapidAssessment = new ReflectionButton(ImageIO.read(getClass().getResource(
+				"/ClassAdminFrontEnd/resources/HomeRapidAssessment.png")));
+		homeRapidAssessment.setBounds(554, 235, 250, 100);
+		homePanel.add(homeRapidAssessment);
+
 		// add listener to go to workspace screen
 		ButtonWorkspace.addMouseListener(new MouseAdapter() {
 			@Override
@@ -550,6 +555,10 @@ public class Frame extends JFrame {
 		maxValButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/maxValue.png")));
 		maxValButton.setBounds(704, 11, 68, 80);
 		navBar.add(maxValButton);
+
+		rulesButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Rules2.png")));
+		rulesButton.setBounds(757, 10, 68, 80);
+		navBar.add(rulesButton);
 
 		setNavButtonsDisabled();
 
@@ -700,6 +709,18 @@ public class Frame extends JFrame {
 		maxValBubble.setLayout(null);
 		maxValInfoPanel.add(maxValBubble);
 
+		// create rules bubbles panel
+		rulesInfoPanel = new FadePanel(false, 200, 200);
+		rulesInfoPanel.setBounds(748, 0, 129, infoPanel.getHeight());
+		rulesInfoPanel.setLayout(null);
+		infoPanel.add(rulesInfoPanel);
+
+		// create rules image
+		ImagePanel rulesBubble = new ImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/InfoAddRule.png")));
+		rulesBubble.setBounds(0, 0, infoPanel.getWidth(), infoPanel.getHeight());
+		rulesBubble.setLayout(null);
+		rulesInfoPanel.add(rulesBubble);
+
 		homeButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
@@ -820,7 +841,7 @@ public class Frame extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (!scatterButton.isDisabled()) {
-					ScatterPlotFrame x = new ScatterPlotFrame(Global.getGlobal().getActiveProject());//project);
+					ScatterPlotFrame x = new ScatterPlotFrame(Global.getGlobal().getActiveProject());// project);
 					Global.getGlobal().getActiveProject().addscattercharts(x);
 				}
 			}
@@ -920,6 +941,21 @@ public class Frame extends JFrame {
 
 			public void mouseExited(MouseEvent arg0) {
 				maxValInfoPanel.fadeOut();
+			}
+		});
+
+		rulesButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+
+			}
+
+			public void mouseEntered(MouseEvent arg0) {
+				rulesInfoPanel.fadeIn();
+			}
+
+			public void mouseExited(MouseEvent arg0) {
+				rulesInfoPanel.fadeOut();
 			}
 		});
 
@@ -1483,6 +1519,7 @@ public class Frame extends JFrame {
 		addRowButton.setEnabled();
 		filterButton.setEnabled();
 		maxValButton.setEnabled();
+		rulesButton.setEnabled();
 
 		searchPanel.fadeIn();
 	}
@@ -1521,6 +1558,9 @@ public class Frame extends JFrame {
 		}
 		if (maxValButton != null) {
 			maxValButton.setDisabled();
+		}
+		if (rulesButton != null) {
+			rulesButton.setDisabled();
 		}
 		if (searchPanel != null) {
 			searchPanel.fadeOut();
