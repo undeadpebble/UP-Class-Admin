@@ -55,6 +55,7 @@ public class ScatterPlot {
 	public ScatterPlot(Project project)
 	{
 		this.project = project;
+		project.updatecharts();
 	}
 	
 	//Set the dataset of the chart
@@ -81,8 +82,8 @@ public class ScatterPlot {
 	{
 		chart.getXYPlot().clearAnnotations();
 		System.out.println("Ek update scatterchart");
-		ArrayList u= project.getScatterIndexes();
-
+		ArrayList u= project.getSelectedIndexes();
+		int [] scatterwaardes = project.getScatterIndexes();
 		final CircleDrawer cd = new CircleDrawer(Color.red,
 				new BasicStroke(1.0f), null);
 		
@@ -90,12 +91,14 @@ public class ScatterPlot {
 		{
 		
 		final XYAnnotation selectPlots = new XYDrawableAnnotation(datasetMain
-				.getXValue(0, (Integer) u.get(x)), datasetMain.getYValue(0,
-						(Integer) u.get(x)), 11, 11, cd);
+				.getXValue(0, (Integer) scatterwaardes[(Integer)u.get(x)]), datasetMain.getYValue(0,
+						(Integer) scatterwaardes[(Integer)u.get(x)]), 11, 11, cd);
 		System.out.println(u.get(x));
 		System.out.println("X-AS  "+datasetMain
-				.getXValue(0, (Integer) u.get(x)) + "  Y-as  "+datasetMain.getYValue(0,
-						(Integer) u.get(x)));
+				.getXValue(0, 0) + "  Y-as  "+datasetMain.getYValue(0,
+						0));
+		System.out.println(u.get(x));
+		System.out.println(scatterwaardes[0]);
 		chart.getXYPlot().addAnnotation(selectPlots);
 		}
 	}

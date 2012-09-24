@@ -45,39 +45,35 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 	private int houery = 0;
 	private ScatterPlot nuweChart;
 	private Project project;
-	
-	//Update all the values of the scatterplot
-	public void update()
-	{
-		
-	
+
+	// Update all the values of the scatterplot
+	public void update() {
+
 		nuweChart.updateSelectedvalues();
 	}
-	//Create the scatterplotframe
+
+	// Create the scatterplotframe
 	public ScatterPlotFrame(Project project) {
 		JFrame f = new JFrame("ScatterPlot");
 		this.project = project;
 		final Container content = f.getContentPane();
 		f.setSize(550, 500);
 		final LinkedList<LinkedList<SuperEntity>> diedata = project.getHead().getDataLinkedList();
-	
-		
+
 		final XYSeriesCollection dataset = new XYSeriesCollection();
 		final String[] headers = project.getHead().getHeaders();
-	
+
 		nuweChart = new ScatterPlot(project);
-		
-		
+
 		String[] kolom = project.getHead().getNumberHeaders();
-		
-		
+
 		String xas = kolom[0];
 		String yas = kolom[1];
 
 		for (int s = 0; s < headers.length; s++) {
 			if (headers[s].equals(kolom[0])) {
 				houerx = s;
-				
+
 			}
 
 		}
@@ -85,58 +81,66 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 		for (int s = 0; s < headers.length; s++) {
 			if (headers[s].equals(kolom[1])) {
 				houery = s;
-				
+
 			}
 
 		}
-		
-		double[] sorteermidq =new double[diedata.size()];
-		double[] sorteermidw =new double[diedata.size()];
+
+		double[] sorteermidq = new double[diedata.size()];
+		double[] sorteermidw = new double[diedata.size()];
 		int[] scattergetalle = new int[diedata.size()];
 		for (int q = 0; q < diedata.size(); q++) {
-			sorteermidq[q]=diedata.get(q).get(houerx).getMark();
-			sorteermidw[q]=diedata.get(q).get(houery).getMark();
-			scattergetalle[q]=q;
+			sorteermidq[q] = diedata.get(q).get(houerx).getMark();
+			sorteermidw[q] = diedata.get(q).get(houery).getMark();
+			scattergetalle[q] = q;
+
 		}
-		
-	    int n = sorteermidq.length;
-       	double temp = 0;
-       double temp2 =0;
-     int temp3 = 0;
-       
-        for(int i=0; i < n; i++){
-                for(int j=1; j < (n-i); j++){
-                       
-                        if(sorteermidq[j-1] > sorteermidq[j]){
-                                //swap the elements!
-	                        	  temp2 = sorteermidw[j-1];
-	                              sorteermidw[j-1] = sorteermidw[j];
-	                              sorteermidw[j] = temp2;
-                              
-                                temp = sorteermidq[j-1];
-                                sorteermidq[j-1] = sorteermidq[j];
-                                sorteermidq[j] = temp;
-                                
-                                temp3 = scattergetalle[j-1];
-                                scattergetalle[j-1] = scattergetalle[j];
-                                scattergetalle[j] = temp3;
-                                
-                        }
-                       
-                }
-        }
-        
-        
-        for(int x=0;x<sorteermidq.length;x++)
-        	System.out.println("Sorteer deeerder "+x+"   "+sorteermidq[x]+" "+ scattergetalle[x]);
+
+		int n = sorteermidq.length;
+		double temp = 0;
+		double temp2 = 0;
+		int temp3 = 0;
+	
+		for (int i = 0; i < n; i++) {
+			for (int j = 1; j < (n - i); j++) {
+				if (sorteermidq[j - 1] > sorteermidq[j]) {
+					
+					
+					// swap the elements!
+					temp2 = sorteermidw[j - 1];
+					sorteermidw[j - 1] = sorteermidw[j];
+					sorteermidw[j] = temp2;
+
+					temp = sorteermidq[j - 1];
+					sorteermidq[j - 1] = sorteermidq[j];
+					sorteermidq[j] = temp;
+
+					temp3 = scattergetalle[j - 1];
+					scattergetalle[j - 1] = scattergetalle[j];
+					scattergetalle[j] = temp3;
+
+				}
+
+			}
+		}
+
+		for (int x = 0; x < sorteermidq.length; x++)
+			System.out.println("Sorteer deeerder " + x + "   " + sorteermidq[x] + " " +sorteermidw[x]+" "+ scattergetalle[x]);
 		XYSeries series = new XYSeries("Scatter");
 
 		for (int q = 0; q < diedata.size(); q++) {
-			series.add(sorteermidq[q],sorteermidw[q] );
-			
+			series.add(sorteermidq[q], sorteermidw[q]);
+
 		}
+		
+		for(int i=0;i<scattergetalle.length-1;i++)
+		{
+			scattergetalle[scattergetalle[i]] = i;
+			System.out.println(scattergetalle[i] +"   "+ i);
+		}
+		
+		
 		project.setScatterSelect(scattergetalle);
-	
 
 		dataset.addSeries(series);
 
@@ -145,21 +149,20 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 
 		JLabel lblNewLabel = new JLabel("X-axis");
 		final JComboBox xascb = new JComboBox();
-		//Combobox of X-axis
+		// Combobox of X-axis
 		xascb.setModel(new DefaultComboBoxModel(kolom));
 		xascb.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JComboBox cb = (JComboBox) e.getSource();
 				String axis = (String) cb.getSelectedItem();
-				chartpanel.getChart().getXYPlot().getDomainAxis()
-						.setLabel(axis);
+				chartpanel.getChart().getXYPlot().getDomainAxis().setLabel(axis);
 				chartpanel.getChart().getXYPlot().clearAnnotations();
 
 				for (int s = 0; s < headers.length; s++) {
 					if (headers[s].equals(cb.getSelectedItem().toString())) {
 						houerx = s;
-						
+
 					}
 
 				}
@@ -168,9 +171,8 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 				XYSeries series = new XYSeries("Scatter");
 
 				for (int q = 0; q < diedata.size() - 1; q++) {
-					series.add(diedata.get(q).get(houerx).getMark(), diedata
-							.get(q).get(houery).getMark());
-					
+					series.add(diedata.get(q).get(houerx).getMark(), diedata.get(q).get(houery).getMark());
+
 				}
 
 				nuwedataset.addSeries(series);
@@ -180,7 +182,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 			}
 
 		});
-		//Cycle of X-axis combobox left
+		// Cycle of X-axis combobox left
 		JButton switchlinksx = new JButton("<");
 		switchlinksx.addMouseListener(new MouseListener() {
 
@@ -215,7 +217,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 
 			}
 		});
-		//Cycle of X-axis combobox right
+		// Cycle of X-axis combobox right
 		JButton switchregsx = new JButton(">");
 		switchregsx.addMouseListener(new MouseListener() {
 
@@ -256,7 +258,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 		final JComboBox yascb = new JComboBox();
 		yascb.setModel(new DefaultComboBoxModel(kolom));
 		yascb.setSelectedIndex(1);
-		//Combobox of Y-axis
+		// Combobox of Y-axis
 		yascb.addActionListener(new ActionListener() {
 
 			@Override
@@ -277,9 +279,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 				XYSeries series = new XYSeries("Scatter");
 
 				for (int q = 0; q < diedata.size() - 1; q++) {
-					series.add(diedata.get(q).get(houerx).getMark(), diedata
-							.get(q).get(houery).getMark());
-					
+					series.add(diedata.get(q).get(houerx).getMark(), diedata.get(q).get(houery).getMark());
 
 				}
 
@@ -289,7 +289,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 			}
 
 		});
-		//Cycle of Y-axis combobox left
+		// Cycle of Y-axis combobox left
 		JButton switchlinksy = new JButton("<");
 		switchlinksy.addMouseListener(new MouseListener() {
 
@@ -324,7 +324,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 
 			}
 		});
-		//Cycle of Y-axis combobox right
+		// Cycle of Y-axis combobox right
 		JButton switchregsy = new JButton(">");
 		switchregsy.addMouseListener(new MouseListener() {
 
@@ -396,7 +396,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 			}
 
 		});
-		//Extract Jfreechart as a jpg
+		// Extract Jfreechart as a jpg
 		JButton extractPic = new JButton("Extract chart");
 		extractPic.addMouseListener(new MouseListener() {
 
@@ -427,9 +427,9 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				try {
-					
+
 					saveFileAs();
-					
+
 				} catch (Exception e1) {
 
 					e1.printStackTrace();
@@ -438,7 +438,6 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 			}
 		});
 
-		
 		content.setBackground(Color.white);
 		content.setLayout(new FlowLayout());
 		content.add(chartpanel);
@@ -461,15 +460,14 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 		// TODO Auto-generated method stub
 
 	}
-	//----------------------------------------------------------------------------------------------
+
+	// ----------------------------------------------------------------------------------------------
 	public void saveFileAs() throws IOException {
 
 		File file;
-	
 
 		// Create a file chooser
 		final JFileChooser filechooser = new JFileChooser();
-	
 
 		// shows the dialog, return value specifies file
 		int returnVal = filechooser.showSaveDialog(this);
@@ -478,8 +476,8 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			file = filechooser.getSelectedFile();
 			try {
-				
-				saveToFile(chart, file.getAbsolutePath()+".png", 500, 300, 100);
+
+				saveToFile(chart, file.getAbsolutePath() + ".png", 500, 300, 100);
 			} catch (UnknownTypeException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -488,48 +486,43 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 
 		}
 	}
-	//----------------------------------------------------------------------------------------------
- public static void saveToFile(JFreeChart chart,String aFileName,int width,int height, double quality) throws FileNotFoundException, IOException
-	    {
-	            BufferedImage img = draw( chart, width, height );
-	            byte[] pngbytes;
-	   		 PngEncoder png = new PngEncoder(img);
-	   		
-	   		 
-	   		  try
-	   	        {
-	   	            FileOutputStream outfile = new FileOutputStream( aFileName );
-	   	            pngbytes = png.pngEncode();
-	   	            if (pngbytes == null)
-	   	            {
-	   	                System.out.println("Null image");
-	   	            }
-	   	            else
-	   	            {
-	   	                outfile.write( pngbytes );
-	   	            }
-	   	            outfile.flush();
-	   	            outfile.close();
-	   	        }
-	   	        catch (IOException e)
-	   	        {
-	   	            e.printStackTrace();
-	   	        }
 
-	    }
-//----------------------------------------------------------------------------------------------
-	    protected static BufferedImage draw(JFreeChart chart, int width, int height)
+	// ----------------------------------------------------------------------------------------------
+	public static void saveToFile(JFreeChart chart, String aFileName, int width, int height, double quality) throws FileNotFoundException,
+			IOException {
+		BufferedImage img = draw(chart, width, height);
+		byte[] pngbytes;
+		PngEncoder png = new PngEncoder(img);
 
-	    {
+		try {
+			FileOutputStream outfile = new FileOutputStream(aFileName);
+			pngbytes = png.pngEncode();
+			if (pngbytes == null) {
+				System.out.println("Null image");
+			} else {
+				outfile.write(pngbytes);
+			}
+			outfile.flush();
+			outfile.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
-	        BufferedImage img = new BufferedImage(width , height, BufferedImage.TYPE_INT_RGB);
-	        Graphics2D g2 = img.createGraphics();
+	}
 
-	        chart.draw(g2, new Rectangle2D.Double(0, 0, width, height));
-	        g2.dispose();
+	// ----------------------------------------------------------------------------------------------
+	protected static BufferedImage draw(JFreeChart chart, int width, int height)
 
-	        return img;
+	{
 
-	    }
+		BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+		Graphics2D g2 = img.createGraphics();
+
+		chart.draw(g2, new Rectangle2D.Double(0, 0, width, height));
+		g2.dispose();
+
+		return img;
+
+	}
 
 }

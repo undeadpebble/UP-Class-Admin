@@ -124,7 +124,7 @@ public class FrmTable extends JPanel {
 		}
 
 	}
-
+	
 	public FrmTable(String[] headers, LinkedList<LinkedList<SuperEntity>> data,
 			Project project) {
 		this.data = data;

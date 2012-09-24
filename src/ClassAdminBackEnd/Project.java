@@ -83,8 +83,13 @@ public class Project {
 		if (duplicate==false)
 		{
 		selectedIndexes.add(x);
+		
+		if(scatterIndexes !=null)
+		{
 		scatterArrayListIndexes.add(scatterIndexes[x]);
 		System.out.println(scatterIndexes[x]);
+		}
+		
 		System.out.println("Set selected index" + x);
 		}
 		
@@ -96,10 +101,12 @@ public class Project {
 	public void setScatterSelect(int [] x)
 	{
 			scatterIndexes =x;
+			
+	
 	}
-	public ArrayList getScatterIndexes()
+	public int[] getScatterIndexes()
 	{
-		return scatterArrayListIndexes;
+		return scatterIndexes;
 	}
 
 	public void updateTables(){
