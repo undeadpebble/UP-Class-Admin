@@ -12,6 +12,7 @@ import Frames.Frame;
 import prefuse.Display;
 import prefuse.Visualization;
 import prefuse.controls.ControlAdapter;
+import prefuse.data.Edge;
 import prefuse.data.Node;
 import prefuse.data.Table;
 import prefuse.data.Tree;
@@ -63,15 +64,38 @@ public class PopUpMenu {
 
 		miRemoveWC.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				activeTree.removeNode(activeItem.getRow());
-				activeTreeLinkedList.get(activeItem.getRow()).removeDeletingChildren();				
+				int i = activeItem.getRow();
+				activeTree.removeNode(i);
+				activeTreeLinkedList.get(i).removeDeletingChildren();
+				activeItem.getVisualization().repaint();
 			}
 		});
 
 		miRemoveWOC.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				activeTree.removeNode(activeItem.getRow());
-				activeTreeLinkedList.get(activeItem.getRow()).removeSavingChildren();
+				VisualItem item = activeItem;
+				int i = item.getRow();
+				int source = -1, target = -1;
+				Table edgeTable =  activeTree.getEdgeTable();
+				for(int r = 0; r <edgeTable.getRowCount(); r++)
+				{
+					if(edgeTable.getInt(r, 1) == i)
+					{
+						source = edgeTable.getInt(r, 0);
+					}
+				}
+				for(int r = 0; r <edgeTable.getRowCount(); r++)
+				{
+					if(edgeTable.getInt(r, 0) == i)
+					{
+						target =  edgeTable.getInt(r, 1);
+						activeTree.removeEdge(activeTree.getEdge(edgeTable.getInt(r, 0), edgeTable.getInt(r, 1)));
+						activeTree.addEdge(source, target);
+					}
+				}				
+				activeTree.removeNode(i);
+				activeTreeLinkedList.get(i).removeSavingChildren();
+				item.getVisualization().repaint();
 			}
 		});
 
@@ -87,7 +111,6 @@ public class PopUpMenu {
 					if (item.canGetString("name")) {
 						pMenu.show(e.getComponent(), e.getX(), e.getY());
 						activeItem = item;
-						System.out.println(item.getString("name"));
 					}
 				}
 			}

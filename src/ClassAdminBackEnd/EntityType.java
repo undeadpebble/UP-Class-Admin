@@ -294,7 +294,7 @@ public class EntityType {
 	
 	public void removeSavingChildren(){
 		for(int x = 0;x<this.getEntityList().size();++x){
-			for(int y = 0;y<this.getEntityList().get(x).getSubEntity().size();++x){
+			for(int y = 0;y<this.getEntityList().get(x).getSubEntity().size();++y){
 				this.getEntityList().get(x).getParentEntity().getSubEntity().add(this.getEntityList().get(x).getSubEntity().get(y));
 				this.getEntityList().get(x).getSubEntity().get(y).setParentEntity(this.getEntityList().get(x).getParentEntity());
 			}
