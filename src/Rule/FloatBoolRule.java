@@ -1,57 +1,58 @@
 package Rule;
 
+import ClassAdminBackEnd.EntityType;
+import ClassAdminBackEnd.Project;
+import ClassAdminBackEnd.SuperEntity;
 
-public class FloatBoolRule extends BooleanRule{
+public class FloatBoolRule extends BooleanRule {
 	FloatRule child1;
 	FloatRule child2;
-	
-	public FloatBoolRule(char opperator, FloatRule child1, FloatRule child2,  String name) {
-		super(name);
+
+	public FloatBoolRule(char opperator, FloatRule child1, FloatRule child2,
+			String name, Project project) {
+		super(name, project);
 		this.child1 = child1;
 		this.child2 = child2;
 		this.opperator = opperator;
+		this.setIsRule(true);
+		this.setIsTextField(true);
 	}
-	
+
 	@Override
-	public Boolean evaluateBool(){
+	public Boolean evaluateBool(SuperEntity sE) {
 		switch (opperator) {
 		case '<':
-			if(child1.evaluateDouble() < child2.evaluateDouble()){
+			if (child1.evaluateDouble(sE) < child2.evaluateDouble(sE)) {
 				value = true;
-			}
-			else{
+			} else {
 				value = false;
 			}
 			break;
 		case '>':
-			if(child1.evaluateDouble() > child2.evaluateDouble()){
+			if (child1.evaluateDouble(sE) > child2.evaluateDouble(sE)) {
 				value = true;
-			}
-			else{
+			} else {
 				value = false;
 			}
 			break;
 		case '=':
-			if(child1.evaluateDouble() == child2.evaluateDouble()){
+			if (child1.evaluateDouble(sE) == child2.evaluateDouble(sE)) {
 				value = true;
-			}
-			else{
+			} else {
 				value = false;
 			}
 			break;
 		case '1':
-			if(child1.evaluateDouble() <= child2.evaluateDouble()){
+			if (child1.evaluateDouble(sE) <= child2.evaluateDouble(sE)) {
 				value = true;
-			}
-			else{
+			} else {
 				value = false;
 			}
 			break;
 		case '2':
-			if(child1.evaluateDouble() >= child2.evaluateDouble()){
+			if (child1.evaluateDouble(sE) >= child2.evaluateDouble(sE)) {
 				value = true;
-			}
-			else{
+			} else {
 				value = false;
 			}
 			break;
@@ -62,10 +63,10 @@ public class FloatBoolRule extends BooleanRule{
 
 		return value;
 	}
-	
+
 	@Override
-	public int getType(){
+	public int getType() {
 		return 1;
 	}
-	
+
 }
