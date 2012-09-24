@@ -288,6 +288,8 @@ public class EntityType {
 			this.getParentEntitytype().getSubEntityType().remove(this);
 			this.getEntityList().clear();
 		}
+		this.getParentEntitytype().getSubEntityType().remove(this);
+		this.setParentEntitytype(null);
 	}
 	
 	public void removeSavingChildren(){
