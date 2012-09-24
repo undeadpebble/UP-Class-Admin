@@ -1,4 +1,4 @@
-package ClassAdminFrontEnd;
+package Frames;
 
 import java.awt.Color;
 import java.awt.EventQueue;

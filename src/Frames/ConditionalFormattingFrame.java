@@ -1,7 +1,8 @@
-package ClassAdminFrontEnd;
+package Frames;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -19,6 +20,8 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 
+import ClassAdminFrontEnd.BackgroundGradientPanel;
+
 public class ConditionalFormattingFrame extends JFrame {
 
 	private JPanel contentPane;
@@ -28,38 +31,31 @@ public class ConditionalFormattingFrame extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		
+
 		try {
-			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager
-					.getInstalledLookAndFeels()) {
+			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
 				if ("Nimbus".equals(info.getName())) {
 					javax.swing.UIManager.setLookAndFeel(info.getClassName());
 					UIManager.put("nimbusBase", new Color(0x7A7A7A));
-					UIManager.put("nimbusSelectionBackground", new Color(
-							0x171717));
+					UIManager.put("nimbusSelectionBackground", new Color(0x171717));
 					UIManager.put("nimbusFocus", new Color(0x00C6E0));
 					UIManager.put("Menu.background", new Color(0x2B2B2B));
 					UIManager.put("background", new Color(0x171717));
-					UIManager
-							.put("DesktopIcon.background", new Color(0x171717));
+					UIManager.put("DesktopIcon.background", new Color(0x171717));
 					UIManager.put("nimbusLightBackground", new Color(0xE3E3E3));
 
 					break;
 				}
 			}
 		} catch (ClassNotFoundException ex) {
-			java.util.logging.Logger.getLogger(Frame.class.getName()).log(
-					java.util.logging.Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(Frame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 		} catch (InstantiationException ex) {
-			java.util.logging.Logger.getLogger(Frame.class.getName()).log(
-					java.util.logging.Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(Frame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 		} catch (IllegalAccessException ex) {
-			java.util.logging.Logger.getLogger(Frame.class.getName()).log(
-					java.util.logging.Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(Frame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(Frame.class.getName()).log(
-					java.util.logging.Level.SEVERE, null, ex);
-		} 
+			java.util.logging.Logger.getLogger(Frame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+		}
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -76,15 +72,26 @@ public class ConditionalFormattingFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public ConditionalFormattingFrame() {
+
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 561, 755);
+		setBounds(100, 100, 561, 625);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(null);
 		setContentPane(contentPane);
-		
+
+		// Get the size of the screen
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		// Determine the new location of the window
+		int w = getSize().width;
+		int h = getSize().height;
+		int x = (dim.width - w) / 2;
+		int y = (dim.height - h) / 2;
+		// Move the window
+		setLocation(x, y);
+
 		this.setTitle("Conditional Formatting");
-		
+
 		Image icon = Toolkit.getDefaultToolkit().getImage("Logo.png");
 		this.setIconImage(icon);
 
@@ -92,66 +99,69 @@ public class ConditionalFormattingFrame extends JFrame {
 		backgroundPanel.setBounds(0, 0, getWidth(), getHeight());
 		contentPane.add(backgroundPanel);
 		backgroundPanel.setLayout(null);
-		
+
 		JComboBox cbxConditionalRuleType = new JComboBox();
-		cbxConditionalRuleType.setBounds(361, 74, 113, 26);
+		cbxConditionalRuleType.setBounds(361, 38, 113, 26);
 		backgroundPanel.add(cbxConditionalRuleType);
-		
+
 		JColorChooser colCombo = new JColorChooser();
 		colCombo.remove(colCombo.getComponent(1));
 		backgroundPanel.add(colCombo);
-		colCombo.setBounds(58,237,416,269);
+		colCombo.setBounds(58, 186, 416, 269);
 		/*
 		 * add combo box options
 		 */
-		SpinnerNumberModel SNMmin = new SpinnerNumberModel(new Integer(
-				0), // value
+		SpinnerNumberModel SNMmin = new SpinnerNumberModel(new Integer(0), // value
 				new Integer(0), // min
 				new Integer(100), // max
 				new Integer(1) // step
 		);
 		final JSpinner minVal = new JSpinner(SNMmin);
-		minVal.setBounds(361, 126, 113, 26);
+		minVal.setBounds(361, 75, 113, 26);
 		backgroundPanel.add(minVal);
-		
-		SpinnerNumberModel SNMmax = new SpinnerNumberModel(new Integer(
-				0), // value
+
+		SpinnerNumberModel SNMmax = new SpinnerNumberModel(new Integer(0), // value
 				new Integer(0), // min
 				new Integer(100), // max
 				new Integer(1) // step
 		);
 		JSpinner maxVal = new JSpinner(SNMmax);
-		maxVal.setBounds(361, 178, 113, 26);
+		maxVal.setBounds(361, 113, 113, 26);
 		backgroundPanel.add(maxVal);
-		
+
 		JComboBox whatToFormatCombo = new JComboBox();
-		whatToFormatCombo.setBounds(361, 550, 113, 26);
+		whatToFormatCombo.setBounds(361, 483, 113, 26);
 		backgroundPanel.add(whatToFormatCombo);
-		
+
 		JLabel lblConditionalRuleType = new JLabel("Conditional Rule Type");
-		lblConditionalRuleType.setBounds(58, 80, 134, 14);
+		lblConditionalRuleType.setBounds(58, 44, 134, 14);
 		lblConditionalRuleType.setForeground(new Color(0xEDEDED));
 		backgroundPanel.add(lblConditionalRuleType);
 
 		JLabel lblLowerValue = new JLabel("Lower Value");
-		lblLowerValue.setBounds(58, 132, 134, 14);
+		lblLowerValue.setBounds(58, 81, 134, 14);
 		lblLowerValue.setForeground(new Color(0xEDEDED));
 		backgroundPanel.add(lblLowerValue);
-		
-		JLabel lblUpperValue = new JLabel("Bottom Value");
-		lblUpperValue.setBounds(58, 184, 134, 14);
+
+		JLabel lblUpperValue = new JLabel("Upper Value");
+		lblUpperValue.setBounds(58, 119, 134, 14);
 		lblUpperValue.setForeground(new Color(0xEDEDED));
 		backgroundPanel.add(lblUpperValue);
-		
+
 		JLabel lblAffectedArea = new JLabel("Affected Area");
-		lblAffectedArea.setBounds(58, 556, 134, 14);
+		lblAffectedArea.setBounds(58, 483, 134, 14);
 		lblAffectedArea.setForeground(new Color(0xEDEDED));
 		backgroundPanel.add(lblAffectedArea);
-		
+
 		JButton btnAddFormatting = new JButton("Add Formatting");
-		btnAddFormatting.setBounds(361, 640, 113, 23);
+		btnAddFormatting.setBounds(361, 535, 113, 23);
 		backgroundPanel.add(btnAddFormatting);
 		
+		JLabel lblColour = new JLabel("Colour");
+		lblColour.setForeground(new Color(237, 237, 237));
+		lblColour.setBounds(58, 161, 134, 14);
+		backgroundPanel.add(lblColour);
+
 		// frame resize listener adjust components accordingly
 		this.addComponentListener(new ComponentListener() {
 

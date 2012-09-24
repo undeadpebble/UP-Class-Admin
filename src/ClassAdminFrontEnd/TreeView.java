@@ -71,6 +71,7 @@ import org.tmatesoft.sqljet.core.SqlJetException;
 import jxl.Sheet;
 
 import ClassAdminBackEnd.Global;
+import Frames.Frame;
 
 import prefuse.Constants;
 import prefuse.Display;
