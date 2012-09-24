@@ -9,7 +9,10 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
+
 import java.awt.Color;
+import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -21,6 +24,9 @@ import javax.swing.JButton;
 import ClassAdminBackEnd.EntityType;
 import ClassAdminBackEnd.Project;
 import ClassAdminBackEnd.SuperEntity;
+import ClassAdminFrontEnd.BackgroundGradientPanel;
+import Frames.FilterFrame;
+import Frames.Frame;
 
 import javax.swing.SpinnerNumberModel;
 import java.awt.Label;
@@ -28,6 +34,7 @@ import java.awt.Label;
 public class frmRule extends JFrame {
 
 	private JPanel contentPane;
+	private BackgroundGradientPanel backgroundPanel;
 	private Project project;
 	private LinkedList<Rule> ruleList;
 	private LinkedList<Rule> floatBoolRuleList;
@@ -73,6 +80,7 @@ public class frmRule extends JFrame {
 	private Label lblRule2 = new Label("->");
 	private Label lblEntityType2 = new Label("->");
 
+	
 	/**
 	 * Create the frame.
 	 */
@@ -89,6 +97,13 @@ public class frmRule extends JFrame {
 		lblRule2.setVisible(false);
 		lblText1.setVisible(false);
 		lblText2.setVisible(false);
+		
+		lblText1.setForeground(new Color(0xEDEDED));
+		lblRule1.setForeground(new Color(0xEDEDED));
+		lblEntityType1.setForeground(new Color(0xEDEDED));
+		lblText2.setForeground(new Color(0xEDEDED));
+		lblRule2.setForeground(new Color(0xEDEDED));
+		lblEntityType2.setForeground(new Color(0xEDEDED));
 
 		heads = project.getHead().getHeadersLinkedList();
 
@@ -98,7 +113,7 @@ public class frmRule extends JFrame {
 		cbxRuleChooser.setBounds(10, 11, 165, 20);
 		cbxFloat1.setBounds(68, 159, 180, 20);
 		cbxFloat2.setBounds(433, 159, 180, 20);
-		btnAddFloatRule.setBounds(68, 248, 497, 66);
+		btnAddFloatRule.setBounds(237, 280, 219, 34);
 		txtName.setBounds(68, 42, 292, 20);
 		spinFloat1.setBounds(68, 105, 180, 20);
 		spinFloat2.setBounds(433, 105, 180, 20);
@@ -109,71 +124,76 @@ public class frmRule extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		reactivateFloat();
+		
+		backgroundPanel = new BackgroundGradientPanel(contentPane);
+		backgroundPanel.setBounds(0, 0, getWidth(), getHeight());
+		contentPane.add(backgroundPanel);
+		backgroundPanel.setLayout(null);
 
-		contentPane.add(cbxRuleChooser);
-		contentPane.add(cbxOpperator);
-		contentPane.add(cbxFloat1);
-		contentPane.add(cbxFloat2);
-		contentPane.add(btnAddFloatRule);
-		contentPane.add(txtName);
-		contentPane.add(spinFloat1);
-		contentPane.add(spinFloat2);
+		backgroundPanel.add(cbxRuleChooser);
+		backgroundPanel.add(cbxOpperator);
+		backgroundPanel.add(cbxFloat1);
+		backgroundPanel.add(cbxFloat2);
+		backgroundPanel.add(btnAddFloatRule);
+		backgroundPanel.add(txtName);
+		backgroundPanel.add(spinFloat1);
+		backgroundPanel.add(spinFloat2);
 
-		btnAddFloatBool.setBounds(68, 248, 497, 66);
+		btnAddFloatBool.setBounds(237, 280, 219, 34);
 
-		contentPane.add(btnAddFloatBool);
+		backgroundPanel.add(btnAddFloatBool);
 
-		contentPane.add(txtStr1);
+		backgroundPanel.add(txtStr1);
 
-		contentPane.add(txtStr2);
-		btnAddStrBool.setBounds(68, 248, 497, 66);
-		contentPane.add(btnAddStrBool);
+		backgroundPanel.add(txtStr2);
+		btnAddStrBool.setBounds(260, 280, 198, 34);
+		backgroundPanel.add(btnAddStrBool);
 		cbxStringComp.setBounds(260, 106, 113, 20);
 
-		contentPane.add(cbxStringComp);
-		btnAddStringRule.setBounds(68, 248, 497, 66);
+		backgroundPanel.add(cbxStringComp);
+		btnAddStringRule.setBounds(237, 280, 225, 34);
 
-		contentPane.add(btnAddStringRule);
+		backgroundPanel.add(btnAddStringRule);
 
 		cbxRuleChooser.setModel(new DefaultComboBoxModel(new String[] {
 				"Float Rule", "String Rule", "Float Boolean Rule",
 				"String Boolean Rule" }));
 
 		cbxReference1.setBounds(68, 202, 180, 20);
-		contentPane.add(cbxReference1);
+		backgroundPanel.add(cbxReference1);
 
 		cbxReference2.setBounds(433, 202, 180, 20);
-		contentPane.add(cbxReference2);
+		backgroundPanel.add(cbxReference2);
 
 		lblText1.setBackground(Color.ORANGE);
 		lblText1.setForeground(Color.BLACK);
 		lblText1.setBounds(38, 103, 24, 22);
-		contentPane.add(lblText1);
+		backgroundPanel.add(lblText1);
 
 		lblRule1.setBackground(Color.ORANGE);
 		lblRule1.setForeground(Color.BLACK);
 		lblRule1.setBounds(38, 157, 24, 22);
-		contentPane.add(lblRule1);
+		backgroundPanel.add(lblRule1);
 
 		lblEntityType1.setBackground(Color.ORANGE);
 		lblEntityType1.setForeground(Color.BLACK);
 		lblEntityType1.setBounds(38, 200, 24, 22);
-		contentPane.add(lblEntityType1);
+		backgroundPanel.add(lblEntityType1);
 
 		lblText2.setBackground(Color.ORANGE);
 		lblText2.setForeground(Color.BLACK);
 		lblText2.setBounds(403, 103, 24, 22);
-		contentPane.add(lblText2);
+		backgroundPanel.add(lblText2);
 
 		lblRule2.setBackground(Color.ORANGE);
 		lblRule2.setForeground(Color.BLACK);
 		lblRule2.setBounds(403, 157, 24, 22);
-		contentPane.add(lblRule2);
+		backgroundPanel.add(lblRule2);
 
 		lblEntityType2.setBackground(Color.ORANGE);
 		lblEntityType2.setForeground(Color.BLACK);
 		lblEntityType2.setBounds(403, 200, 24, 22);
-		contentPane.add(lblEntityType2);
+		backgroundPanel.add(lblEntityType2);
 
 		cbxFloat1.addActionListener(new ActionListener() {
 			@Override
