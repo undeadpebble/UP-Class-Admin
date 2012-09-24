@@ -9,10 +9,8 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
-import javax.swing.UIManager;
 
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -25,8 +23,6 @@ import ClassAdminBackEnd.EntityType;
 import ClassAdminBackEnd.Project;
 import ClassAdminBackEnd.SuperEntity;
 import ClassAdminFrontEnd.BackgroundGradientPanel;
-import Frames.FilterFrame;
-import Frames.Frame;
 
 import javax.swing.SpinnerNumberModel;
 import java.awt.Label;

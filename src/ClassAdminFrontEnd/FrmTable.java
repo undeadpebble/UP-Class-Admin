@@ -72,6 +72,10 @@ public class FrmTable extends JPanel {
 		this.data = project.getHead().getDataLinkedList();
 		this.headers = project.getHead().getHeaders();
 		
+		for(int x = 0; x < project.getHead().getHeaders().length;x++){
+			System.out.println(project.getHead().getHeaders()[x]);
+		}
+		
 		tableModel.setColumnCount(0);
 		tableModel.setRowCount(0);
 		
@@ -169,6 +173,24 @@ public class FrmTable extends JPanel {
 	}
 
 	private void createGUI() {
+		//------------------------------------------------------------------------------------------------------------
+		
+		addCounters(project.getHead(), project.getHead());
+		
+		
+		
+		JButton tempss = new JButton("temp");
+		tempss.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				for(int x = 0; x < data.get(0).size();x++){
+					System.out.println(data.get(0).get(x).getType().getName() + data.get(0).get(x).getRowFollowCount());
+				}
+			}
+		});
+		
 		// -------------------------------------------------------------------------------------------------------
 				// create the filters array with everything false
 				for (int x = 0; x < data.size(); x++) {
@@ -369,7 +391,6 @@ public class FrmTable extends JPanel {
 
 					return comp;
 				} catch (Exception e) {
-					// TODO: handle exception
 					return null;
 				}
 
@@ -411,7 +432,6 @@ public class FrmTable extends JPanel {
 
 					table.setToolTipText(toolTip);
 				} catch (Exception ex) {
-					// TODO: handle exception
 				}
 			}// end MouseMoved
 		}); // end MouseMotionAdapter
@@ -473,7 +493,6 @@ public class FrmTable extends JPanel {
 			@Override
 			public void keyReleased(KeyEvent arg0) {
 
-				// TODO Auto-generated method stub
 				boolean temp = false;
 				if (searchTxt.getText().compareTo("") != 0) {
 					project.getSelected().clear();
@@ -1074,6 +1093,7 @@ public class FrmTable extends JPanel {
 			}
 		});
 
+		
 		JButton removeAllFilters = new JButton("Remove All Filters");
 
 		removeAllFilters.addActionListener(new ActionListener() {
@@ -1111,6 +1131,8 @@ public class FrmTable extends JPanel {
 		Filter.add(cbFilter);
 		Filter.add(removeAllFilters);
 		eastPanel.add(Filter);
+		
+		//this.add(tempss);
 
 	}
 
@@ -1159,4 +1181,23 @@ public class FrmTable extends JPanel {
 	public LinkedList<LinkedList<SuperEntity>> getData() {
 		return data;
 	}
+	
+    public void addCounters(SuperEntity ent, SuperEntity head){
+    	ent.increaseRowFollowCount();
+    	
+    	SuperEntity temp = ent;
+    	
+    	while(temp != head){
+    		temp = temp.getParentEntity();
+    		temp.increaseRowFollowCount();
+    	}
+    	
+    	LinkedList<SuperEntity> temp2 = ent.getSubEntity();
+    	
+    	for(int x = 0; x < temp2.size();x++){
+    		addCounters(temp2.get(x), head);
+    	}
+    	
+    	
+    }
 }
