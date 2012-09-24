@@ -74,6 +74,10 @@ public class FrmTable extends JPanel {
 		this.data = project.getHead().getDataLinkedList();
 		this.headers = project.getHead().getHeaders();
 
+		for(int x = 0; x < project.getHead().getHeaders().length;x++){
+			System.out.println(project.getHead().getHeaders()[x]);
+		}
+		
 		tableModel.setColumnCount(0);
 		tableModel.setRowCount(0);
 
@@ -168,6 +172,8 @@ public class FrmTable extends JPanel {
 			}
 		});
 
+		});
+		
 		// -------------------------------------------------------------------------------------------------------
 		// create the filters array with everything false
 		for (int x = 0; x < data.size(); x++) {
@@ -1101,6 +1107,7 @@ public class FrmTable extends JPanel {
 			}
 		});
 
+		
 		JButton removeAllFilters = new JButton("Remove All Filters");
 
 		removeAllFilters.addActionListener(new ActionListener() {
@@ -1138,8 +1145,9 @@ public class FrmTable extends JPanel {
 		Filter.add(cbFilter);
 		Filter.add(removeAllFilters);
 		eastPanel.add(Filter);
-
+		
 		// this.add(tempss);
+
 
 	}
 
@@ -1232,4 +1240,23 @@ public class FrmTable extends JPanel {
 
 		return;
 	}
+	
+    public void addCounters(SuperEntity ent, SuperEntity head){
+    	ent.increaseRowFollowCount();
+    	
+    	SuperEntity temp = ent;
+    	
+    	while(temp != head){
+    		temp = temp.getParentEntity();
+    		temp.increaseRowFollowCount();
+    	}
+    	
+    	LinkedList<SuperEntity> temp2 = ent.getSubEntity();
+    	
+    	for(int x = 0; x < temp2.size();x++){
+    		addCounters(temp2.get(x), head);
+    	}
+    	
+    	
+    }
 }
