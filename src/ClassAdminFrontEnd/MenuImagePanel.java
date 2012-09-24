@@ -23,7 +23,7 @@ public class MenuImagePanel extends JXPanel implements MouseListener {
 	private BufferedImage highlightimage;
 	private Boolean entered = false;
 
-	MenuImagePanel(BufferedImage _image) {
+	public MenuImagePanel(BufferedImage _image) {
 		image = _image;
 		setOpaque(false);
 		installUI(this);

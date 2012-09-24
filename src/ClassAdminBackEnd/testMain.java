@@ -29,17 +29,20 @@ import javax.xml.crypto.dsig.spec.XSLTTransformParameterSpec;
 
 import org.tmatesoft.sqljet.core.SqlJetException;
 
-import ClassAdminFrontEnd.Frame;
 
 import ClassAdminFrontEnd.EntityTypePanel;
 import ClassAdminFrontEnd.FrmTable;
 import ClassAdminFrontEnd.RapidAssessmentCanvas;
 import ClassAdminFrontEnd.TreeView;
+<<<<<<< HEAD
+import Frames.Frame;
+=======
 
 import Rule.frmRule;
 
 import ClassAdminFrontEnd.RapidAssessmentCanvas.MyMarkPoint;
 
+>>>>>>> refs/remotes/origin/dev
 
 import jxl.*;
 public class testMain
