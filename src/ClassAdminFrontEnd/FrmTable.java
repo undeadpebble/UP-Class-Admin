@@ -67,7 +67,34 @@ public class FrmTable extends JPanel {
 		this.data = project.getHead().getDataLinkedList();
 		this.headers = project.getHead().getHeaders();
 		
-		this.createGUI();
+		tableModel.setColumnCount(0);
+		tableModel.setRowCount(0);
+		
+		for (int x = 0; x < data.size(); x++) {
+			LinkedList<Boolean> temp = new LinkedList<Boolean>();
+			for (int y = 0; y < data.get(0).size(); y++) {
+				temp.add(false);
+			}
+			filters.add(temp);
+		}
+
+		dataFilter = new Boolean[data.size()];
+		for (int x = 0; x < dataFilter.length; x++)
+			dataFilter[x] = true;
+		
+		for(int x = 0; x < headers.length;x++){
+			tableModel.addColumn(headers[x]);
+		}
+		
+		Object[] temp = new Object[data.get(0).size()];
+
+		for(int x = 0; x <data.size();x++){
+			for (int y = 0; y < data.get(0).size(); y++) {
+				temp[y] = data.get(x).get(y).getValue();
+			}
+			tableModel.addRow(temp);
+		}
+		
 	}
 	
 	public SuperEntity[] getFirstSelectedStudent() {

@@ -1,6 +1,7 @@
-/*package ClassAdminBackEnd;
+package ClassAdminBackEnd;
 
 import java.awt.Color;
+import java.awt.FlowLayout;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,6 +19,7 @@ import java.util.logging.FileHandler;
 
 import javax.imageio.ImageIO;
 
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -56,37 +58,23 @@ public class testMain
 			temp.setVisible(true);
 			temp.setSize(1300, 600);
 			
-			FrmTable test = new FrmTable(Global.getGlobal().getActiveProject().getHead().getHeaders(), Global.getGlobal().getActiveProject().getHead().getDataLinkedList(), Global.getGlobal().getActiveProject());
+			final FrmTable test = new FrmTable(Global.getGlobal().getActiveProject().getHead().getHeaders(), Global.getGlobal().getActiveProject().getHead().getDataLinkedList(), Global.getGlobal().getActiveProject());
 			
 			
 
-			//temp.add(test);
-
-			EventQueue.invokeLater(new Runnable() {
-				public void run() {
-					try {
-						
-						BufferedImage background = ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/sheep.jpg"));
-						JFrame frame = new RapidAssessmentCanvas(background, new SuperEntity(new EntityType("test1"), 1.0));
-						
-						frame.setVisible(true);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			});
-
+			temp.setLayout(new FlowLayout());
 			JButton adder = new JButton("Add");
-			
+			temp.add(test);
 			temp.add(adder);
 			
 			adder.addActionListener(new ActionListener() {
-				
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					// TODO Auto-generated method stub
+					// TODO Auto-generated method stub\
+					test.redraw();
 					frmRule rule = new frmRule(Global.getGlobal().getActiveProject());
 					rule.setVisible(true);
+					
 				}
 			});
 
@@ -98,4 +86,4 @@ public class testMain
 	}
 
 }
-*/
+
