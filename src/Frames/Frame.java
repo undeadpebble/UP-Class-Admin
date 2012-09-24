@@ -8,6 +8,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -452,6 +453,21 @@ public class Frame extends JFrame {
 					e.printStackTrace();
 				}
 			}
+		});
+		
+		homeRapidAssessment.addMouseListener(new MouseAdapter() {
+			
+		
+			
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				if(!homeRapidAssessment.isDisabled()){
+					
+				}
+				
+			}
+			
+			
 		});
 
 		// setup panel to contain recent documents buttons
