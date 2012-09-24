@@ -1,41 +1,25 @@
 package ClassAdminFrontEnd;
 
-import java.security.acl.Group;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import ClassAdminBackEnd.*;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.Label;
-import java.awt.Point;
+import java.awt.PopupMenu;
 import java.awt.dnd.DragSource;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-import javax.jws.Oneway;
-import javax.naming.PartialResultException;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -49,29 +33,15 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
-import javax.swing.SpinnerListModel;
-import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.TransferHandler;
-import javax.swing.border.MatteBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.text.BadLocationException;
-import javax.swing.tree.TreeNode;
 
 import org.tmatesoft.sqljet.core.SqlJetException;
-
-import jxl.Sheet;
-
-import ClassAdminBackEnd.Global;
-import Frames.Frame;
 
 import prefuse.Constants;
 import prefuse.Display;
@@ -96,32 +66,29 @@ import prefuse.controls.PanControl;
 import prefuse.controls.WheelZoomControl;
 import prefuse.controls.ZoomControl;
 import prefuse.controls.ZoomToFitControl;
-import prefuse.data.Graph;
 import prefuse.data.Node;
 import prefuse.data.Table;
 import prefuse.data.Tree;
 import prefuse.data.Tuple;
-import prefuse.data.column.Column;
 import prefuse.data.event.TupleSetListener;
-import prefuse.data.io.CSVTableReader;
-import prefuse.data.io.DataIOException;
 import prefuse.data.io.TreeMLReader;
 import prefuse.data.search.PrefixSearchTupleSet;
 import prefuse.data.tuple.TupleSet;
+import prefuse.render.AbstractShapeRenderer;
 import prefuse.render.DefaultRendererFactory;
 import prefuse.render.EdgeRenderer;
-import prefuse.render.AbstractShapeRenderer;
 import prefuse.render.LabelRenderer;
 import prefuse.util.ColorLib;
 import prefuse.util.FontLib;
 import prefuse.util.PrefuseLib;
-import prefuse.util.ui.BrowserLauncher;
 import prefuse.util.ui.JFastLabel;
-import prefuse.util.ui.JSearchPanel;
 import prefuse.visual.VisualItem;
 import prefuse.visual.expression.InGroupPredicate;
 import prefuse.visual.sort.TreeDepthItemSorter;
-import sun.tools.jar.resources.jar_pt_BR;
+import ClassAdminBackEnd.EntityType;
+import ClassAdminBackEnd.Project;
+import ClassAdminBackEnd.SuperEntity;
+import Frames.Frame;
 
 public class TreeView extends Display {
 
@@ -334,7 +301,6 @@ public class TreeView extends Display {
 				myProject.getHeadEntityType());
 
 		JFrame frame = new JFrame();
-		PopUpMenu p = new PopUpMenu(frame);
 		frame.setContentPane(treeview);
 		frame.pack();
 		frame.setVisible(true);
@@ -392,6 +358,8 @@ public class TreeView extends Display {
 
 		// create a new treemap
 		final TreeView tview = new TreeView(t, label);
+        PopUpMenu p = new PopUpMenu();
+        p.setTreeView(tview,myTree);
 		tview.setBackground(BACKGROUND);
 		tview.setForeground(FOREGROUND);
 
@@ -515,6 +483,7 @@ public class TreeView extends Display {
 
 		// create a new treemap
 		final TreeView tview = new TreeView(t, label);
+		
 		tview.setBackground(BACKGROUND);
 		tview.setForeground(FOREGROUND);
 
@@ -691,11 +660,13 @@ public class TreeView extends Display {
 													// and child
 
 					// add child to parent in back end
-					myProject.getTreeLinkedList().add(
-							new EntityType(txtName.getText(), myProject
-									.getTreeLinkedList().get(
-											cmbParent.getSelectedIndex()),
-									isText, d, (Double) txtWeight.getValue()));
+					EntityType newE = new EntityType(txtName.getText(), myProject
+							.getTreeLinkedList().get(
+									cmbParent.getSelectedIndex()),
+							isText, d, (Double) txtWeight.getValue());
+
+					myProject.getTreeLinkedList().add(newE);
+					newE.populateTreeWithEntities();
 
 					// refresh cmbParent content
 					cmbParent.removeAllItems();
@@ -858,18 +829,6 @@ public class TreeView extends Display {
 			title.setText("");
 		}
 
-		/*
-		 * public void itemPressed(VisualItem item, MouseEvent e) { if
-		 * (!SwingUtilities.isLeftMouseButton(e)) return;
-		 * 
-		 * // set the focus to the current node Visualization vis =
-		 * item.getVisualization();
-		 * vis.getFocusGroup(Visualization.FOCUS_ITEMS).setTuple(item);
-		 * item.setFixed(true); dragged = false; Display d = (Display)
-		 * e.getComponent(); down = d.getAbsoluteCoordinate(e.getPoint(), down);
-		 * vis.run("forces"); }
-		 */
-
 		public void itemReleased(VisualItem item, MouseEvent e) {
 			if (!SwingUtilities.isLeftMouseButton(e))
 				return;
@@ -1001,7 +960,7 @@ public class TreeView extends Display {
 			PrefuseLib.setY(item, null, item.getY() + dy);
 			down.setLocation(tmp);
 			item.getVisualization().repaint();
-		}
+		}//itemDragged
 	}
 
 } // end of class TreeMap
