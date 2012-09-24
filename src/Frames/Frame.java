@@ -66,6 +66,7 @@ import ClassAdminFrontEnd.ScatterPlotFrame;
 import ClassAdminFrontEnd.ShadowPanel;
 import ClassAdminFrontEnd.ThreeStopGradientPanel;
 import ClassAdminFrontEnd.TreeView;
+import Rule.frmRule;
 
 public class Frame extends JFrame {
 
@@ -972,7 +973,8 @@ public class Frame extends JFrame {
 		rulesButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-
+				frmRule rules = new frmRule(Global.getGlobal().getActiveProject());
+				rules.setVisible(true);
 			}
 
 			public void mouseEntered(MouseEvent arg0) {
