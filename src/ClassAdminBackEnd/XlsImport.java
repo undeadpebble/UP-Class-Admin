@@ -23,7 +23,9 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import ClassAdminFrontEnd.Frame;
+import org.tmatesoft.sqljet.core.SqlJetException;
+
+import Frames.Frame;
 
 import jxl.Cell;
 import jxl.CellType;
@@ -133,11 +135,19 @@ public class XlsImport extends FileImport {
 	public ArrayList recordData() {
 		
 		arr = null;
-		createImport();
+		try {
+			createImport();
+		} catch (SqlJetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return arr;
 	}
 
-	public void createImport() {
+	public void createImport() throws SqlJetException, IOException {
 
 					
 					frame = new JDialog(new Frame(),true);

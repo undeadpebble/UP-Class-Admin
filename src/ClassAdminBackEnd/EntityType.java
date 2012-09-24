@@ -101,6 +101,8 @@ public class EntityType {
 			Boolean isTextField, Date date, Double defaultWeight) {
 		this.name = name;
 		this.parentEntitytype = parentEntitytype;
+		if(parentEntitytype != null)
+		parentEntitytype.getSubEntityType().add(this);
 		this.isTextField = isTextField;
 		this.date = date;
 		this.defaultWeight = defaultWeight;
@@ -237,15 +239,38 @@ public class EntityType {
 
 		}
 	}
+
+	public String createTreeFromHead(LinkedList<EntityType> treeLinkedList)
+	{
+		treeLinkedList.add(this);
+		if(this.getSubEntityType().size()>0){
+			String str = "";
+			str += "<branch>" +
+					"<attribute name = \"name\" value= \"" + this.getName() + "\" />";
+			for (int i = 0; i < this.getSubEntityType().size(); i++)
+			{
+				str += this.getSubEntityType().get(i).createTreeFromHead(treeLinkedList);
+			}
+			str +="</branch>";
+			return str;
+		} else{
+			String str = "";
+			str += "<leaf>" +
+					"<attribute name = \"name\" value= \"" + this.getName() + "\" />";
+			str +="</leaf>";
+			return str;
+		}
+	}
 	
 	public void populateTreeWithEntities(){
 		for(int x = 0;x<this.getParentEntitytype().getEntityList().size();++x){
 			SuperEntity parent = this.getParentEntitytype().getEntityList().get(x);
 			if(this.getIsRule()){
 				if(this.getIsTextField()){
+					new StringRuleEntity(this, parent, "");
 					
 				} else{
-					
+					new floatRuleEntity(this, parent);
 				}
 			} else {
 				if(this.getIsTextField()){
@@ -257,7 +282,6 @@ public class EntityType {
 			
 		}
 	}
-	
 	public void removeDeletingChildren(){
 		for(int x = 0;x<this.getEntityList().size();++x){
 			this.getEntityList().get(x).getParentEntity().getSubEntity().remove(this.getEntityList().get(x));
@@ -279,5 +303,5 @@ public class EntityType {
 		}
 		removeDeletingChildren();
 	}
-	
+
 }

@@ -5,11 +5,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.LinkedList;
 
+import javax.lang.model.type.UnknownTypeException;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -19,36 +27,55 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
+import com.sun.image.codec.jpeg.JPEGCodec;
+import com.sun.image.codec.jpeg.JPEGEncodeParam;
+import com.sun.image.codec.jpeg.JPEGImageEncoder;
+
 import ClassAdminBackEnd.EntityType;
 import ClassAdminBackEnd.Global;
+import ClassAdminBackEnd.Project;
 import ClassAdminBackEnd.SuperEntity;
 
 public class ScatterPlotFrame extends JFrame implements ActionListener {
 	static ChartPanel chartpanel;
 	static JFreeChart chart;
-	int houerx = 0;
-	int houery = 0;
-
-	public ScatterPlotFrame() {
+	private int houerx = 0;
+	private int houery = 0;
+	private ScatterPlot nuweChart;
+	private Project project;
+	
+	// -------------------------------------------------------------------------------------------------------
+	public void update()
+	{
+		
+	
+		nuweChart.updateSelectedvalues();
+	}
+	//----------------------------------------------------------------------------------------------
+	public ScatterPlotFrame(Project project) {
 		JFrame f = new JFrame("ScatterPlot");
+		this.project = project;
 		final Container content = f.getContentPane();
 		f.setSize(550, 500);
-		final LinkedList<LinkedList<SuperEntity>> diedata = Global.getGlobal()
-				.getActiveProject().getHead().getDataLinkedList();
-		final XYSeriesCollection dataset = new XYSeriesCollection();
-		final String[] headers = Global.getGlobal().getActiveProject()
-				.getHead().getHeaders();
-		final ScatterPlot nuweChart = new ScatterPlot();
+		final LinkedList<LinkedList<SuperEntity>> diedata = project.getHead().getDataLinkedList();
+		//final LinkedList<LinkedList<SuperEntity>> diedata = Global.getGlobal().getActiveProject().getHead().getDataLinkedList();
 		
-		String[] kolom = Global.getGlobal().getActiveProject().getHead()
-				.getNumberHeaders();
+		final XYSeriesCollection dataset = new XYSeriesCollection();
+		final String[] headers = project.getHead().getHeaders();
+		//final String[] headers = Global.getGlobal().getActiveProject().getHead().getHeaders();
+		nuweChart = new ScatterPlot(project);
+		
+		
+		String[] kolom = project.getHead().getNumberHeaders();
+		//String[] kolom = Global.getGlobal().getActiveProject().getHead().getNumberHeaders();
+		
 		String xas = kolom[0];
 		String yas = kolom[1];
 
 		for (int s = 0; s < headers.length; s++) {
 			if (headers[s].equals(kolom[0])) {
 				houerx = s;
-				System.out.println(headers[s]);
+				
 			}
 
 		}
@@ -56,7 +83,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 		for (int s = 0; s < headers.length; s++) {
 			if (headers[s].equals(kolom[1])) {
 				houery = s;
-				System.out.println(headers[s]);
+				
 			}
 
 		}
@@ -90,7 +117,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 				for (int s = 0; s < headers.length; s++) {
 					if (headers[s].equals(cb.getSelectedItem().toString())) {
 						houerx = s;
-						System.out.println(headers[s]);
+						
 					}
 
 				}
@@ -327,7 +354,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 
 		});
 
-		JButton extractPic = new JButton("Extract");
+		JButton extractPic = new JButton("Extract chart as jpg");
 		extractPic.addMouseListener(new MouseListener() {
 
 			@Override
@@ -357,8 +384,9 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				try {
-
-					// nuweChart.saveToFile(chart,"test.jpg",500,300,100);
+					
+					saveFileAs();
+					
 				} catch (Exception e1) {
 
 					e1.printStackTrace();
@@ -366,6 +394,8 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 				}
 			}
 		});
+
+		
 		content.setBackground(Color.white);
 		content.setLayout(new FlowLayout());
 		content.add(chartpanel);
@@ -388,5 +418,63 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 		// TODO Auto-generated method stub
 
 	}
+	//----------------------------------------------------------------------------------------------
+	public void saveFileAs() throws IOException {
+
+		File file;
+	
+
+		// Create a file chooser
+		final JFileChooser filechooser = new JFileChooser();
+	
+
+		// shows the dialog, return value specifies file
+		int returnVal = filechooser.showSaveDialog(this);
+
+		// if the chosen file is valid
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			file = filechooser.getSelectedFile();
+			try {
+				
+				saveToFile(chart, file.getAbsolutePath()+".jpg", 500, 300, 100);
+			} catch (UnknownTypeException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
+
+		}
+	}
+	//----------------------------------------------------------------------------------------------
+ public static void saveToFile(JFreeChart chart,String aFileName,int width,int height, double quality) throws FileNotFoundException, IOException
+	    {
+	            BufferedImage img = draw( chart, width, height );
+	            FileOutputStream fos = new FileOutputStream(aFileName);
+
+	            JPEGImageEncoder encoder2 = JPEGCodec.createJPEGEncoder(fos);
+
+	            JPEGEncodeParam param2 = encoder2.getDefaultJPEGEncodeParam(img);
+
+	            param2.setQuality((float) quality, true);
+
+	            encoder2.encode(img,param2);
+
+	            fos.close();
+
+	    }
+//----------------------------------------------------------------------------------------------
+	    protected static BufferedImage draw(JFreeChart chart, int width, int height)
+
+	    {
+
+	        BufferedImage img = new BufferedImage(width , height, BufferedImage.TYPE_INT_RGB);
+	        Graphics2D g2 = img.createGraphics();
+
+	        chart.draw(g2, new Rectangle2D.Double(0, 0, width, height));
+	        g2.dispose();
+
+	        return img;
+
+	    }
 
 }
