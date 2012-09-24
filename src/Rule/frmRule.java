@@ -109,7 +109,7 @@ public class frmRule extends JFrame {
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 671, 440);
-		cbxOpperator.setBounds(302, 105, 36, 20);
+		cbxOpperator.setBounds(302, 105, 58, 20);
 		cbxRuleChooser.setBounds(10, 11, 165, 20);
 		cbxFloat1.setBounds(68, 159, 180, 20);
 		cbxFloat2.setBounds(433, 159, 180, 20);

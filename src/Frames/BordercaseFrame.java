@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
@@ -16,7 +18,10 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
+import ClassAdminBackEnd.BorderCase;
 import ClassAdminFrontEnd.BackgroundGradientPanel;
+import ClassAdminFrontEnd.FrmTable;
+
 import javax.swing.JButton;
 
 public class BordercaseFrame extends JFrame {
@@ -56,8 +61,8 @@ public class BordercaseFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ConditionalFormattingFrame frame = new ConditionalFormattingFrame();
-					frame.setVisible(true);
+					/*ConditionalFormattingFrame frame = new ConditionalFormattingFrame();
+					frame.setVisible(true);*/
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -66,8 +71,8 @@ public class BordercaseFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					BordercaseFrame frame = new BordercaseFrame();
-					frame.setVisible(true);
+					/*BordercaseFrame frame = new BordercaseFrame();
+					frame.setVisible(true);*/
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -78,7 +83,7 @@ public class BordercaseFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public BordercaseFrame() {
+	public BordercaseFrame(final FrmTable table) {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 502, 285);
 		contentPane = new JPanel();
@@ -166,6 +171,24 @@ public class BordercaseFrame extends JFrame {
 
 			}
 
+		});
+		
+		btnAddBordercase.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				table.headersList
+						.get(table.headPoints.get(table.cbheaders
+								.getSelectedIndex()))
+						.getType()
+						.getBorderCasing()
+						.add(new BorderCase(Double
+								.parseDouble(minVal.getValue()
+										.toString()), Double
+								.parseDouble(maxVal.getValue()
+										.toString())));
+
+				table.repaint();
+			}
 		});
 	}
 }
