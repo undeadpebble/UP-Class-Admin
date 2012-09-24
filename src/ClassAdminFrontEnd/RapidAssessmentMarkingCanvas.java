@@ -10,10 +10,11 @@ import javax.swing.JPanel;
 
 import org.imgscalr.Scalr;
 
-import ClassAdminFrontEnd.RapidAssessmentTree.TreeContainerNode;
-import ClassAdminFrontEnd.RapidAssessmentTree.TreeMarkNode;
-import ClassAdminFrontEnd.RapidAssessmentTree.TreeNode;
-import ClassAdminFrontEnd.RapidAssessmentTree.TreeRectangleNode;
+import ClassAdminBackEnd.RapidAssessmentTree;
+import ClassAdminBackEnd.RapidAssessmentTree.TreeContainerNode;
+import ClassAdminBackEnd.RapidAssessmentTree.TreeMarkNode;
+import ClassAdminBackEnd.RapidAssessmentTree.TreeNode;
+import ClassAdminBackEnd.RapidAssessmentTree.TreeRectangleNode;
 
 public class RapidAssessmentMarkingCanvas extends JFrame{
 	private String backgroundFileName;

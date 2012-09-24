@@ -34,11 +34,12 @@ import org.imgscalr.Scalr;
 
 import com.jhlabs.vecmath.Color4f;
 
+import ClassAdminBackEnd.RapidAssessmentTree;
 import ClassAdminBackEnd.SuperEntity;
-import ClassAdminFrontEnd.RapidAssessmentTree.TreeContainerNode;
-import ClassAdminFrontEnd.RapidAssessmentTree.TreeMarkNode;
-import ClassAdminFrontEnd.RapidAssessmentTree.TreeNode;
-import ClassAdminFrontEnd.RapidAssessmentTree.TreeRectangleNode;
+import ClassAdminBackEnd.RapidAssessmentTree.TreeContainerNode;
+import ClassAdminBackEnd.RapidAssessmentTree.TreeMarkNode;
+import ClassAdminBackEnd.RapidAssessmentTree.TreeNode;
+import ClassAdminBackEnd.RapidAssessmentTree.TreeRectangleNode;
 
 public class RapidAssessmentCanvas extends JFrame {
 	/**
@@ -775,9 +776,10 @@ public class RapidAssessmentCanvas extends JFrame {
 		}
 
 		public RapidAssessmentTree createTree() {
-			RapidAssessmentTree tree = new RapidAssessmentTree(null);
-			tree.setHead(this.createRapidAssessmentTreeNode(tree));
-			return tree;
+			//RapidAssessmentTree tree = new RapidAssessmentTree(null);
+			//tree.setHead(this.createRapidAssessmentTreeNode(tree));
+			//return tree;
+			return null;
 		}
 
 		public TreeContainerNode createRapidAssessmentTreeNode(
