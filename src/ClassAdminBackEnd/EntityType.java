@@ -240,9 +240,10 @@ public class EntityType {
 			SuperEntity parent = this.getParentEntitytype().getEntityList().get(x);
 			if(this.getIsRule()){
 				if(this.getIsTextField()){
+					new StringRuleEntity(this, parent, "");
 					
 				} else{
-					
+					new floatRuleEntity(this, parent);
 				}
 			} else {
 				if(this.getIsTextField()){
