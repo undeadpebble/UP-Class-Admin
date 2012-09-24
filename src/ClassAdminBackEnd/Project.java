@@ -87,7 +87,7 @@ public class Project {
 		if(scatterIndexes !=null)
 		{
 		scatterArrayListIndexes.add(scatterIndexes[x]);
-		System.out.println(scatterIndexes[x]);
+		
 		}
 		
 		System.out.println("Set selected index" + x);

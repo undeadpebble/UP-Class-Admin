@@ -91,14 +91,9 @@ public class ScatterPlot {
 		{
 		
 		final XYAnnotation selectPlots = new XYDrawableAnnotation(datasetMain
-				.getXValue(0, (Integer) scatterwaardes[(Integer)u.get(x)]), datasetMain.getYValue(0,
-						(Integer) scatterwaardes[(Integer)u.get(x)]), 11, 11, cd);
-		System.out.println(u.get(x));
-		System.out.println("X-AS  "+datasetMain
-				.getXValue(0, 0) + "  Y-as  "+datasetMain.getYValue(0,
-						0));
-		System.out.println(u.get(x));
-		System.out.println(scatterwaardes[0]);
+				.getXValue(0, scatterwaardes[(Integer)u.get(x)]), datasetMain.getYValue(0,
+						scatterwaardes[(Integer)u.get(x)]), 11, 11, cd);
+		
 		chart.getXYPlot().addAnnotation(selectPlots);
 		}
 	}
@@ -134,7 +129,7 @@ public class ScatterPlot {
 						int sindex = ent.getSeriesIndex();
 						int iindex = ent.getItem();
 						project.setSelected(iindex);
-						//Global.getGlobal().getActiveProject().setSelected(iindex);
+						
 						
 					
 						final CircleDrawer cd = new CircleDrawer(Color.red,
@@ -142,9 +137,11 @@ public class ScatterPlot {
 						final XYAnnotation bestBid = new XYDrawableAnnotation(datasetMain
 								.getXValue(sindex, iindex), datasetMain.getYValue(sindex,
 								iindex), 11, 11, cd);
-
+					
+						
+						
 						chart.getXYPlot().addAnnotation(bestBid);
-						project.updatecharts();
+						//project.updatecharts();
 						
 						
 					

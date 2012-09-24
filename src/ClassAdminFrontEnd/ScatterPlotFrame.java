@@ -93,7 +93,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 			sorteermidq[q] = diedata.get(q).get(houerx).getMark();
 			sorteermidw[q] = diedata.get(q).get(houery).getMark();
 			scattergetalle[q] = q;
-
+			
 		}
 
 		int n = sorteermidq.length;
@@ -123,24 +123,40 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 
 			}
 		}
-
+		int[] houer = new int[scattergetalle.length];
 		for (int x = 0; x < sorteermidq.length; x++)
+		{
 			System.out.println("Sorteer deeerder " + x + "   " + sorteermidq[x] + " " +sorteermidw[x]+" "+ scattergetalle[x]);
-		XYSeries series = new XYSeries("Scatter");
+		
+		
+		}
+			XYSeries series = new XYSeries("Scatter");
 
 		for (int q = 0; q < diedata.size(); q++) {
 			series.add(sorteermidq[q], sorteermidw[q]);
 
 		}
 		
-		for(int i=0;i<scattergetalle.length-1;i++)
+		
+	
+		int flipen;
+		int flipen2;
+		for(int i=0;i<scattergetalle.length;i++)
 		{
-			scattergetalle[scattergetalle[i]] = i;
-			System.out.println(scattergetalle[i] +"   "+ i);
+			
+			flipen =scattergetalle[i];
+			flipen2=scattergetalle[flipen];
+			houer[flipen2] =flipen;
+			System.out.println(flipen2+" "+flipen);
+			
 		}
+			
+			
+		for(int x=0;x<scattergetalle.length;x++)
+			System.out.println(houer[x]);
 		
 		
-		project.setScatterSelect(scattergetalle);
+		project.setScatterSelect(houer);
 
 		dataset.addSeries(series);
 
