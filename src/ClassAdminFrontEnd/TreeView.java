@@ -121,6 +121,7 @@ import prefuse.util.ui.JSearchPanel;
 import prefuse.visual.VisualItem;
 import prefuse.visual.expression.InGroupPredicate;
 import prefuse.visual.sort.TreeDepthItemSorter;
+import sun.tools.jar.resources.jar_pt_BR;
 
 public class TreeView extends Display {
 
@@ -143,6 +144,8 @@ public class TreeView extends Display {
 	static JFastLabel lblParent = new JFastLabel("Parent: ");
 	static JFastLabel lblChild = new JFastLabel("Child: ");
 	static JButton btnNew = new JButton("Add Node");
+	static JButton btnHelp = new JButton("?");
+	
 	static private boolean bParent = false;
 	static private boolean bChild = false;
 	private static Project myProject = null;
@@ -331,7 +334,7 @@ public class TreeView extends Display {
 				myProject.getHeadEntityType());
 
 		JFrame frame = new JFrame();
-
+		PopUpMenu p = new PopUpMenu(frame);
 		frame.setContentPane(treeview);
 		frame.pack();
 		frame.setVisible(true);
@@ -436,6 +439,14 @@ public class TreeView extends Display {
 		topBox.add(Box.createHorizontalStrut(3));
 		topBox.setBackground(BACKGROUND);
 
+		btnHelp.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				createHelpDialog();
+				
+			}
+		});
 		btnNew.addActionListener(new ActionListener() {
 
 			@Override
@@ -450,6 +461,7 @@ public class TreeView extends Display {
 		box.add(title);
 		box.add(Box.createHorizontalGlue());
 		box.add(btnNew);
+		box.add(btnHelp);
 		box.add(Box.createHorizontalStrut(3));
 		box.setBackground(BACKGROUND);
 
@@ -532,6 +544,39 @@ public class TreeView extends Display {
 	}
 
 	static JDialog frame = null;
+
+	private static void createHelpDialog() {
+		JDialog frame = new JDialog();
+		frame.setSize(600, 400);
+		frame.setLayout(new GridLayout(5, 2));
+		final JLabel p1 = new JLabel("Select Parent");
+		final JLabel p2 = new JLabel("Deselect Parent");
+		final JLabel c1 = new JLabel("Select Child");
+		final JLabel c2 = new JLabel("Deselect Child");
+		final JLabel pp1 = new JLabel("SHFT + Left Mouse");
+		final JLabel pp2 = new JLabel("SHFT + Right Mouse");
+		final JLabel cc1 = new JLabel("CTRL + Left Mouse");
+		final JLabel cc2 = new JLabel("CTRL + Right Mouse");
+		p1.setFont(FontLib.getFont("Arial", Font.BOLD, 16));
+		p2.setFont(FontLib.getFont("Arial", Font.BOLD, 16));
+		c1.setFont(FontLib.getFont("Arial", Font.BOLD, 16));
+		c2.setFont(FontLib.getFont("Arial", Font.BOLD, 16));
+		pp1.setFont(FontLib.getFont("Arial", Font.PLAIN, 16));
+		pp2.setFont(FontLib.getFont("Arial", Font.PLAIN, 16));
+		cc1.setFont(FontLib.getFont("Arial", Font.PLAIN, 16));
+		cc2.setFont(FontLib.getFont("Arial", Font.PLAIN, 16));
+		frame.add(p1);
+		frame.add(p2);
+		frame.add(pp1);
+		frame.add(pp2);
+		frame.add(c1);
+		frame.add(c2);
+		frame.add(cc1);
+		frame.add(cc2);
+
+		frame.pack();
+		frame.setVisible(true);
+	}
 
 	private static void createNewNode() {
 		final Table nodes = myTree.getNodeTable();
@@ -625,31 +670,34 @@ public class TreeView extends Display {
 					e.printStackTrace();
 				}
 
-				if(d == null)
-				{
+				if (d == null) {
 					b = false;
 					lblDate.setForeground(Color.RED);
 				}
 
 				if (b) {
-					parent = myTree.getNode(cmbParent.getSelectedIndex()); //get parent
-					child = myTree.addNode(); //create child
-					
-					for (int c = 0; c < child.getColumnCount() - 1; c++) //copy parent data
-						child.set(c, parent.get(c));
-					
-					child.set("name", txtName.getText()); //edit child to fit new child
-					
-					myTree.addEdge(parent, child); //add edge between parent and child
+					parent = myTree.getNode(cmbParent.getSelectedIndex()); // get
+																			// parent
+					child = myTree.addNode(); // create child
 
-					//add child to parent in back end
+					for (int c = 0; c < child.getColumnCount() - 1; c++)
+						// copy parent data
+						child.set(c, parent.get(c));
+
+					child.set("name", txtName.getText()); // edit child to fit
+															// new child
+
+					myTree.addEdge(parent, child); // add edge between parent
+													// and child
+
+					// add child to parent in back end
 					myProject.getTreeLinkedList().add(
 							new EntityType(txtName.getText(), myProject
 									.getTreeLinkedList().get(
 											cmbParent.getSelectedIndex()),
-									isText, d,(Double) txtWeight.getValue()));
+									isText, d, (Double) txtWeight.getValue()));
 
-					//refresh cmbParent content
+					// refresh cmbParent content
 					cmbParent.removeAllItems();
 					for (int r = 0; r < nodes.getRowCount(); r++) {
 						for (int c = 0; c < nodes.getColumnCount(); c++) {
@@ -657,10 +705,10 @@ public class TreeView extends Display {
 						}
 					}
 
-					//set selected index to what it was
+					// set selected index to what it was
 					cmbParent.setSelectedIndex(selectedIndex);
-					
-					//reset all values
+
+					// reset all values
 					rblNo.setSelected(true);
 					txtWeight.setValue(new Double(1.0));
 					txtName.setText(null);
@@ -669,8 +717,8 @@ public class TreeView extends Display {
 					lblName.setForeground(Color.BLACK);
 					lblDate.setForeground(Color.BLACK);
 					isText = false;
-				}//if b
-			}//actionListener
+				}// if b
+			}// actionListener
 		});
 
 		btnClose.addActionListener(new ActionListener() {
@@ -899,7 +947,8 @@ public class TreeView extends Display {
 																.get(iParent));
 										bChild = false;
 										iChild = -1;
-										lblSelectedChild.setText("please select child");
+										lblSelectedChild
+												.setText("please select child");
 										break;
 									}// if
 								}// for
