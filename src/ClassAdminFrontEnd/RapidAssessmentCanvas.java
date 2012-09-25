@@ -34,6 +34,11 @@ import org.imgscalr.Scalr;
 
 import com.jhlabs.vecmath.Color4f;
 
+import ClassAdminBackEnd.EntityType;
+import ClassAdminBackEnd.RapidAssessmentComponentType;
+import ClassAdminBackEnd.RapidAssessmentContainerType;
+import ClassAdminBackEnd.RapidAssessmentMarkType;
+import ClassAdminBackEnd.RapidAssessmentRectangleType;
 import ClassAdminBackEnd.RapidAssessmentTree;
 import ClassAdminBackEnd.SuperEntity;
 import ClassAdminBackEnd.RapidAssessmentTree.TreeContainerNode;
@@ -52,7 +57,7 @@ public class RapidAssessmentCanvas extends JFrame {
 	private BufferedImage resizedBackGround = null;
 	// private LinkedList<MyRectangle> rectangles = new
 	// LinkedList<MyRectangle>();
-	private SuperEntity assessedEntity;
+	private EntityType assessedEntity;
 	private MyMarkPoint lastcreated = null;
 	// private LinkedList<MyMarkPoint> marks = new LinkedList<MyMarkPoint>();
 	private ContainerPanel parentPanel;
@@ -113,7 +118,7 @@ public class RapidAssessmentCanvas extends JFrame {
 
 		}
 
-		public TreeNode createTreeNode(RapidAssessmentTree tree)
+		public RapidAssessmentComponentType createTreeNode(String name)
 				throws ClassCastException {
 			throw new ClassCastException();
 		}
@@ -237,10 +242,9 @@ public class RapidAssessmentCanvas extends JFrame {
 		}
 
 		@Override
-		public TreeNode createTreeNode(RapidAssessmentTree tree)
+		public RapidAssessmentComponentType createTreeNode(String name)
 				throws ClassCastException {
-			TreeMarkNode tmp = tree.new TreeMarkNode(this.getX(), this.getY(),
-					this.getMark());
+			RapidAssessmentMarkType tmp = new RapidAssessmentMarkType(name, this.getX(), this.getY(), this.getWidth(), this.getHeight(), this.getMark());
 
 			return tmp;
 		}
@@ -375,15 +379,14 @@ public class RapidAssessmentCanvas extends JFrame {
 		}
 
 		@Override
-		public TreeNode createTreeNode(RapidAssessmentTree tree)
+		public RapidAssessmentComponentType createTreeNode(String name)
 				throws ClassCastException {
-			TreeRectangleNode tmp = tree.new TreeRectangleNode(this.getX(),
-					this.getY(), this.getWidth(), this.getHeight());
+			RapidAssessmentRectangleType tmp = new RapidAssessmentRectangleType(name,this.getX(),this.getY(),this.getWidth(),this.getHeight());
 			for (int x = 0; x < this.getComponentCount(); ++x) {
 				try {
-					tmp.getChildNodes().add(
+					tmp.getSubEntityType().add(
 							((MyComponent) this.getComponent(x))
-									.createTreeNode(tree));
+									.createTreeNode(name+"."+x));
 				} catch (ClassCastException e) {
 
 				}
@@ -617,7 +620,7 @@ public class RapidAssessmentCanvas extends JFrame {
 	}
 
 	public RapidAssessmentCanvas(String backGroundFilename,
-			SuperEntity assessedEntity) {
+			EntityType assessedEntity) {
 		this.setLayout(null);
 		ContainerPanel canvas = new ContainerPanel();
 		parentPanel = canvas;
@@ -775,7 +778,7 @@ public class RapidAssessmentCanvas extends JFrame {
 			g2.dispose();
 		}
 
-		public RapidAssessmentTree createTree() {
+		/*public RapidAssessmentTree createTree() {
 			//RapidAssessmentTree tree = new RapidAssessmentTree(null);
 			//tree.setHead(this.createRapidAssessmentTreeNode(tree));
 			//return tree;
@@ -797,7 +800,27 @@ public class RapidAssessmentCanvas extends JFrame {
 				}
 			}
 			return tmp;
+		}*/
+		
+		public void save(){
+			RapidAssessmentContainerType parent = new RapidAssessmentContainerType(assessedEntity);
+			
+			parent.setX(this.getX());
+			parent.setY(this.getY());
+			parent.setH(this.getHeight());
+			parent.setW(this.getWidth());
+			parent.setImage(backgroundFileName);
+			
+			for(int x = 0;x<this.getComponentCount();++x){
+				try{
+					parent.getSubEntityType().add(((MyComponent)(this.getComponent(x))).createTreeNode("Q1"));
+				}
+				catch(ClassCastException e){
+					
+				}
+			}
 		}
+		
 	}
 
 }

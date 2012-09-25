@@ -23,7 +23,7 @@ public class EntityType {
 	private Date date;
 	private Double defaultWeight;
 	private long ID;
-	private int maxValue = 100;
+	private double maxValue = 100;
 	
 	public Boolean getIsRule() {
 		return isRule;
@@ -31,11 +31,11 @@ public class EntityType {
 	public void setIsRule(Boolean isRule) {
 		this.isRule = isRule;
 	}
-	public int getMaxValue() {
+	public double getMaxValue() {
 		return maxValue;
 	}
-	public void setMaxValue(int maxValue) {
-		this.maxValue = maxValue;
+	public void setMaxValue(double maxmark) {
+		this.maxValue = maxmark;
 	}
 	
 

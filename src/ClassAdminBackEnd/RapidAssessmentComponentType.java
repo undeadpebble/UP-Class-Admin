@@ -18,6 +18,21 @@ public class RapidAssessmentComponentType extends EntityType{
 		this.x = x;
 	}
 	/**
+	 * @param n
+	 * @param x
+	 * @param y
+	 * @param w
+	 * @param h
+	 */
+	public RapidAssessmentComponentType(String n, double x, double y, double w,
+			double h) {
+		super(n);
+		this.x = x;
+		this.y = y;
+		this.w = w;
+		this.h = h;
+	}
+	/**
 	 * @return the y
 	 */
 	public double getY() {
