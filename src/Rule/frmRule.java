@@ -85,6 +85,7 @@ public class frmRule extends JFrame {
 	private Label lblRule2 = new Label("->");
 	private Label lblEntityType2 = new Label("->");
 	private JLabel lblCreateNewRule = new JLabel("Create new rule of type:");
+			"Create new rule of type:");
 
 	/**
 	 * Create the frame.
@@ -254,6 +255,10 @@ public class frmRule extends JFrame {
 		lblselected1.setBackground(Color.ORANGE);
 		lblselected1.setBounds(32, 9, 24, 22);
 		backgroundPanel.add(lblselected1);
+
+		lblselected2.setBackground(Color.ORANGE);
+		lblselected2.setBounds(32, 40, 24, 22);
+		backgroundPanel.add(lblselected2);
 
 		lblselected2.setBackground(Color.ORANGE);
 		lblselected2.setBounds(32, 40, 24, 22);
@@ -1314,6 +1319,10 @@ public class frmRule extends JFrame {
 
 		cbxRules.setModel(new DefaultComboBoxModel(ruleStrings));
 
+		}
+
+		cbxRules.setModel(new DefaultComboBoxModel(ruleStrings));
+
 		lblEntityType1.setVisible(true);
 		lblEntityType2.setVisible(true);
 		lblRule1.setVisible(false);
@@ -1438,6 +1447,10 @@ public class frmRule extends JFrame {
 				ruleStrings[ruleReferences.size()] = ruleList.get(x).getName();
 				ruleReferences.add(x);
 			}
+		}
+
+		cbxRules.setModel(new DefaultComboBoxModel(ruleStrings));
+
 		}
 
 		cbxRules.setModel(new DefaultComboBoxModel(ruleStrings));
@@ -1574,6 +1587,9 @@ public class frmRule extends JFrame {
 				ruleReferences.add(x);
 			}
 		}
+
+		cbxRules.setModel(new DefaultComboBoxModel(ruleStrings));
+
 
 		cbxRules.setModel(new DefaultComboBoxModel(ruleStrings));
 
