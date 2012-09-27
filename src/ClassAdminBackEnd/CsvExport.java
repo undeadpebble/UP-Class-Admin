@@ -29,7 +29,11 @@ public class CsvExport {
 			for(int y = 0;y<lListME.get(x).size();++y){
 
 				if(!lListME.get(x).get(y).getDetails().getType().getIsTextField()){
-					out +=lListME.get(x).get(y).getMark()+",";
+					try {
+						out +=lListME.get(x).get(y).getMark()+",";
+					} catch (AbsentException e) {
+						out +="0,";
+					}
 				}
 				else{
 				

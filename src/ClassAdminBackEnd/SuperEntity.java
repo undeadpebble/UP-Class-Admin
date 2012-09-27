@@ -20,6 +20,7 @@ public class SuperEntity {
 	private EntityType type;
 	private String field = "";
 	private SuperEntityPointer thisPointer;
+	private boolean hasMark = false;
 
 	/**
 	 * @return the type
@@ -126,7 +127,11 @@ public class SuperEntity {
 			this.getThisPointer().setTarget(this);
 
 		this.parentEntity = replacedEntity.getParentEntity();
-		this.mark = replacedEntity.getMark();
+		try {
+			this.mark = replacedEntity.getMark();
+		} catch (AbsentException e) {
+			this.hasMark = false;
+		}
 		this.field = replacedEntity.getField();
 		this.subEntity = replacedEntity.getSubEntity();
 		for (int x = 0; x < subEntity.size(); ++x) {
@@ -201,7 +206,9 @@ public class SuperEntity {
 	/**
 	 * @return the mark
 	 */
-	public double getMark() {
+	public double getMark() throws AbsentException{
+		if(!this.hasMark)
+			throw new AbsentException();
 		return mark;
 	}
 
@@ -211,6 +218,16 @@ public class SuperEntity {
 	 */
 	public void setMark(double mark) {
 		this.mark = mark;
+		this.updateMark();
+		
+	}
+	
+	public void updateMark(){
+		try {
+			this.calcMark();
+		} catch (Exception e) {
+			this.hasMark = false;
+		}
 	}
 
 	/**
@@ -240,7 +257,7 @@ public class SuperEntity {
 		Boolean hasval = false;
 		for (int i = 0; i < subEntity.size(); ++i) {
 			try {
-				mTotal += subEntity.get(i).calcMark()
+				mTotal += subEntity.get(i).getMark()
 						* subEntity.get(i).getWeight();
 				wTotal += subEntity.get(i).getWeight();
 
@@ -265,12 +282,11 @@ public class SuperEntity {
 	 * @throws AbsentException
 	 */
 
-	public double calcMark() throws Exception {
+	public void calcMark() throws Exception {
 		if (this.isAbsent()) {
 			throw new AbsentException();
 		} else {
 			this.mark = doMarkMath();
-			return this.mark;
 		}
 
 	}

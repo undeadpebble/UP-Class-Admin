@@ -20,7 +20,7 @@ public class SumMarkEntity extends MarkEntity {
 		Boolean hasval = false;
 		for (int i = 0; i < this.getSubEntity().size(); ++i) {
 			try {
-				mTotal += this.getSubEntity().get(i).calcMark();
+				mTotal += this.getSubEntity().get(i).getMark();
 				
 
 				hasval = true;

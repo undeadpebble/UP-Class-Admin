@@ -36,7 +36,7 @@ public class BestNMarkEntity extends MarkEntity{
 		for (int i = 0; i < this.getSubEntity().size(); ++i) {
 			try {
 				w =  this.getSubEntity().get(i).getWeight();
-				m = this.getSubEntity().get(i).calcMark()
+				m = this.getSubEntity().get(i).getMark()
 						* w;
 				
 				if(ofN < N){
