@@ -228,6 +228,12 @@ public class SuperEntity {
 		} catch (Exception e) {
 			this.hasMark = false;
 		}
+		try{
+			this.parentEntity.updateMark();
+		}
+		catch (NullPointerException e){
+			
+		}
 	}
 
 	/**
