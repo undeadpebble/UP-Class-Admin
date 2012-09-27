@@ -26,6 +26,7 @@ import ClassAdminFrontEnd.BackgroundGradientPanel;
 
 import javax.swing.SpinnerNumberModel;
 import java.awt.Label;
+import javax.swing.JLabel;
 
 public class frmRule extends JFrame {
 
@@ -68,6 +69,13 @@ public class frmRule extends JFrame {
 	private JButton btnAddStringRule = new JButton("Add String Rule");
 	private JComboBox cbxReference1 = new JComboBox();
 	private JComboBox cbxReference2 = new JComboBox();
+	private JComboBox cbxRules = new JComboBox();
+	private String[] ruleStrings;
+	private LinkedList<Integer> ruleReferences = new LinkedList<Integer>();
+	private JLabel lblrule = new JLabel("Edit or delete a existing rule");
+	private JButton btnRemoveRule = new JButton("Remove selected rule");
+	private Label lblselected1 = new Label("->");
+	private Label lblselected2 = new Label("->");
 
 	private Label lblText1 = new Label("->");
 	private Label lblRule1 = new Label("->");
@@ -75,25 +83,26 @@ public class frmRule extends JFrame {
 	private Label lblText2 = new Label("->");
 	private Label lblRule2 = new Label("->");
 	private Label lblEntityType2 = new Label("->");
+	private final JLabel lblCreateNewRule = new JLabel(
+			"Create new rule of type:");
 
-	
 	/**
 	 * Create the frame.
 	 */
 	public frmRule(final Project project) {
-		txtStr2.setBounds(435, 105, 178, 20);
+		txtStr2.setBounds(433, 156, 178, 20);
 		txtStr2.setColumns(10);
-		txtStr1.setBounds(68, 106, 180, 20);
+		txtStr1.setBounds(68, 156, 180, 20);
 		txtStr1.setColumns(10);
 		this.project = project;
-		
+
 		lblEntityType1.setVisible(true);
 		lblEntityType2.setVisible(true);
 		lblRule1.setVisible(false);
 		lblRule2.setVisible(false);
 		lblText1.setVisible(false);
 		lblText2.setVisible(false);
-		
+
 		lblText1.setForeground(new Color(0xEDEDED));
 		lblRule1.setForeground(new Color(0xEDEDED));
 		lblEntityType1.setForeground(new Color(0xEDEDED));
@@ -105,14 +114,14 @@ public class frmRule extends JFrame {
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 671, 440);
-		cbxOpperator.setBounds(302, 105, 58, 20);
-		cbxRuleChooser.setBounds(10, 11, 165, 20);
-		cbxFloat1.setBounds(68, 159, 180, 20);
-		cbxFloat2.setBounds(433, 159, 180, 20);
-		btnAddFloatRule.setBounds(237, 280, 219, 34);
-		txtName.setBounds(68, 42, 292, 20);
-		spinFloat1.setBounds(68, 105, 180, 20);
-		spinFloat2.setBounds(433, 105, 180, 20);
+		cbxOpperator.setBounds(302, 156, 58, 20);
+		cbxRuleChooser.setBounds(237, 11, 165, 20);
+		cbxFloat1.setBounds(68, 210, 180, 20);
+		cbxFloat2.setBounds(433, 210, 180, 20);
+		btnAddFloatRule.setBounds(237, 331, 219, 34);
+		txtName.setBounds(403, 89, 210, 29);
+		spinFloat1.setBounds(68, 156, 180, 20);
+		spinFloat2.setBounds(433, 156, 180, 20);
 
 		contentPane = new JPanel();
 		contentPane.setForeground(Color.GRAY);
@@ -120,7 +129,7 @@ public class frmRule extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		reactivateFloat();
-		
+
 		backgroundPanel = new BackgroundGradientPanel(contentPane);
 		backgroundPanel.setBounds(0, 0, getWidth(), getHeight());
 		contentPane.add(backgroundPanel);
@@ -135,19 +144,19 @@ public class frmRule extends JFrame {
 		backgroundPanel.add(spinFloat1);
 		backgroundPanel.add(spinFloat2);
 
-		btnAddFloatBool.setBounds(237, 280, 219, 34);
+		btnAddFloatBool.setBounds(237, 331, 219, 34);
 
 		backgroundPanel.add(btnAddFloatBool);
 
 		backgroundPanel.add(txtStr1);
 
 		backgroundPanel.add(txtStr2);
-		btnAddStrBool.setBounds(260, 280, 198, 34);
+		btnAddStrBool.setBounds(237, 331, 219, 34);
 		backgroundPanel.add(btnAddStrBool);
-		cbxStringComp.setBounds(260, 106, 113, 20);
+		cbxStringComp.setBounds(260, 157, 113, 20);
 
 		backgroundPanel.add(cbxStringComp);
-		btnAddStringRule.setBounds(237, 280, 225, 34);
+		btnAddStringRule.setBounds(237, 331, 225, 34);
 
 		backgroundPanel.add(btnAddStringRule);
 
@@ -155,41 +164,104 @@ public class frmRule extends JFrame {
 				"Float Rule", "String Rule", "Float Boolean Rule",
 				"String Boolean Rule" }));
 
-		cbxReference1.setBounds(68, 202, 180, 20);
+		cbxReference1.setBounds(68, 253, 180, 20);
 		backgroundPanel.add(cbxReference1);
 
-		cbxReference2.setBounds(433, 202, 180, 20);
+		cbxReference2.setBounds(433, 253, 180, 20);
 		backgroundPanel.add(cbxReference2);
 
 		lblText1.setBackground(Color.ORANGE);
 		lblText1.setForeground(Color.BLACK);
-		lblText1.setBounds(38, 103, 24, 22);
+		lblText1.setBounds(38, 154, 24, 22);
 		backgroundPanel.add(lblText1);
 
 		lblRule1.setBackground(Color.ORANGE);
 		lblRule1.setForeground(Color.BLACK);
-		lblRule1.setBounds(38, 157, 24, 22);
+		lblRule1.setBounds(38, 208, 24, 22);
 		backgroundPanel.add(lblRule1);
 
 		lblEntityType1.setBackground(Color.ORANGE);
 		lblEntityType1.setForeground(Color.BLACK);
-		lblEntityType1.setBounds(38, 200, 24, 22);
+		lblEntityType1.setBounds(38, 251, 24, 22);
 		backgroundPanel.add(lblEntityType1);
 
 		lblText2.setBackground(Color.ORANGE);
 		lblText2.setForeground(Color.BLACK);
-		lblText2.setBounds(403, 103, 24, 22);
+		lblText2.setBounds(403, 154, 24, 22);
 		backgroundPanel.add(lblText2);
 
 		lblRule2.setBackground(Color.ORANGE);
 		lblRule2.setForeground(Color.BLACK);
-		lblRule2.setBounds(403, 157, 24, 22);
+		lblRule2.setBounds(403, 208, 24, 22);
 		backgroundPanel.add(lblRule2);
 
 		lblEntityType2.setBackground(Color.ORANGE);
 		lblEntityType2.setForeground(Color.BLACK);
-		lblEntityType2.setBounds(403, 200, 24, 22);
+		lblEntityType2.setBounds(403, 251, 24, 22);
 		backgroundPanel.add(lblEntityType2);
+
+		JLabel lblname = new JLabel("Rule name");
+		lblname.setForeground(Color.WHITE);
+		lblname.setBounds(38, 101, 113, 14);
+		backgroundPanel.add(lblname);
+
+		cbxRules.setBounds(237, 42, 165, 20);
+		backgroundPanel.add(cbxRules);
+
+		ruleList = project.getRules();
+		ruleReferences = new LinkedList<Integer>();
+
+		int a = 0;
+
+		for (int x = 0; x < ruleList.size(); x++) {
+			if (!(ruleList.get(x).getName().contains("reqwuiop"))) {
+				if (!(ruleList.get(x).getName()
+						.contains("referencespsaiodfhnosaudhf"))) {
+					a++;
+
+				}
+			}
+		}
+
+		ruleStrings = new String[a];
+		for (int x = 0; x < ruleList.size(); x++) {
+			if (!ruleList.get(x).getName().contains("reqwuiop")
+					&& !ruleList.get(x).getName()
+							.contains("referencespsaiodfhnosaudhf")) {
+				System.out.println(ruleList.get(x).getName());
+				System.out.println(ruleList.get(x).getName()
+						.contains("reqwuiop"));
+				System.out.println(ruleList.get(x).getName()
+						.contains("referencespsaiodfhnosaudhf"));
+
+				ruleStrings[ruleReferences.size()] = ruleList.get(x).getName();
+				ruleReferences.add(x);
+			}
+		}
+
+		cbxRules.setModel(new DefaultComboBoxModel(ruleStrings));
+		
+		lblselected1.setVisible(false);
+		lblselected2.setVisible(false);
+
+		lblrule.setForeground(Color.WHITE);
+		lblrule.setBounds(62, 45, 165, 14);
+		backgroundPanel.add(lblrule);
+
+		btnRemoveRule.setBounds(38, 331, 172, 34);
+		backgroundPanel.add(btnRemoveRule);
+		lblCreateNewRule.setForeground(Color.WHITE);
+		lblCreateNewRule.setBounds(62, 14, 165, 14);
+
+		backgroundPanel.add(lblCreateNewRule);
+
+		lblselected1.setBackground(Color.ORANGE);
+		lblselected1.setBounds(32, 9, 24, 22);
+		backgroundPanel.add(lblselected1);
+
+		lblselected2.setBackground(Color.ORANGE);
+		lblselected2.setBounds(32, 40, 24, 22);
+		backgroundPanel.add(lblselected2);
 
 		cbxFloat1.addActionListener(new ActionListener() {
 			@Override
@@ -557,13 +629,46 @@ public class frmRule extends JFrame {
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------
 	public void reactivateString() {
+		ruleList = project.getRules();
+		ruleReferences = new LinkedList<Integer>();
+
+		int a = 0;
+
+		for (int x = 0; x < ruleList.size(); x++) {
+			if (!(ruleList.get(x).getName().contains("reqwuiop"))) {
+				if (!(ruleList.get(x).getName()
+						.contains("referencespsaiodfhnosaudhf"))) {
+					a++;
+
+				}
+			}
+		}
+
+		ruleStrings = new String[a];
+		for (int x = 0; x < ruleList.size(); x++) {
+			if (!ruleList.get(x).getName().contains("reqwuiop")
+					&& !ruleList.get(x).getName()
+							.contains("referencespsaiodfhnosaudhf")) {
+				System.out.println(ruleList.get(x).getName());
+				System.out.println(ruleList.get(x).getName()
+						.contains("reqwuiop"));
+				System.out.println(ruleList.get(x).getName()
+						.contains("referencespsaiodfhnosaudhf"));
+
+				ruleStrings[ruleReferences.size()] = ruleList.get(x).getName();
+				ruleReferences.add(x);
+			}
+		}
+
+		cbxRules.setModel(new DefaultComboBoxModel(ruleStrings));
+
 		lblEntityType1.setVisible(true);
 		lblEntityType2.setVisible(true);
 		lblRule1.setVisible(false);
 		lblRule2.setVisible(false);
 		lblText1.setVisible(false);
 		lblText2.setVisible(false);
-		
+
 		cbxOpperator.setVisible(false);
 		cbxFloat1.setVisible(true);
 		cbxFloat2.setVisible(true);
@@ -654,13 +759,46 @@ public class frmRule extends JFrame {
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------
 	public void reactivateBooleanFloat() {
+		ruleList = project.getRules();
+		ruleReferences = new LinkedList<Integer>();
+
+		int a = 0;
+
+		for (int x = 0; x < ruleList.size(); x++) {
+			if (!(ruleList.get(x).getName().contains("reqwuiop"))) {
+				if (!(ruleList.get(x).getName()
+						.contains("referencespsaiodfhnosaudhf"))) {
+					a++;
+
+				}
+			}
+		}
+
+		ruleStrings = new String[a];
+		for (int x = 0; x < ruleList.size(); x++) {
+			if (!ruleList.get(x).getName().contains("reqwuiop")
+					&& !ruleList.get(x).getName()
+							.contains("referencespsaiodfhnosaudhf")) {
+				System.out.println(ruleList.get(x).getName());
+				System.out.println(ruleList.get(x).getName()
+						.contains("reqwuiop"));
+				System.out.println(ruleList.get(x).getName()
+						.contains("referencespsaiodfhnosaudhf"));
+
+				ruleStrings[ruleReferences.size()] = ruleList.get(x).getName();
+				ruleReferences.add(x);
+			}
+		}
+
+		cbxRules.setModel(new DefaultComboBoxModel(ruleStrings));
+
 		lblEntityType1.setVisible(true);
 		lblEntityType2.setVisible(true);
 		lblRule1.setVisible(false);
 		lblRule2.setVisible(false);
 		lblText1.setVisible(false);
 		lblText2.setVisible(false);
-		
+
 		cbxOpperator.setVisible(true);
 		cbxFloat1.setVisible(true);
 		cbxFloat2.setVisible(true);
@@ -745,13 +883,46 @@ public class frmRule extends JFrame {
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------
 	public void reactivateStringBool() {
+		ruleList = project.getRules();
+		ruleReferences = new LinkedList<Integer>();
+
+		int a = 0;
+
+		for (int x = 0; x < ruleList.size(); x++) {
+			if (!(ruleList.get(x).getName().contains("reqwuiop"))) {
+				if (!(ruleList.get(x).getName()
+						.contains("referencespsaiodfhnosaudhf"))) {
+					a++;
+
+				}
+			}
+		}
+
+		ruleStrings = new String[a];
+		for (int x = 0; x < ruleList.size(); x++) {
+			if (!ruleList.get(x).getName().contains("reqwuiop")
+					&& !ruleList.get(x).getName()
+							.contains("referencespsaiodfhnosaudhf")) {
+				System.out.println(ruleList.get(x).getName());
+				System.out.println(ruleList.get(x).getName()
+						.contains("reqwuiop"));
+				System.out.println(ruleList.get(x).getName()
+						.contains("referencespsaiodfhnosaudhf"));
+
+				ruleStrings[ruleReferences.size()] = ruleList.get(x).getName();
+				ruleReferences.add(x);
+			}
+		}
+
+		cbxRules.setModel(new DefaultComboBoxModel(ruleStrings));
+
 		lblEntityType1.setVisible(true);
 		lblEntityType2.setVisible(true);
 		lblRule1.setVisible(false);
 		lblRule2.setVisible(false);
 		lblText1.setVisible(false);
 		lblText2.setVisible(false);
-		
+
 		ruleList = project.getRules();
 		floatBoolRuleList = new LinkedList<Rule>();
 		StringBoolRuleList = new LinkedList<Rule>();
@@ -842,6 +1013,39 @@ public class frmRule extends JFrame {
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------
 	public void reactivateFloat() {
+		ruleList = project.getRules();
+		ruleReferences = new LinkedList<Integer>();
+
+		int a = 0;
+
+		for (int x = 0; x < ruleList.size(); x++) {
+			if (!(ruleList.get(x).getName().contains("reqwuiop"))) {
+				if (!(ruleList.get(x).getName()
+						.contains("referencespsaiodfhnosaudhf"))) {
+					a++;
+
+				}
+			}
+		}
+
+		ruleStrings = new String[a];
+		for (int x = 0; x < ruleList.size(); x++) {
+			if (!ruleList.get(x).getName().contains("reqwuiop")
+					&& !ruleList.get(x).getName()
+							.contains("referencespsaiodfhnosaudhf")) {
+				System.out.println(ruleList.get(x).getName());
+				System.out.println(ruleList.get(x).getName()
+						.contains("reqwuiop"));
+				System.out.println(ruleList.get(x).getName()
+						.contains("referencespsaiodfhnosaudhf"));
+
+				ruleStrings[ruleReferences.size()] = ruleList.get(x).getName();
+				ruleReferences.add(x);
+			}
+		}
+
+		cbxRules.setModel(new DefaultComboBoxModel(ruleStrings));
+
 		lblEntityType1.setVisible(true);
 		lblEntityType2.setVisible(true);
 		lblRule1.setVisible(false);
