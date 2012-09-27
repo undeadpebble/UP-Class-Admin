@@ -16,11 +16,12 @@ public class SumMarkEntity extends MarkEntity {
 
 	public Double doMarkMath() throws AbsentException {
 		double mTotal = 0;
+		double mmax = 0;
 		Boolean hasval = false;
 		for (int i = 0; i < this.getSubEntity().size(); ++i) {
 			try {
-				mTotal += this.getSubEntity().get(i).calcMark()
-						* this.getSubEntity().get(i).getWeight();
+				mTotal += this.getSubEntity().get(i).calcMark();
+				
 
 				hasval = true;
 			} catch (Exception e) {

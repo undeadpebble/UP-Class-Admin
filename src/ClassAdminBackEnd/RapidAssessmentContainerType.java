@@ -4,7 +4,7 @@ import ClassAdminBackEnd.RapidAssessmentTree.TreeContainerNode;
 
 public class RapidAssessmentContainerType extends RapidAssessmentRectangleType {
 	private String Image;
-	
+
 	/**
 	 * @return the image
 	 */
@@ -13,20 +13,33 @@ public class RapidAssessmentContainerType extends RapidAssessmentRectangleType {
 	}
 
 	/**
-	 * @param image the image to set
+	 * @param image
+	 *            the image to set
 	 */
 	public void setImage(String image) {
 		Image = image;
 	}
 
-	public RapidAssessmentContainerType(EntityType replacedEntity) {
-
+	/**
+	 * @param n
+	 * @param x
+	 * @param y
+	 * @param w
+	 * @param h
+	 */
+	public RapidAssessmentContainerType(EntityType replacedEntity, double x,
+			double y, double w, double h) {
+		super(replacedEntity.getName(), x, y, w, h);
+		this.setX(x);
+		this.setY(y);
+		this.setW(w);
+		this.setH(h);
+		
 		this.setDate(replacedEntity.getDate());
 		this.setParentEntitytype(replacedEntity.getParentEntitytype());
 		this.setDefaultWeight(replacedEntity.getDefaultWeight());
 		this.setIsRule(false);
 		this.setIsTextField(false);
-		this.setName(replacedEntity.getName());
 
 		replacedEntity.getParentEntitytype().getSubEntityType()
 				.remove(replacedEntity);
@@ -40,9 +53,9 @@ public class RapidAssessmentContainerType extends RapidAssessmentRectangleType {
 		SuperEntity[] entitylist = (SuperEntity[]) (replacedEntity
 				.getEntityList().toArray());
 
-		for (int x = 0; x < entitylist.length; ++x) {
-			entitylist[x].setType(this);
+		for (int z = 0; z < entitylist.length; ++z) {
+			entitylist[z].setType(this);
 		}
-
 	}
+
 }

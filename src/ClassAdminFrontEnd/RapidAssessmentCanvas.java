@@ -382,11 +382,12 @@ public class RapidAssessmentCanvas extends JFrame {
 		public RapidAssessmentComponentType createTreeNode(String name)
 				throws ClassCastException {
 			RapidAssessmentRectangleType tmp = new RapidAssessmentRectangleType(name,this.getX(),this.getY(),this.getWidth(),this.getHeight());
+			int count = 0;
 			for (int x = 0; x < this.getComponentCount(); ++x) {
 				try {
 					tmp.getSubEntityType().add(
 							((MyComponent) this.getComponent(x))
-									.createTreeNode(name+"."+x));
+									.createTreeNode(name+"."+ ++count));
 				} catch (ClassCastException e) {
 
 				}
@@ -803,17 +804,13 @@ public class RapidAssessmentCanvas extends JFrame {
 		}*/
 		
 		public void save(){
-			RapidAssessmentContainerType parent = new RapidAssessmentContainerType(assessedEntity);
+			RapidAssessmentContainerType parent = new RapidAssessmentContainerType(assessedEntity,this.getX(),this.getY(),this.getWidth(),this.getHeight());
 			
-			parent.setX(this.getX());
-			parent.setY(this.getY());
-			parent.setH(this.getHeight());
-			parent.setW(this.getWidth());
 			parent.setImage(backgroundFileName);
-			
+			int count = 0;
 			for(int x = 0;x<this.getComponentCount();++x){
 				try{
-					parent.getSubEntityType().add(((MyComponent)(this.getComponent(x))).createTreeNode("Q1"));
+					parent.getSubEntityType().add(((MyComponent)(this.getComponent(x))).createTreeNode("Q"+ ++count));
 				}
 				catch(ClassCastException e){
 					

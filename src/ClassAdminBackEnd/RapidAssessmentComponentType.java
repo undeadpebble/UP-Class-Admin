@@ -31,6 +31,7 @@ public class RapidAssessmentComponentType extends EntityType{
 		this.y = y;
 		this.w = w;
 		this.h = h;
+		
 	}
 	/**
 	 * @return the y
