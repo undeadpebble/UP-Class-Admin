@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
@@ -14,6 +16,8 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 import ClassAdminFrontEnd.BackgroundGradientPanel;
+import ClassAdminFrontEnd.FrmTable;
+
 import javax.swing.JComboBox;
 import javax.swing.JSpinner;
 import javax.swing.JLabel;
@@ -55,8 +59,8 @@ public class SetMaxValueFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					SetMaxValueFrame frame = new SetMaxValueFrame();
-					frame.setVisible(true);
+					/*SetMaxValueFrame frame = new SetMaxValueFrame();
+					frame.setVisible(true);*/
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -67,7 +71,7 @@ public class SetMaxValueFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public SetMaxValueFrame() {
+	public SetMaxValueFrame(final FrmTable table) {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 408, 335);
 		contentPane = new JPanel();
@@ -92,11 +96,11 @@ public class SetMaxValueFrame extends JFrame {
 		contentPane.add(backgroundPanel);
 		backgroundPanel.setLayout(null);
 
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(233, 72, 101, 23);
-		backgroundPanel.add(comboBox);
+		final JComboBox MaxValEditing = new JComboBox(table.project.getHead().getNumberHeaders());
+		MaxValEditing.setBounds(233, 72, 101, 23);
+		backgroundPanel.add(MaxValEditing);
 
-		JSpinner spinner = new JSpinner();
+		final JSpinner spinner = new JSpinner();
 		spinner.setBounds(233, 123, 101, 23);
 		backgroundPanel.add(spinner);
 
@@ -142,6 +146,29 @@ public class SetMaxValueFrame extends JFrame {
 
 			}
 
+		});
+		
+		btnSetMaxValues.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// public void actionPerformed(ActionEvent e) {
+				if (!table.data.get(0).get(MaxValEditing.getSelectedIndex())
+						.getType().getIsTextField()) {
+					table.data.get(0)
+							.get(MaxValEditing.getSelectedIndex())
+							.getType()
+							.setMaxValue(
+									Integer.parseInt(spinner.getValue().toString()));
+
+					for(int x = 0; x < table.data.get(0).size(); x++){
+						if ((table.data.get(0).get(MaxValEditing.getSelectedIndex()).getMark() > (table.data.get(0).get(MaxValEditing.getSelectedIndex()).getType().getMaxValue()))){
+							table.data.get(0).get(MaxValEditing.getSelectedIndex()).setMark(table.data.get(0).get(MaxValEditing.getSelectedIndex()).getType().getMaxValue());
+						}
+					}
+				}
+			}
+				
 		});
 	}
 }

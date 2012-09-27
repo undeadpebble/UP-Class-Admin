@@ -8,12 +8,14 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
@@ -42,8 +44,13 @@ import org.tmatesoft.sqljet.core.table.ISqlJetTable;
 import org.tmatesoft.sqljet.core.table.ISqlJetTransaction;
 import org.tmatesoft.sqljet.core.table.SqlJetDb;
 
+import ClassAdminBackEnd.EntityType;
 import ClassAdminBackEnd.FileHandler;
 import ClassAdminBackEnd.Global;
+
+import ClassAdminBackEnd.PDatExport;
+import ClassAdminBackEnd.SuperEntityPointer;
+
 import ClassAdminBackEnd.UnsupportedFileTypeException;
 import ClassAdminFrontEnd.BackgroundGradientPanel;
 import ClassAdminFrontEnd.BlurBackground;
@@ -61,6 +68,7 @@ import ClassAdminFrontEnd.ScatterPlotFrame;
 import ClassAdminFrontEnd.ShadowPanel;
 import ClassAdminFrontEnd.ThreeStopGradientPanel;
 import ClassAdminFrontEnd.TreeView;
+import Rule.frmRule;
 
 public class Frame extends JFrame {
 
@@ -549,6 +557,21 @@ public class Frame extends JFrame {
 				}
 			}
 		});
+		
+		homeRapidAssessment.addMouseListener(new MouseAdapter() {
+			
+		
+			
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				if(!homeRapidAssessment.isDisabled()){
+					
+				}
+				
+			}
+			
+			
+		});
 
 		// setup panel to contain recent documents buttons
 		recentDocsPanel = new FadePanel(false, 200, 200);
@@ -808,6 +831,7 @@ public class Frame extends JFrame {
 				importInfoPanel.fadeOut();
 			}
 		});
+		
 
 		exportButton.addMouseListener(new MouseAdapter() {
 			@Override
@@ -909,7 +933,7 @@ public class Frame extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (!conditionalFormatButton.isDisabled()) {
-					ConditionalFormattingFrame conditionalformatFrame = new ConditionalFormattingFrame();
+					ConditionalFormattingFrame conditionalformatFrame = new ConditionalFormattingFrame(table);
 					conditionalformatFrame.setVisible(true);
 				}
 			}
@@ -927,7 +951,7 @@ public class Frame extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (!bordercaseButton.isDisabled()) {
-					BordercaseFrame bordercaseFrame = new BordercaseFrame();
+					BordercaseFrame bordercaseFrame = new BordercaseFrame(table);
 					bordercaseFrame.setVisible(true);
 				}
 			}
@@ -945,7 +969,28 @@ public class Frame extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (!addRowButton.isDisabled()) {
-					// add new row
+					EntityType testHead = table.project.getHeadEntityType();
+					LinkedList<EntityType> list = testHead.getSubEntityType();
+
+					for (int x = 0; x < list.size(); x++) {
+						table.createEntities(list.get(x),new SuperEntityPointer(table.project.getHead()));
+					}
+
+					table.data = table.project.getHead().getDataLinkedList();
+
+					/*
+					 * tableModel.addRow(new Object[] { txtField1.getText(),
+					 * txtField1.getText() });
+					 */
+
+					Object[] temp = new Object[table.data.get(0).size()];
+
+					for (int y = 0; y < table.data.get(0).size(); y++) {
+						temp[y] = table.data.getLast().get(y).getValue();
+					}
+
+					table.tableModel.addRow(temp);
+					table.repaint();
 				}
 			}
 
@@ -962,7 +1007,7 @@ public class Frame extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (!filterButton.isDisabled()) {
-					FilterFrame filterframe = new FilterFrame();
+					FilterFrame filterframe = new FilterFrame(table);
 					filterframe.setVisible(true);
 				}
 			}
@@ -980,7 +1025,7 @@ public class Frame extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (!maxValButton.isDisabled()) {
-					SetMaxValueFrame maxframe = new SetMaxValueFrame();
+					SetMaxValueFrame maxframe = new SetMaxValueFrame(table);
 					maxframe.setVisible(true);
 				}
 			}
@@ -997,7 +1042,8 @@ public class Frame extends JFrame {
 		rulesButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-
+				frmRule rules = new frmRule(Global.getGlobal().getActiveProject());
+				rules.setVisible(true);
 			}
 
 			public void mouseEntered(MouseEvent arg0) {
