@@ -1555,6 +1555,7 @@ public class Frame extends JFrame {
 		filterButton.setEnabled();
 		maxValButton.setEnabled();
 		rulesButton.setEnabled();
+		treeButton.setEnabled();
 
 		searchPanel.fadeIn();
 	}
@@ -1596,6 +1597,9 @@ public class Frame extends JFrame {
 		}
 		if (rulesButton != null) {
 			rulesButton.setDisabled();
+		}
+		if (treeButton != null) {
+			treeButton.setDisabled();
 		}
 		if (searchPanel != null) {
 			searchPanel.fadeOut();
