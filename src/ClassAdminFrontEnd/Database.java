@@ -49,7 +49,7 @@ public class Database {
 			System.out.println("document: " + rh.getFilename());
 			System.out.println("path: " + rh.getFilepath());
 			System.out.println("date: " + rh.getDate());
-			System.out.println("===================");
+			System.out.println("==================="); 
 		}
 	}
 
@@ -64,12 +64,44 @@ public class Database {
 		}
 	}
 	
-
 	public void updateRecentDocument(String filen, String filep, String d) {
 		ObjectSet result=db.queryByExample(new RecentDocument(filen,filep,null));
 		RecentDocument found=(RecentDocument)result.next();
 		found.setDate(d);
 		db.store(found);
 	}
+	
+	public String[] getDocumentNames() {
+		int i = 0;
+		String[] array = new String[10];
+		ObjectSet result = db.queryByExample(RecentDocument.class);
+		
+		while ((result.hasNext()) && (i < 10)){
+			RecentDocument rh = (RecentDocument) result.next();
+			array[i] = rh.getFilename();
+			i++;
+		}
+		return array;
+	}
+	
+	public int getDocumentCount() {
+	
+		ObjectSet result = db.queryByExample(RecentDocument.class);
+		return result.size();
+	}
+
+	public String[] getDocumentPaths() {
+		int i = 0;
+		String[] array = new String[10];
+		ObjectSet result = db.queryByExample(RecentDocument.class);
+		
+		while ((result.hasNext()) && (i < 10)){
+			RecentDocument rh = (RecentDocument) result.next();
+			array[i] = rh.getFilepath();
+			i++;
+		}
+		return array;
+	}
+	
 	
 }

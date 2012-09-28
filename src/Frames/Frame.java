@@ -4,14 +4,14 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -41,21 +41,11 @@ import javax.swing.text.BadLocationException;
 
 import org.imgscalr.Scalr;
 import org.tmatesoft.sqljet.core.SqlJetException;
-import org.tmatesoft.sqljet.core.SqlJetTransactionMode;
-import org.tmatesoft.sqljet.core.table.ISqlJetCursor;
-import org.tmatesoft.sqljet.core.table.ISqlJetTable;
-import org.tmatesoft.sqljet.core.table.ISqlJetTransaction;
-import org.tmatesoft.sqljet.core.table.SqlJetDb;
-
-import com.db4o.ObjectContainer;
 
 import ClassAdminBackEnd.EntityType;
 import ClassAdminBackEnd.FileHandler;
 import ClassAdminBackEnd.Global;
-
-import ClassAdminBackEnd.PDatExport;
 import ClassAdminBackEnd.SuperEntityPointer;
-
 import ClassAdminBackEnd.UnsupportedFileTypeException;
 import ClassAdminFrontEnd.BackgroundGradientPanel;
 import ClassAdminFrontEnd.BlurBackground;
@@ -75,11 +65,8 @@ import ClassAdminFrontEnd.ShadowPanel;
 import ClassAdminFrontEnd.ThreeStopGradientPanel;
 import ClassAdminFrontEnd.TreeView;
 import Rule.frmRule;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.IOException;
 
-public class Frame extends JFrame {
+public class Frame extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
 	private FadePanel homePanel, workspacePanel, navBar, tabBar, infoPanel, scatterplotInfoPanel, recentDocsPanel, searchPanel;
@@ -104,7 +91,7 @@ public class Frame extends JFrame {
 	private FadePanel homeInfoPanel, importInfoPanel, exportInfoPanel, studentsInfoPanel, histogramInfoPanel, boxplotInfoPanel,
 			conditionalFormattingInfoPanel, bordercaseInfoPanel, addRowInfoPanel, filterInfoPanel, maxValInfoPanel, rulesInfoPanel;
 	private ShadowPanel studentPanel;
-	private ReflectionButtonWithLabel[] recentDocsButtonsArray;
+	private ReflectionButtonWithLabel[] buttonArray;
 
 	private Database db;
 
@@ -1105,11 +1092,11 @@ public class Frame extends JFrame {
 				}
 				db.listDocuments();
 			}
-
 		} else {
 			blur.fadeOut();
 		}
 	}
+	
 
 	/*
 	 * Method with handles file import actions from the recent documents button
@@ -1332,7 +1319,39 @@ public class Frame extends JFrame {
 
 	public void createRecentDocsView() throws IOException, SqlJetException {
 		createRecentDocsDB();
+		
+		recentDocsPanel.removeAll();
+		
+		ReflectionButtonWithLabel[] buttonArray = new ReflectionButtonWithLabel[10];
+		String[] filenamesarray = db.getDocumentNames();
+		String[] filepathsarray = db.getDocumentPaths();
+		int count = db.getDocumentCount();
+		
+		int i =0;
+		while (i < count) {
+						
+			BufferedImage icon = null;
 
+			if (filenamesarray[i].endsWith("csv")) {
+				icon = ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/csvsmall.png"));
+			} 
+			else if (filenamesarray[i].endsWith("pdat")) {
+				icon = ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/pdatsmall.png"));
+			} 
+			else {
+				icon = ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/xlssmall.png"));
+			}
+
+			buttonArray[i] = new ReflectionButtonWithLabel(icon, filenamesarray[i], new Color(0xD6D6D6), new Color(
+					0xFAFAFA), filepathsarray[i]);
+			buttonArray[i].setBounds(8 + (80 * i), 8, 68, 95);
+			
+			buttonArray[i].addActionListener(this);
+			
+			recentDocsPanel.add(buttonArray[i]);
+			
+			i++;
+		}
 	}
 
 	/*
@@ -1403,6 +1422,26 @@ public class Frame extends JFrame {
 			studentPanel.setVisible(false);
 		}
 
+	}
+
+	// action for recent docs buttons
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if( e.getSource() instanceof ReflectionButtonWithLabel) {
+		       File testFile = new File(((ReflectionButtonWithLabel)e.getSource()).getPath());
+				if (testFile.exists()) {
+					try {
+						openRecentFile(testFile);
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					} catch (BadLocationException e1) {
+						e1.printStackTrace();
+					}
+				} else {
+
+				}
+		   }
+		
 	}
 
 }
