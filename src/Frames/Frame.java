@@ -4,6 +4,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseAdapter;
@@ -44,6 +47,8 @@ import org.tmatesoft.sqljet.core.table.ISqlJetTable;
 import org.tmatesoft.sqljet.core.table.ISqlJetTransaction;
 import org.tmatesoft.sqljet.core.table.SqlJetDb;
 
+import com.db4o.ObjectContainer;
+
 import ClassAdminBackEnd.EntityType;
 import ClassAdminBackEnd.FileHandler;
 import ClassAdminBackEnd.Global;
@@ -55,6 +60,7 @@ import ClassAdminBackEnd.UnsupportedFileTypeException;
 import ClassAdminFrontEnd.BackgroundGradientPanel;
 import ClassAdminFrontEnd.BlurBackground;
 import ClassAdminFrontEnd.BoxPlotFrame;
+import ClassAdminFrontEnd.Database;
 import ClassAdminFrontEnd.FadePanel;
 import ClassAdminFrontEnd.FrmTable;
 import ClassAdminFrontEnd.GradientMenuBar;
@@ -69,6 +75,9 @@ import ClassAdminFrontEnd.ShadowPanel;
 import ClassAdminFrontEnd.ThreeStopGradientPanel;
 import ClassAdminFrontEnd.TreeView;
 import Rule.frmRule;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
 
 public class Frame extends JFrame {
 
@@ -78,7 +87,7 @@ public class Frame extends JFrame {
 	private BackgroundGradientPanel backgroundPanel;
 	private GradientMenuBar menuBarWindows;
 	private JMenuBar menuBarMAC;
-	private ReflectionImagePanel container, containerRecentDocs;
+	private ReflectionImagePanel containerSelectTask, containerRecentDocs;
 	private MenuImagePanel studentsViewArrowOut, studentsViewArrowIn;
 	private ImagePanel boxChartImage, histogramChartImage, scatterplotChartImage, studentPhoto, searchImage;
 	private JFileChooser filechooser;
@@ -97,9 +106,7 @@ public class Frame extends JFrame {
 	private ShadowPanel studentPanel;
 	private ReflectionButtonWithLabel[] recentDocsButtonsArray;
 
-	private static final String DB_NAME = "db.sqlite";
-	private static final String TABLE_NAME = "Documents";
-	private File dbFile;
+	private Database db;
 
 	private int HOME_SPACE_LEFT_X;
 	private int HOME_SPACE_Y;
@@ -211,9 +218,6 @@ public class Frame extends JFrame {
 		// maximize window
 		// setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
 
-		// create database to hold recently open documents information
-		createRecentDocsDB();
-
 		// create content pane
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -237,6 +241,12 @@ public class Frame extends JFrame {
 		setupHomeScreen();
 		setupWorkspaceScreen();
 
+		this.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent we) {
+				if (db != null)
+					db.closeDatabase();
+			}
+		});
 		// frame resize listener adjust components accordingly
 		this.addComponentListener(new ComponentListener() {
 
@@ -508,32 +518,40 @@ public class Frame extends JFrame {
 		this.setGlassPane(blur);
 		blur.setBounds(0, 0, getWidth(), getHeight());
 
-		// add title bars
-		container = new ReflectionImagePanel(
-				ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/UPAdminHomeSelectTask.png")));
-		container.setBounds(117, 25, 953, 88);
-		homePanel.add(container);
-
+		// add title bars and recent docs container
+		containerSelectTask = new ReflectionImagePanel(ImageIO.read(getClass().getResource(
+				"/ClassAdminFrontEnd/resources/UPAdminHomeSelectTask.png")));
 		containerRecentDocs = new ReflectionImagePanel(ImageIO.read(getClass().getResource(
 				"/ClassAdminFrontEnd/resources/UPAdminHomeRecentDocs.png")));
+		recentDocsPanel = new FadePanel(false, 200, 200);
+
+		containerSelectTask.setBounds(117, 25, 953, 88);
 		containerRecentDocs.setBounds(117, 366, 953, 81);
+		recentDocsPanel.setBounds(160, containerRecentDocs.getHeight() + containerRecentDocs.getY() + 10, containerRecentDocs.getWidth(),
+				100);
+		recentDocsPanel.setLayout(null);
+
+		homePanel.add(containerSelectTask);
 		homePanel.add(containerRecentDocs);
+		homePanel.add(recentDocsPanel);
 
+		createRecentDocsView();
+
+		// create home buttons
 		homeImportButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/HomeImport.png")));
-		homeImportButton.setBounds(163, 139, 200, 100);
-		homePanel.add(homeImportButton);
-
 		ButtonWorkspace = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/HomeWorkspace.png")));
-		ButtonWorkspace.setBounds(155, 235, 200, 100);
-		homePanel.add(ButtonWorkspace);
-
 		homeStudents = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/HomeStudents.png")));
-		homeStudents.setBounds(554, 140, 180, 100);
-		homePanel.add(homeStudents);
-
 		homeRapidAssessment = new ReflectionButton(ImageIO.read(getClass().getResource(
 				"/ClassAdminFrontEnd/resources/HomeRapidAssessment.png")));
+
+		homeImportButton.setBounds(163, 139, 200, 100);
+		ButtonWorkspace.setBounds(155, 235, 200, 100);
+		homeStudents.setBounds(554, 140, 180, 100);
 		homeRapidAssessment.setBounds(554, 235, 250, 100);
+
+		homePanel.add(homeImportButton);
+		homePanel.add(ButtonWorkspace);
+		homePanel.add(homeStudents);
 		homePanel.add(homeRapidAssessment);
 
 		// add listener to go to workspace screen
@@ -557,33 +575,21 @@ public class Frame extends JFrame {
 				}
 			}
 		});
-		
+
 		homeRapidAssessment.addMouseListener(new MouseAdapter() {
-			
-		
-			
+
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				if(!homeRapidAssessment.isDisabled()){
-					
+				if (!homeRapidAssessment.isDisabled()) {
+
 				}
-				
+
 			}
-			
-			
+
 		});
 
-		// setup panel to contain recent documents buttons
-		recentDocsPanel = new FadePanel(false, 200, 200);
-		recentDocsPanel.setBounds(160, containerRecentDocs.getHeight() + containerRecentDocs.getY() + 10, containerRecentDocs.getWidth(),
-				100);
-		recentDocsPanel.setLayout(null);
-		homePanel.add(recentDocsPanel);
-
-		createRecentDocsView();
-
+		// fade in containers on program launch
 		recentDocsPanel.fadeIn();
-
 		homePanel.fadeIn();
 	}
 
@@ -831,7 +837,6 @@ public class Frame extends JFrame {
 				importInfoPanel.fadeOut();
 			}
 		});
-		
 
 		exportButton.addMouseListener(new MouseAdapter() {
 			@Override
@@ -973,7 +978,7 @@ public class Frame extends JFrame {
 					LinkedList<EntityType> list = testHead.getSubEntityType();
 
 					for (int x = 0; x < list.size(); x++) {
-						table.createEntities(list.get(x),new SuperEntityPointer(table.project.getHead()));
+						table.createEntities(list.get(x), new SuperEntityPointer(table.project.getHead()));
 					}
 
 					table.data = table.project.getHead().getDataLinkedList();
@@ -1090,13 +1095,17 @@ public class Frame extends JFrame {
 			homeToWorkspaceTransition();
 			tabBar.fadeIn();
 
-			try {
-				insertIntoDB(file.getName(), file.getAbsolutePath());
-			} catch (SqlJetException e) {
-				e.printStackTrace();
+			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+			Date date = new Date();
+			if (db != null) {
+				if (db.alreadyContains(file.getName(), file.getAbsolutePath())) {
+					db.updateRecentDocument(file.getName(), file.getAbsolutePath(), dateFormat.format(date));
+				} else {
+					db.addRecentDoc(file.getName(), file.getAbsolutePath(), dateFormat.format(date));
+				}
+				db.listDocuments();
 			}
 
-			// studentPanel.moveIn();
 		} else {
 			blur.fadeOut();
 		}
@@ -1315,275 +1324,15 @@ public class Frame extends JFrame {
 		}
 	}
 
-	/*
-	 * Creates the recent docs database table
-	 */
 	public void createRecentDocsDB() throws SqlJetException {
-		dbFile = new File(DB_NAME);
-		if (!dbFile.exists()) {
-			dbFile.delete();
+		db = new Database();
+		db.openDatabase();
 
-			// create database, table and two indices:
-			SqlJetDb db = SqlJetDb.open(dbFile, true);
-			// set DB option that have to be set before running any
-			// transactions:
-			db.getOptions().setAutovacuum(true);
-			// set DB option that have to be set in a transaction:
-			db.runTransaction(new ISqlJetTransaction() {
-				public Object run(SqlJetDb db) throws SqlJetException {
-					db.getOptions().setUserVersion(1);
-					return true;
-				}
-			}, SqlJetTransactionMode.WRITE);
-
-			db.beginTransaction(SqlJetTransactionMode.WRITE);
-			try {
-				String createTableQuery = "CREATE TABLE "
-						+ TABLE_NAME
-						+ " (file_ID INTEGER NOT NULL PRIMARY KEY, filename TEXT NOT NULL, file_path TEXT NOT NULL, file_last_used DATE NOT NULL)";
-				String createDateIndexQuery = "CREATE INDEX Date_Index ON " + TABLE_NAME + "(file_last_used)";
-				String createPathIndexQuery = "CREATE INDEX Path_Index ON " + TABLE_NAME + "(file_path)";
-
-				db.createTable(createTableQuery);
-				db.createIndex(createDateIndexQuery);
-				db.createIndex(createPathIndexQuery);
-			} finally {
-				db.commit();
-			}
-			// close DB and open it again (as part of example code)
-
-			db.close();
-
-		}
-	}
-
-	/*
-	 * Inserts new file information in the database or updates existing fields
-	 */
-	public void insertIntoDB(String fname, String fpath) throws SqlJetException {
-		int i = 0;
-		SqlJetDb db = SqlJetDb.open(dbFile, true);
-
-		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		Date date = new Date();
-
-		ISqlJetTable table = db.getTable(TABLE_NAME);
-
-		db.beginTransaction(SqlJetTransactionMode.READ_ONLY);
-		try {
-			i = countRecords(table.lookup("Path_Index", fpath));
-		} finally {
-			db.commit();
-		}
-
-		// if there is not such a file in the database, add it
-		if (i == 0) {
-
-			db.beginTransaction(SqlJetTransactionMode.WRITE);
-			// insert file info
-			table.insert(fname, fpath, dateFormat.format(date));
-
-			db.commit();
-			db.close();
-		}
-		// else update time accessed
-		else {
-			db.beginTransaction(SqlJetTransactionMode.WRITE);
-			// insert file info
-			long rowid = getRecordID(table.lookup("Path_Index", fpath));
-
-			ISqlJetCursor cursor = db.getTable(TABLE_NAME).open();
-			try {
-				if (cursor.goTo(rowid)) {
-					cursor.update(cursor.getValue("file_ID"), cursor.getValue("filename"), cursor.getValue("file_path"),
-							dateFormat.format(date));
-				}
-			} finally {
-				cursor.close();
-			}
-
-			db.commit();
-			db.close();
-		}
-
-	}
-
-	private long getRecordID(ISqlJetCursor cursor) throws SqlJetException {
-		return cursor.getRowId();
-	}
-
-	private int countRecords(ISqlJetCursor cursor) throws SqlJetException {
-		int counter = 0;
-		try {
-			if (!cursor.eof()) {
-				do {
-					counter++;
-				} while (cursor.next());
-			}
-		} finally {
-			cursor.close();
-		}
-		return counter;
-	}
-
-	private String[][] getRecentRecords(ISqlJetCursor cursor) throws SqlJetException {
-		String[][] recentDocs = new String[5][2];
-		try {
-			int i = 0;
-			if (!cursor.eof() || i < 5) {
-				do {
-					recentDocs[i][0] = cursor.getString("filename");
-					recentDocs[i][1] = cursor.getString("file_path");
-					i++;
-				} while (cursor.next());
-			}
-		} finally {
-			cursor.close();
-		}
-		return recentDocs;
 	}
 
 	public void createRecentDocsView() throws IOException, SqlJetException {
-		SqlJetDb db = SqlJetDb.open(dbFile, true);
-		ISqlJetTable doctable = db.getTable(TABLE_NAME);
+		createRecentDocsDB();
 
-		recentDocsButtonsArray = new ReflectionButtonWithLabel[5];
-		db.beginTransaction(SqlJetTransactionMode.READ_ONLY);
-		try {
-			String[][] recentDocs = new String[5][2];
-			int rowcount = (int) doctable.order(doctable.getPrimaryKeyIndexName()).getRowCount();
-
-			if (rowcount > 0) {
-				recentDocs = getRecentRecords(doctable.order("Date_Index").reverse());
-
-				for (int i = 0; i < rowcount; i++) {
-
-					BufferedImage icon = null;
-
-					if (recentDocs[i][0].endsWith("csv")) {
-						icon = ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/csvsmall.png"));
-					} else if (recentDocs[i][0].endsWith("pdat")) {
-						icon = ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/pdatsmall.png"));
-					} else {
-						icon = ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/xlssmall.png"));
-					}
-
-					recentDocsButtonsArray[i] = new ReflectionButtonWithLabel(icon, recentDocs[i][0], new Color(0xD6D6D6), new Color(
-							0xFAFAFA), recentDocs[i][1]);
-					recentDocsButtonsArray[i].setBounds(8 + (80 * i), 8, 68, 95);
-
-					System.out.println(i + ": " + recentDocsButtonsArray[i].getPath());
-					recentDocsPanel.add(recentDocsButtonsArray[i]);
-
-				}
-				if (recentDocsButtonsArray[0] != null) {
-					recentDocsButtonsArray[0].addMouseListener(new MouseAdapter() {
-						@Override
-						public void mousePressed(MouseEvent arg0) {
-							try {
-								File testFile = new File(recentDocsButtonsArray[0].getPath());
-								if (testFile.exists()) {
-									openRecentFile(testFile);
-								} else {
-
-								}
-							} catch (IOException e) {
-								e.printStackTrace();
-							} catch (BadLocationException e) {
-								e.printStackTrace();
-							}
-						}
-
-					});
-				}
-
-				if (recentDocsButtonsArray[1] != null) {
-					recentDocsButtonsArray[1].addMouseListener(new MouseAdapter() {
-						@Override
-						public void mousePressed(MouseEvent arg0) {
-							try {
-								File testFile = new File(recentDocsButtonsArray[1].getPath());
-								if (testFile.exists()) {
-									openRecentFile(testFile);
-								} else {
-
-								}
-							} catch (IOException e) {
-								e.printStackTrace();
-							} catch (BadLocationException e) {
-								e.printStackTrace();
-							}
-						}
-
-					});
-				}
-
-				if (recentDocsButtonsArray[2] != null) {
-					recentDocsButtonsArray[2].addMouseListener(new MouseAdapter() {
-						@Override
-						public void mousePressed(MouseEvent arg0) {
-							try {
-								File testFile = new File(recentDocsButtonsArray[2].getPath());
-								if (testFile.exists()) {
-									openRecentFile(testFile);
-								} else {
-
-								}
-							} catch (IOException e) {
-								e.printStackTrace();
-							} catch (BadLocationException e) {
-								e.printStackTrace();
-							}
-						}
-
-					});
-				}
-
-				if (recentDocsButtonsArray[3] != null) {
-					recentDocsButtonsArray[3].addMouseListener(new MouseAdapter() {
-						@Override
-						public void mousePressed(MouseEvent arg0) {
-							try {
-								File testFile = new File(recentDocsButtonsArray[3].getPath());
-								if (testFile.exists()) {
-									openRecentFile(testFile);
-								} else {
-
-								}
-							} catch (IOException e) {
-								e.printStackTrace();
-							} catch (BadLocationException e) {
-								e.printStackTrace();
-							}
-						}
-
-					});
-				}
-
-				if (recentDocsButtonsArray[4] != null) {
-					recentDocsButtonsArray[4].addMouseListener(new MouseAdapter() {
-						@Override
-						public void mousePressed(MouseEvent arg0) {
-							try {
-								File testFile = new File(recentDocsButtonsArray[4].getPath());
-								if (testFile.exists()) {
-									openRecentFile(testFile);
-								} else {
-
-								}
-							} catch (IOException e) {
-								e.printStackTrace();
-							} catch (BadLocationException e) {
-								e.printStackTrace();
-							}
-						}
-
-					});
-				}
-			}
-		} finally {
-
-		}
 	}
 
 	/*
