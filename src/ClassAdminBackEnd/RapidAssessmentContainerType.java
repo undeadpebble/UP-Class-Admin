@@ -41,20 +41,19 @@ public class RapidAssessmentContainerType extends RapidAssessmentRectangleType {
 		this.setIsRule(false);
 		this.setIsTextField(false);
 
+		if(replacedEntity.getParentEntitytype() != null){
 		replacedEntity.getParentEntitytype().getSubEntityType()
 				.remove(replacedEntity);
 		replacedEntity.getParentEntitytype().getSubEntityType().add(this);
+		}
 
 		this.setBorderCasing(replacedEntity.getBorderCasing());
 		this.setFormatting(replacedEntity.getFormatting());
 		this.setSubEntityType(replacedEntity.getSubEntityType());
 		this.setEntityList(replacedEntity.getEntityList());
 
-		SuperEntity[] entitylist = (SuperEntity[]) (replacedEntity
-				.getEntityList().toArray());
-
-		for (int z = 0; z < entitylist.length; ++z) {
-			entitylist[z].setType(this);
+		for (int z = 0; z < this.getEntityList().size(); ++z) {
+			this.getEntityList().get(z).setType(this);
 		}
 	}
 
