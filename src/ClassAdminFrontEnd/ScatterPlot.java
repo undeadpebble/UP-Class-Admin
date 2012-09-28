@@ -123,15 +123,18 @@ public class ScatterPlot {
 					if (entity instanceof XYItemEntity && entity != null) {
 						
 						XYItemEntity ent = (XYItemEntity) entity;
-					
+						int [] scatterwaardes = project.getScatterIndexes();
 						
 						
 						int sindex = ent.getSeriesIndex();
 						int iindex = ent.getItem();
-						project.setSelected(iindex);
+						for(int q=0;q<scatterwaardes.length;q++)
+						{
+							if(scatterwaardes[q]== iindex)
+								project.setSelected(q);
+						}
 						
-						
-					
+					/*
 						final CircleDrawer cd = new CircleDrawer(Color.red,
 								new BasicStroke(1.0f), null);
 						final XYAnnotation bestBid = new XYDrawableAnnotation(datasetMain
@@ -140,8 +143,8 @@ public class ScatterPlot {
 					
 						
 						
-						chart.getXYPlot().addAnnotation(bestBid);
-						//project.updatecharts();
+						chart.getXYPlot().addAnnotation(bestBid);*/
+						project.updatecharts();
 						
 						
 					

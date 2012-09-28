@@ -70,6 +70,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 		String xas = kolom[0];
 		String yas = kolom[1];
 
+		// get the first headers value
 		for (int s = 0; s < headers.length; s++) {
 			if (headers[s].equals(kolom[0])) {
 				houerx = s;
@@ -77,7 +78,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 			}
 
 		}
-
+		// get the second headers value
 		for (int s = 0; s < headers.length; s++) {
 			if (headers[s].equals(kolom[1])) {
 				houery = s;
@@ -86,6 +87,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 
 		}
 
+		// Sorting for scatterselection
 		double[] sorteermidq = new double[diedata.size()];
 		double[] sorteermidw = new double[diedata.size()];
 		int[] scattergetalle = new int[diedata.size()];
@@ -93,19 +95,25 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 			sorteermidq[q] = diedata.get(q).get(houerx).getMark();
 			sorteermidw[q] = diedata.get(q).get(houery).getMark();
 			scattergetalle[q] = q;
-			
+
+		}
+
+		XYSeries series = new XYSeries("Scatter");
+		// Add to series
+		for (int q = 0; q < diedata.size(); q++) {
+			series.add(diedata.get(q).get(houerx).getMark(), diedata.get(q).get(houery).getMark());
+
 		}
 
 		int n = sorteermidq.length;
 		double temp = 0;
 		double temp2 = 0;
 		int temp3 = 0;
-	
+		// Bubblesort
 		for (int i = 0; i < n; i++) {
 			for (int j = 1; j < (n - i); j++) {
 				if (sorteermidq[j - 1] > sorteermidq[j]) {
-					
-					
+
 					// swap the elements!
 					temp2 = sorteermidw[j - 1];
 					sorteermidw[j - 1] = sorteermidw[j];
@@ -123,39 +131,28 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 
 			}
 		}
+
 		int[] houer = new int[scattergetalle.length];
-		for (int x = 0; x < sorteermidq.length; x++)
-		{
-			System.out.println("Sorteer deeerder " + x + "   " + sorteermidq[x] + " " +sorteermidw[x]+" "+ scattergetalle[x]);
-		
-		
-		}
-			XYSeries series = new XYSeries("Scatter");
 
-		for (int q = 0; q < diedata.size(); q++) {
-			series.add(sorteermidq[q], sorteermidw[q]);
+		for (int x = 0; x < sorteermidq.length; x++) {
+			System.out.println("Sorteer deeerder " + x + "   " + sorteermidq[x] + " " + sorteermidw[x] + " " + scattergetalle[x]);
 
 		}
-		
-		
-	
-		int flipen;
-		int flipen2;
-		for(int i=0;i<scattergetalle.length;i++)
-		{
-			
-			flipen =scattergetalle[i];
-			flipen2=scattergetalle[flipen];
-			houer[flipen2] =flipen;
-			System.out.println(flipen2+" "+flipen);
-			
+
+		int houerflip;
+		int houerflip2;
+		for (int i = 0; i < scattergetalle.length; i++) {
+
+			houerflip = scattergetalle[i];
+			houerflip2 = scattergetalle[houerflip];
+			houer[houerflip2] = houerflip;
+			// System.out.println(flipen2+" "+flipen);
+
 		}
-			
-			
-		for(int x=0;x<scattergetalle.length;x++)
+
+		for (int x = 0; x < scattergetalle.length; x++)
 			System.out.println(houer[x]);
-		
-		
+
 		project.setScatterSelect(houer);
 
 		dataset.addSeries(series);
