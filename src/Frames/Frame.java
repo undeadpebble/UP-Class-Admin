@@ -27,6 +27,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
@@ -1096,7 +1097,6 @@ public class Frame extends JFrame implements ActionListener {
 			blur.fadeOut();
 		}
 	}
-	
 
 	/*
 	 * Method with handles file import actions from the recent documents button
@@ -1319,37 +1319,37 @@ public class Frame extends JFrame implements ActionListener {
 
 	public void createRecentDocsView() throws IOException, SqlJetException {
 		createRecentDocsDB();
-		
+
 		recentDocsPanel.removeAll();
-		
+
 		ReflectionButtonWithLabel[] buttonArray = new ReflectionButtonWithLabel[10];
 		String[] filenamesarray = db.getDocumentNames();
 		String[] filepathsarray = db.getDocumentPaths();
 		int count = db.getDocumentCount();
-		
-		int i =0;
+
+		int i = 0;
 		while (i < count) {
-						
+
 			BufferedImage icon = null;
 
 			if (filenamesarray[i].endsWith("csv")) {
 				icon = ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/csvsmall.png"));
-			} 
-			else if (filenamesarray[i].endsWith("pdat")) {
+			} else if (filenamesarray[i].endsWith("pdat")) {
 				icon = ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/pdatsmall.png"));
-			} 
-			else {
+			} else {
 				icon = ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/xlssmall.png"));
 			}
 
-			buttonArray[i] = new ReflectionButtonWithLabel(icon, filenamesarray[i], new Color(0xD6D6D6), new Color(
-					0xFAFAFA), filepathsarray[i]);
+			buttonArray[i] = new ReflectionButtonWithLabel(icon, filenamesarray[i], new Color(0xD6D6D6), new Color(0xFAFAFA),
+					filepathsarray[i]);
 			buttonArray[i].setBounds(8 + (80 * i), 8, 68, 95);
-			
+
 			buttonArray[i].addActionListener(this);
-			
+
+			buttonArray[i].setToolTipText(filepathsarray[i]);
+
 			recentDocsPanel.add(buttonArray[i]);
-			
+
 			i++;
 		}
 	}
@@ -1427,21 +1427,28 @@ public class Frame extends JFrame implements ActionListener {
 	// action for recent docs buttons
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if( e.getSource() instanceof ReflectionButtonWithLabel) {
-		       File testFile = new File(((ReflectionButtonWithLabel)e.getSource()).getPath());
-				if (testFile.exists()) {
-					try {
-						openRecentFile(testFile);
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					} catch (BadLocationException e1) {
-						e1.printStackTrace();
-					}
-				} else {
-
+		if (e.getSource() instanceof ReflectionButtonWithLabel) {
+			File testFile = new File(((ReflectionButtonWithLabel) e.getSource()).getPath());
+			if (testFile.exists()) {
+				try {
+					openRecentFile(testFile);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				} catch (BadLocationException e1) {
+					e1.printStackTrace();
 				}
-		   }
-		
+			} else {
+				recentDocsPanel.remove(((ReflectionButtonWithLabel) e.getSource()));
+				db.deleteRecentDocuments(((ReflectionButtonWithLabel) e.getSource()).getPath());
+
+				JOptionPane.showMessageDialog(frame, "File seems to be missing from last directory location, removing shortcut.",
+						"File Missing", JOptionPane.ERROR_MESSAGE);
+
+				recentDocsPanel.revalidate();
+				recentDocsPanel.repaint();
+			}
+		}
+
 	}
 
 }
