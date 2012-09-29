@@ -82,7 +82,7 @@ public class Database {
 		
 		Query query=db.query();
 		query.constrain(RecentDocument.class);
-		query.descend("date").orderAscending();
+		query.descend("date").orderDescending();
 		ObjectSet result=query.execute(); 
 		
 		while ((result.hasNext()) && (i < 10)){
@@ -104,7 +104,7 @@ public class Database {
 		String[] array = new String[10];
 		Query query=db.query();
 		query.constrain(RecentDocument.class);
-		query.descend("date").orderAscending();
+		query.descend("date").orderDescending();
 		ObjectSet result=query.execute(); 
 		
 		while ((result.hasNext()) && (i < 10)){
