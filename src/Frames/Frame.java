@@ -34,6 +34,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
@@ -46,6 +48,7 @@ import org.tmatesoft.sqljet.core.SqlJetException;
 import ClassAdminBackEnd.EntityType;
 import ClassAdminBackEnd.FileHandler;
 import ClassAdminBackEnd.Global;
+import ClassAdminBackEnd.Project;
 import ClassAdminBackEnd.SuperEntityPointer;
 import ClassAdminBackEnd.UnsupportedFileTypeException;
 import ClassAdminFrontEnd.BackgroundGradientPanel;
@@ -801,9 +804,8 @@ public class Frame extends JFrame implements ActionListener {
 				try {
 					workspaceToHomeTransition();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
-				} 
+				}
 			}
 
 			public void mouseEntered(MouseEvent arg0) {
@@ -1180,14 +1182,31 @@ public class Frame extends JFrame implements ActionListener {
 	 * create a new Tab when a new file is imported
 	 */
 	public void createTab(File file) {
+		
+		
+		
+
+		//set selected index to new file opened
+		//tabbedPane.setSelectedIndex(tabbedPane.getTabCount()-1);
+		setNavButtonsEnabled();
+
+		studentPanel.moveIn();
+		
+		//set selected table 
+		//table = Global.getGlobal().getActiveProject().getTables().get(0);
+		
 		try {
+			Global.getGlobal().addProject(new Project());
 			fileHandler.openFile(file.getAbsolutePath(), Global.getGlobal().getActiveProject());
 		} catch (UnsupportedFileTypeException e) {
 			e.printStackTrace();
 		}
 		// create table on panel
+		
 		table = new FrmTable(Global.getGlobal().getActiveProject().getHead().getHeaders(), Global.getGlobal().getActiveProject().getHead()
 				.getDataLinkedList(), Global.getGlobal().getActiveProject());
+		
+		
 
 		// listener for changes of selection in table
 		table.getTable().getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -1195,31 +1214,39 @@ public class Frame extends JFrame implements ActionListener {
 				showStudent();
 			}
 		});
-
+		
+		
 		// create tabbedPane
-		if (tabbedPane == null) {
-			tabbedPane = new JTabbedPane();
-			tabbedPane.setBounds(20, 20, workspacePanel.getWidth() - 40, workspacePanel.getHeight() - 40 - navBar.getHeight());
-		}
+				if (tabbedPane == null) {
+					tabbedPane = new JTabbedPane();
+					tabbedPane.setBounds(20, 20, workspacePanel.getWidth() - 40, workspacePanel.getHeight() - 40 - navBar.getHeight());
 
-		// create panel on which tabbedPane will be
-		if (tabBar == null) {
-			tabBar = new FadePanel(false, 800, 400);
-			tabBar.setBounds(0, 0, frame.getWidth(), frame.getHeight());
-			tabBar.setLayout(null);
-		}
-		tabBar.add(tabbedPane);
+					tabbedPane.addChangeListener(new ChangeListener() {
+						// This method is called whenever the selected tab changes
+						@Override
+						public void stateChanged(ChangeEvent arg0) {
+							Global.getGlobal().setActiveProjectIndex(tabbedPane.getSelectedIndex()+1);
+								table = Global.getGlobal().getActiveProject().getTables().get(0);
+						}
+					});
+				}
 
-		workspacePanel.add(tabBar);
+				// create panel on which tabbedPane will be
+				if (tabBar == null) {
+					tabBar = new FadePanel(false, 800, 400);
+					tabBar.setBounds(0, 0, frame.getWidth(), frame.getHeight());
+					tabBar.setLayout(null);
+				}
+				tabBar.add(tabbedPane);
 
-		// put panel with table on a new tab
-		tabbedPane.addTab(file.getName(), table);
-		tabCount++;
-		tabbedPane.setTabComponentAt(tabCount, new TabButton(file.getName()));
+				workspacePanel.add(tabBar);
 
-		setNavButtonsEnabled();
-
-		studentPanel.moveIn();
+				// put panel with table on a new tab
+				tabbedPane.addTab(file.getName(), table);
+				
+				tabCount++;
+				tabbedPane.setTabComponentAt(tabCount, new TabButton(file.getName()));
+		//tabbedPane.add(table, tabCount);
 	}
 
 	/*
