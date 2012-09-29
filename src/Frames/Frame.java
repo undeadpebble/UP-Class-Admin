@@ -581,8 +581,8 @@ public class Frame extends JFrame implements ActionListener {
 				}
 
 			}
-
 		});
+
 
 		// fade in containers on program launch
 		recentDocsPanel.fadeIn();
@@ -871,12 +871,7 @@ public class Frame extends JFrame implements ActionListener {
 			public void mousePressed(MouseEvent arg0) {
 				if (!studentsButton.isDisabled()) {
 					table.getTable().getSelectedRow();
-
-					// kom by build tree btn
-					TreeView.createEntityTypeFrm("name", Global.getGlobal().getActiveProject());
-					// moet hier bly
-					// TreeView.createStudentFrm("name",
-					// table.getData().get(table.getTable().getSelectedRow()).get(0));
+					TreeView.createStudentFrm("name",table.getData().get(table.getTable().getSelectedRow()).get(0));
 				}
 			}
 
@@ -886,6 +881,23 @@ public class Frame extends JFrame implements ActionListener {
 
 			public void mouseExited(MouseEvent arg0) {
 				studentsInfoPanel.fadeOut();
+			}
+		});
+		
+		treeButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				if (!treeButton.isDisabled()) {
+					TreeView.createEntityTypeFrm("name", Global.getGlobal().getActiveProject());					
+				}
+			}
+
+			public void mouseEntered(MouseEvent arg0) {
+				
+			}
+
+			public void mouseExited(MouseEvent arg0) {
+				
 			}
 		});
 
