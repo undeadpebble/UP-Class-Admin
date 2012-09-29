@@ -11,6 +11,8 @@ import java.awt.dnd.DragSource;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.geom.Point2D;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -89,6 +91,8 @@ import ClassAdminBackEnd.EntityType;
 import ClassAdminBackEnd.Project;
 import ClassAdminBackEnd.SuperEntity;
 import Frames.Frame;
+import Frames.FrmNewNode;
+import Frames.FrmTreeHelpDialog;
 
 public class TreeView extends Display {
 
@@ -102,7 +106,7 @@ public class TreeView extends Display {
 
 	private String m_label = "label";
 	private int m_orientation = Constants.ORIENT_LEFT_RIGHT;
-
+	static TreeView tview;
 	static Cursor dc = new Cursor(Cursor.DEFAULT_CURSOR);
 	static Cursor yd = DragSource.DefaultMoveDrop;
 	static JFastLabel title = new JFastLabel("                 ");
@@ -112,6 +116,7 @@ public class TreeView extends Display {
 	static JFastLabel lblChild = new JFastLabel("Child: ");
 	static JButton btnNew = new JButton("Add Node");
 	static JButton btnHelp = new JButton("?");
+	static FrmNewNode newNode;
 	
 	static private boolean bParent = false;
 	static private boolean bChild = false;
@@ -304,6 +309,7 @@ public class TreeView extends Display {
 		frame.setContentPane(treeview);
 		frame.pack();
 		frame.setVisible(true);
+		newNode = new FrmNewNode(myTree, myProject, frame,tview);
 
 	}
 
@@ -357,9 +363,9 @@ public class TreeView extends Display {
 		}
 
 		// create a new treemap
-		final TreeView tview = new TreeView(t, label);
+		tview = new TreeView(t, label);
         PopUpMenu p = new PopUpMenu();
-        p.setTreeView(tview,myTree);
+        p.setTreeView(tview,myTree,myProject);
 		tview.setBackground(BACKGROUND);
 		tview.setForeground(FOREGROUND);
 
@@ -411,16 +417,15 @@ public class TreeView extends Display {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				createHelpDialog();
-				
+				FrmTreeHelpDialog helper = new FrmTreeHelpDialog();
+				helper.showFrmTreeHelpDialog();
 			}
 		});
 		btnNew.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				createNewNode();
-
+				newNode.showFrmNewNode(iParent);
 			}
 		});
 
@@ -482,7 +487,7 @@ public class TreeView extends Display {
 		}
 
 		// create a new treemap
-		final TreeView tview = new TreeView(t, label);
+		tview = new TreeView(t, label);
 		
 		tview.setBackground(BACKGROUND);
 		tview.setForeground(FOREGROUND);
@@ -512,222 +517,7 @@ public class TreeView extends Display {
 		return panel;
 	}
 
-	static JDialog frame = null;
-
-	private static void createHelpDialog() {
-		JDialog frame = new JDialog();
-		frame.setSize(600, 400);
-		frame.setLayout(new GridLayout(5, 2));
-		final JLabel p1 = new JLabel("Select Parent");
-		final JLabel p2 = new JLabel("Deselect Parent");
-		final JLabel c1 = new JLabel("Select Child");
-		final JLabel c2 = new JLabel("Deselect Child");
-		final JLabel pp1 = new JLabel("SHFT + Left Mouse");
-		final JLabel pp2 = new JLabel("SHFT + Right Mouse");
-		final JLabel cc1 = new JLabel("CTRL + Left Mouse");
-		final JLabel cc2 = new JLabel("CTRL + Right Mouse");
-		p1.setFont(FontLib.getFont("Arial", Font.BOLD, 16));
-		p2.setFont(FontLib.getFont("Arial", Font.BOLD, 16));
-		c1.setFont(FontLib.getFont("Arial", Font.BOLD, 16));
-		c2.setFont(FontLib.getFont("Arial", Font.BOLD, 16));
-		pp1.setFont(FontLib.getFont("Arial", Font.PLAIN, 16));
-		pp2.setFont(FontLib.getFont("Arial", Font.PLAIN, 16));
-		cc1.setFont(FontLib.getFont("Arial", Font.PLAIN, 16));
-		cc2.setFont(FontLib.getFont("Arial", Font.PLAIN, 16));
-		frame.add(p1);
-		frame.add(p2);
-		frame.add(pp1);
-		frame.add(pp2);
-		frame.add(c1);
-		frame.add(c2);
-		frame.add(cc1);
-		frame.add(cc2);
-
-		frame.pack();
-		frame.setVisible(true);
-	}
-
-	private static void createNewNode() {
-		final Table nodes = myTree.getNodeTable();
-		try {
-			frame = new JDialog(new Frame(), true);
-		} catch (SqlJetException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		JPanel pnlRad = new JPanel(new GridLayout(1, 2));
-		frame.setSize(600, 600);
-
-		frame.setLayout(new GridLayout(6, 2));
-
-		final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		Date date = new Date();
-		final JLabel lblName = new JLabel("Name:");
-		final JComboBox cmbParent = new JComboBox();
-		final JLabel lblParent = new JLabel("Parent:");
-		final JTextField txtName = new JTextField();
-		final JLabel lblText = new JLabel("Text field");
-		final JRadioButton rblYes = new JRadioButton("Yes");
-		final JRadioButton rblNo = new JRadioButton("No");
-		final ButtonGroup group = new ButtonGroup();
-		final JLabel lblDate = new JLabel("Date of assesment:");
-		final JTextArea txtDate = new JTextArea();
-		final JButton btnDate = new JButton("change");
-		final JLabel lblWeight = new JLabel("Weight");
-		JButton btnAdd = new JButton("Add");
-		JButton btnClose = new JButton("Close");
-		SpinnerNumberModel snmWeight = new SpinnerNumberModel(new Double(1.00), // value
-				new Double(0.00), // min
-				new Double(100.00), // max
-				new Double(0.01)); // step
-		final JSpinner txtWeight = new JSpinner(snmWeight);
-
-		txtName.setSize(120, 30);
-		txtDate.setText(dateFormat.format(date));
-		rblNo.setSelected(true);
-		group.add(rblYes);
-		group.add(rblNo);
-
-		for (int r = 0; r < nodes.getRowCount(); r++) {
-			for (int c = 0; c < nodes.getColumnCount(); c++) {
-				cmbParent.addItem(nodes.getString(r, c));
-			}
-		}
-
-		btnDate.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				try {
-					txtDate.setText(new DatePicker(new Frame()).setPickedDate());
-				} catch (SqlJetException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		});
-
-		btnAdd.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				boolean b = true;
-				boolean isText = false;
-				Node parent = null;
-				Node child = null;
-				String assDate = "";
-				double weight = 1.0;
-
-				int selectedIndex = cmbParent.getSelectedIndex();
-				if (selectedIndex == 0) {
-					b = false;
-					lblParent.setForeground(Color.red);
-				}
-
-				if (txtName.getText() == null || txtName.getText().equals("")) {
-					b = false;
-					lblName.setForeground(Color.red);
-				}
-
-				if (rblYes.isSelected())
-					isText = true;
-
-				Date d = null;
-				try {
-					d = dateFormat.parse(txtDate.getText());
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-
-				if (d == null) {
-					b = false;
-					lblDate.setForeground(Color.RED);
-				}
-
-				if (b) {
-					parent = myTree.getNode(cmbParent.getSelectedIndex()); // get
-																			// parent
-					child = myTree.addNode(); // create child
-
-					for (int c = 0; c < child.getColumnCount() - 1; c++)
-						// copy parent data
-						child.set(c, parent.get(c));
-
-					child.set("name", txtName.getText()); // edit child to fit
-															// new child
-
-					myTree.addEdge(parent, child); // add edge between parent
-													// and child
-
-					// add child to parent in back end
-					EntityType newE = new EntityType(txtName.getText(), myProject
-							.getTreeLinkedList().get(
-									cmbParent.getSelectedIndex()),
-							isText, d, (Double) txtWeight.getValue());
-
-					myProject.getTreeLinkedList().add(newE);
-					newE.populateTreeWithEntities();
-
-					// refresh cmbParent content
-					cmbParent.removeAllItems();
-					for (int r = 0; r < nodes.getRowCount(); r++) {
-						for (int c = 0; c < nodes.getColumnCount(); c++) {
-							cmbParent.addItem(nodes.getString(r, c));
-						}
-					}
-
-					// set selected index to what it was
-					cmbParent.setSelectedIndex(selectedIndex);
-
-					// reset all values
-					rblNo.setSelected(true);
-					txtWeight.setValue(new Double(1.0));
-					txtName.setText(null);
-					txtDate.setText(dateFormat.format(new Date()));
-					lblParent.setForeground(Color.BLACK);
-					lblName.setForeground(Color.BLACK);
-					lblDate.setForeground(Color.BLACK);
-					isText = false;
-				}// if b
-			}// actionListener
-		});
-
-		btnClose.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				myProject.updateTables();
-				frame.dispose();
-			}
-		});
-
-		if (iParent != -1)
-			cmbParent.setSelectedIndex(iParent);
-		else
-			cmbParent.setSelectedIndex(0);
-
-		JPanel pnlDate = new JPanel(new GridLayout(1, 2));
-		pnlDate.add(txtDate);
-		pnlDate.add(btnDate);
-		frame.add(lblParent);
-		frame.add(cmbParent);
-		frame.add(lblName);
-		frame.add(txtName);
-		frame.add(lblText);
-		pnlRad.add(rblYes);
-		pnlRad.add(rblNo);
-		frame.add(pnlRad);
-		frame.add(lblDate);
-		frame.add(pnlDate);
-		frame.add(lblWeight);
-		frame.add(txtWeight);
-		frame.add(btnAdd);
-		frame.add(btnClose);
-		frame.pack();
-		frame.setVisible(true);
-
-	}
-
+	
 	// ------------------------------------------------------------------------
 
 	public class OrientAction extends AbstractAction {
@@ -846,7 +636,7 @@ public class TreeView extends Display {
 		public void itemPressed(VisualItem item, MouseEvent e) {
 
 			Visualization vis = item.getVisualization();
-			vis.getFocusGroup(Visualization.FOCUS_ITEMS).setTuple(item);
+			vis.getFocusGroup(Visualization.FOCUS_ITEMS).setTuple(item); 
 			item.setFixed(true);
 			dragged = false;
 			Display d = (Display) e.getComponent();
