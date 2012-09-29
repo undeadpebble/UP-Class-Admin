@@ -19,7 +19,7 @@ import Rule.Rule;
 
 /**
  * @author undeadpebble
- *
+ * 
  */
 public class Project {
 	private SuperEntity head;
@@ -35,96 +35,92 @@ public class Project {
 	private LinkedList<Rule> rules = new LinkedList<Rule>();
 	private LinkedList<EntityType> treeLinkedList;
 	private LinkedList<FrmTable> tables = new LinkedList<FrmTable>();
-	
 
-	public void clearselected()
-	{
+	public void clearselected() {
 		selectedIndexes = new ArrayList();
+		this.getSelected().clear();
 		updatecharts();
 	}
-	
-	public void addscattercharts(ScatterPlotFrame x)
-	{
-		
+
+	public void addscattercharts(ScatterPlotFrame x) {
+
 		scattercharts.add(x);
-		
+
 	}
-	public void addboxplotcharts(BoxPlotFrame x)
-	{
-		
+
+	public void addboxplotcharts(BoxPlotFrame x) {
+
 		scattercharts.add(x);
-		
+
 	}
-	public void addhistogramcharts(HistogramFrame x)
-	{
-		
+
+	public void addhistogramcharts(HistogramFrame x) {
+
 		histogramcharts.add(x);
-		
+
 	}
-	public void updatecharts()
-	{
-		for(int i =0 ; i < scattercharts.size();i++)
-		((ScatterPlotFrame) scattercharts.get(i)).update();
-		for(int i =0 ; i < histogramcharts.size();i++)
-		{
-			
-		((HistogramFrame) histogramcharts.get(i)).update();
+
+	public void updatecharts() {
+		for (int i = 0; i < scattercharts.size(); i++)
+			((ScatterPlotFrame) scattercharts.get(i)).update();
+		for (int i = 0; i < histogramcharts.size(); i++) {
+
+			((HistogramFrame) histogramcharts.get(i)).update();
 		}
 	}
 
-	public void setSelected(int x)
-	{
-		boolean duplicate =false;
-		for(int i=0;i<selectedIndexes.size();i++)
-		{
-			if((Integer)selectedIndexes.get(i)==x)
+	public void setSelected(int x) {
+		
+		boolean duplicate = false;
+		for (int i = 0; i < selectedIndexes.size(); i++) {
+			if ((Integer) selectedIndexes.get(i) == x)
 				duplicate = true;
 		}
-		if (duplicate==false)
-		{
-		selectedIndexes.add(x);
-		
-		if(scatterIndexes !=null)
-		{
-		scatterArrayListIndexes.add(scatterIndexes[x]);
+		if (duplicate == false) {
+			selectedIndexes.add(x);
+			
+			
+			for(int w=0;w< this.getHead().getDataLinkedList().get(0).size();w++ )
+				this.getSelected().add(this.getHead().getDataLinkedList().get(x).get(w));
+			if (scatterIndexes != null) {
+				scatterArrayListIndexes.add(scatterIndexes[x]);
+
+			}
+			
+			System.out.println("Set selected index" + x);
 		
 		}
-		
-		System.out.println("Set selected index" + x);
-		}
+		for(int y=0;y<tables.size();y++)
+			tables.get(y).repaint();
 		
 	}
-	public ArrayList getSelectedIndexes()
-	{
+
+	public ArrayList getSelectedIndexes() {
 		return selectedIndexes;
 	}
-	public void setScatterSelect(int [] x)
-	{
-			scatterIndexes =x;
-			
-	
+
+	public void setScatterSelect(int[] x) {
+		scatterIndexes = x;
+
 	}
-	public int[] getScatterIndexes()
-	{
+
+	public int[] getScatterIndexes() {
 		return scatterIndexes;
 	}
 
-	public void updateTables(){
-		for(int x = 0; x < tables.size();x++){
+	public void updateTables() {
+		for (int x = 0; x < tables.size(); x++) {
 			tables.get(x).redraw();
 		}
 	}
-	
-	public LinkedList<FrmTable> getTables(){
+
+	public LinkedList<FrmTable> getTables() {
 		return tables;
 	}
 
-	
 	public LinkedList<Rule> getRules() {
 		return rules;
 	}
-
-
 
 	/**
 	 * @return the headEntityType
@@ -133,42 +129,39 @@ public class Project {
 		return headEntityType;
 	}
 
-
 	/**
-	 * @param headEntityType the headEntityType to set
+	 * @param headEntityType
+	 *            the headEntityType to set
 	 */
 	public void setHeadEntityType(EntityType headEntityType) {
 		this.headEntityType = headEntityType;
 	}
 
-
 	public SuperEntity getHead() {
 		return head;
 	}
-	
 
 	public void setHead(SuperEntity head) {
 		this.head = head;
 
 	}
+
 	public LinkedList<SuperEntity> getSelected() {
-		if(selected==null)
+		if (selected == null)
 			selected = new LinkedList<SuperEntity>();
 		return selected;
 	}
 
-	public void saveToDB(SqlJetDb db) throws SqlJetException{
+	public void saveToDB(SqlJetDb db) throws SqlJetException {
 		PDatIDGenerator idgen = new PDatIDGenerator();
 		this.headEntityType.saveToDB(db, new Long(0), idgen);
 
-		
 		this.head.saveToDB(db, 0, idgen);
-		
+
 	}
-	
-	public LinkedList<EntityType> getTreeLinkedList()
-	{
-		if(treeLinkedList == null)
+
+	public LinkedList<EntityType> getTreeLinkedList() {
+		if (treeLinkedList == null)
 			treeLinkedList = new LinkedList<EntityType>();
 		return treeLinkedList;
 	}
