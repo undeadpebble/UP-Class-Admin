@@ -52,6 +52,7 @@ public class frmRule extends JFrame {
 
 	private LinkedList<SuperEntity> heads;
 	private LinkedList<EntityType> headTypes = new LinkedList<EntityType>();
+	private LinkedList<Rule> acktualRules = new LinkedList<Rule>();
 
 	private JComboBox cbxOpperator = new JComboBox();
 	private JComboBox cbxRuleChooser = new JComboBox();
@@ -83,8 +84,7 @@ public class frmRule extends JFrame {
 	private Label lblText2 = new Label("->");
 	private Label lblRule2 = new Label("->");
 	private Label lblEntityType2 = new Label("->");
-	private final JLabel lblCreateNewRule = new JLabel(
-			"Create new rule of type:");
+	private JLabel lblCreateNewRule = new JLabel("Create new rule of type:");
 
 	/**
 	 * Create the frame.
@@ -228,11 +228,6 @@ public class frmRule extends JFrame {
 			if (!ruleList.get(x).getName().contains("reqwuiop")
 					&& !ruleList.get(x).getName()
 							.contains("referencespsaiodfhnosaudhf")) {
-				System.out.println(ruleList.get(x).getName());
-				System.out.println(ruleList.get(x).getName()
-						.contains("reqwuiop"));
-				System.out.println(ruleList.get(x).getName()
-						.contains("referencespsaiodfhnosaudhf"));
 
 				ruleStrings[ruleReferences.size()] = ruleList.get(x).getName();
 				ruleReferences.add(x);
@@ -240,9 +235,10 @@ public class frmRule extends JFrame {
 		}
 
 		cbxRules.setModel(new DefaultComboBoxModel(ruleStrings));
-		
-		lblselected1.setVisible(false);
+
+		lblselected1.setVisible(true);
 		lblselected2.setVisible(false);
+		btnRemoveRule.setVisible(false);
 
 		lblrule.setForeground(Color.WHITE);
 		lblrule.setBounds(62, 45, 165, 14);
@@ -451,7 +447,7 @@ public class frmRule extends JFrame {
 								project, headTypes.get(cbxReference1
 										.getSelectedIndex()));
 						ruleList.add(rule2);
-					} else if (lblRule1.isVisible()) {
+					} else if (lblRule2.isVisible()) {
 						rule2 = (FloatRule) floatRuleList.get(cbxFloat2
 								.getSelectedIndex());
 					} else {
@@ -475,6 +471,7 @@ public class frmRule extends JFrame {
 		cbxRuleChooser.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
 				switch (cbxRuleChooser.getSelectedIndex()) {
 				case 0:
 					reactivateFloat();
@@ -625,12 +622,381 @@ public class frmRule extends JFrame {
 			}
 		});
 		// ------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+		cbxRules.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+
+				// check if works allways
+				int selected = cbxRules.getSelectedIndex();
+
+				for (int x = 0; x < ruleList.size(); x++) {
+					if (!ruleList.get(x).getName().contains("reqwuiop")
+							&& !ruleList.get(x).getName()
+									.contains("referencespsaiodfhnosaudhf")) {
+						acktualRules.add(ruleList.get(x));
+					}
+				}
+
+				Rule rule = acktualRules.get(cbxRules.getSelectedIndex());
+				switch (rule.getType()) {
+				case 1: {
+
+					reactivateBooleanFloat();
+					cbxRules.setSelectedIndex(selected);
+					txtName.setText(rule.getName());
+					FloatRule child1 = ((FloatBoolRule) rule).getChild1();
+					FloatRule child2 = ((FloatBoolRule) rule).getChild2();
+
+					int charop = 0;
+					for (int x = 0; x < opFloatBoolChar.length; x++) {
+						if (opFloatBoolChar[x] == ((FloatBoolRule) rule)
+								.getOpperator()) {
+							charop = x;
+							break;
+						}
+					}
+					cbxOpperator.setSelectedIndex(charop);
+
+					if (child1 != null) {
+						if (child1.getName().contains("reqwuiop")) {
+							spinFloat1.setValue(child1.getValue());
+						} else {
+							if (child1.getReferences() != null) {
+								int z = 0;
+								String[] headers = new String[headTypes.size()];
+								for (int x = 0; x < headTypes.size(); x++) {
+									headers[x] = headTypes.get(x).getName();
+								}
+								for (int x = 0; x < headers.length; x++) {
+									if (headers[x].contains(child1
+											.getReferences().getName())) {
+										z = x;
+										break;
+									}
+								}
+								cbxReference1.setSelectedIndex(z);
+							} else {
+								if (child1.getChild1() != null) {
+									int z = 0;
+									for (int x = 0; x < floatRuleList.size(); x++) {
+										if (floatRuleList.get(x).getName()
+												.contains(child1.getName())) {
+											z = x;
+										}
+									}
+									cbxFloat1.setSelectedIndex(z);
+								}
+							}
+						}
+
+						if (child2.getName().contains("reqwuiop")) {
+							spinFloat2.setValue(child2.getValue());
+						} else {
+							if (child2.getReferences() != null) {
+								int z = 0;
+								String[] headers = new String[headTypes.size()];
+								for (int x = 0; x < headTypes.size(); x++) {
+									headers[x] = headTypes.get(x).getName();
+								}
+								for (int x = 0; x < headers.length; x++) {
+									if (headers[x].contains(child2
+											.getReferences().getName())) {
+										z = x;
+										break;
+									}
+								}
+								cbxReference2.setSelectedIndex(z);
+							} else {
+								if (child2.getChild2() != null) {
+									int z = 0;
+									for (int x = 0; x < floatRuleList.size(); x++) {
+										if (floatRuleList.get(x).getName()
+												.contains(child2.getName())) {
+											z = x;
+										}
+									}
+									cbxFloat2.setSelectedIndex(z);
+								}
+							}
+						}
+					}
+				}
+					break;
+
+				case 2: {
+					reactivateStringBool();
+					cbxRules.setSelectedIndex(selected);
+
+					txtName.setText(rule.getName());
+					StringRule child1 = ((StringBoolRule) rule).getChild1();
+					StringRule child2 = ((StringBoolRule) rule).getChild2();
+
+					int charop = 0;
+					for (int x = 0; x < opStringBoolChar.length; x++) {
+						if (opStringBoolChar[x] == ((StringBoolRule) rule)
+								.getOpperator()) {
+							charop = x;
+							break;
+						}
+					}
+					cbxStringComp.setSelectedIndex(charop);
+
+					if (child1 != null) {
+						if (child1.getName().contains("reqwuiop")) {
+							txtStr1.setText(child1.getValue());
+							lblRule1.setVisible(false);
+							lblText1.setVisible(true);
+							lblEntityType1.setVisible(false);
+						} else {
+							if (child1.getReferences() != null) {
+								int z = 0;
+								String[] headers = new String[headTypes.size()];
+								for (int x = 0; x < headTypes.size(); x++) {
+									headers[x] = headTypes.get(x).getName();
+								}
+								for (int x = 0; x < headers.length; x++) {
+									if (headers[x].contains(child1
+											.getReferences().getName())) {
+										z = x;
+										break;
+									}
+								}
+								cbxReference1.setSelectedIndex(z);
+							} else {
+								if (child1.getChild1() != null) {
+									int z = 0;
+									for (int x = 0; x < floatRuleList.size(); x++) {
+										if (floatRuleList.get(x).getName()
+												.contains(child1.getName())) {
+											z = x;
+										}
+									}
+									cbxFloat1.setSelectedIndex(z);
+								}
+							}
+						}
+
+						if (child2.getName().contains("reqwuiop")) {
+							txtStr2.setText(child2.getValue());
+							lblRule2.setVisible(false);
+							lblText2.setVisible(true);
+							lblEntityType2.setVisible(false);
+						} else {
+							if (child2.getReferences() != null) {
+								int z = 0;
+								String[] headers = new String[headTypes.size()];
+								for (int x = 0; x < headTypes.size(); x++) {
+									headers[x] = headTypes.get(x).getName();
+								}
+								for (int x = 0; x < headers.length; x++) {
+									if (headers[x].contains(child2
+											.getReferences().getName())) {
+										z = x;
+										break;
+									}
+								}
+								cbxReference2.setSelectedIndex(z);
+							} else {
+								if (child2.getChild2() != null) {
+									int z = 0;
+									for (int x = 0; x < floatRuleList.size(); x++) {
+										if (floatRuleList.get(x).getName()
+												.contains(child2.getName())) {
+											z = x;
+										}
+									}
+									cbxFloat2.setSelectedIndex(z);
+								}
+							}
+						}
+					}
+					break;
+				}
+
+				case 3: {
+					reactivateFloat();
+					cbxRules.setSelectedIndex(selected);
+					txtName.setText(rule.getName());
+					FloatRule child1 = ((FloatRule) rule).getChild1();
+					FloatRule child2 = ((FloatRule) rule).getChild2();
+
+					int charop = 0;
+					for (int x = 0; x < opFloatChar.length; x++) {
+						if (opFloatChar[x] == ((FloatRule) rule).getOpperator()) {
+							charop = x;
+							break;
+						}
+					}
+					cbxOpperator.setSelectedIndex(charop);
+
+					if (child1 != null) {
+						if (child1.getName().contains("reqwuiop")) {
+							spinFloat1.setValue(child1.getValue());
+						} else {
+							if (child1.getReferences() != null) {
+								int z = 0;
+								String[] headers = new String[headTypes.size()];
+								for (int x = 0; x < headTypes.size(); x++) {
+									headers[x] = headTypes.get(x).getName();
+								}
+								for (int x = 0; x < headers.length; x++) {
+									if (headers[x].contains(child1
+											.getReferences().getName())) {
+										z = x;
+										break;
+									}
+								}
+								cbxReference1.setSelectedIndex(z);
+							} else {
+								if (child1.getChild1() != null) {
+									int z = 0;
+									for (int x = 0; x < floatRuleList.size(); x++) {
+										if (floatRuleList.get(x).getName()
+												.contains(child1.getName())) {
+											z = x;
+										}
+									}
+									cbxFloat1.setSelectedIndex(z);
+								}
+							}
+						}
+
+						if (child2.getName().contains("reqwuiop")) {
+							spinFloat2.setValue(child2.getValue());
+						} else {
+							if (child2.getReferences() != null) {
+								int z = 0;
+								String[] headers = new String[headTypes.size()];
+								for (int x = 0; x < headTypes.size(); x++) {
+									headers[x] = headTypes.get(x).getName();
+								}
+								for (int x = 0; x < headers.length; x++) {
+									if (headers[x].contains(child2
+											.getReferences().getName())) {
+										z = x;
+										break;
+									}
+								}
+								cbxReference2.setSelectedIndex(z);
+							} else {
+								if (child2.getChild2() != null) {
+									int z = 0;
+									for (int x = 0; x < floatRuleList.size(); x++) {
+										if (floatRuleList.get(x).getName()
+												.contains(child2.getName())) {
+											z = x;
+										}
+									}
+									cbxFloat2.setSelectedIndex(z);
+								}
+							}
+						}
+					}
+					break;
+				}
+
+				case 4: {
+					reactivateString();
+					cbxRules.setSelectedIndex(selected);
+
+					txtName.setText(rule.getName());
+					StringRule child1 = ((StringRule) rule).getChild1();
+					StringRule child2 = ((StringRule) rule).getChild2();
+
+					int charop = 0;
+					for (int x = 0; x < opStringBoolChar.length; x++) {
+						
+					}
+					
+
+					if (child1 != null) {
+						if (child1.getName().contains("reqwuiop")) {
+							txtStr1.setText(child1.getValue());
+							lblRule1.setVisible(false);
+							lblText1.setVisible(true);
+							lblEntityType1.setVisible(false);
+						} else {
+							if (child1.getReferences() != null) {
+								int z = 0;
+								String[] headers = new String[headTypes.size()];
+								for (int x = 0; x < headTypes.size(); x++) {
+									headers[x] = headTypes.get(x).getName();
+								}
+								for (int x = 0; x < headers.length; x++) {
+									if (headers[x].contains(child1
+											.getReferences().getName())) {
+										z = x;
+										break;
+									}
+								}
+								cbxReference1.setSelectedIndex(z);
+							} else {
+								if (child1.getChild1() != null) {
+									int z = 0;
+									for (int x = 0; x < floatRuleList.size(); x++) {
+										if (floatRuleList.get(x).getName()
+												.contains(child1.getName())) {
+											z = x;
+										}
+									}
+									cbxFloat1.setSelectedIndex(z);
+								}
+							}
+						}
+
+						if (child2.getName().contains("reqwuiop")) {
+							txtStr2.setText(child2.getValue());
+							lblRule2.setVisible(false);
+							lblText2.setVisible(true);
+							lblEntityType2.setVisible(false);
+						} else {
+							if (child2.getReferences() != null) {
+								int z = 0;
+								String[] headers = new String[headTypes.size()];
+								for (int x = 0; x < headTypes.size(); x++) {
+									headers[x] = headTypes.get(x).getName();
+								}
+								for (int x = 0; x < headers.length; x++) {
+									if (headers[x].contains(child2
+											.getReferences().getName())) {
+										z = x;
+										break;
+									}
+								}
+								cbxReference2.setSelectedIndex(z);
+							} else {
+								if (child2.getChild2() != null) {
+									int z = 0;
+									for (int x = 0; x < floatRuleList.size(); x++) {
+										if (floatRuleList.get(x).getName()
+												.contains(child2.getName())) {
+											z = x;
+										}
+									}
+									cbxFloat2.setSelectedIndex(z);
+								}
+							}
+						}
+					}
+					break;
+				}
+
+				default:
+					break;
+				}
+
+			}
+		});
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------
 	public void reactivateString() {
 		ruleList = project.getRules();
 		ruleReferences = new LinkedList<Integer>();
+		acktualRules.clear();
 
 		int a = 0;
 
@@ -649,14 +1015,10 @@ public class frmRule extends JFrame {
 			if (!ruleList.get(x).getName().contains("reqwuiop")
 					&& !ruleList.get(x).getName()
 							.contains("referencespsaiodfhnosaudhf")) {
-				System.out.println(ruleList.get(x).getName());
-				System.out.println(ruleList.get(x).getName()
-						.contains("reqwuiop"));
-				System.out.println(ruleList.get(x).getName()
-						.contains("referencespsaiodfhnosaudhf"));
 
 				ruleStrings[ruleReferences.size()] = ruleList.get(x).getName();
 				ruleReferences.add(x);
+				acktualRules.add(ruleList.get(x));
 			}
 		}
 
@@ -761,6 +1123,8 @@ public class frmRule extends JFrame {
 	public void reactivateBooleanFloat() {
 		ruleList = project.getRules();
 		ruleReferences = new LinkedList<Integer>();
+		acktualRules.clear();
+		;
 
 		int a = 0;
 
@@ -779,12 +1143,6 @@ public class frmRule extends JFrame {
 			if (!ruleList.get(x).getName().contains("reqwuiop")
 					&& !ruleList.get(x).getName()
 							.contains("referencespsaiodfhnosaudhf")) {
-				System.out.println(ruleList.get(x).getName());
-				System.out.println(ruleList.get(x).getName()
-						.contains("reqwuiop"));
-				System.out.println(ruleList.get(x).getName()
-						.contains("referencespsaiodfhnosaudhf"));
-
 				ruleStrings[ruleReferences.size()] = ruleList.get(x).getName();
 				ruleReferences.add(x);
 			}
@@ -885,6 +1243,8 @@ public class frmRule extends JFrame {
 	public void reactivateStringBool() {
 		ruleList = project.getRules();
 		ruleReferences = new LinkedList<Integer>();
+		acktualRules.clear();
+		;
 
 		int a = 0;
 
@@ -903,12 +1263,6 @@ public class frmRule extends JFrame {
 			if (!ruleList.get(x).getName().contains("reqwuiop")
 					&& !ruleList.get(x).getName()
 							.contains("referencespsaiodfhnosaudhf")) {
-				System.out.println(ruleList.get(x).getName());
-				System.out.println(ruleList.get(x).getName()
-						.contains("reqwuiop"));
-				System.out.println(ruleList.get(x).getName()
-						.contains("referencespsaiodfhnosaudhf"));
-
 				ruleStrings[ruleReferences.size()] = ruleList.get(x).getName();
 				ruleReferences.add(x);
 			}
@@ -1015,6 +1369,8 @@ public class frmRule extends JFrame {
 	public void reactivateFloat() {
 		ruleList = project.getRules();
 		ruleReferences = new LinkedList<Integer>();
+		acktualRules.clear();
+		;
 
 		int a = 0;
 
@@ -1033,11 +1389,6 @@ public class frmRule extends JFrame {
 			if (!ruleList.get(x).getName().contains("reqwuiop")
 					&& !ruleList.get(x).getName()
 							.contains("referencespsaiodfhnosaudhf")) {
-				System.out.println(ruleList.get(x).getName());
-				System.out.println(ruleList.get(x).getName()
-						.contains("reqwuiop"));
-				System.out.println(ruleList.get(x).getName()
-						.contains("referencespsaiodfhnosaudhf"));
 
 				ruleStrings[ruleReferences.size()] = ruleList.get(x).getName();
 				ruleReferences.add(x);

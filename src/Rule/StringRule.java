@@ -6,12 +6,52 @@ import ClassAdminBackEnd.Project;
 import ClassAdminBackEnd.SuperEntity;
 
 public class StringRule extends Rule {
-	StringRule child1;
-	StringRule child2;
-	BooleanRule boolRule;
-	String value;	
+	private StringRule child1;
+	private StringRule child2;
+	private BooleanRule boolRule;
+	private String value;	
 	private EntityType references = null;
 	
+	public StringRule getChild1() {
+		return child1;
+	}
+
+	public void setChild1(StringRule child1) {
+		this.child1 = child1;
+	}
+
+	public StringRule getChild2() {
+		return child2;
+	}
+
+	public void setChild2(StringRule child2) {
+		this.child2 = child2;
+	}
+
+	public BooleanRule getBoolRule() {
+		return boolRule;
+	}
+
+	public void setBoolRule(BooleanRule boolRule) {
+		this.boolRule = boolRule;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
+
+	public EntityType getReferences() {
+		return references;
+	}
+
+	public void setReferences(EntityType references) {
+		this.references = references;
+	}
+
 	public StringRule(StringRule child1, StringRule child2, BooleanRule boolRule, String name, Project project) {
 		super(name,project);
 		this.child1 = child1;
