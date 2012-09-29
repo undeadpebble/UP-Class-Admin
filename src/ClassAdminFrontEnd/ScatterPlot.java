@@ -95,6 +95,13 @@ public class ScatterPlot {
 						scatterwaardes[(Integer)u.get(x)]), 11, 11, cd);
 		
 		chart.getXYPlot().addAnnotation(selectPlots);
+		System.out.println(u.get(x));
+		System.out.println(scatterwaardes[(Integer)u.get(x)]);
+		System.out.println(datasetMain.getXValue(0, scatterwaardes[(Integer)u.get(x)])+"  " + datasetMain.getYValue(0,scatterwaardes[(Integer)u.get(x)]));
+		for(int w=0;w<scatterwaardes.length;w++)
+			System.out.println(scatterwaardes[w]);
+		System.out.println(datasetMain.getXValue(0, 76));
+		System.out.println(datasetMain.getYValue(0, 76));
 		}
 	}
 	//Put the chart on the chartpanel

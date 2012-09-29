@@ -48,6 +48,7 @@ public class Histogram {
 
 	// constructor
 	public Histogram(Project project) {
+		
 		maindataset = new HistogramDataset();
 		this.project = project;
 	}
@@ -68,9 +69,10 @@ public class Histogram {
 		if (u.size() != 0) {
 			for (int t = 0; t < barsused.length - 1; t++)
 				barsused[t] = 0;
+			
 			for (int x = 0; x < u.size(); x++) {
 				for (int q = 0; q < widthbar; q++) {
-
+					System.out.println("Die punt wat ek na kyk "+diedata.get((Integer) u.get(x)).get(currentdata).getMark());
 					if (q == (widthbar - 1)) {
 
 						if ((diedata.get((Integer) u.get(x)).get(currentdata).getMark() <= (q * 10 + 10))
@@ -350,6 +352,7 @@ public class Histogram {
 
 	// Change the dataset of the current chart
 	public HistogramDataset changeDataset(int houer) {
+		currentdata= houer;
 		final LinkedList<LinkedList<SuperEntity>> diedata = project.getHead().getDataLinkedList();
 
 		values = new double[diedata.size()];

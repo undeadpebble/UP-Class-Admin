@@ -76,7 +76,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 	}
 
 	//Create the frame of the histogram
-	public HistogramFrame(Project project) {
+	public HistogramFrame(final Project project) {
 		JFrame f = new JFrame("Histogram");
 		final Container content = f.getContentPane();
 		f.setSize(550, 600);
@@ -148,6 +148,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 				 */
 				chartpanel.getChart().getXYPlot()
 						.setDataset(nuweChart.changeDataset(houerx));
+				project.updatecharts();
 
 			}
 
@@ -183,8 +184,10 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (xascb.getSelectedIndex() >= 1)
+				{
 					xascb.setSelectedIndex(xascb.getSelectedIndex() - 1);
-
+					project.updatecharts();
+				}
 			}
 		});
 		//Cycle through data right
@@ -218,8 +221,10 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (xascb.getSelectedIndex() < xascb.getItemCount() - 1)
+				{
 					xascb.setSelectedIndex(xascb.getSelectedIndex() + 1);
-
+					project.updatecharts();
+				}
 			}
 		});
 

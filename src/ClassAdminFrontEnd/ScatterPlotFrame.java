@@ -196,7 +196,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 				XYSeriesCollection nuwedataset = new XYSeriesCollection();
 				XYSeries series = new XYSeries("Scatter");
 
-				for (int q = 0; q < diedata.size() - 1; q++) {
+				for (int q = 0; q < diedata.size(); q++) {
 					series.add(diedata.get(q).get(houerx).getMark(), diedata.get(q).get(houery).getMark());
 
 				}
@@ -239,8 +239,11 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (xascb.getSelectedIndex() >= 1)
+				{
 					xascb.setSelectedIndex(xascb.getSelectedIndex() - 1);
-
+				//	project.setScatterSelect(doensorteer(houerx, houery));
+				project.updatecharts();
+				}
 			}
 		});
 		// Cycle of X-axis combobox right
@@ -274,8 +277,10 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (xascb.getSelectedIndex() < xascb.getItemCount())
+				{
 					xascb.setSelectedIndex(xascb.getSelectedIndex() + 1);
-
+					project.updatecharts();
+				}
 			}
 		});
 
@@ -304,14 +309,15 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 				XYSeriesCollection nuwedataset = new XYSeriesCollection();
 				XYSeries series = new XYSeries("Scatter");
 
-				for (int q = 0; q < diedata.size() - 1; q++) {
+				for (int q = 0; q < diedata.size() ; q++) {
 					series.add(diedata.get(q).get(houerx).getMark(), diedata.get(q).get(houery).getMark());
 
 				}
-
+				project.setScatterSelect(doensorteer(houerx, houery));
 				nuwedataset.addSeries(series);
 				chartpanel.getChart().getXYPlot().setDataset(nuwedataset);
 				nuweChart.setDatasetmain(nuwedataset);
+				project.updatecharts();
 			}
 
 		});
@@ -346,8 +352,10 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (yascb.getSelectedIndex() >= 1)
+				{
 					yascb.setSelectedIndex(yascb.getSelectedIndex() - 1);
-
+					project.updatecharts();
+				}
 			}
 		});
 		// Cycle of Y-axis combobox right
@@ -382,8 +390,10 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 			public void mouseClicked(MouseEvent e) {
 
 				if (yascb.getSelectedIndex() < yascb.getItemCount())
+				{
 					yascb.setSelectedIndex(yascb.getSelectedIndex() + 1);
-
+					project.updatecharts();
+				}
 			}
 		});
 
