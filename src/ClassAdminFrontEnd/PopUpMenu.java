@@ -36,11 +36,11 @@ public class PopUpMenu {
 	Project activeProject;
 	JDialog frame = null;
 	LinkedList<EntityType> activeTreeLinkedList = null;
-	
+
 	public PopUpMenu() {
 		activeProject = Global.getGlobal().getActiveProject();
 		activeTreeLinkedList = activeProject.getTreeLinkedList();
-		
+
 		pMenu = new JPopupMenu();
 		JMenuItem miAddChild = new JMenuItem("Add Child");
 		pMenu.add(miAddChild);
@@ -64,10 +64,11 @@ public class PopUpMenu {
 
 		miRemoveWC.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int i = activeItem.getRow();
+				VisualItem item = activeItem;
+				int i = item.getRow();
 				activeTree.removeNode(i);
 				activeTreeLinkedList.get(i).removeDeletingChildren();
-				activeItem.getVisualization().repaint();
+				item.getVisualization().repaint();
 			}
 		});
 
@@ -76,23 +77,19 @@ public class PopUpMenu {
 				VisualItem item = activeItem;
 				int i = item.getRow();
 				int source = -1, target = -1;
-				Table edgeTable =  activeTree.getEdgeTable();
-				for(int r = 0; r <edgeTable.getRowCount(); r++)
-				{
-					if(edgeTable.getInt(r, 1) == i)
-					{
+				Table edgeTable = activeTree.getEdgeTable();
+				for (int r = 0; r < edgeTable.getRowCount(); r++) {
+					if (edgeTable.getInt(r, 1) == i) {
 						source = edgeTable.getInt(r, 0);
 					}
 				}
-				for(int r = 0; r <edgeTable.getRowCount(); r++)
-				{
-					if(edgeTable.getInt(r, 0) == i)
-					{
-						target =  edgeTable.getInt(r, 1);
+				for (int r = 0; r < edgeTable.getRowCount(); r++) {
+					if (edgeTable.getInt(r, 0) == i) {
+						target = edgeTable.getInt(r, 1);
 						activeTree.removeEdge(activeTree.getEdge(edgeTable.getInt(r, 0), edgeTable.getInt(r, 1)));
 						activeTree.addEdge(source, target);
 					}
-				}				
+				}
 				activeTree.removeNode(i);
 				activeTreeLinkedList.get(i).removeSavingChildren();
 				item.getVisualization().repaint();
@@ -102,7 +99,7 @@ public class PopUpMenu {
 	}
 
 	public void setTreeView(TreeView treeView, Tree tree) {
-		activeTree =  tree;
+		activeTree = tree;
 		tview = treeView;
 		tview.addControlListener(new ControlAdapter() {
 			public void itemReleased(VisualItem item, MouseEvent e) {
@@ -117,7 +114,7 @@ public class PopUpMenu {
 		});
 	}
 
-	private void createNewNode(int iParent){
+	private void createNewNode(int iParent) {
 		final Table nodes = activeTree.getNodeTable();
 		try {
 			frame = new JDialog(new Frame(), true);
@@ -216,7 +213,7 @@ public class PopUpMenu {
 
 				if (b) {
 					parent = activeTree.getNode(cmbParent.getSelectedIndex()); // get
-																			// parent
+																				// parent
 					child = activeTree.addNode(); // create child
 
 					for (int c = 0; c < child.getColumnCount() - 1; c++)
@@ -226,14 +223,12 @@ public class PopUpMenu {
 					child.set("name", txtName.getText()); // edit child to fit
 															// new child
 
-					activeTree.addEdge(parent, child); // add edge between parent
-													// and child
+					activeTree.addEdge(parent, child); // add edge between
+														// parent
+														// and child
 
 					// add child to parent in back end
-					EntityType newE = new EntityType(txtName.getText(), activeProject
-							.getTreeLinkedList().get(
-									cmbParent.getSelectedIndex()),
-							isText, d, (Double) txtWeight.getValue());
+					EntityType newE = new EntityType(txtName.getText(), activeProject.getTreeLinkedList().get(cmbParent.getSelectedIndex()), isText, d, (Double) txtWeight.getValue());
 
 					activeProject.getTreeLinkedList().add(newE);
 					newE.populateTreeWithEntities();
