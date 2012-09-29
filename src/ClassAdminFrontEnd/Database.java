@@ -7,6 +7,7 @@ import java.util.Date;
 import com.db4o.Db4o;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
+import com.db4o.query.Query;
 
 public class Database {
 	private static final Class<? extends ObjectSet> RecentDocuments = null;
@@ -78,12 +79,11 @@ public class Database {
 	public String[] getDocumentNames() {
 		int i = 0;
 		String[] array = new String[10];
-		ObjectSet result = db.queryByExample(RecentDocument.class);
 		
-/*		Query query=db.query();
-		query.constrain(Pilot.class);
-		query.descend("name").orderAscending();
-		ObjectSet result=query.execute(); */
+		Query query=db.query();
+		query.constrain(RecentDocument.class);
+		query.descend("date").orderAscending();
+		ObjectSet result=query.execute(); 
 		
 		while ((result.hasNext()) && (i < 10)){
 			RecentDocument rh = (RecentDocument) result.next();
@@ -102,7 +102,10 @@ public class Database {
 	public String[] getDocumentPaths() {
 		int i = 0;
 		String[] array = new String[10];
-		ObjectSet result = db.queryByExample(RecentDocument.class);
+		Query query=db.query();
+		query.constrain(RecentDocument.class);
+		query.descend("date").orderAscending();
+		ObjectSet result=query.execute(); 
 		
 		while ((result.hasNext()) && (i < 10)){
 			RecentDocument rh = (RecentDocument) result.next();
