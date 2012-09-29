@@ -98,11 +98,11 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 
 				int[] houer = new int[scattergetalle.length];
 
-				for (int x = 0; x < sorteermidq.length; x++) {
+			/*	for (int x = 0; x < sorteermidq.length; x++) {
 					System.out.println("Sorteer deeerder " + x + "   " + sorteermidq[x] + " " + sorteermidw[x] + " " + scattergetalle[x]);
 
 				}
-
+*/
 				int houerflip;
 				int houerflip2;
 				for (int i = 0; i < scattergetalle.length; i++) {
@@ -114,8 +114,8 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 
 				}
 
-				for (int x = 0; x < scattergetalle.length; x++)
-					System.out.println(houer[x]);
+			/*	for (int x = 0; x < scattergetalle.length; x++)
+					System.out.println(houer[x]);*/
 				
 				return houer;
 	}

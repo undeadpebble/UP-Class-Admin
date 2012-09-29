@@ -37,9 +37,12 @@ public class Project {
 	private LinkedList<FrmTable> tables = new LinkedList<FrmTable>();
 
 	public void clearselected() {
-		selectedIndexes = new ArrayList();
+		System.out.println("Cleared");
+		this.getSelectedIndexes().clear();
 		this.getSelected().clear();
 		updatecharts();
+		for(int y=0;y<tables.size();y++)
+			tables.get(y).repaint();
 	}
 
 	public void addscattercharts(ScatterPlotFrame x) {
@@ -64,19 +67,19 @@ public class Project {
 		for (int i = 0; i < scattercharts.size(); i++)
 			((ScatterPlotFrame) scattercharts.get(i)).update();
 		for (int i = 0; i < histogramcharts.size(); i++) {
-
 			((HistogramFrame) histogramcharts.get(i)).update();
 		}
 	}
 
 	public void setSelected(int x) {
-		
+	
 		boolean duplicate = false;
 		for (int i = 0; i < selectedIndexes.size(); i++) {
+		
 			if ((Integer) selectedIndexes.get(i) == x)
 				duplicate = true;
 		}
-		if (duplicate == false) {
+		if (duplicate == false ) {
 			selectedIndexes.add(x);
 			
 			
@@ -88,10 +91,11 @@ public class Project {
 			}
 			
 			System.out.println("Set selected index" + x);
-		
+			updatecharts();
+			for(int y=0;y<tables.size();y++)
+				tables.get(y).repaint();
 		}
-		for(int y=0;y<tables.size();y++)
-			tables.get(y).repaint();
+		
 		
 	}
 
