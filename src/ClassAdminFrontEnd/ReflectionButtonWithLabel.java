@@ -1,10 +1,10 @@
 package ClassAdminFrontEnd;
 
-
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Composite;
 import java.awt.Cursor;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagLayout;
@@ -60,19 +60,19 @@ public class ReflectionButtonWithLabel extends JButton implements MouseListener 
 		this.setBorder(new EmptyBorder(0, 0, 0, 0));
 		this.setLayout(null);
 		label = new JLabel(lbl);
-		
+
 		path = _path;
-		
+
 		c1 = _c1;
 		c2 = _c2;
-		
+
 		label.setForeground(c1);
-		
+
 	}
 
 	public void createReflectionButton(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
-		
+
 		ReflectionRenderer renderer = new ReflectionRenderer();
 		renderer.setBlurEnabled(true);
 		renderer.setLength(0.5f);
@@ -131,8 +131,7 @@ public class ReflectionButtonWithLabel extends JButton implements MouseListener 
 					g2.drawImage(highlightreflection, 0, 0, null);
 				}
 			}
-		}
-		else {
+		} else {
 			if (grayreflection == null) {
 				createGrayscaleReflection(g2);
 				g2.drawImage(grayreflection, 0, 0, null);
@@ -142,17 +141,17 @@ public class ReflectionButtonWithLabel extends JButton implements MouseListener 
 		}
 
 	}
-	
+
 	public void setDisabled() {
 		this.disabled = true;
 		repaint();
 	}
-	
+
 	public void setEnabled() {
 		this.disabled = false;
 		repaint();
 	}
-	
+
 	public Boolean isDisabled() {
 		return disabled;
 	}
@@ -190,20 +189,25 @@ public class ReflectionButtonWithLabel extends JButton implements MouseListener 
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	@Override
 	public void setBounds(int x, int y, int width, int height) {
 		super.setBounds(x, y, width, height);
 
-		int w = (int)label.getPreferredSize().getWidth();
-		int h = (int)label.getPreferredSize().getHeight();
-	
-		label.setSize(w, h);
-		label.setLocation(getWidth()/2-w/2, (getHeight()/2-h/2)+10);
+		int w = (int) label.getPreferredSize().getWidth();
+		int h = (int) label.getPreferredSize().getHeight();
+
+		label.setSize(width, h);
+
+		if (w > width) {
+			label.setLocation(0, (getHeight() / 2 - h / 2) + 10);
+		} else {
+			label.setLocation(getWidth() / 2 - w / 2, (getHeight() / 2 - h / 2) + 10);
+		}
 		this.add(label);
-		
+
 	}
-	
+
 	public String getPath() {
 		return path;
 	}

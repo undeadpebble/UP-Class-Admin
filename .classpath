@@ -5,6 +5,7 @@
 	<classpathentry kind="lib" path="lib/jxl.jar"/>
 	<classpathentry kind="lib" path="lib/org.tmatesoft.sqljet_1.1.4.r1226_v20120717_1620.jar"/>
 	<classpathentry kind="lib" path="lib/antlr-runtime-3.3.jar"/>
+	<classpathentry kind="lib" path="lib/db4o-7.2.54.11278-java5.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Filters"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/GraphicsUtilities"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/SwingX"/>

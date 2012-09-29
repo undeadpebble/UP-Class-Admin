@@ -3,6 +3,7 @@ package ClassAdminBackEnd;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -45,13 +46,15 @@ public class XlsImport extends FileImport {
 	int headerLine = -1;
 	FileHandler fileHandler;
 	final Object monitor = new Object();
-	JDialog frame = null;
 	JDialog dialog = null;
+	Frame frame;
 
-	public XlsImport() {
+	public XlsImport(Frame frame_) {
 		fileHandler = FileHandler.get();
 		fileHandler.setXLSImport(this);
+		frame = frame_;
 	}
+
 
 	public Boolean fileExists(String in) {
 		try {
@@ -68,10 +71,10 @@ public class XlsImport extends FileImport {
 		try {
 			w = Workbook.getWorkbook(f);
 		} catch (BiffException e) {
-			System.out.println("1");
+			//System.out.println("1");
 			e.printStackTrace();
 		} catch (IOException e) {
-			System.out.println("2");
+			//System.out.println("2");
 			e.printStackTrace();
 		}
 	}
@@ -95,13 +98,11 @@ public class XlsImport extends FileImport {
 		ArrayList records = null;
 
 		if (sheet == null) {
-			System.out
-					.println("No sheet selected -- selecting first sheet for import data");
+			//System.out.println("No sheet selected -- selecting first sheet for import data");
 			sheet = w.getSheet(0);
 		}
 		if (headerLine == -1) {
-			System.out
-					.println("No headerline selected -- selecting first line for headers");
+			//System.out.println("No headerline selected -- selecting first line for headers");
 			headerLine = 0;
 		}
 
@@ -150,8 +151,10 @@ public class XlsImport extends FileImport {
 	public void createImport() throws SqlJetException, IOException {
 
 					
-					frame = new JDialog(new Frame(),true);
-					frame.setLayout(new FlowLayout());
+					dialog = new JDialog(frame,true);
+					dialog.setLayout(new FlowLayout());
+					
+					
 					JLabel lblSheets = new JLabel("Sheet:");
 					JLabel lblHeader = new JLabel("HeaderLine:");
 					JPanel pnlSheets = new JPanel();
@@ -171,7 +174,7 @@ public class XlsImport extends FileImport {
 							setSheet((Integer) cmbSheet.getSelectedItem() - 1);
 							setHeaderLine((Integer) cmbHeaders.getSelectedItem()-1);
 							arr = importData();
-							frame.dispose();
+							dialog.dispose();
 							// TODO Auto-generated method stub
 
 						}
@@ -225,12 +228,22 @@ public class XlsImport extends FileImport {
 					pnlSheets.add(cmbSheet);
 					pnlHeaders.add(lblHeader);
 					pnlHeaders.add(cmbHeaders);
-					frame.add(scrollPane);
-					frame.add(pnlSheets);
-					frame.add(pnlHeaders);
-					frame.add(btnImport);
-					frame.pack();
-					frame.setVisible(true);
+					dialog.add(scrollPane);
+					dialog.add(pnlSheets);
+					dialog.add(pnlHeaders);
+					dialog.add(btnImport);
+					dialog.pack();
+					dialog.setVisible(true);
+					
+					// Get the size of the screen
+					Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+					// Determine the new location of the window
+					int _w = dialog.getSize().width;
+					int _h = dialog.getSize().height;
+					int x = (dim.width - _w) / 2;
+					int y = (dim.height - _h) / 2;
+					// Move the window
+					dialog.setLocation(x, y);
 
 	}
 	public void printAllSheets() {
@@ -242,16 +255,16 @@ public class XlsImport extends FileImport {
 		for (int k = 0; k < sheetcount; k++) { // loop through sheets
 			sheet = k + 1;
 			s = w.getSheet(k);
-			System.out.print("SHEET " + sheet + "\n");
+	//		System.out.print("SHEET " + sheet + "\n");
 			for (int j = 0; j < s.getRows(); j++) { // loop through rows
 				for (int i = 0; i < s.getColumns(); i++) { // loop through
 															// columns
 					Cell cell = s.getCell(i, j);
-					System.out.print(cell.getContents() + "\t");
+	//				System.out.print(cell.getContents() + "\t");
 				}
-				System.out.print("\n");
+	//			System.out.print("\n");
 			}
-			System.out.print("\n");
+	//		System.out.print("\n");
 		}
 
 	}
@@ -266,10 +279,10 @@ public class XlsImport extends FileImport {
 			for (int i = 0; i < s.getColumns(); i++) { // loop through columns
 				Cell cell = s.getCell(i, j);
 				textArea.append(cell.getContents() + "\t");
-				System.out.print(cell.getContents() + "\t");
+	//			System.out.print(cell.getContents() + "\t");
 			}
 			textArea.append("\n");
-			System.out.println(); // end of record
+		//	System.out.println(); // end of record
 		}
 	}
 
@@ -316,9 +329,9 @@ public class XlsImport extends FileImport {
 	// headers arraylist
 	{
 		for (int j = 0; j < headers.size(); j++) {
-			System.out.print(headers.get(j).toString() + "\t");
+	//		System.out.print(headers.get(j).toString() + "\t");
 		}
-		System.out.println();
+	//	System.out.println();
 	}
 
 	public void printRecords(ArrayList records) // print all records from
@@ -332,11 +345,11 @@ public class XlsImport extends FileImport {
 			for (int j = 0; j < record.size(); j++) // get field from record
 			// arraylist
 			{
-				System.out.print(record.get(j).toString() + "\t"); // print
+				//System.out.print(record.get(j).toString() + "\t"); // print
 				// field
 				// data
 			}
-			System.out.println(); // new line for next record
+			//System.out.println(); // new line for next record
 
 		}
 	}
@@ -345,10 +358,10 @@ public class XlsImport extends FileImport {
 	// specified record
 	{
 		for (int j = 0; j < record.size(); j++) {
-			System.out.print(record.get(j).toString() + "\t"); // print field
+			//System.out.print(record.get(j).toString() + "\t"); // print field
 			// data
 		}
-		System.out.println(); // new line XD
+		//System.out.println(); // new line XD
 	}
 
 	public void print(ArrayList in) // print entire structure
@@ -360,9 +373,9 @@ public class XlsImport extends FileImport {
 		for (int j = 0; j < headers.size(); j++) // print all headers on header
 		// arraylist
 		{
-			System.out.print(headers.get(j).toString() + "\t");
+			//System.out.print(headers.get(j).toString() + "\t");
 		}
-		System.out.println();
+		//System.out.println();
 
 		for (int i = 0; i < records.size(); i++) // get each record arraylist in
 		// records arraylist
@@ -372,9 +385,9 @@ public class XlsImport extends FileImport {
 			for (int j = 0; j < record.size(); j++) // print all field data from
 			// record arraylist
 			{
-				System.out.print(record.get(j).toString() + "\t");
+				//System.out.print(record.get(j).toString() + "\t");
 			}
-			System.out.println(); // next record to follow
+			//System.out.println(); // next record to follow
 
 		}// get records
 	}
