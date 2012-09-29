@@ -74,10 +74,6 @@ public class FrmTable extends JPanel {
 		this.data = project.getHead().getDataLinkedList();
 		this.headers = project.getHead().getHeaders();
 
-		for(int x = 0; x < project.getHead().getHeaders().length;x++){
-			System.out.println(project.getHead().getHeaders()[x]);
-		}
-		
 		tableModel.setColumnCount(0);
 		tableModel.setRowCount(0);
 
@@ -98,7 +94,7 @@ public class FrmTable extends JPanel {
 		}
 
 		Object[] temp = new Object[data.get(0).size()];
-
+		
 		for (int x = 0; x < data.size(); x++) {
 			for (int y = 0; y < data.get(0).size(); y++) {
 				temp[y] = data.get(x).get(y).getValue();

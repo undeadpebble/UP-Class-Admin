@@ -85,7 +85,6 @@ public class frmRule extends JFrame {
 	private Label lblRule2 = new Label("->");
 	private Label lblEntityType2 = new Label("->");
 	private JLabel lblCreateNewRule = new JLabel("Create new rule of type:");
-			"Create new rule of type:");
 
 	/**
 	 * Create the frame.
