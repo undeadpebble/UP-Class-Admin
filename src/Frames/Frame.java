@@ -312,7 +312,7 @@ public class Frame extends JFrame implements ActionListener {
 
 		// get current filehandler (ClassAdminBackEnd)
 		fileHandler = FileHandler.get();
-		
+
 		createRecentDocsDB();
 		createRecentDocsView();
 	}
@@ -332,7 +332,6 @@ public class Frame extends JFrame implements ActionListener {
 		JMenu mNew = new JMenu("New");
 		JMenuItem miSpreadsheet = new JMenuItem("Spreadsheet");
 		JMenuItem miRapidAssessment = new JMenuItem("Rapid Assessment");
-		JMenuItem miOpen = new JMenuItem("Open");
 		JMenu mRecent = new JMenu("Recent");
 		JMenuItem miClose = new JMenuItem("Close");
 		JMenuItem miCloseAll = new JMenuItem("Close All");
@@ -348,7 +347,6 @@ public class Frame extends JFrame implements ActionListener {
 		mFile.add(mNew);
 		mNew.add(miSpreadsheet);
 		mNew.add(miRapidAssessment);
-		mFile.add(miOpen);
 		mFile.add(mRecent);
 		mFile.add(miClose);
 		mFile.add(miCloseAll);
@@ -375,8 +373,6 @@ public class Frame extends JFrame implements ActionListener {
 		JMenuItem miBoxPlot = new JMenuItem("Box Plot");
 		JMenuItem miScatterPlot = new JMenuItem("Histogram");
 
-		mProject.setForeground(Color.white);
-
 		menuBarWindows.add(mProject);
 		mProject.add(miConditionalFormatting);
 		mProject.add(miBordercases);
@@ -392,6 +388,14 @@ public class Frame extends JFrame implements ActionListener {
 		mGraph.add(miHistogram);
 		mGraph.add(miBoxPlot);
 		mGraph.add(miScatterPlot);
+
+		// SETTINGS
+		JMenu mSettings = new JMenu("Settings");
+		menuBarWindows.add(mSettings);
+
+		mFile.setForeground(Color.white);
+		mProject.setForeground(Color.white);
+		mSettings.setForeground(Color.white);
 
 		// setup space constants
 		HOME_SPACE_LEFT_X = 3;
@@ -525,7 +529,6 @@ public class Frame extends JFrame implements ActionListener {
 		homePanel.add(containerSelectTask);
 		homePanel.add(containerRecentDocs);
 		homePanel.add(recentDocsPanel);
-
 
 		// create home buttons
 		homeImportButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/HomeImport.png")));
@@ -795,7 +798,12 @@ public class Frame extends JFrame implements ActionListener {
 		homeButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				workspaceToHomeTransition();
+				try {
+					workspaceToHomeTransition();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
 			}
 
 			public void mouseEntered(MouseEvent arg0) {
@@ -1115,7 +1123,7 @@ public class Frame extends JFrame implements ActionListener {
 				db.addRecentDoc(file.getName(), file.getAbsolutePath(), dateFormat.format(date));
 			}
 		}
-		
+
 		createTab(file);
 		homeToWorkspaceTransition();
 		tabBar.fadeIn();
@@ -1228,7 +1236,7 @@ public class Frame extends JFrame implements ActionListener {
 	/*
 	 * Function to simulate transitions from workspace screen to home screen
 	 */
-	public void workspaceToHomeTransition() {
+	public void workspaceToHomeTransition() throws IOException {
 		homePanel.fadeIn();
 		workspacePanel.fadeOut();
 		navBar.fadeOut();
@@ -1238,6 +1246,7 @@ public class Frame extends JFrame implements ActionListener {
 		}
 
 		recentDocsPanel.fadeIn();
+		createRecentDocsView();
 
 	}
 
@@ -1325,11 +1334,10 @@ public class Frame extends JFrame implements ActionListener {
 	public void createRecentDocsDB() throws SqlJetException {
 		db = new Database();
 		db.openDatabase();
-		
+
 	}
 
-	public void createRecentDocsView() throws IOException, SqlJetException {
-		
+	public void createRecentDocsView() throws IOException {
 
 		recentDocsPanel.removeAll();
 
