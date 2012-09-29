@@ -312,6 +312,9 @@ public class Frame extends JFrame implements ActionListener {
 
 		// get current filehandler (ClassAdminBackEnd)
 		fileHandler = FileHandler.get();
+		
+		createRecentDocsDB();
+		createRecentDocsView();
 	}
 
 	/*
@@ -523,7 +526,6 @@ public class Frame extends JFrame implements ActionListener {
 		homePanel.add(containerRecentDocs);
 		homePanel.add(recentDocsPanel);
 
-		createRecentDocsView();
 
 		// create home buttons
 		homeImportButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/HomeImport.png")));
@@ -1091,7 +1093,6 @@ public class Frame extends JFrame implements ActionListener {
 				} else {
 					db.addRecentDoc(file.getName(), file.getAbsolutePath(), dateFormat.format(date));
 				}
-				db.listDocuments();
 			}
 		} else {
 			blur.fadeOut();
@@ -1105,6 +1106,16 @@ public class Frame extends JFrame implements ActionListener {
 
 		File file = _file;
 
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		Date date = new Date();
+		if (db != null) {
+			if (db.alreadyContains(file.getName(), file.getAbsolutePath())) {
+				db.updateRecentDocument(file.getName(), file.getAbsolutePath(), dateFormat.format(date));
+			} else {
+				db.addRecentDoc(file.getName(), file.getAbsolutePath(), dateFormat.format(date));
+			}
+		}
+		
 		createTab(file);
 		homeToWorkspaceTransition();
 		tabBar.fadeIn();
@@ -1314,11 +1325,11 @@ public class Frame extends JFrame implements ActionListener {
 	public void createRecentDocsDB() throws SqlJetException {
 		db = new Database();
 		db.openDatabase();
-
+		
 	}
 
 	public void createRecentDocsView() throws IOException, SqlJetException {
-		createRecentDocsDB();
+		
 
 		recentDocsPanel.removeAll();
 

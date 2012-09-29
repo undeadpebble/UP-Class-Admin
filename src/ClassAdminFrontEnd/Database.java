@@ -1,6 +1,7 @@
 package ClassAdminFrontEnd;
 
 
+import java.io.IOException;
 import java.util.Date;
 
 import com.db4o.Db4o;
@@ -10,12 +11,15 @@ import com.db4o.ObjectSet;
 public class Database {
 	private static final Class<? extends ObjectSet> RecentDocuments = null;
 
-	private ObjectContainer db = null;
+	private ObjectContainer db;
 	private final String fileName = "database.db";
-	private int counter = 0;
 
 	public void openDatabase() {
-		db = Db4o.openFile(fileName);
+			
+		if (db == null) {
+			db = Db4o.openFile(fileName);
+		}
+	
 	}
 
 	public void closeDatabase() {
@@ -75,6 +79,11 @@ public class Database {
 		int i = 0;
 		String[] array = new String[10];
 		ObjectSet result = db.queryByExample(RecentDocument.class);
+		
+/*		Query query=db.query();
+		query.constrain(Pilot.class);
+		query.descend("name").orderAscending();
+		ObjectSet result=query.execute(); */
 		
 		while ((result.hasNext()) && (i < 10)){
 			RecentDocument rh = (RecentDocument) result.next();
