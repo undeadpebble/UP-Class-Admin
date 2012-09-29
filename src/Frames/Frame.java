@@ -1400,7 +1400,10 @@ public class Frame extends JFrame implements ActionListener {
 		int count = db.getDocumentCount();
 
 		int i = 0;
-		while (i < count) {
+		int m = 0;
+		
+		//restrict recent docs to 7
+		while ((i < count) && (m < 7))  {
 
 			BufferedImage icon = null;
 
@@ -1423,6 +1426,7 @@ public class Frame extends JFrame implements ActionListener {
 			recentDocsPanel.add(buttonArray[i]);
 
 			i++;
+			m++;
 		}
 	}
 
