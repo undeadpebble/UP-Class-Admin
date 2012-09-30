@@ -35,7 +35,8 @@ public class Project {
 	private LinkedList<Rule> rules = new LinkedList<Rule>();
 	private LinkedList<EntityType> treeLinkedList;
 	private LinkedList<FrmTable> tables = new LinkedList<FrmTable>();
-
+	private boolean cleared= false;
+	
 	public void clearselected() {
 		System.out.println("Cleared");
 		this.getSelectedIndexes().clear();
@@ -44,7 +45,15 @@ public class Project {
 		for(int y=0;y<tables.size();y++)
 			tables.get(y).repaint();
 	}
-
+	public boolean getCleared()
+	{
+		return cleared;
+	}
+	public void setCleared(boolean x)
+	{
+		
+		cleared = x;
+	}
 	public void addscattercharts(ScatterPlotFrame x) {
 
 		scattercharts.add(x);

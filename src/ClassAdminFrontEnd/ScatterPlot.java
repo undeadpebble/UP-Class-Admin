@@ -96,10 +96,10 @@ public class ScatterPlot {
 						scatterwaardes[(Integer)u.get(x)]), 11, 11, cd);
 		
 		chart.getXYPlot().addAnnotation(selectPlots);
-		/*System.out.println(u.get(x));
+		System.out.println(u.get(x));
 		System.out.println(scatterwaardes[(Integer)u.get(x)]);
 		System.out.println(datasetMain.getXValue(0, scatterwaardes[(Integer)u.get(x)])+"  " + datasetMain.getYValue(0,scatterwaardes[(Integer)u.get(x)]));
-		for(int w=0;w<scatterwaardes.length;w++)
+		/*for(int w=0;w<scatterwaardes.length;w++)
 			System.out.println(scatterwaardes[w]);
 		System.out.println(datasetMain.getXValue(0, 76));
 		System.out.println(datasetMain.getYValue(0, 76));*/
@@ -125,6 +125,7 @@ public class ScatterPlot {
 					{
 					chart.getXYPlot().clearAnnotations();
 					project.clearselected();
+				//	project.setCleared(true);
 					}
 					ChartEntity entity = ((ChartMouseEvent) e).getEntity();
 				
@@ -139,8 +140,12 @@ public class ScatterPlot {
 						for(int q=0;q<scatterwaardes.length;q++)
 						{
 							if(scatterwaardes[q]== iindex)
+							{
 								project.setSelected(q);
+								project.setCleared(true);
+							}
 						}
+						System.out.println("Ek het klaar geset");
 						
 					/*
 						final CircleDrawer cd = new CircleDrawer(Color.red,
@@ -152,14 +157,14 @@ public class ScatterPlot {
 						
 						
 						chart.getXYPlot().addAnnotation(bestBid);*/
-						project.updatecharts();
+						//project.updatecharts();
 						
 						
 					
 						
-						System.out.println("Series"+sindex +" Index"+iindex);
+					/*	System.out.println("Series"+sindex +" Index"+iindex);
 						System.out.println("x = " + datasetMain.getXValue(sindex, iindex));
-						System.out.println("y = " + datasetMain.getYValue(sindex, iindex));
+						System.out.println("y = " + datasetMain.getYValue(sindex, iindex));*/
 					}
 
 				}
