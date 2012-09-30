@@ -174,8 +174,10 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 		dataset.addSeries(series);
 
 		chart = nuweChart.createScatter("asd", dataset, xas, yas);
+		nuweChart.setDatasetmain(dataset);
 		chartpanel = nuweChart.createPanel();
-		
+		chartpanel.getChart().getXYPlot().setDataset(dataset);
+	
 		
 		
 		

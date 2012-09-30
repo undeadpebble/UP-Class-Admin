@@ -87,12 +87,12 @@ public class Project {
 	public void addscattercharts(ScatterPlotFrame x) {
 
 		scattercharts.add(x);
-
+		
 	}
 
 	public void addboxplotcharts(BoxPlotFrame x) {
 
-		scattercharts.add(x);
+		boxplotcharts.add(x);
 
 	}
 
