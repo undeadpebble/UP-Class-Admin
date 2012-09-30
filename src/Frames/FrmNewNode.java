@@ -96,13 +96,7 @@ public class FrmNewNode {
 		btnDate.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				try {
-					txtDate.setText(new DatePicker(new Frame()).setPickedDate());
-				} catch (SqlJetException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+					txtDate.setText(new DatePicker(frame).setPickedDate());
 			}
 		});
 
@@ -188,6 +182,7 @@ public class FrmNewNode {
 					lblDate.setForeground(Color.BLACK);
 					isText = false;
 					activeTreeView.getVisualization().run("filter");
+					txtName.requestFocus(true);
 					}// if b
 			}// actionListener
 		});
@@ -231,6 +226,7 @@ public class FrmNewNode {
 
 			@Override
 			public void windowActivated(WindowEvent e) {
+				txtName.requestFocus(true);
 			}
 		});
 
