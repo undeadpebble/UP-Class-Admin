@@ -399,6 +399,13 @@ public class Frame extends JFrame implements ActionListener {
 		mFile.setForeground(Color.white);
 		mProject.setForeground(Color.white);
 		mSettings.setForeground(Color.white);
+		
+		miExit.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				frame.dispose();
+			}
+		});
 
 		// setup space constants
 		HOME_SPACE_LEFT_X = 3;
@@ -485,6 +492,8 @@ public class Frame extends JFrame implements ActionListener {
 		mGraph.add(miHistogram);
 		mGraph.add(miBoxPlot);
 		mGraph.add(miScatterPlot);
+		
+		//menu actions
 
 		// setup space constants
 		HOME_SPACE_LEFT_X = 3;
