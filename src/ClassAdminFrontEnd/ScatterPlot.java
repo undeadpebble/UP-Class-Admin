@@ -32,6 +32,7 @@ import org.jfree.chart.entity.ChartEntity;
 import org.jfree.chart.entity.XYItemEntity;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYItemRenderer;
 
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
@@ -73,7 +74,10 @@ public class ScatterPlot {
 		datasetMain = chartdata;
 		NumberAxis domainAxis = (NumberAxis) chart.getXYPlot().getDomainAxis();
 		domainAxis.setAutoRangeIncludesZero(false);
+		XYPlot plot = (XYPlot) chart.getPlot();
 		
+		XYItemRenderer renderer = plot.getRenderer();
+				 renderer.setSeriesPaint(0, new Color(0xFF8400));
 		return chart;
 	}	
 	

@@ -25,6 +25,7 @@ import javax.swing.JPanel;
 
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
@@ -172,7 +173,11 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 
 		chart = nuweChart.createScatter("asd", dataset, xas, yas);
 		chartpanel = nuweChart.createPanel();
-
+		
+		
+		
+		
+		
 		JLabel lblNewLabel = new JLabel("X-axis");
 		final JComboBox xascb = new JComboBox();
 		// Combobox of X-axis
