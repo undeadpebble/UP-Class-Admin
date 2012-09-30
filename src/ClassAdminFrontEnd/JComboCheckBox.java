@@ -40,7 +40,7 @@ public class JComboCheckBox extends JComboBox {
         }
         return c;
       } else {
-        if (defaultLabel==null) defaultLabel = new JLabel(value.toString());
+        if (defaultLabel==null) defaultLabel = new JLabel("temp");
         else defaultLabel.setText(value.toString());
         return defaultLabel;
       }

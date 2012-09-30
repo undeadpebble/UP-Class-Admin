@@ -19,11 +19,18 @@ public class EntityType {
 	private EntityType parentEntitytype;
 	private LinkedList<EntityType> subEntityType;
 	private Boolean isTextField;
+	private Boolean isRule = false;
 	private Date date;
 	private Double defaultWeight;
 	private long ID;
-
 	private int maxValue = 100;
+	
+	public Boolean getIsRule() {
+		return isRule;
+	}
+	public void setIsRule(Boolean isRule) {
+		this.isRule = isRule;
+	}
 	public int getMaxValue() {
 		return maxValue;
 	}
@@ -94,15 +101,44 @@ public class EntityType {
 			Boolean isTextField, Date date, Double defaultWeight) {
 		this.name = name;
 		this.parentEntitytype = parentEntitytype;
+		if(parentEntitytype != null)
+		parentEntitytype.getSubEntityType().add(this);
 		this.isTextField = isTextField;
 		this.date = date;
 		this.defaultWeight = defaultWeight;
 	}
 
+	public EntityType() {
+		// TODO Auto-generated constructor stub
+	}
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * @param formatting the formatting to set
+	 */
+	public void setFormatting(LinkedList<Format> formatting) {
+		this.formatting = formatting;
+	}
+	/**
+	 * @param borderCasing the borderCasing to set
+	 */
+	public void setBorderCasing(LinkedList<BorderCase> borderCasing) {
+		this.borderCasing = borderCasing;
+	}
+	/**
+	 * @param entityList the entityList to set
+	 */
+	public void setEntityList(LinkedList<SuperEntity> entityList) {
+		this.entityList = entityList;
+	}
+	/**
+	 * @param subEntityType the subEntityType to set
+	 */
+	public void setSubEntityType(LinkedList<EntityType> subEntityType) {
+		this.subEntityType = subEntityType;
+	}
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -203,6 +239,7 @@ public class EntityType {
 
 		}
 	}
+
 	public String createTreeFromHead(LinkedList<EntityType> treeLinkedList)
 	{
 		treeLinkedList.add(this);
@@ -224,4 +261,49 @@ public class EntityType {
 			return str;
 		}
 	}
+	
+	public void populateTreeWithEntities(){
+		for(int x = 0;x<this.getParentEntitytype().getEntityList().size();++x){
+			SuperEntity parent = this.getParentEntitytype().getEntityList().get(x);
+			if(this.getIsRule()){
+				if(this.getIsTextField()){
+					new StringRuleEntity(this, parent, "");
+					
+				} else{
+					new floatRuleEntity(this, parent);
+				}
+			} else {
+				if(this.getIsTextField()){
+					new LeafStringEntity(this, parent,"<"+this.getName()+">");
+				} else{
+					new LeafMarkEntity(this, parent, 0);
+				}
+			}
+			
+		}
+	}
+	public void removeDeletingChildren(){
+		for(int x = 0;x<this.getEntityList().size();++x){
+			this.getEntityList().get(x).getParentEntity().getSubEntity().remove(this.getEntityList().get(x));
+			this.getParentEntitytype().getSubEntityType().remove(this);
+			this.getEntityList().clear();
+		}
+		this.getParentEntitytype().getSubEntityType().remove(this);
+		this.setParentEntitytype(null);
+	}
+	
+	public void removeSavingChildren(){
+		for(int x = 0;x<this.getEntityList().size();++x){
+			for(int y = 0;y<this.getEntityList().get(x).getSubEntity().size();++y){
+				this.getEntityList().get(x).getParentEntity().getSubEntity().add(this.getEntityList().get(x).getSubEntity().get(y));
+				this.getEntityList().get(x).getSubEntity().get(y).setParentEntity(this.getEntityList().get(x).getParentEntity());
+			}
+		}
+		for(int x = 0;x<this.getSubEntityType().size();++x){
+			this.getSubEntityType().get(x).setParentEntitytype(this.getParentEntitytype());
+			this.getParentEntitytype().getSubEntityType().add(this.getSubEntityType().get(x));
+		}
+		removeDeletingChildren();
+	}
+
 }

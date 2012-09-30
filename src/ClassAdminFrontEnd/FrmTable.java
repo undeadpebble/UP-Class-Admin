@@ -51,23 +51,58 @@ import ClassAdminBackEnd.LessThanFormat;
 public class FrmTable extends JPanel {
 	private JXTable table;
 	private JButton btnAdd;
-	private DefaultTableModel tableModel;
 	private JTextField txtField1;
 	private JTextField txtField2;
-	protected LinkedList<LinkedList<Boolean>> filters = new LinkedList<LinkedList<Boolean>>();
-	private LinkedList<LinkedList<SuperEntity>> data;
-	private Boolean[] dataFilter;
-	private String[] headers;
 
-	private Project project;
 	private int count =0;
+
+	public String[] headers;
+	public LinkedList<LinkedList<Boolean>> filters = new LinkedList<LinkedList<Boolean>>();
+	public Boolean[] dataFilter;
+	public LinkedList<LinkedList<SuperEntity>> data;
+	public LinkedList<SuperEntity> headersList;
+	public LinkedList<Integer> headPoints;
+	public JComboBox cbheaders ;
+	public JComboBox cbFormatting;
+	public String[] numberHeads;
+	public DefaultTableModel tableModel;
+	public Project project;
+
+
 	private LinkedList<Integer> selected = new LinkedList<Integer>();
 
 	public void redraw(){
 		this.data = project.getHead().getDataLinkedList();
 		this.headers = project.getHead().getHeaders();
 		
-		this.createGUI();
+		tableModel.setColumnCount(0);
+		tableModel.setRowCount(0);
+		
+		for (int x = 0; x < data.size(); x++) {
+			LinkedList<Boolean> temp = new LinkedList<Boolean>();
+			for (int y = 0; y < data.get(0).size(); y++) {
+				temp.add(false);
+			}
+			filters.add(temp);
+		}
+
+		dataFilter = new Boolean[data.size()];
+		for (int x = 0; x < dataFilter.length; x++)
+			dataFilter[x] = true;
+		
+		for(int x = 0; x < headers.length;x++){
+			tableModel.addColumn(headers[x]);
+		}
+		
+		Object[] temp = new Object[data.get(0).size()];
+
+		for(int x = 0; x <data.size();x++){
+			for (int y = 0; y < data.get(0).size(); y++) {
+				temp[y] = data.get(x).get(y).getValue();
+			}
+			tableModel.addRow(temp);
+		}
+		
 	}
 	
 	public SuperEntity[] getFirstSelectedStudent() {
@@ -423,9 +458,9 @@ public class FrmTable extends JPanel {
 				});
 		// --------------------------------------------------------------------------------------
 
-		final LinkedList<Integer> headPoints = new LinkedList<Integer>();
+		headPoints = new LinkedList<Integer>();
 
-		String[] numberHeads = project.getHead().getNumberHeaders();
+		numberHeads = project.getHead().getNumberHeaders();
 		for (int x = 0; x < headers.length; x++) {
 			if (!data.get(0).get(x).getType().getIsTextField()) {
 				headPoints.add(x);
@@ -440,8 +475,8 @@ public class FrmTable extends JPanel {
 		JButton bordercase = new JButton("Add bordercase");
 		border.add(bordercase);
 
-		final JComboBox cbheaders = new JComboBox(numberHeads);
-		final LinkedList<SuperEntity> headersList = project.getHead()
+		cbheaders = new JComboBox(numberHeads);
+		headersList = project.getHead()
 				.getHeadersLinkedList();
 		border.add(cbheaders);
 
@@ -499,84 +534,27 @@ public class FrmTable extends JPanel {
 		searchPnl.add(btnSearch);
 		searchPnl.add(searchTxt);
 		// =--------------------------------------------------------------------------------------------------------------
-		// bordercase button
-		bordercase.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				{
-					final JFrame borderFrame = new JFrame();
-
-					SpinnerNumberModel SNMmax = new SpinnerNumberModel(
-							new Integer(50), // value
-							new Integer(0), // min
-							new Integer(100), // max
-							new Integer(1) // step
-					);
-					final JSpinner maxVal = new JSpinner(SNMmax);
-
-					SpinnerNumberModel SNMmin = new SpinnerNumberModel(
-							new Integer(40), // value
-							new Integer(0), // min
-							new Integer(100), // max
-							new Integer(1) // step
-					);
-					final JSpinner minVal = new JSpinner(SNMmin);
-
-					borderFrame.setLayout(new BorderLayout());
-
-					borderFrame.add(maxVal, BorderLayout.CENTER);
-					borderFrame.add(minVal, BorderLayout.NORTH);
-
-					JButton addBorderCase = new JButton("Add border case");
-					borderFrame.add(addBorderCase, BorderLayout.SOUTH);
-
-					borderFrame.setVisible(true);
-					borderFrame.setSize(400, 400);
-
-					addBorderCase.addActionListener(new ActionListener() {
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							headersList
-									.get(headPoints.get(cbheaders
-											.getSelectedIndex()))
-									.getType()
-									.getBorderCasing()
-									.add(new BorderCase(Double
-											.parseDouble(minVal.getValue()
-													.toString()), Double
-											.parseDouble(maxVal.getValue()
-													.toString())));
-
-							borderFrame.setVisible(false);
-
-							table.repaint();
-						}
-					});
-				}
-			}
-		});
-		// =--------------------------------------------------------------------------------------------------------------
 		JButton btnAddConditionalFormatting = new JButton(
 				"Add conditional formatting");
 
-		final JComboBox cbFormatting = new JComboBox(numberHeads);
+		cbFormatting = new JComboBox(numberHeads);
 
 		eastPanel.setLayout(new GridLayout(0, 1));
 
 		btnAdd = new JButton("Add row");
-		eastPanel.add(btnAdd);
+		//eastPanel.add(btnAdd);
 
 		JButton btnView = new JButton("View student");
-		eastPanel.add(btnView);
+	//	eastPanel.add(btnView);
 
-		eastPanel.add(border);
+		//eastPanel.add(border);
 
 		JPanel formatting = new JPanel();
 		formatting.add(btnAddConditionalFormatting);
 		formatting.add(cbFormatting);
-		eastPanel.add(formatting);
+	//	eastPanel.add(formatting);
 
-		eastPanel.add(searchPnl);
+		//eastPanel.add(searchPnl);
 
 		JPanel northPanel = new JPanel();
 
@@ -589,7 +567,7 @@ public class FrmTable extends JPanel {
 		txtField2.setPreferredSize(lblField2.getPreferredSize());
 
 		add(northPanel, BorderLayout.NORTH);
-		add(eastPanel, BorderLayout.EAST);
+		//add(eastPanel, BorderLayout.EAST);
 		add(pane, BorderLayout.CENTER);
 
 		table.setColumnControlVisible(true);
@@ -602,7 +580,6 @@ public class FrmTable extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				table.repaint();
-				int count = tableModel.getRowCount() + 1;
 
 				EntityType testHead = project.getHeadEntityType();
 				LinkedList<EntityType> list = testHead.getSubEntityType();
@@ -614,10 +591,6 @@ public class FrmTable extends JPanel {
 
 				data = project.getHead().getDataLinkedList();
 
-				/*
-				 * tableModel.addRow(new Object[] { txtField1.getText(),
-				 * txtField1.getText() });
-				 */
 
 				Object[] temp = new Object[data.get(0).size()];
 
@@ -676,9 +649,6 @@ public class FrmTable extends JPanel {
 		btnSetMaxVal.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println(data.get(0)
-						.get(MaxValEditing.getSelectedIndex()).getType()
-						.getMaxValue());
 				if (!data.get(0).get(MaxValEditing.getSelectedIndex())
 						.getType().getIsTextField()) {
 					data.get(0)
@@ -732,12 +702,7 @@ public class FrmTable extends JPanel {
 
 				final JComboBox formatTypes = new JComboBox(formatTypesStr);
 
-			/*	String[] cols = new String[colors.size()];
 
-				for (int x = 0; x < cols.length; x++) {
-					cols[x] = colorsString.get(x);
-				}
-				final JComboBox colCombo = new JComboBox(cols);*/
 
 				String[] whatToFormat = { "Background", "Text" };
 
@@ -1171,8 +1136,9 @@ public class FrmTable extends JPanel {
 
 	}
 
+	
 	// =--------------------------------------------------------------------------------------------------------------
-	private void createEntities(EntityType entType, SuperEntityPointer parent) {
+	public void createEntities(EntityType entType, SuperEntityPointer parent) {
 		LinkedList<EntityType> list = entType.getSubEntityType();
 
 		if (entType.getIsTextField()) {

@@ -5,6 +5,8 @@ import java.util.LinkedList;
 
 import org.tmatesoft.sqljet.core.SqlJetException;
 
+import Frames.Frame;
+
 public class FileHandler {
 	final double LARGEST_MARK_VALUE = 1000;
 	/**
@@ -12,6 +14,7 @@ public class FileHandler {
 	 * @return
 	 */
 	static FileHandler fh;
+	Frame frame;
 	
 	Project project;
 
@@ -49,13 +52,13 @@ public class FileHandler {
 		if (fileReader.fileExists(filename)) {
 			ArrayList recordArray = fileReader.recordData();
 			headers = fileReader.getHeaders(recordArray);
-			int parentRow = createEntityTypes(headers, recordArray, fileReader);
+			int parentRow = createEntityTypes(headers, recordArray, fileReader, filename);
 			createMarkEntities(parentRow, headers, recordArray, fileReader);
 		}
 	}
 
 	private int createEntityTypes(ArrayList headers, ArrayList recordArray,
-			FileImport fileReader) {
+			FileImport fileReader, String filename) {
 		// header entity
 		int firstStringCol = -1;
 		// EntityTypeFactory eTFactory = new EntityTypeFactory();
@@ -158,13 +161,13 @@ public class FileHandler {
 
 	private void openXls(String filename) {
 		FileImport fileReader;
-		fileReader = new XlsImport();
+		fileReader = new XlsImport(frame);
 		ArrayList headers;
 
 		if (fileReader.fileExists(filename)) {
 			ArrayList recordArray = fileReader.recordData();
 			headers = fileReader.getHeaders(recordArray);
-			int parentRow = createEntityTypes(headers, recordArray, fileReader);
+			int parentRow = createEntityTypes(headers, recordArray, fileReader, filename);
 			createMarkEntities(parentRow, headers, recordArray, fileReader);
 		}
 	}
@@ -216,6 +219,10 @@ public class FileHandler {
 	public void setXLSImport(XlsImport i) {
 //		i.recordData();
 		
+	}
+	
+	public void setFrame(Frame frame_) {
+		frame = frame_;
 	}
 
 }
