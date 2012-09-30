@@ -26,12 +26,17 @@ import javax.swing.JPanel;
 
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.labels.BoxAndWhiskerToolTipGenerator;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.renderer.category.BoxAndWhiskerRenderer;
+import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.statistics.DefaultBoxAndWhiskerCategoryDataset;
 import org.jfree.data.statistics.HistogramDataset;
 import org.jfree.data.statistics.HistogramType;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
+import com.keypoint.PngEncoder;
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGEncodeParam;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
@@ -43,23 +48,21 @@ public class BoxPlotFrame extends JFrame implements ActionListener {
 	static ChartPanel chartpanel;
 	static JFreeChart chart;
 	int houerx;
-	int headerindex=0;
-	protected final String[] kolom = Global.getGlobal().getActiveProject().getHead()
-			.getNumberHeaders();
-	protected final LinkedList<LinkedList<SuperEntity>> diedata = Global.getGlobal()
-			.getActiveProject().getHead().getDataLinkedList();
-	protected final String[] headers = Global.getGlobal().getActiveProject()
-			.getHead().getHeaders();
+	int headerindex = 0;
+	protected final String[] kolom = Global.getGlobal().getActiveProject().getHead().getNumberHeaders();
+	protected final LinkedList<LinkedList<SuperEntity>> diedata = Global.getGlobal().getActiveProject().getHead().getDataLinkedList();
+	protected final String[] headers = Global.getGlobal().getActiveProject().getHead().getHeaders();
 	protected static int teller = 0;
 	protected final int seriesCount = 1;
 	protected final int categoryCount = 1;
 	protected final int entityCount = diedata.size();
-	protected final BoxPlotOptionMenu box= new BoxPlotOptionMenu();
+	protected final BoxPlotOptionMenu box = new BoxPlotOptionMenu();
 	protected static final DefaultBoxAndWhiskerCategoryDataset dataset = new DefaultBoxAndWhiskerCategoryDataset();
-	public BoxPlotFrame()
-	{
-		
+
+	public BoxPlotFrame() {
+
 	}
+
 	public void createBoxPlotFrame() {
 
 		JFrame f = new JFrame("BoxPlot");
@@ -67,15 +70,22 @@ public class BoxPlotFrame extends JFrame implements ActionListener {
 		f.setSize(450, 500);
 
 		
+        
+		
+		
 		final BoxPlot nuweChart = new BoxPlot();
 		chart = nuweChart.createBoxPlot("BoxPlot", "", "", dataset);
-		chartpanel = new ChartPanel(chart, 400, 400, 100, 100, 400, 400, true,
-				true, true, true, true, true);
+		chartpanel = new ChartPanel(chart, 400, 400, 100, 100, 400, 400, true, true, true, true, true, true);
+		
+		final BoxAndWhiskerRenderer renderer = new BoxAndWhiskerRenderer();
+
+        renderer.setToolTipGenerator(new BoxAndWhiskerToolTipGenerator());
+        
+        chartpanel.getChart().getCategoryPlot().setRenderer(renderer);
 		
 		
-	
 		JButton addseries = new JButton("Add a series");
-		//Series can be added dynamically
+		// Series can be added dynamically
 		addseries.addMouseListener(new MouseListener() {
 
 			@Override
@@ -102,15 +112,11 @@ public class BoxPlotFrame extends JFrame implements ActionListener {
 
 			}
 
-				
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				
-			
-				
-			box.createFrame();
-							
-			
+
+				box.createFrame();
+
 			}
 		});
 
@@ -149,8 +155,8 @@ public class BoxPlotFrame extends JFrame implements ActionListener {
 			}
 
 		});
-		//Extract chart to JPG
-		JButton extractPic = new JButton("Extract");
+		// Extract chart to PNG
+		JButton extractPic = new JButton("Extract chart");
 		extractPic.addMouseListener(new MouseListener() {
 
 			@Override
@@ -190,7 +196,6 @@ public class BoxPlotFrame extends JFrame implements ActionListener {
 			}
 		});
 
-		content.setBackground(Color.white);
 		content.setLayout(new FlowLayout());
 		content.add(chartpanel);
 		content.add(addseries);
@@ -199,35 +204,35 @@ public class BoxPlotFrame extends JFrame implements ActionListener {
 
 		f.setVisible(true);
 	}
-	public void addBoxSeries()
-	{
-	
+
+	public void addBoxSeries() {
+
 		ArrayList nuwe = new ArrayList();
-	
-			for (int k = 0; k < diedata.size(); k++) {
-
-				nuwe.add(diedata.get(k).get(box.getIndexOfHeader()).getMark());
-
-				
-			}
-			teller +=1;
-			dataset.add(nuwe, "Series" + teller, headers[box.getIndexOfHeader()]);
+		
+		for (int k = 0; k < diedata.size(); k++) {
 			
-			chartpanel.getChart().getCategoryPlot().setDataset(dataset);
+			nuwe.add(diedata.get(k).get(box.getIndexOfHeader()).getMark());
+			
+		}
+		teller += 1;
+		
+		dataset.add(nuwe, "Series" + teller, headers[box.getIndexOfHeader()]);
+		
+		chartpanel.getChart().getCategoryPlot().setDataset(dataset);
 	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 
 	}
+
 	public void saveFileAs() throws IOException {
 
 		File file;
-	
 
 		// Create a file chooser
 		final JFileChooser filechooser = new JFileChooser();
-	
 
 		// shows the dialog, return value specifies file
 		int returnVal = filechooser.showSaveDialog(this);
@@ -236,8 +241,8 @@ public class BoxPlotFrame extends JFrame implements ActionListener {
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			file = filechooser.getSelectedFile();
 			try {
-				
-				saveToFile(chart, file.getAbsolutePath()+".jpg", 500, 300, 100);
+
+				saveToFile(chart, file.getAbsolutePath() + ".png", 500, 300, 100);
 			} catch (UnknownTypeException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -247,34 +252,39 @@ public class BoxPlotFrame extends JFrame implements ActionListener {
 		}
 	}
 
- public static void saveToFile(JFreeChart chart,String aFileName,int width,int height, double quality) throws FileNotFoundException, IOException
-	    {
-	            BufferedImage img = draw( chart, width, height );
-	            FileOutputStream fos = new FileOutputStream(aFileName);
+	public static void saveToFile(JFreeChart chart, String aFileName, int width, int height, double quality) throws FileNotFoundException,
+			IOException {
+		BufferedImage img = draw(chart, width, height);
+		byte[] pngbytes;
+		PngEncoder png = new PngEncoder(img);
 
-	            JPEGImageEncoder encoder2 = JPEGCodec.createJPEGEncoder(fos);
+		try {
+			FileOutputStream outfile = new FileOutputStream(aFileName);
+			pngbytes = png.pngEncode();
+			if (pngbytes == null) {
+				System.out.println("Null image");
+			} else {
+				outfile.write(pngbytes);
+			}
+			outfile.flush();
+			outfile.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
-	            JPEGEncodeParam param2 = encoder2.getDefaultJPEGEncodeParam(img);
+	}
 
-	            param2.setQuality((float) quality, true);
+	protected static BufferedImage draw(JFreeChart chart, int width, int height)
 
-	            encoder2.encode(img,param2);
+	{
 
-	            fos.close();
+		BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+		Graphics2D g2 = img.createGraphics();
 
-	    }
-	    
-	    protected static BufferedImage draw(JFreeChart chart, int width, int height)
+		chart.draw(g2, new Rectangle2D.Double(0, 0, width, height));
+		g2.dispose();
 
-	    {
+		return img;
 
-	        BufferedImage img = new BufferedImage(width , height, BufferedImage.TYPE_INT_RGB);
-	        Graphics2D g2 = img.createGraphics();
-
-	        chart.draw(g2, new Rectangle2D.Double(0, 0, width, height));
-	        g2.dispose();
-
-	        return img;
-
-	    }
+	}
 }

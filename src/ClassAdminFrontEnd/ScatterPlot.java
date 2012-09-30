@@ -51,19 +51,20 @@ public class ScatterPlot {
 	XYPlot plot;
 	static XYDataset datasetMain;
 	Project project;
-	// -------------------------------------------------------------------------------------------------------
+	//Constructor
 	public ScatterPlot(Project project)
 	{
 		this.project = project;
+		project.updatecharts();
 	}
-	// -------------------------------------------------------------------------------------------------------
 	
+	//Set the dataset of the chart
 	public void setDatasetmain(XYDataset x)
 	{
 		datasetMain = x;
 	}
 	
-	// -------------------------------------------------------------------------------------------------------
+	//Create the create the scatterplot
 	public JFreeChart createScatter(String title,final XYDataset chartdata,String xas,String yas)
 	{
 		chart = ChartFactory.createScatterPlot(
@@ -76,12 +77,14 @@ public class ScatterPlot {
 		return chart;
 	}	
 	
-	// -------------------------------------------------------------------------------------------------------
+	//Update all the selected values of the scatterplot
 	public void updateSelectedvalues()
 	{
+		chart.getXYPlot().clearAnnotations();
 		System.out.println("Ek update scatterchart");
 		ArrayList u= project.getSelectedIndexes();
-		//ArrayList u= Global.getGlobal().getActiveProject().getSelectedIndexes();
+		System.out.println("Size van "+ u.size());
+		int [] scatterwaardes = project.getScatterIndexes();
 		final CircleDrawer cd = new CircleDrawer(Color.red,
 				new BasicStroke(1.0f), null);
 		
@@ -89,13 +92,20 @@ public class ScatterPlot {
 		{
 		
 		final XYAnnotation selectPlots = new XYDrawableAnnotation(datasetMain
-				.getXValue(0, (Integer) u.get(x)), datasetMain.getYValue(0,
-						(Integer) u.get(x)), 11, 11, cd);
-
+				.getXValue(0, scatterwaardes[(Integer)u.get(x)]), datasetMain.getYValue(0,
+						scatterwaardes[(Integer)u.get(x)]), 11, 11, cd);
+		
 		chart.getXYPlot().addAnnotation(selectPlots);
+		System.out.println(u.get(x));
+		System.out.println(scatterwaardes[(Integer)u.get(x)]);
+		System.out.println(datasetMain.getXValue(0, scatterwaardes[(Integer)u.get(x)])+"  " + datasetMain.getYValue(0,scatterwaardes[(Integer)u.get(x)]));
+		/*for(int w=0;w<scatterwaardes.length;w++)
+			System.out.println(scatterwaardes[w]);
+		System.out.println(datasetMain.getXValue(0, 76));
+		System.out.println(datasetMain.getYValue(0, 76));*/
 		}
 	}
-	// -------------------------------------------------------------------------------------------------------
+	//Put the chart on the chartpanel
 	public ChartPanel createPanel()
 	{
 		
@@ -112,33 +122,49 @@ public class ScatterPlot {
 					
 				
 					if(me.isShiftDown() == false)
+					{
 					chart.getXYPlot().clearAnnotations();
-					
+					project.clearselected();
+				//	project.setCleared(true);
+					}
 					ChartEntity entity = ((ChartMouseEvent) e).getEntity();
 				
 					if (entity instanceof XYItemEntity && entity != null) {
 						
 						XYItemEntity ent = (XYItemEntity) entity;
-					
+						int [] scatterwaardes = project.getScatterIndexes();
 						
 						
 						int sindex = ent.getSeriesIndex();
 						int iindex = ent.getItem();
-						project.setSelected(iindex);
-						//Global.getGlobal().getActiveProject().setSelected(iindex);
+						for(int q=0;q<scatterwaardes.length;q++)
+						{
+							if(scatterwaardes[q]== iindex)
+							{
+								project.setSelected(q);
+								project.setCleared(true);
+							}
+						}
+						System.out.println("Ek het klaar geset");
 						
-						System.out.println("Punt se index"+iindex);
+					/*
 						final CircleDrawer cd = new CircleDrawer(Color.red,
 								new BasicStroke(1.0f), null);
 						final XYAnnotation bestBid = new XYDrawableAnnotation(datasetMain
 								.getXValue(sindex, iindex), datasetMain.getYValue(sindex,
 								iindex), 11, 11, cd);
-
-						chart.getXYPlot().addAnnotation(bestBid);
-						project.updatecharts();
-						//Global.getGlobal().getActiveProject().updatecharts();
+					
+						
+						
+						chart.getXYPlot().addAnnotation(bestBid);*/
+						//project.updatecharts();
+						
+						
+					
+						
+					/*	System.out.println("Series"+sindex +" Index"+iindex);
 						System.out.println("x = " + datasetMain.getXValue(sindex, iindex));
-						System.out.println("y = " + datasetMain.getYValue(sindex, iindex));
+						System.out.println("y = " + datasetMain.getYValue(sindex, iindex));*/
 					}
 
 				}
