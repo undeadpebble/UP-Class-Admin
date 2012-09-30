@@ -63,29 +63,30 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
+
 		this.addKeyListener(new KeyListener() {
-			
+
 			@Override
 			public void keyTyped(KeyEvent arg0) {
-				
+
 			}
-			
+
 			@Override
 			public void keyReleased(KeyEvent arg0) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void keyPressed(KeyEvent arg0) {
 
 				switch (arg0.getKeyCode()) {
-				case 192: 
+				case 192:
 					markList.get(focusedMark).addChar('0');
 					break;
-				case KeyEvent.VK_ENTER : markList.get(focusedMark).next();
-				break;
+				case KeyEvent.VK_ENTER:
+					markList.get(focusedMark).next();
+					break;
 				case '1':
 				case '2':
 				case '3':
@@ -97,13 +98,13 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 				case '9':
 				case '0':
 					markList.get(focusedMark).addChar(arg0.getKeyCode());
-						
+
 					break;
 
 				default:
 					break;
 				}
-				
+
 			}
 		});
 	}
@@ -143,8 +144,7 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 		try {
 			RapidAssessmentMarkType n = ((RapidAssessmentMarkType) node);
 
-			comp = new MyMark(node, (int) (n.getX()),
-					(int) (n.getY()));
+			comp = new MyMark(node, (int) (n.getX()), (int) (n.getY()));
 
 			return comp;
 		} catch (ClassCastException e) {
@@ -155,13 +155,13 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 			contentPanel = new ContentPanel();
 			backgroundFileName = n.getImage();
 
-			parentFrame.setSize((int) (n.getW()+20), (int) (n.getH()+20));
+			parentFrame.setSize((int) (n.getW() + 20), (int) (n.getH() + 20));
 			for (int x = 0; x < n.getSubEntityType().size(); ++x) {
 				try {
 					contentPanel
 							.add(createComponent((RapidAssessmentComponentType) n
 									.getSubEntityType().get(x)));
-					
+
 				} catch (ClassCastException e) {
 				}
 			}
@@ -173,13 +173,13 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 		}
 		try {
 			RapidAssessmentRectangleType n = ((RapidAssessmentRectangleType) node);
-			comp = new MyRectangle(node, (int) (n.getX()),
-					(int) (n.getY()), (int) (n.getW()), (int) (n.getH()));
+			comp = new MyRectangle(node, (int) (n.getX()), (int) (n.getY()),
+					(int) (n.getW()), (int) (n.getH()));
 			for (int x = 0; x < n.getSubEntityType().size(); ++x) {
 				try {
 					comp.add(createComponent((RapidAssessmentComponentType) n
 							.getSubEntityType().get(x)));
-					
+
 				} catch (ClassCastException e) {
 				}
 			}
@@ -210,11 +210,14 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 		 * @return the mark
 		 */
 		public double getMark() {
-			try {
-				return entity.getMark();
-			} catch (AbsentException e) {
+			if (entity != null) {
+				try {
+					return entity.getMark();
+				} catch (AbsentException e) {
+					return 0;
+				}
+			} else
 				return 0;
-			}
 		}
 
 		/**
@@ -222,14 +225,15 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 		 *            the mark to set
 		 */
 		public void setMark(double mark) {
-			entity.setMark(mark);
+			if (entity != null)
+				entity.setMark(mark);
 		}
 
 		/**
 		 * @return the maxMark
 		 */
 		public double getMaxMark() {
-			return entity.getType().getMaxValue();
+			return enType.getMaxValue();
 		}
 
 		/**
@@ -237,7 +241,7 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 		 *            the maxMark to set
 		 */
 		public void setMaxMark(double maxMark) {
-			entity.getType().setMaxValue(maxMark);
+			enType.setMaxValue(maxMark);
 		}
 
 		public void updateMark() {
@@ -266,7 +270,8 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 		}
 
 		/**
-		 * @param entity the entity to set
+		 * @param entity
+		 *            the entity to set
 		 */
 		public void setEntity(SuperEntity entity) {
 			this.entity = entity;
@@ -280,7 +285,8 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 		}
 
 		/**
-		 * @param enType the enType to set
+		 * @param enType
+		 *            the enType to set
 		 */
 		public void setEnType(EntityType enType) {
 			this.enType = enType;
@@ -331,6 +337,7 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 
 	public class MyMark extends MyComponent {
 		private String strValue = "";
+
 		/**
 		 * @param maxMark
 		 * @param x
@@ -342,96 +349,94 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 			super(enType, x, y, RapidAssessmentCanvas.MARK_SIZE * 3,
 					RapidAssessmentCanvas.MARK_SIZE);
 			markList.add(this);
-			
+
 			this.addMouseListener(new MouseListener() {
-				
+
 				@Override
 				public void mouseReleased(MouseEvent arg0) {
 					// TODO Auto-generated method stub
-					
+
 				}
-				
+
 				@Override
 				public void mousePressed(MouseEvent arg0) {
 					int old = focusedMark;
 					markList.get(old).next();
-					focusedMark=markList.indexOf(arg0.getSource());
+					focusedMark = markList.indexOf(arg0.getSource());
 					markList.get(old).repaint();
-					
+
 					markList.get(focusedMark).repaint();
 				}
-				
+
 				@Override
 				public void mouseExited(MouseEvent arg0) {
 					// TODO Auto-generated method stub
-					
+
 				}
-				
+
 				@Override
 				public void mouseEntered(MouseEvent arg0) {
 					// TODO Auto-generated method stub
-					
+
 				}
-				
+
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
 					// TODO Auto-generated method stub
-					
+
 				}
 			});
 
 		}
-		
-		public boolean addChar(int charVal){
-			String newStr = strValue + (char)charVal;
+
+		public boolean addChar(int charVal) {
+			String newStr = strValue + (char) charVal;
 			System.out.println(newStr);
-			try{
+			try {
 				double newMark = Double.parseDouble(newStr);
-				if(newMark > this.getMaxMark())
+				if (newMark > this.getMaxMark())
 					return false;
-				
+
 				this.setMark(newMark);
 				strValue = newStr;
-				
-				if((strValue.length())*10 > this.getMaxMark())
+
+				if ((strValue.length()) * 10 > this.getMaxMark())
 					next();
-				
+
 				this.repaint();
 				return true;
-			}
-			catch(NumberFormatException e){
+			} catch (NumberFormatException e) {
 				return false;
 			}
-			
+
 		}
-		
-		public boolean backspace(){
-			if(strValue.length() > 0){
-				strValue = strValue.substring(0, strValue.length()-2);
+
+		public boolean backspace() {
+			if (strValue.length() > 0) {
+				strValue = strValue.substring(0, strValue.length() - 2);
 				this.setMark(Double.parseDouble(strValue));
 				return true;
-			}
-			else
+			} else
 				return false;
-				
+
 		}
-		
-		public void next(){
-			strValue ="";
+
+		public void next() {
+			strValue = "";
 			MyMark old = markList.get(focusedMark);
 			focusedMark = ++focusedMark % markList.size();
 			markList.get(focusedMark).repaint();
 			old.repaint();
-			
+
 		}
-		
+
 		@Override
 		protected void paintComponent(Graphics arg0) {
 
 			super.paintComponent(arg0);
 
 			Graphics2D g2 = (Graphics2D) arg0.create();
-			
+
 			if (markList.get(focusedMark) == this) {
 				g2.setColor(Color.red.darker().darker());
 			} else {
@@ -441,10 +446,11 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 					RenderingHints.VALUE_ANTIALIAS_ON);
 			g2.drawRect(0, 0, this.getWidth() / 3 - 1, this.getHeight() - 1);
-			g2.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, RapidAssessmentCanvas.MARK_SIZE - 2));
+			g2.setFont(new Font(Font.SANS_SERIF, Font.PLAIN,
+					RapidAssessmentCanvas.MARK_SIZE - 2));
 			String text1 = "" + this.getMark();
-			String text2 = "/"+this.getMaxMark();
-			
+			String text2 = "/" + this.getMaxMark();
+
 			g2.drawString(text1 + text2, this.getWidth() / 3 + 2,
 					this.getHeight() - 1);
 			g2.dispose();
@@ -452,6 +458,7 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 		}
 
 	}
+
 	public class MyMarkTotalComponent extends JComponent {
 
 		/**
@@ -488,27 +495,27 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 			g2.drawRect(0, 0, this.getWidth() + 5, this.getHeight() + 5);
 			g2.setFont(new Font(Font.SANS_SERIF, Font.PLAIN,
 					this.getHeight() - 4));
-			g2.drawString(((MyComponent) this.getParent()).getMark()+" / " + ((MyComponent) this.getParent()).getMaxMark(),
-					1, this.getHeight() - 3);
+			g2.drawString(((MyComponent) this.getParent()).getMark() + " / "
+					+ ((MyComponent) this.getParent()).getMaxMark(), 1,
+					this.getHeight() - 3);
 			g2.dispose();
 		}
 
 	}
-	
-	public void assess(SuperEntity entity){
-		load(entity,(MyComponent)(contentPanel.getComponent(0)));
+
+	public void assess(SuperEntity entity) {
+		load(entity, (MyComponent) (contentPanel.getComponent(0)));
 	}
-	
-	public void load(SuperEntity entity, MyComponent comp){
+
+	public void load(SuperEntity entity, MyComponent comp) {
 		comp.setEntity(entity.findEntityOfType_Down(comp.getEnType()));
-		for(int x = 0;x<comp.getComponentCount();++x){
-			try{
-				load(entity,(MyComponent)(comp.getComponent(x)));
-			}
-			catch(ClassCastException e){
-				
+		for (int x = 0; x < comp.getComponentCount(); ++x) {
+			try {
+				load(entity, (MyComponent) (comp.getComponent(x)));
+			} catch (ClassCastException e) {
+
 			}
 		}
 	}
-	
+
 }
