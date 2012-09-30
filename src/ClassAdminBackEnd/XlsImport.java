@@ -166,6 +166,9 @@ public class XlsImport extends FileImport {
 
 	public void createImport() throws SqlJetException, IOException {
 
+		BufferedImage icon2 = ImageIO.read(getClass().getResource(
+				"/ClassAdminFrontEnd/resources/XLSImport.png"));
+		ReflectionButton buttonImport = new ReflectionButton(icon2);
 		dialog = new JDialog(frame, true);
 		dialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		dialog.setBounds(0, 0, 700, 625);
@@ -174,6 +177,11 @@ public class XlsImport extends FileImport {
 
 		// set frame icon
 		Image icon = Toolkit.getDefaultToolkit().getImage("Logo.png");
+		dialog.setTitle("Specify Header");
+
+		// set frame icon
+		Image icon = Toolkit.getDefaultToolkit().getImage("Logo.png");
+		dialog.setIconImage(icon);
 		dialog.setIconImage(icon);
 
 		// create background panel
@@ -218,6 +226,12 @@ public class XlsImport extends FileImport {
 		lblHeader.setForeground(new Color(0xEDEDED));
 
 		importButton.addMouseListener(new MouseListener() {
+		backgroundPanel.add(buttonImport);
+		buttonImport.setBounds(600, 500, 70, 80);
+		buttonImport.setFocusable(true);
+		buttonImport.setVisible(true);
+		
+		buttonImport.addMouseListener(new MouseListener() {
 
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
@@ -292,14 +306,17 @@ public class XlsImport extends FileImport {
 		pnlHeaders.add(cmbHeaders);
 
 		textArea2.setCaretPosition(0);
-		scrollPane.setBounds(40, 110, 500, 420);
+		scrollPane.setBounds(40, 110, 500, 460);
 		pnlSheets.setBounds(574, 105, 70, 55);
 		pnlHeaders.setBounds(574, 160, 70, 55);
+		
 
 		backgroundPanel.add(scrollPane);
 		backgroundPanel.add(pnlSheets);
 		backgroundPanel.add(pnlHeaders);
-
+		
+		dialog.setVisible(true);
+		
 		dialog.setVisible(true);
 		
 	}
