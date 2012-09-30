@@ -69,7 +69,7 @@ public class ScatterPlot {
 	public JFreeChart createScatter(String title,final XYDataset chartdata,String xas,String yas)
 	{
 		chart = ChartFactory.createScatterPlot(
-				"Scatter Plot Demo", xas, yas, chartdata,
+				"Scatter Plot", xas, yas, chartdata,
 				PlotOrientation.VERTICAL, false, false, false);
 		datasetMain = chartdata;
 		NumberAxis domainAxis = (NumberAxis) chart.getXYPlot().getDomainAxis();
@@ -77,7 +77,7 @@ public class ScatterPlot {
 		XYPlot plot = (XYPlot) chart.getPlot();
 		
 		XYItemRenderer renderer = plot.getRenderer();
-				 renderer.setSeriesPaint(0, new Color(0xFF8400));
+		renderer.setSeriesPaint(0, new Color(0xFF8400));
 		return chart;
 	}	
 	

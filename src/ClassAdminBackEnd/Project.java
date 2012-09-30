@@ -36,7 +36,37 @@ public class Project {
 	private LinkedList<EntityType> treeLinkedList;
 	private LinkedList<FrmTable> tables = new LinkedList<FrmTable>();
 	private boolean cleared= false;
+	private int histogramdatacount=-1;
+	private int scatterdatacount=-1;
 	
+	public int getHistogramcount()
+	{
+		return histogramdatacount;
+	}
+	public void incHistogramcount()
+	{
+		int modgetal = this.getHead().getNumberHeaders().length;
+		
+		histogramdatacount= histogramdatacount+1;
+		
+		histogramdatacount = histogramdatacount % modgetal;
+		
+	}
+	
+	
+	public int getscattercount()
+	{
+		return scatterdatacount;
+	}
+	public void incscattercount()
+	{
+		int modgetal = this.getHead().getNumberHeaders().length;
+		
+		scatterdatacount= scatterdatacount+1;
+		
+		scatterdatacount = scatterdatacount % (modgetal-1);
+		
+	}
 	public void clearselected() {
 		System.out.println("Cleared");
 		this.getSelectedIndexes().clear();

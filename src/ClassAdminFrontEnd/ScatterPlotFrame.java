@@ -122,11 +122,11 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 	}
 	// Create the scatterplotframe
 	public ScatterPlotFrame(final Project project) {
-		System.out.println("Toet2s");
+
 		JFrame f = new JFrame("ScatterPlot");
 		this.project = project;
 		final Container content = f.getContentPane();
-		f.setSize(550, 500);
+		f.setSize(550, 380);
 		diedata = project.getHead().getDataLinkedList();
 
 		final XYSeriesCollection dataset = new XYSeriesCollection();
@@ -135,13 +135,15 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 		nuweChart = new ScatterPlot(project);
 
 		String[] kolom = project.getHead().getNumberHeaders();
-
-		String xas = kolom[0];
-		String yas = kolom[1];
+		if(kolom.length >=2)
+		{
+			project.incscattercount();
+		String xas = kolom[project.getscattercount()];
+		String yas = kolom[project.getscattercount()+1];
 
 		// get the first headers value
 		for (int s = 0; s < headers.length; s++) {
-			if (headers[s].equals(kolom[0])) {
+			if (headers[s].equals(kolom[project.getscattercount()])) {
 				houerx = s;
 
 			}
@@ -149,7 +151,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 		}
 		// get the second headers value
 		for (int s = 0; s < headers.length; s++) {
-			if (headers[s].equals(kolom[1])) {
+			if (headers[s].equals(kolom[project.getscattercount()+1])) {
 				houery = s;
 
 			}
@@ -182,6 +184,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 		final JComboBox xascb = new JComboBox();
 		// Combobox of X-axis
 		xascb.setModel(new DefaultComboBoxModel(kolom));
+		xascb.setSelectedIndex(project.getscattercount());
 		xascb.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -293,7 +296,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 
 		final JComboBox yascb = new JComboBox();
 		yascb.setModel(new DefaultComboBoxModel(kolom));
-		yascb.setSelectedIndex(1);
+		yascb.setSelectedIndex(project.getscattercount() +1);
 		// Combobox of Y-axis
 		yascb.addActionListener(new ActionListener() {
 
@@ -479,7 +482,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 			}
 		});
 
-		content.setBackground(Color.white);
+		
 		content.setLayout(new FlowLayout());
 		content.add(chartpanel);
 		content.add(lblNewLabel);
@@ -492,6 +495,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 		content.add(switchregsy);
 		content.add(rotate);
 		content.add(extractPic);
+		}
 
 		f.setVisible(true);
 	}

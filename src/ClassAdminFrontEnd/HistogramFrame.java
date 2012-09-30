@@ -79,7 +79,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 	public HistogramFrame(final Project project) {
 		JFrame f = new JFrame("Histogram");
 		final Container content = f.getContentPane();
-		f.setSize(550, 600);
+		f.setSize(550, 620);
 
 		this.project = project;
 		final LinkedList<LinkedList<SuperEntity>> diedata = project.getHead()
@@ -89,19 +89,19 @@ public class HistogramFrame extends JFrame implements ActionListener {
 		
 		String[] kolom = project.getHead().getNumberHeaders();
 		
-
+		project.incHistogramcount();
 		String plotTitle = "Histogram";
-		String xaxis = kolom[0];
+		String xaxis = kolom[project.getHistogramcount()];
 		String yaxis = "Count";
 
 		nuweChart = new Histogram(project);
 
 		final HistogramDataset dataset = new HistogramDataset();
-
-		String xas = kolom[0];
-
+	
+		String xas = kolom[project.getHistogramcount()];
+		
 		for (int s = 0; s < headers.length; s++) {
-			if (headers[s].equals(kolom[0])) {
+			if (headers[s].equals(kolom[project.getHistogramcount()])) {
 				houerx = s;
 
 			}
@@ -118,6 +118,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 		final JComboBox xascb = new JComboBox();
 		//Combobox van X-axis
 		xascb.setModel(new DefaultComboBoxModel(kolom));
+		xascb.setSelectedIndex(project.getHistogramcount());
 		xascb.addActionListener(new ActionListener() {
 
 			@Override
