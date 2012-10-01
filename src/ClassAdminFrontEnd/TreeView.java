@@ -125,6 +125,10 @@ public class TreeView extends Display {
 	static int iParent = -1;
 	static int iChild = -1;
 
+	public void updateTree(Tree newTree)
+	{
+		myTree = newTree;
+	}
 	public TreeView(Tree t, String label) {
 		super(new Visualization());
 
@@ -654,7 +658,7 @@ public class TreeView extends Display {
 				if (e.isShiftDown() && e.getClickCount() == 1) {
 
 					if (id.contains("Node")) {
-						nodeTable = item.getTable();
+						nodeTable = myTree.getNodeTable();
 						name = item.getString("name");
 
 						iParent = item.getRow();
@@ -666,7 +670,7 @@ public class TreeView extends Display {
 				if (e.isControlDown() && e.getClickCount() == 1) {
 					if (bParent) {
 						if (id.contains("Node")) {
-							nodeTable = item.getTable();
+							nodeTable = myTree.getNodeTable();
 							name = item.getString("name");
 
 							iChild = item.getRow();

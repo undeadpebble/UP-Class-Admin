@@ -158,7 +158,7 @@ public class FrmNewNode {
 					
 					//REQUIRED NEEDS FIXING//					
 					activeProject.getTreeLinkedList().add(newE);
-					//newE.populateTreeWithEntities();
+					newE.populateTreeWithEntities();
 
 					
 					// refresh cmbParent content
