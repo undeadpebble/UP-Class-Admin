@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -44,9 +45,12 @@ import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.statistics.HistogramDataset;
 import org.jfree.data.statistics.HistogramType;
 
+import com.keypoint.PngEncoder;
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGEncodeParam;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
+import com.sun.imageio.plugins.png.PNGImageReader;
+import com.sun.imageio.plugins.png.PNGImageWriter;
 
 import ClassAdminBackEnd.EntityType;
 import ClassAdminBackEnd.Global;
@@ -66,13 +70,13 @@ public class HistogramFrame extends JFrame implements ActionListener {
 	private Histogram nuweChart;
 	private Project project;
 
-	// -------------------------------------------------------------------------------------------------------
+	//Update the values of the histogram
 	public void update() {
 		nuweChart.updateSelectedValues();
 	}
 
-	// -------------------------------------------------------------------------------------------------------
-	public HistogramFrame(Project project) {
+	//Create the frame of the histogram
+	public HistogramFrame(final Project project) {
 		JFrame f = new JFrame("Histogram");
 		final Container content = f.getContentPane();
 		f.setSize(550, 600);
@@ -103,7 +107,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			}
 
 		}
-		;
+		
 		chart = nuweChart.createHistogram(plotTitle, xaxis, yaxis,
 				nuweChart.createDataset(houerx));
 
@@ -112,7 +116,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 		JLabel lblNewLabel = new JLabel("X-axis");
 
 		final JComboBox xascb = new JComboBox();
-
+		//Combobox van X-axis
 		xascb.setModel(new DefaultComboBoxModel(kolom));
 		xascb.addActionListener(new ActionListener() {
 
@@ -144,11 +148,12 @@ public class HistogramFrame extends JFrame implements ActionListener {
 				 */
 				chartpanel.getChart().getXYPlot()
 						.setDataset(nuweChart.changeDataset(houerx));
+				project.updatecharts();
 
 			}
 
 		});
-
+		//Cycle through the data left
 		JButton switchlinksx = new JButton("<");
 		switchlinksx.addMouseListener(new MouseListener() {
 
@@ -179,11 +184,13 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (xascb.getSelectedIndex() >= 1)
+				{
 					xascb.setSelectedIndex(xascb.getSelectedIndex() - 1);
-
+					project.updatecharts();
+				}
 			}
 		});
-
+		//Cycle through data right
 		JButton switchregsx = new JButton(">");
 		switchregsx.addMouseListener(new MouseListener() {
 
@@ -214,8 +221,10 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (xascb.getSelectedIndex() < xascb.getItemCount() - 1)
+				{
 					xascb.setSelectedIndex(xascb.getSelectedIndex() + 1);
-
+					project.updatecharts();
+				}
 			}
 		});
 
@@ -254,8 +263,8 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			}
 
 		});
-
-		JButton extractPic = new JButton("Extract chart as jpg");
+		//Extract the chart  as a jpg
+		JButton extractPic = new JButton("Extract chart");
 		extractPic.addMouseListener(new MouseListener() {
 
 			@Override
@@ -297,7 +306,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 		});
 		final JLabel width = new JLabel("Width");
 		JButton widthsmall = new JButton("<");
-
+		//Change the widht of the bars smaller
 		widthsmall.addMouseListener(new MouseListener() {
 
 			@Override
@@ -341,7 +350,9 @@ public class HistogramFrame extends JFrame implements ActionListener {
 
 			}
 		});
+		
 		JButton widthlarge = new JButton(">");
+		//Change the width of the bars bigger
 		widthlarge.addMouseListener(new MouseListener() {
 
 			@Override
@@ -401,6 +412,33 @@ public class HistogramFrame extends JFrame implements ActionListener {
 
 			}
 		});
+		
+		final JLabel histogramtypelabel = new JLabel("Histogram Type");
+		
+		String[] HistogramTypeString = { "Normal Histogram", "Cummulative Plot" };
+		final JComboBox histogramType = new JComboBox();
+		//Combobox van X-axis
+		histogramType.setModel(new DefaultComboBoxModel(HistogramTypeString));
+		histogramType.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JComboBox cb = (JComboBox) e.getSource();
+				String axis = (String) cb.getSelectedItem();
+				if(axis.compareTo("Cummulative Plot")==0)
+					chartpanel.getChart().getXYPlot()
+					.setDataset(nuweChart.changeHistogramType());
+				else
+					chartpanel.getChart().getXYPlot()
+					.setDataset(nuweChart.changeToNormalHistogramType());
+
+			}
+
+		});
+		
+		
+		
+		
 		content.setLayout(new FlowLayout());
 		content.add(chartpanel);
 		content.add(lblNewLabel);
@@ -412,6 +450,9 @@ public class HistogramFrame extends JFrame implements ActionListener {
 		content.add(width);
 		content.add(widthsmall);
 		content.add(widthlarge);
+		content.add(histogramtypelabel);
+		content.add(histogramType);
+		
 		f.setVisible(true);
 	}
 
@@ -420,8 +461,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 		// TODO Auto-generated method stub
 
 	}
-
-	// -------------------------------------------------------------------------------------------------------
+	//SaveFileAs for extract
 	public void saveFileAs() throws IOException {
 
 		File file;
@@ -437,7 +477,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			file = filechooser.getSelectedFile();
 			try {
 
-				saveToFile(chart, file.getAbsolutePath() + ".jpg", 500, 300,
+				saveToFile(chart, file.getAbsolutePath() + ".png", 500, 300,
 						100);
 			} catch (UnknownTypeException e) {
 				// TODO Auto-generated catch block
@@ -448,26 +488,39 @@ public class HistogramFrame extends JFrame implements ActionListener {
 		}
 	}
 
-	// -------------------------------------------------------------------------------------------------------
+	//Save the Jfreechart in a directory as a jpg
 	public static void saveToFile(JFreeChart chart, String aFileName,
 			int width, int height, double quality)
 			throws FileNotFoundException, IOException {
 		BufferedImage img = draw(chart, width, height);
-		FileOutputStream fos = new FileOutputStream(aFileName);
-
-		JPEGImageEncoder encoder2 = JPEGCodec.createJPEGEncoder(fos);
-
-		JPEGEncodeParam param2 = encoder2.getDefaultJPEGEncodeParam(img);
-
-		param2.setQuality((float) quality, true);
-
-		encoder2.encode(img, param2);
-
-		fos.close();
-
+	
+		 byte[] pngbytes;
+		 PngEncoder png = new PngEncoder(img);
+		
+		 
+		  try
+	        {
+	            FileOutputStream outfile = new FileOutputStream( aFileName );
+	            pngbytes = png.pngEncode();
+	            if (pngbytes == null)
+	            {
+	                System.out.println("Null image");
+	            }
+	            else
+	            {
+	                outfile.write( pngbytes );
+	            }
+	            outfile.flush();
+	            outfile.close();
+	        }
+	        catch (IOException e)
+	        {
+	            e.printStackTrace();
+	        }
+		
 	}
 
-	// -------------------------------------------------------------------------------------------------------
+	// Create jpg image
 	protected static BufferedImage draw(JFreeChart chart, int width, int height)
 
 	{
