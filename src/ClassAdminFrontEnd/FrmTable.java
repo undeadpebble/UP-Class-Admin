@@ -298,15 +298,15 @@ public class FrmTable extends JPanel {
 							 {
 								 if(table.getSelectedRowCount() > 1){
 									 
-									 if(table.getSelectedRow() == Index_row)
+									 if(table.getSelectedRow() == table.convertRowIndexToModel(Index_row))
 										 project.clearselected();
 								 
-								 project.setSelected(Index_row);
+									 project.setSelected(table.convertRowIndexToModel(Index_row),false);
 								 }
 								 else{
 									 project.clearselected();
 									 
-									 project.setSelected(Index_row);
+									 project.setSelected(table.convertRowIndexToModel(Index_row),false);
 								 }
 								
 								
@@ -514,7 +514,7 @@ public class FrmTable extends JPanel {
 								for (int z = 0; z < data.get(x).size(); z++) {
 									//project.getSelected().add(data.get(x).get(z));
 									System.out.println("Group selected");
-									project.setSelected(x);
+									//project.setSelected(x);
 								}
 								tableModel.fireTableDataChanged();
 							}
@@ -625,7 +625,7 @@ public class FrmTable extends JPanel {
 								for (int z = 0; z < data.get(x).size(); z++) {
 									System.out.println("Groep selected");
 									//project.getSelected().add(data.get(x).get(z));
-									project.setSelected(x);
+									//project.setSelected(x);
 									tableModel.fireTableDataChanged();
 								}
 								tableModel.fireTableDataChanged();

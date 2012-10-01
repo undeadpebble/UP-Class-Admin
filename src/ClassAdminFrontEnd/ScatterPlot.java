@@ -144,7 +144,7 @@ public class ScatterPlot {
 						{
 							if(scatterwaardes[q]== iindex)
 							{
-								project.setSelected(q);
+								project.setSelected(q,true);
 								
 							}
 						}

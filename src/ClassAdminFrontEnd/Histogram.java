@@ -309,7 +309,7 @@ public class Histogram {
 					 */
 
 					for (int o = 0; o < selectedindex.size(); o++) {
-						project.setSelected((Integer) selectedindex.get(o));
+						project.setSelected((Integer) selectedindex.get(o),true);
 
 					}
 					barkleurder.setShadowVisible(false);
