@@ -288,29 +288,35 @@ public class FrmTable extends JPanel {
 					if (isCellSelected(Index_row, Index_col)) {
 						backgroundColors.add(Color.orange);
 						comp.setBackground(Color.orange);
-					// project.getSelected().add(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col));
-					//	if(count == 0)
-						//{
+						//project.getSelected().add(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col));
+	
 						 count++;
 						System.out.println(count);
-						/*System.out.println("FrmTable se clear");
-						if(project.getCleared() == false)
-						{	*/
+	
 						if(Index_col ==0)
 							 if(!project.getSelected().contains(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col)))
 							 {
-								 project.clearselected();
+								 if(table.getSelectedRowCount() > 1){
+									 
+									 if(table.getSelectedRow() == Index_row)
+										 project.clearselected();
+								 
+								 project.setSelected(Index_row);
+								 }
+								 else{
+									 project.clearselected();
+									 
+									 project.setSelected(Index_row);
+								 }
 								
-								// project.setCleared(true);
+								
 									System.out.println(Index_col + ":"+Index_row);
 							 }
-						 project.setSelected(Index_row);
-						//count++;
-						//}
-					/*	}*/
+						 
+				
 						
 					
-					
+						
 						comp.setForeground(Color.black);
 						//table.repaint();
 					}

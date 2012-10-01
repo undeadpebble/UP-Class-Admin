@@ -110,7 +110,7 @@ public class Project {
 		}
 	}
 
-	public void setSelected(int x) {
+	public void setSelected(int x/*,boolean toetso*/) {
 	
 		boolean duplicate = false;
 		for (int i = 0; i < selectedIndexes.size(); i++) {
@@ -131,8 +131,11 @@ public class Project {
 			
 			System.out.println("Set selected index" + x);
 			updatecharts();
-			for(int y=0;y<tables.size();y++)
-				tables.get(y).repaint();
+			for(int y=0;y<tables.size();y++){
+				/*if(toetso == true)*/
+					tables.get(y).getTable().clearSelection();
+					tables.get(y).getTable().repaint();
+			}
 		}
 		
 		

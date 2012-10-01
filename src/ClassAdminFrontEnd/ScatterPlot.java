@@ -146,7 +146,7 @@ public class ScatterPlot {
 							if(scatterwaardes[q]== iindex)
 							{
 								project.setSelected(q);
-								project.setCleared(true);
+								
 							}
 						}
 						System.out.println("Ek het klaar geset");
