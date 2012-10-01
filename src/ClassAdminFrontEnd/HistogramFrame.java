@@ -306,7 +306,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 		});
 		final JLabel width = new JLabel("Width");
 		JButton widthsmall = new JButton("<");
-		//Change the widht of the bars smaller
+		//Change the width of the bars smaller
 		widthsmall.addMouseListener(new MouseListener() {
 
 			@Override
@@ -345,9 +345,10 @@ public class HistogramFrame extends JFrame implements ActionListener {
 				 * HistogramDataset nuwedataset = new HistogramDataset();
 				 * nuwedataset.addSeries("Histogram", values,widthbar ,0,100);
 				 */
+				System.out.println("Barwidth smaller " + nuweChart.getWidthBar());
 				chartpanel.getChart().getXYPlot()
-						.setDataset(nuweChart.increaseWidth(nuweChart.getWidthBar()));
-
+						.setDataset(nuweChart.changebarWidth(nuweChart.getWidthBar()));
+				project.updatecharts();
 			}
 		});
 		
@@ -392,7 +393,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 				 * nuwedataset.addSeries("Histogram", values,widthbar ,0,100);
 				 */
 				chartpanel.getChart().getXYPlot()
-						.setDataset(nuweChart.increaseWidth(nuweChart.getWidthBar()));
+						.setDataset(nuweChart.changebarWidth(nuweChart.getWidthBar()));
 
 				
 				

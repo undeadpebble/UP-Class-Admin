@@ -60,12 +60,14 @@ public class Histogram {
 		double groot = -1;
 		final LinkedList<LinkedList<SuperEntity>> diedata = project.getHead().getDataLinkedList();
 		double verdeling;
-
+		int intervalle;
 		ArrayList u = project.getSelectedIndexes();
 
-		for (int h = 0; h < u.size(); h++)
-			System.out.println("INDEXES:" + u.get(h));
-		int[] barsused = new int[widthbar];
+	/*	for (int h = 0; h < u.size(); h++)
+			System.out.println("INDEXES:" + u.get(h));*/
+		int[] barsused = new int[getWidthBar()];
+		System.out.println("Bars" + getWidthBar());
+		intervalle= 100/widthbar;
 		if (u.size() != 0) {
 			for (int t = 0; t < barsused.length - 1; t++)
 				barsused[t] = 0;
@@ -73,7 +75,7 @@ public class Histogram {
 			for (int x = 0; x < u.size(); x++) {
 				for (int q = 0; q < widthbar; q++) {
 					System.out.println("Die punt wat ek na kyk "+diedata.get((Integer) u.get(x)).get(currentdata).getMark());
-					if (q == (widthbar - 1)) {
+					if (q == (intervalle - 1)) {
 
 						if ((diedata.get((Integer) u.get(x)).get(currentdata).getMark() <= (q * 10 + 10))
 								&& (diedata.get((Integer) u.get(x)).get(currentdata).getMark() >= (q * 10)))
@@ -363,6 +365,7 @@ public class Histogram {
 		}
 		HistogramDataset nuwedataset = new HistogramDataset();
 		nuwedataset.addSeries("Histogram", values, 10, 0, 100);
+		maindataset =nuwedataset;
 		return nuwedataset;
 	}
 	
@@ -379,20 +382,14 @@ public class Histogram {
 		}
 
 	// Increase the width of the bars
-	public HistogramDataset increaseWidth(int widthbarb) {
+	public HistogramDataset changebarWidth(int widthbarb) {
 		widthbar = widthbarb;
 		HistogramDataset nuwedataset = new HistogramDataset();
 		nuwedataset.addSeries("Histogram", values, widthbar, 0, 100);
+		maindataset =nuwedataset;
 		return nuwedataset;
 	}
 
-	// Decrease the width of the bars
-	public HistogramDataset decreaseWidth(int widthbard) {
-		widthbar = widthbard;
-		HistogramDataset nuwedataset = new HistogramDataset();
-		nuwedataset.addSeries("Histogram", values, widthbar, 0, 100);
-		return nuwedataset;
-	}
 
 	// Get the width of the bar
 	public int getWidthBar() {

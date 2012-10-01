@@ -212,7 +212,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 					series.add(diedata.get(q).get(houerx).getMark(), diedata.get(q).get(houery).getMark());
 
 				}
-				project.setScatterSelect(doensorteer(houerx, houery));
+			//	project.setScatterSelect(doensorteer(houerx, houery));
 				nuwedataset.addSeries(series);
 				chartpanel.getChart().getXYPlot().setDataset(nuwedataset);
 				nuweChart.setDatasetmain(nuwedataset);
@@ -325,7 +325,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 					series.add(diedata.get(q).get(houerx).getMark(), diedata.get(q).get(houery).getMark());
 
 				}
-				project.setScatterSelect(doensorteer(houerx, houery));
+				//project.setScatterSelect(doensorteer(houerx, houery));
 				nuwedataset.addSeries(series);
 				chartpanel.getChart().getXYPlot().setDataset(nuwedataset);
 				nuweChart.setDatasetmain(nuwedataset);
