@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -35,6 +37,7 @@ import ClassAdminFrontEnd.BackgroundGradientPanel;
 import ClassAdminFrontEnd.FadePanel;
 import ClassAdminFrontEnd.ReflectionButton;
 import ClassAdminFrontEnd.ReflectionButtonWithLabel;
+import ClassAdminFrontEnd.ReflectionButtonXLS;
 import ClassAdminFrontEnd.ReflectionImagePanel;
 import Frames.Frame;
 
@@ -161,11 +164,7 @@ public class XlsImport extends FileImport {
 
 	public void createImport() throws SqlJetException, IOException {
 
-		BufferedImage icon2 = ImageIO.read(getClass().getResource(
-				"/ClassAdminFrontEnd/resources/XLSImport.png"));
-		ReflectionButton buttonImport = new ReflectionButton(icon2);
-		
-		dialog = new JDialog(frame,true);
+		dialog = new JDialog(frame, true);
 		dialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		dialog.setBounds(0, 0, 700, 625);
 		dialog.setTitle("Specify Header");
@@ -188,8 +187,13 @@ public class XlsImport extends FileImport {
 		ReflectionImagePanel containerSelectHeader = new ReflectionImagePanel(ImageIO.read(getClass().getResource(
 				"/ClassAdminFrontEnd/resources/SelectHeaderLine.png")));
 
+		ReflectionButtonXLS importButton = new ReflectionButtonXLS(ImageIO.read(getClass().getResource(
+				"/ClassAdminFrontEnd/resources/XLSImport.png")));
+
 		containerSelectHeader.setBounds(0, 20, 700, 88);
 		backgroundPanel.add(containerSelectHeader);
+		importButton.setBounds(585, 480, 70, 80);
+		backgroundPanel.add(importButton);
 
 		// Set frame to center of screen
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -210,13 +214,7 @@ public class XlsImport extends FileImport {
 		lblSheets.setForeground(new Color(0xEDEDED));
 		lblHeader.setForeground(new Color(0xEDEDED));
 
-		
-		backgroundPanel.add(buttonImport);
-		buttonImport.setBounds(600, 500, 70, 80);
-		buttonImport.setFocusable(true);
-		buttonImport.setVisible(true);
-		
-		buttonImport.addMouseListener(new MouseListener() {
+		importButton.addMouseListener(new MouseListener() {
 
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
@@ -256,9 +254,9 @@ public class XlsImport extends FileImport {
 
 		final JTextArea textArea2 = new JTextArea();
 		textArea2.setEditable(false);
-		//textArea2.setEnabled(false);
+		// textArea2.setEnabled(false);
 		textArea2.setFocusable(false);
-		
+
 		Sheet s = null;
 		int sheet = -1;
 		int sheetcount = w.getNumberOfSheets();
@@ -291,17 +289,15 @@ public class XlsImport extends FileImport {
 		pnlHeaders.add(cmbHeaders);
 
 		textArea2.setCaretPosition(0);
-		scrollPane.setBounds(40, 110, 500, 460);
+		scrollPane.setBounds(40, 110, 500, 420);
 		pnlSheets.setBounds(574, 105, 70, 55);
 		pnlHeaders.setBounds(574, 160, 70, 55);
-		
 
 		backgroundPanel.add(scrollPane);
 		backgroundPanel.add(pnlSheets);
 		backgroundPanel.add(pnlHeaders);
-		
+
 		dialog.setVisible(true);
-		
 
 	}
 
