@@ -217,8 +217,8 @@ public class TreeView extends Display {
 		// initialize the display
 		setSize(700, 600);
 		setItemSorter(new TreeDepthItemSorter());
-		addControlListener(new ZoomToFitControl());
-		addControlListener(new ZoomControl());
+//		addControlListener(new ZoomToFitControl());
+//		addControlListener(new ZoomControl());
 		addControlListener(new WheelZoomControl());
 		addControlListener(new PanControl());
 		addControlListener(new FocusControl(1, "filter"));
@@ -641,7 +641,7 @@ public class TreeView extends Display {
 			dragged = false;
 			Display d = (Display) e.getComponent();
 			down = d.getAbsoluteCoordinate(e.getPoint(), down);
-			vis.run("forces");
+//			vis.run("forces");
 
 			Table edgeTable = null;
 			Table nodeTable = null;

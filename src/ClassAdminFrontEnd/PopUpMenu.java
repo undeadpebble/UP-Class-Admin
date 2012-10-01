@@ -9,11 +9,13 @@ import ClassAdminBackEnd.Global;
 import ClassAdminBackEnd.Project;
 import Frames.Frame;
 import Frames.FrmNewNode;
+import Frames.FrmUpdateNode;
 
 import prefuse.Display;
 import prefuse.Visualization;
 import prefuse.controls.ControlAdapter;
 import prefuse.data.Edge;
+import prefuse.data.Graph;
 import prefuse.data.Node;
 import prefuse.data.Table;
 import prefuse.data.Tree;
@@ -35,9 +37,11 @@ public class PopUpMenu {
 	VisualItem activeItem = null;
 	Tree activeTree = null;
 	Project activeProject;
+	EntityType activeEntity;
 	JDialog frame = null;
 	LinkedList<EntityType> activeTreeLinkedList = null;
 	FrmNewNode newNode;
+	FrmUpdateNode updateNode;
 
 	public PopUpMenu() {
 		pMenu = new JPopupMenu();
@@ -62,6 +66,11 @@ public class PopUpMenu {
 
 		miEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(activeItem.canSetString("name"))
+				{
+					updateNode.showFrmUpdateNode(0);
+					activeItem.getVisualization().run("filter");
+				}
 			}
 		});
 
@@ -73,6 +82,7 @@ public class PopUpMenu {
 				activeTreeLinkedList.get(i).removeDeletingChildren();
 				item.getVisualization().repaint();
 				activeProject.updateTables();
+				//tview.getVisualization().run("filter");
 			}
 		});
 
@@ -95,9 +105,13 @@ public class PopUpMenu {
 					}
 				}
 				activeTree.removeNode(i);
+				
+				
+				
 				activeTreeLinkedList.get(i).removeSavingChildren();
 				item.getVisualization().repaint();
 				activeProject.updateTables();
+				//tview.getVisualization().run("filter");
 			}
 		});
 
@@ -108,7 +122,7 @@ public class PopUpMenu {
 		activeTreeLinkedList = activeProject.getTreeLinkedList();
 		activeTree = tree;
 		tview = treeView;
-		newNode = new FrmNewNode(activeTree, activeProject, new JFrame(),tview);
+
 		tview.addControlListener(new ControlAdapter() {
 			public void itemReleased(VisualItem item, MouseEvent e) {
 				activeItem = null;
@@ -116,6 +130,9 @@ public class PopUpMenu {
 					if (item.canGetString("name")) {
 						pMenu.show(e.getComponent(), e.getX(), e.getY());
 						activeItem = item;
+						activeEntity = activeTreeLinkedList.get(activeItem.getRow());
+						newNode = new FrmNewNode(activeTree, activeProject, new JFrame(),tview);
+						updateNode = new FrmUpdateNode(activeProject, new JFrame(), activeEntity,activeItem);
 					}
 				}
 			}
