@@ -8,6 +8,8 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -167,6 +169,7 @@ public class XlsImport extends FileImport {
 		dialog = new JDialog(frame, true);
 		dialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		dialog.setBounds(0, 0, 700, 625);
+		dialog.setResizable(false);
 		dialog.setTitle("Specify Header");
 
 		// set frame icon
@@ -298,7 +301,7 @@ public class XlsImport extends FileImport {
 		backgroundPanel.add(pnlHeaders);
 
 		dialog.setVisible(true);
-
+		
 	}
 
 	public void printAllSheets() {
