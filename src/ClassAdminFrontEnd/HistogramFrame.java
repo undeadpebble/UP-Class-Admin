@@ -108,8 +108,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 
 		}
 		
-		chart = nuweChart.createHistogram(plotTitle, xaxis, yaxis,
-				nuweChart.createDataset(houerx));
+		chart = nuweChart.createHistogram(plotTitle, xaxis, yaxis,nuweChart.createDataset(houerx));
 
 		chartpanel = nuweChart.createPanel();
 

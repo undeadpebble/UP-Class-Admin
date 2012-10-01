@@ -40,8 +40,8 @@ import ClassAdminBackEnd.Project;
 import ClassAdminBackEnd.SuperEntity;
 
 public class ScatterPlotFrame extends JFrame implements ActionListener {
-	static ChartPanel chartpanel;
-	static JFreeChart chart;
+	private ChartPanel chartpanel;
+	private JFreeChart chart;
 	private int houerx = 0;
 	private int houery = 0;
 	private ScatterPlot nuweChart;
@@ -53,6 +53,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 	public void update() {
 
 		nuweChart.updateSelectedvalues();
+	
 	}
 	//sort scatterchart
 	public int[] doensorteer(int xgetal, int ygetal)
@@ -169,14 +170,15 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 
 		
 		
-		project.setScatterSelect(doensorteer(houerx, houery));
+	//	project.setScatterSelect(doensorteer(houerx, houery));
 
 		dataset.addSeries(series);
-
+		nuweChart.setScatterArray(doensorteer(houerx, houery));
 		chart = nuweChart.createScatter("asd", dataset, xas, yas);
-		nuweChart.setDatasetmain(dataset);
+		
 		chartpanel = nuweChart.createPanel();
-		chartpanel.getChart().getXYPlot().setDataset(dataset);
+		//nuweChart.setDatasetmain(dataset);
+		//chartpanel.getChart().getXYPlot().setDataset(dataset);
 	
 		
 		
