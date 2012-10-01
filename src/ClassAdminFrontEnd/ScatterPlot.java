@@ -129,7 +129,6 @@ public class ScatterPlot {
 					{
 					chart.getXYPlot().clearAnnotations();
 					project.clearselected();
-				//	project.setCleared(true);
 					}
 					ChartEntity entity = ((ChartMouseEvent) e).getEntity();
 				
@@ -151,24 +150,6 @@ public class ScatterPlot {
 						}
 						System.out.println("Ek het klaar geset");
 						
-					/*
-						final CircleDrawer cd = new CircleDrawer(Color.red,
-								new BasicStroke(1.0f), null);
-						final XYAnnotation bestBid = new XYDrawableAnnotation(datasetMain
-								.getXValue(sindex, iindex), datasetMain.getYValue(sindex,
-								iindex), 11, 11, cd);
-					
-						
-						
-						chart.getXYPlot().addAnnotation(bestBid);*/
-						//project.updatecharts();
-						
-						
-					
-						
-					/*	System.out.println("Series"+sindex +" Index"+iindex);
-						System.out.println("x = " + datasetMain.getXValue(sindex, iindex));
-						System.out.println("y = " + datasetMain.getYValue(sindex, iindex));*/
 					}
 
 				}
