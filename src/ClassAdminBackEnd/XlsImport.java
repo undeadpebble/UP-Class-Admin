@@ -306,7 +306,7 @@ public class XlsImport extends FileImport {
 		backgroundPanel.add(pnlHeaders);
 
 		dialog.setVisible(true);
-
+		
 		dialog.setVisible(true);
 	}
 

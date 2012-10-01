@@ -174,7 +174,7 @@ public class ConditionalFormattingFrame extends JFrame {
 		backgroundPanel.add(lblAffectedArea);
 
 		final ReflectionButton btnAddFormatting = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/ConditionalFormattingFrame.png")));
-		//final JButton btnAddFormatting = new JButton("Add Formatting");
+		btnAddFormatting.setBounds(335, 451, 113, 23);
 		btnAddFormatting.setBounds(747, 437, 70, 100);
 		backgroundPanel.add(btnAddFormatting);
 		
