@@ -15,6 +15,7 @@ import prefuse.Display;
 import prefuse.Visualization;
 import prefuse.controls.ControlAdapter;
 import prefuse.data.Edge;
+import prefuse.data.Graph;
 import prefuse.data.Node;
 import prefuse.data.Table;
 import prefuse.data.Tree;
@@ -81,7 +82,7 @@ public class PopUpMenu {
 				activeTreeLinkedList.get(i).removeDeletingChildren();
 				item.getVisualization().repaint();
 				activeProject.updateTables();
-				tview.getVisualization().run("filter");
+				//tview.getVisualization().run("filter");
 			}
 		});
 
@@ -104,10 +105,13 @@ public class PopUpMenu {
 					}
 				}
 				activeTree.removeNode(i);
+				
+				
+				
 				activeTreeLinkedList.get(i).removeSavingChildren();
 				item.getVisualization().repaint();
 				activeProject.updateTables();
-				tview.getVisualization().run("filter");
+				//tview.getVisualization().run("filter");
 			}
 		});
 

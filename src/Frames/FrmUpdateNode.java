@@ -58,7 +58,7 @@ public class FrmUpdateNode {
 		
 		JPanel pnlRad = new JPanel(new GridLayout(1, 2));
 		frame.setSize(600, 600);
-		frame.setLayout(new GridLayout(6, 2));
+		frame.setLayout(new GridLayout(5, 2));
 
 		final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		Date date = new Date();
@@ -94,7 +94,21 @@ public class FrmUpdateNode {
 		group.add(rblYes);
 		group.add(rblNo);
 
-
+		if(activeentity.getDate() == null)
+		{
+			txtDate.setText(dateFormat.format(new Date()));
+		}
+		else
+		{
+/*			Date d = null;
+			try {
+				d = dateFormat.parse(txtDate.getText());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+*/
+			txtDate.setText(dateFormat.format(activeentity.getDate()).toString());
+		}
 		btnDate.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -149,8 +163,10 @@ public class FrmUpdateNode {
 					lblName.setForeground(Color.BLACK);
 					lblDate.setForeground(Color.BLACK);
 					isText = false;
-					activeTreeView.getVisualization().run("filter");
+					//activeTreeView.getVisualization().run("filter");
 					txtName.requestFocus(true);
+					activeProject.updateTables();
+					frame.dispose();
 					}// if b
 			}// actionListener
 		});
