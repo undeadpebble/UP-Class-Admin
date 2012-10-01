@@ -892,23 +892,6 @@ public class Frame extends JFrame implements ActionListener {
 				studentsInfoPanel.fadeOut();
 			}
 		});
-		
-		treeButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-				if (!treeButton.isDisabled()) {
-					TreeView.createEntityTypeFrm("name", Global.getGlobal().getActiveProject());					
-				}
-			}
-
-			public void mouseEntered(MouseEvent arg0) {
-				
-			}
-
-			public void mouseExited(MouseEvent arg0) {
-				
-			}
-		});
 
 		treeButton.addMouseListener(new MouseAdapter() {
 			@Override
