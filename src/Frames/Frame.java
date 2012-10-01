@@ -1288,7 +1288,7 @@ public class Frame extends JFrame implements ActionListener {
 				@Override
 				public void stateChanged(ChangeEvent arg0) {
 					Global.getGlobal().setActiveProjectIndex(tabbedPane.getSelectedIndex() + 1);
-					if (Global.getGlobal().getActiveProject().getTables().size() > 0)
+					if(Global.getGlobal().getActiveProject().getTables().size() > 0)
 						table = Global.getGlobal().getActiveProject().getTables().get(0);
 				}
 			});
