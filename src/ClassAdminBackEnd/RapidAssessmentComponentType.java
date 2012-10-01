@@ -25,8 +25,8 @@ public class RapidAssessmentComponentType extends EntityType{
 	 * @param h
 	 */
 	public RapidAssessmentComponentType(String n, double x, double y, double w,
-			double h) {
-		super(n);
+			double h, EntityType parent) {
+		super(n,parent,false,null,1.0);
 		this.x = x;
 		this.y = y;
 		this.w = w;
@@ -70,5 +70,13 @@ public class RapidAssessmentComponentType extends EntityType{
 		this.h = h;
 	}
 	
-	
+	@Override
+	public void populateTreeWithEntities() {
+		for (int x = 0; x < this.getParentEntitytype().getEntityList().size(); ++x) {
+			SuperEntity parent = this.getParentEntitytype().getEntityList()
+					.get(x);
+			new SumMarkEntity(this, parent);
+
+		}
+	}
 }

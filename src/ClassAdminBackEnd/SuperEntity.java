@@ -265,7 +265,8 @@ public class SuperEntity {
 			try {
 				mTotal += subEntity.get(i).getMark()
 						* subEntity.get(i).getWeight();
-				wTotal += subEntity.get(i).getWeight();
+				wTotal += subEntity.get(i).getWeight()
+						* subEntity.get(i).getType().getMaxValue();
 
 				hasval = true;
 			} catch (Exception e) {
@@ -278,9 +279,9 @@ public class SuperEntity {
 		}
 
 		if (wTotal != 0)
-			return mTotal / wTotal;
+			return mTotal / wTotal * this.getType().getMaxValue();
 		else
-			return mTotal;
+			return 0.0;
 	}
 
 	/**

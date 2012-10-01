@@ -29,7 +29,7 @@ public class RapidAssessmentContainerType extends RapidAssessmentRectangleType {
 	 */
 	public RapidAssessmentContainerType(EntityType replacedEntity, double x,
 			double y, double w, double h) {
-		super(replacedEntity.getName(), x, y, w, h);
+		super(replacedEntity.getName(), x, y, w, h, null);
 		this.setX(x);
 		this.setY(y);
 		this.setW(w);

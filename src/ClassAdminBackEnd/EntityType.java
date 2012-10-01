@@ -1,6 +1,5 @@
 package ClassAdminBackEnd;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
 
@@ -18,12 +17,13 @@ public class EntityType {
 	private LinkedList<SuperEntity> entityList;
 	private EntityType parentEntitytype;
 	private LinkedList<EntityType> subEntityType;
-	private Boolean isTextField;
+	private Boolean isTextField = false;
 	private Boolean isRule = false;
 	private Date date;
 	private Double defaultWeight;
 	private long ID;
 	private double maxValue = 100;
+	
 
 	public Boolean getIsRule() {
 		return isRule;
