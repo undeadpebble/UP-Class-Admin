@@ -92,7 +92,7 @@ public class ScatterPlot {
 		System.out.println("Ek update scatterchart");
 		ArrayList u= project.getSelectedIndexes();
 		System.out.println("Size van "+ u.size());
-		//int [] scatterwaardes = project.getScatterIndexes();
+	
 		final CircleDrawer cd = new CircleDrawer(Color.red,
 				new BasicStroke(1.0f), null);
 		
@@ -101,18 +101,10 @@ public class ScatterPlot {
 			final XYAnnotation selectPlots = new XYDrawableAnnotation(datasetMain
 					.getXValue(0, scatterarray[(Integer)u.get(x)]), datasetMain.getYValue(0,
 							scatterarray[(Integer)u.get(x)]), 11, 11, cd);
-		/*final XYAnnotation selectPlots = new XYDrawableAnnotation(datasetMain
-				.getXValue(0, scatterwaardes[(Integer)u.get(x)]), datasetMain.getYValue(0,
-						scatterwaardes[(Integer)u.get(x)]), 11, 11, cd);*/
+		
 		
 		chart.getXYPlot().addAnnotation(selectPlots);
-		System.out.println(u.get(x));
-		//System.out.println(scatterwaardes[(Integer)u.get(x)]);
-		//System.out.println(datasetMain.getXValue(0, scatterwaardes[(Integer)u.get(x)])+"  " + datasetMain.getYValue(0,scatterwaardes[(Integer)u.get(x)]));
-		/*for(int w=0;w<scatterwaardes.length;w++)
-			System.out.println(scatterwaardes[w]);
-		System.out.println(datasetMain.getXValue(0, 76));
-		System.out.println(datasetMain.getYValue(0, 76));*/
+		
 		}
 	}
 	//Put the chart on the chartpanel

@@ -100,11 +100,8 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 
 				int[] houer = new int[scattergetalle.length];
 
-			/*	for (int x = 0; x < sorteermidq.length; x++) {
-					System.out.println("Sorteer deeerder " + x + "   " + sorteermidq[x] + " " + sorteermidw[x] + " " + scattergetalle[x]);
+			
 
-				}
-*/
 				int houerflip;
 				int houerflip2;
 				for (int i = 0; i < scattergetalle.length; i++) {
@@ -112,12 +109,11 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 					houerflip = scattergetalle[i];
 					houerflip2 = scattergetalle[houerflip];
 					houer[houerflip2] = houerflip;
-					// System.out.println(flipen2+" "+flipen);
+					
 
 				}
 
-			/*	for (int x = 0; x < scattergetalle.length; x++)
-					System.out.println(houer[x]);*/
+			
 				
 				return houer;
 	}
@@ -170,15 +166,14 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 
 		
 		
-	//	project.setScatterSelect(doensorteer(houerx, houery));
+	
 
 		dataset.addSeries(series);
 		nuweChart.setScatterArray(doensorteer(houerx, houery));
 		chart = nuweChart.createScatter("asd", dataset, xas, yas);
 		
 		chartpanel = nuweChart.createPanel();
-		//nuweChart.setDatasetmain(dataset);
-		//chartpanel.getChart().getXYPlot().setDataset(dataset);
+		
 	
 		
 		
@@ -212,7 +207,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 					series.add(diedata.get(q).get(houerx).getMark(), diedata.get(q).get(houery).getMark());
 
 				}
-			//	project.setScatterSelect(doensorteer(houerx, houery));
+			
 				nuwedataset.addSeries(series);
 				chartpanel.getChart().getXYPlot().setDataset(nuwedataset);
 				nuweChart.setDatasetmain(nuwedataset);
@@ -253,8 +248,8 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 				if (xascb.getSelectedIndex() >= 1)
 				{
 					xascb.setSelectedIndex(xascb.getSelectedIndex() - 1);
-				//	project.setScatterSelect(doensorteer(houerx, houery));
-				project.updatecharts();
+				
+					project.updatecharts();
 				}
 			}
 		});
@@ -325,7 +320,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 					series.add(diedata.get(q).get(houerx).getMark(), diedata.get(q).get(houery).getMark());
 
 				}
-				//project.setScatterSelect(doensorteer(houerx, houery));
+				
 				nuwedataset.addSeries(series);
 				chartpanel.getChart().getXYPlot().setDataset(nuwedataset);
 				nuweChart.setDatasetmain(nuwedataset);
