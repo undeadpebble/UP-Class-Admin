@@ -717,7 +717,7 @@ public class Frame extends JFrame implements ActionListener {
 		conditionalFormatButton.setBounds(535, 2, 68, 80);
 		bordercaseButton.setBounds(600, 11, 68, 80);
 		filterButton.setBounds(657, 13, 68, 80);
-		addRowButton.setBounds(715, 8, 68, 80);
+		addRowButton.setBounds(720, 12, 68, 80);
 		maxValButton.setBounds(782, 11, 68, 80);
 		rulesButton.setBounds(837, 10, 68, 80);
 
@@ -766,7 +766,7 @@ public class Frame extends JFrame implements ActionListener {
 		conditionalFormattingInfoPanel.setBounds(503, 0, 129, infoPanel.getHeight());
 		bordercaseInfoPanel.setBounds(566, 0, 129, infoPanel.getHeight());
 		filterInfoPanel.setBounds(637, 0, 129, infoPanel.getHeight());
-		addRowInfoPanel.setBounds(697, 0, 129, infoPanel.getHeight());
+		addRowInfoPanel.setBounds(715, 0, 129, infoPanel.getHeight());
 		maxValInfoPanel.setBounds(749, 0, 129, infoPanel.getHeight());
 		rulesInfoPanel.setBounds(830, 0, 129, infoPanel.getHeight());
 
