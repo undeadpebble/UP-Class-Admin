@@ -95,7 +95,8 @@ public class Frame extends JFrame implements ActionListener {
 			conditionalFormatButton, bordercaseButton, addRowButton, homeImportButton, homeStudents, ButtonWorkspace, filterButton,
 			maxValButton, rulesButton, homeRapidAssessment, treeButton;
 	private FadePanel homeInfoPanel, importInfoPanel, exportInfoPanel, studentsInfoPanel, histogramInfoPanel, boxplotInfoPanel,
-			conditionalFormattingInfoPanel, bordercaseInfoPanel, addRowInfoPanel, filterInfoPanel, maxValInfoPanel, rulesInfoPanel, buildInfoPanel;
+			conditionalFormattingInfoPanel, bordercaseInfoPanel, addRowInfoPanel, filterInfoPanel, maxValInfoPanel, rulesInfoPanel,
+			buildInfoPanel;
 	private ShadowPanel studentPanel;
 	private ReflectionButtonWithLabel[] buttonArray;
 
@@ -402,6 +403,13 @@ public class Frame extends JFrame implements ActionListener {
 		mProject.setForeground(Color.white);
 		mSettings.setForeground(Color.white);
 
+		miExit.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				frame.dispose();
+			}
+		});
+
 		// setup space constants
 		HOME_SPACE_LEFT_X = 3;
 		HOME_SPACE_Y = 55;
@@ -487,6 +495,8 @@ public class Frame extends JFrame implements ActionListener {
 		mGraph.add(miHistogram);
 		mGraph.add(miBoxPlot);
 		mGraph.add(miScatterPlot);
+
+		// menu actions
 
 		// setup space constants
 		HOME_SPACE_LEFT_X = 3;
@@ -585,7 +595,6 @@ public class Frame extends JFrame implements ActionListener {
 			}
 		});
 
-
 		// fade in containers on program launch
 		recentDocsPanel.fadeIn();
 		homePanel.fadeIn();
@@ -666,8 +675,8 @@ public class Frame extends JFrame implements ActionListener {
 		boxButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Box.png")));
 		scatterButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Scatter.png")));
 		conditionalFormatButton = new ReflectionButton(ImageIO.read(getClass().getResource(
-				"/ClassAdminFrontEnd/resources/ConditionalFormattingAdd.png")));
-		bordercaseButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/BordercaseAdd.png")));
+				"/ClassAdminFrontEnd/resources/ConditionalFormatting.png")));
+		bordercaseButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Bordercase.png")));
 		addRowButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/AddRow.png")));
 		filterButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Filter.png")));
 		maxValButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/maxValue.png")));
@@ -681,12 +690,12 @@ public class Frame extends JFrame implements ActionListener {
 		histogramButton.setBounds(335, 12, 68, 80);
 		boxButton.setBounds(405, 12, 68, 80);
 		scatterButton.setBounds(473, 12, 68, 80);
-		conditionalFormatButton.setBounds(537, 8, 68, 80);
-		bordercaseButton.setBounds(597, 8, 68, 80);
-		addRowButton.setBounds(657, 8, 68, 80);
-		filterButton.setBounds(715, 13, 68, 80);
-		maxValButton.setBounds(774, 11, 68, 80);
-		rulesButton.setBounds(830, 10, 68, 80);
+		conditionalFormatButton.setBounds(535, 2, 68, 80);
+		bordercaseButton.setBounds(600, 11, 68, 80);
+		filterButton.setBounds(657, 13, 68, 80);
+		addRowButton.setBounds(720, 12, 68, 80);
+		maxValButton.setBounds(782, 11, 68, 80);
+		rulesButton.setBounds(837, 10, 68, 80);
 
 		navBar.add(homeButton);
 		navBar.add(importButton);
@@ -710,7 +719,7 @@ public class Frame extends JFrame implements ActionListener {
 		importInfoPanel = new FadePanel(false, 200, 200);
 		exportInfoPanel = new FadePanel(false, 200, 200);
 		studentsInfoPanel = new FadePanel(false, 200, 200);
-		buildInfoPanel = new FadePanel(false, 200, 200); 
+		buildInfoPanel = new FadePanel(false, 200, 200);
 		histogramInfoPanel = new FadePanel(false, 200, 200);
 		boxplotInfoPanel = new FadePanel(false, 200, 200);
 		scatterplotInfoPanel = new FadePanel(false, 200, 200);
@@ -730,12 +739,12 @@ public class Frame extends JFrame implements ActionListener {
 		histogramInfoPanel.setBounds(315, 0, 125, infoPanel.getHeight());
 		boxplotInfoPanel.setBounds(400, 0, 125, infoPanel.getHeight());
 		scatterplotInfoPanel.setBounds(457, 0, 125, infoPanel.getHeight());
-		conditionalFormattingInfoPanel.setBounds(504, 0, 129, infoPanel.getHeight());
-		bordercaseInfoPanel.setBounds(560, 0, 129, infoPanel.getHeight());
-		addRowInfoPanel.setBounds(650, 0, 129, infoPanel.getHeight());
-		filterInfoPanel.setBounds(697, 0, 129, infoPanel.getHeight());
-		maxValInfoPanel.setBounds(738, 0, 129, infoPanel.getHeight());
-		rulesInfoPanel.setBounds(820, 0, 129, infoPanel.getHeight());
+		conditionalFormattingInfoPanel.setBounds(503, 0, 129, infoPanel.getHeight());
+		bordercaseInfoPanel.setBounds(566, 0, 129, infoPanel.getHeight());
+		filterInfoPanel.setBounds(637, 0, 129, infoPanel.getHeight());
+		addRowInfoPanel.setBounds(715, 0, 129, infoPanel.getHeight());
+		maxValInfoPanel.setBounds(749, 0, 129, infoPanel.getHeight());
+		rulesInfoPanel.setBounds(830, 0, 129, infoPanel.getHeight());
 
 		homeInfoPanel.setLayout(null);
 		importInfoPanel.setLayout(null);
@@ -772,7 +781,8 @@ public class Frame extends JFrame implements ActionListener {
 		ImagePanel importBubble = new ImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/ImportInfo.png")));
 		ImagePanel exportBubble = new ImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/ExportInfo.png")));
 		ImagePanel studentsBubble = new ImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/StudentsInfo.png")));
-		ImagePanel buildBubble = new ImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/InfoStructureModule.png")));
+		ImagePanel buildBubble = new ImagePanel(ImageIO.read(getClass()
+				.getResource("/ClassAdminFrontEnd/resources/InfoStructureModule.png")));
 		ImagePanel histogramBubble = new ImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/InfoHistogram.png")));
 		ImagePanel boxplotBubble = new ImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/InfoBoxPlot.png")));
 		ImagePanel scatterplotBubble = new ImagePanel(ImageIO.read(getClass().getResource(
@@ -895,7 +905,7 @@ public class Frame extends JFrame implements ActionListener {
 			public void mousePressed(MouseEvent arg0) {
 				if (!studentsButton.isDisabled()) {
 					table.getTable().getSelectedRow();
-					TreeView.createStudentFrm("name",table.getData().get(table.getTable().getSelectedRow()).get(0));
+					TreeView.createStudentFrm("name",table.getData().get(table.getTable().getSelectedRow()).get(0),Global.getGlobal().getActiveProject());
 				}
 			}
 
@@ -913,12 +923,7 @@ public class Frame extends JFrame implements ActionListener {
 			public void mousePressed(MouseEvent arg0) {
 				if (!treeButton.isDisabled()) {
 					table.getTable().getSelectedRow();
-
-					// kom by build tree btn
 					TreeView.createEntityTypeFrm("name", Global.getGlobal().getActiveProject());
-					// moet hier bly
-					// TreeView.createStudentFrm("name",
-					// table.getData().get(table.getTable().getSelectedRow()).get(0));
 				}
 			}
 
@@ -930,7 +935,7 @@ public class Frame extends JFrame implements ActionListener {
 				buildInfoPanel.fadeOut();
 			}
 		});
-		
+
 		histogramButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
@@ -989,8 +994,13 @@ public class Frame extends JFrame implements ActionListener {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (!conditionalFormatButton.isDisabled()) {
-					ConditionalFormattingFrame conditionalformatFrame = new ConditionalFormattingFrame(table);
-					conditionalformatFrame.setVisible(true);
+					ConditionalFormattingFrame conditionalformatFrame;
+					try {
+						conditionalformatFrame = new ConditionalFormattingFrame(table);
+						conditionalformatFrame.setVisible(true);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 
@@ -1007,8 +1017,13 @@ public class Frame extends JFrame implements ActionListener {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (!bordercaseButton.isDisabled()) {
-					BordercaseFrame bordercaseFrame = new BordercaseFrame(table);
-					bordercaseFrame.setVisible(true);
+					BordercaseFrame bordercaseFrame;
+					try {
+						bordercaseFrame = new BordercaseFrame(table);
+						bordercaseFrame.setVisible(true);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 
@@ -1271,7 +1286,8 @@ public class Frame extends JFrame implements ActionListener {
 				@Override
 				public void stateChanged(ChangeEvent arg0) {
 					Global.getGlobal().setActiveProjectIndex(tabbedPane.getSelectedIndex() + 1);
-					table = Global.getGlobal().getActiveProject().getTables().get(0);
+					if (Global.getGlobal().getActiveProject().getTables().size() > 0)
+						table = Global.getGlobal().getActiveProject().getTables().get(0);
 				}
 			});
 		}
@@ -1420,9 +1436,9 @@ public class Frame extends JFrame implements ActionListener {
 
 		int i = 0;
 		int m = 0;
-		
-		//restrict recent docs to 7
-		while ((i < count) && (m < 7))  {
+
+		// restrict recent docs to 7
+		while ((i < count) && (m < 7)) {
 
 			BufferedImage icon = null;
 

@@ -9,7 +9,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -21,6 +23,7 @@ import javax.swing.border.EmptyBorder;
 import ClassAdminBackEnd.BorderCase;
 import ClassAdminFrontEnd.BackgroundGradientPanel;
 import ClassAdminFrontEnd.FrmTable;
+import ClassAdminFrontEnd.ReflectionButton;
 
 import javax.swing.JButton;
 
@@ -82,10 +85,11 @@ public class BordercaseFrame extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @throws IOException 
 	 */
-	public BordercaseFrame(final FrmTable table) {
+	public BordercaseFrame(final FrmTable table) throws IOException {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 502, 285);
+		setBounds(100, 100, 486, 285);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(null);
@@ -109,12 +113,12 @@ public class BordercaseFrame extends JFrame {
 		backgroundPanel.setLayout(null);
 
 		JLabel lblBottomBordercaseValue = new JLabel("Bottom bordercase Value");
-		lblBottomBordercaseValue.setBounds(54, 86, 160, 14);
+		lblBottomBordercaseValue.setBounds(54, 63, 160, 14);
 		lblBottomBordercaseValue.setForeground(new Color(0xEDEDED));
 		backgroundPanel.add(lblBottomBordercaseValue);
 		
 		JLabel lblUpperBordercaseValue = new JLabel("Upper bordercase Value");
-		lblUpperBordercaseValue.setBounds(54, 130, 160, 14);
+		lblUpperBordercaseValue.setBounds(54, 108, 160, 14);
 		lblUpperBordercaseValue.setForeground(new Color(0xEDEDED));
 		backgroundPanel.add(lblUpperBordercaseValue);
 		
@@ -125,7 +129,7 @@ public class BordercaseFrame extends JFrame {
 				new Integer(1) // step
 		);
 		final JSpinner maxVal = new JSpinner(SNMmax);
-		maxVal.setBounds(259, 123, 121, 28);
+		maxVal.setBounds(274, 101, 121, 28);
 
 		SpinnerNumberModel SNMmin = new SpinnerNumberModel(
 				new Integer(40), // value
@@ -134,13 +138,13 @@ public class BordercaseFrame extends JFrame {
 				new Integer(1) // step
 		);
 		final JSpinner minVal = new JSpinner(SNMmin);
-		minVal.setBounds(259, 79, 121, 28);
+		minVal.setBounds(274, 56, 121, 28);
 		
 		backgroundPanel.add(maxVal);
 		backgroundPanel.add(minVal);
 		
-		JButton btnAddBordercase = new JButton("Add Bordercase");
-		btnAddBordercase.setBounds(259, 189, 121, 23);
+		final ReflectionButton btnAddBordercase = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/BordercaseFrame.png")));
+		btnAddBordercase.setBounds(333, 155, 62, 86);
 		backgroundPanel.add(btnAddBordercase);
 
 		// frame resize listener adjust components accordingly

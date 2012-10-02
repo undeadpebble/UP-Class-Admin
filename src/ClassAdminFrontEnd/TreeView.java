@@ -10,6 +10,8 @@ import java.awt.PopupMenu;
 import java.awt.dnd.DragSource;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -99,7 +101,7 @@ public class TreeView extends Display {
 	private static final String tree = "tree";
 	private static final String treeNodes = "tree.nodes";
 	private static final String treeEdges = "tree.edges";
-
+	
 	private static Tree myTree = null;
 	private LabelRenderer m_nodeRenderer;
 	private EdgeRenderer m_edgeRenderer;
@@ -115,7 +117,9 @@ public class TreeView extends Display {
 	static JFastLabel lblParent = new JFastLabel("Parent: ");
 	static JFastLabel lblChild = new JFastLabel("Child: ");
 	static JButton btnNew = new JButton("Add Node");
+	static JButton btnChange = new JButton("Change");
 	static JButton btnHelp = new JButton("?");
+	static JTextArea txtChange = new JTextArea();
 	static FrmNewNode newNode;
 	
 	static private boolean bParent = false;
@@ -125,6 +129,10 @@ public class TreeView extends Display {
 	static int iParent = -1;
 	static int iChild = -1;
 
+	public void updateTree(Tree newTree)
+	{
+		myTree = newTree;
+	}
 	public TreeView(Tree t, String label) {
 		super(new Visualization());
 
@@ -223,6 +231,7 @@ public class TreeView extends Display {
 		addControlListener(new PanControl());
 		addControlListener(new FocusControl(1, "filter"));
 		addControlListener(new TreeViewControl());
+		addControlListener(new StudentViewControl());
 		registerKeyboardAction(new OrientAction(Constants.ORIENT_LEFT_RIGHT),
 				"left-to-right", KeyStroke.getKeyStroke("ctrl 1"), WHEN_FOCUSED);
 		registerKeyboardAction(new OrientAction(Constants.ORIENT_TOP_BOTTOM),
@@ -302,10 +311,11 @@ public class TreeView extends Display {
 
 	public static void createEntityTypeFrm(String label, Project project) {
 		myProject = project;
-		JComponent treeview = createPanelEntityTypeTreeView(label,
-				myProject.getHeadEntityType());
-
 		JFrame frame = new JFrame();
+
+		JComponent treeview = createPanelEntityTypeTreeView(label,
+				myProject.getHeadEntityType(),frame);
+
 		frame.setContentPane(treeview);
 		frame.pack();
 		frame.setVisible(true);
@@ -313,10 +323,13 @@ public class TreeView extends Display {
 
 	}
 
-	public static void createStudentFrm(String label, SuperEntity treeHead) {
+	public static void createStudentFrm(String label, SuperEntity treeHead, Project project) {
+		
+		myProject = project;
+		JFrame frame = new JFrame();
+		
 		JComponent treeview = createPanelTreeView(label, treeHead);
 
-		JFrame frame = new JFrame();
 
 		frame.setContentPane(treeview);
 		frame.pack();
@@ -324,15 +337,16 @@ public class TreeView extends Display {
 	}
 
 	public static JComponent createPanelEntityTypeTreeView(final String label,
-			EntityType th) {
+			EntityType th, JFrame parentFrame) {
 		Color BACKGROUND = Color.WHITE;
 		Color FOREGROUND = Color.BLACK;
+
+		myProject.getTreeLinkedList().clear();
 
 		String str = "<tree>" + "<declarations>"
 				+ "<attributeDecl name=\"name\" type=\"String\" />"
 				+ "</declarations>";
 
-		myProject.getTreeLinkedList().clear();
 		str += th.createTreeFromHead(myProject.getTreeLinkedList());
 
 		str += "</tree>";
@@ -365,7 +379,7 @@ public class TreeView extends Display {
 		// create a new treemap
 		tview = new TreeView(t, label);
         PopUpMenu p = new PopUpMenu();
-        p.setTreeView(tview,myTree,myProject);
+        p.setTreeView(tview,myTree,myProject,parentFrame);
 		tview.setBackground(BACKGROUND);
 		tview.setForeground(FOREGROUND);
 
@@ -453,11 +467,13 @@ public class TreeView extends Display {
 		Color BACKGROUND = Color.WHITE;
 		Color FOREGROUND = Color.BLACK;
 
+		myProject.getStudentLinkedList().clear();
+
 		String str = "<tree>" + "<declarations>"
 				+ "<attributeDecl name=\"name\" type=\"String\" />"
 				+ "</declarations>";
 
-		str += th.createTreeFromHead();
+		str += th.createTreeFromHead(myProject.getStudentLinkedList());
 
 		str += "</tree>";
 
@@ -500,9 +516,44 @@ public class TreeView extends Display {
 		title.setBackground(BACKGROUND);
 		title.setForeground(FOREGROUND);
 
+		btnChange.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				myProject.getStudentLinkedList().get(2).setValue(txtChange.getText());
+				myProject.updateTables();
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+		txtChange.addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				// TODO Auto-generated method stub
+				txtChange.setText("");
+				txtChange.setVisible(false);
+				btnChange.setVisible(false);
+			}
+			
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
 		Box box = new Box(BoxLayout.X_AXIS);
 		box.add(Box.createHorizontalStrut(10));
 		box.add(title);
+		box.add(txtChange);
+		box.add(btnChange);
+		btnChange.setVisible(false);
+		txtChange.setVisible(false);
+		
+		
+		
 		box.add(Box.createHorizontalGlue());
 		// box.add(search);
 		box.add(Box.createHorizontalStrut(3));
@@ -654,7 +705,7 @@ public class TreeView extends Display {
 				if (e.isShiftDown() && e.getClickCount() == 1) {
 
 					if (id.contains("Node")) {
-						nodeTable = item.getTable();
+						nodeTable = myTree.getNodeTable();
 						name = item.getString("name");
 
 						iParent = item.getRow();
@@ -666,7 +717,7 @@ public class TreeView extends Display {
 				if (e.isControlDown() && e.getClickCount() == 1) {
 					if (bParent) {
 						if (id.contains("Node")) {
-							nodeTable = item.getTable();
+							nodeTable = myTree.getNodeTable();
 							name = item.getString("name");
 
 							iChild = item.getRow();
@@ -750,6 +801,74 @@ public class TreeView extends Display {
 			PrefuseLib.setY(item, null, item.getY() + dy);
 			down.setLocation(tmp);
 			item.getVisualization().repaint();
+		}//itemDragged
+	}
+	
+	public class StudentViewControl extends ControlAdapter {
+		private VisualItem activeItem;
+		private Point2D down = new Point2D.Double();
+		private Point2D tmp = new Point2D.Double();
+		private boolean wasFixed, dragged;
+		private boolean repaint = false;
+
+		public void itemEntered(VisualItem item, MouseEvent e) {
+			activeItem = item;
+			wasFixed = item.isFixed();
+
+			String id = item.getClass().getName();
+			if (id.contains("Node"))
+				title.setText(" " + item.getString("name"));
+		}
+
+		public void itemExited(VisualItem item, MouseEvent e) {
+			if (activeItem == item) {
+				activeItem = null;
+				item.setFixed(wasFixed);
+			}
+			title.setText("");
+		}
+
+		public void itemReleased(VisualItem item, MouseEvent e) {
+			if (!SwingUtilities.isLeftMouseButton(e))
+				return;
+			if (dragged) {
+				activeItem = null;
+				item.setFixed(wasFixed);
+				dragged = false;
+			}
+			// clear the focus
+			Visualization vis = item.getVisualization();
+			vis.getFocusGroup(Visualization.FOCUS_ITEMS).clear();
+			vis.cancel("forces");
+		}
+
+		public void itemPressed(VisualItem item, MouseEvent e) {
+
+			Visualization vis = item.getVisualization();
+			vis.getFocusGroup(Visualization.FOCUS_ITEMS).setTuple(item); 
+			item.setFixed(true);
+			dragged = false;
+			Display d = (Display) e.getComponent();
+			down = d.getAbsoluteCoordinate(e.getPoint(), down);
+
+			Table edgeTable = null;
+			Table nodeTable = null;
+			String name = null;
+
+			if (SwingUtilities.isLeftMouseButton(e)) {
+
+				String id = item.getString("name");
+
+				if (e.getClickCount() == 2) {
+						txtChange.setVisible(true);
+						btnChange.setVisible(true);
+						txtChange.setText(id);
+						txtChange.requestFocus(true);
+				}
+			}
+		}// itemPressed
+
+		public void itemDragged(VisualItem item, MouseEvent e) {
 		}//itemDragged
 	}
 

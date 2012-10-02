@@ -42,6 +42,7 @@ public class PopUpMenu {
 	LinkedList<EntityType> activeTreeLinkedList = null;
 	FrmNewNode newNode;
 	FrmUpdateNode updateNode;
+	JFrame parentFrame;
 
 	public PopUpMenu() {
 		pMenu = new JPopupMenu();
@@ -77,12 +78,14 @@ public class PopUpMenu {
 		miRemoveWC.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				VisualItem item = activeItem;
+
 				int i = item.getRow();
 				activeTree.removeNode(i);
+
 				activeTreeLinkedList.get(i).removeDeletingChildren();
-				item.getVisualization().repaint();
 				activeProject.updateTables();
-				//tview.getVisualization().run("filter");
+				parentFrame.dispose();
+				TreeView.createEntityTypeFrm("name",activeProject);
 			}
 		});
 
@@ -106,23 +109,23 @@ public class PopUpMenu {
 				}
 				activeTree.removeNode(i);
 				
-				
-				
 				activeTreeLinkedList.get(i).removeSavingChildren();
 				item.getVisualization().repaint();
 				activeProject.updateTables();
-				//tview.getVisualization().run("filter");
+				parentFrame.dispose();
+				TreeView.createEntityTypeFrm("name",activeProject);
+				
 			}
 		});
 
 	}
 
-	public void setTreeView(TreeView treeView, Tree tree, Project project) {
+	public void setTreeView(TreeView treeView, Tree tree, Project project, JFrame pFrame) {
 		activeProject = project;
 		activeTreeLinkedList = activeProject.getTreeLinkedList();
 		activeTree = tree;
 		tview = treeView;
-
+		parentFrame = pFrame;
 		tview.addControlListener(new ControlAdapter() {
 			public void itemReleased(VisualItem item, MouseEvent e) {
 				activeItem = null;
