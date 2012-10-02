@@ -18,14 +18,18 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
+import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.imgscalr.Scalr;
 import org.imgscalr.Scalr.Method;
@@ -644,6 +648,14 @@ public class RapidAssessmentCanvas extends JFrame {
 		btnNewButton.setBounds(parentRect.getWidth()+5, 79, 89, 23);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				JFileChooser fc = new JFileChooser();
+				FileNameExtensionFilter ff = new FileNameExtensionFilter("Image Files", "jpeg","png");
+				int returnVal = fc.showOpenDialog(parentPanel);
+				File file;
+				if(returnVal == JFileChooser.APPROVE_OPTION){
+					file = fc.getSelectedFile();
+				}
+				
 			}
 		});
 		setLayout(null);
