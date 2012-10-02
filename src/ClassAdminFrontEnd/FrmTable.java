@@ -94,7 +94,7 @@ public class FrmTable extends JPanel {
 		}
 
 		Object[] temp = new Object[data.get(0).size()];
-		
+
 		for (int x = 0; x < data.size(); x++) {
 			for (int y = 0; y < data.get(0).size(); y++) {
 				temp[y] = data.get(x).get(y).getValue();
@@ -154,7 +154,7 @@ public class FrmTable extends JPanel {
 	private void createGUI() {
 		// ------------------------------------------------------------------------------------------------------------
 
-		addCounters(project.getHead(), project.getHead());	
+		addCounters(project.getHead(), project.getHead());
 
 		JButton tempss = new JButton("temp");
 		tempss.addActionListener(new ActionListener() {
@@ -454,7 +454,7 @@ public class FrmTable extends JPanel {
 							int modelRow = table
 									.convertRowIndexToModel(viewRow);
 						}
-						
+
 					}
 
 				});
@@ -1104,7 +1104,6 @@ public class FrmTable extends JPanel {
 			}
 		});
 
-		
 		JButton removeAllFilters = new JButton("Remove All Filters");
 
 		removeAllFilters.addActionListener(new ActionListener() {
@@ -1142,12 +1141,11 @@ public class FrmTable extends JPanel {
 		Filter.add(cbFilter);
 		Filter.add(removeAllFilters);
 		eastPanel.add(Filter);
-		
+
 		// this.add(tempss);
 
 
 	}
-
 	// =--------------------------------------------------------------------------------------------------------------
 	public void createEntities(EntityType entType, SuperEntityPointer parent) {
 		LinkedList<EntityType> list = entType.getSubEntityType();
@@ -1237,41 +1235,37 @@ public class FrmTable extends JPanel {
 
 		return;
 	}
-	
-    public void addCounters(SuperEntity ent, SuperEntity head){
-    	ent.increaseRowFollowCount();
-    	
-    	SuperEntity temp = ent;
-    	
-    	while(temp != head){
-    		temp = temp.getParentEntity();
-    		temp.increaseRowFollowCount();
-    	}
-    	
-    	LinkedList<SuperEntity> temp2 = ent.getSubEntity();
-    	
-    	for(int x = 0; x < temp2.size();x++){
-    		addCounters(temp2.get(x), head);
-    	}
-    	
-    	
-    }
-    
-    public void search(String text){
-    	boolean temp = false;
+
+	public void addCounters(SuperEntity ent, SuperEntity head) {
+		ent.increaseRowFollowCount();
+
+		SuperEntity temp = ent;
+
+		while (temp != head) {
+			temp = temp.getParentEntity();
+			temp.increaseRowFollowCount();
+		}
+
+		LinkedList<SuperEntity> temp2 = ent.getSubEntity();
+
+		for (int x = 0; x < temp2.size(); x++) {
+			addCounters(temp2.get(x), head);
+		}
+
+	}
+
+	public void search(String text) {
+		boolean temp = false;
 		if (text.compareTo("") != 0) {
 			project.getSelected().clear();
 			for (int x = 0; x < data.size(); x++) {
 				for (int y = 0; y < data.get(0).size(); y++) {
-					if (data.get(x).get(y).getValue()
-							.contains(text)) {
+					if (data.get(x).get(y).getValue().contains(text)) {
 						temp = true;
-						if (!project.getSelected().contains(
-								data.get(x).get(0)))
+						if (!project.getSelected().contains(data.get(x).get(0)))
 							;
 						for (int z = 0; z < data.get(x).size(); z++) {
-							project.getSelected().add(
-									data.get(x).get(z));
+							project.getSelected().add(data.get(x).get(z));
 						}
 						tableModel.fireTableDataChanged();
 					}
@@ -1283,7 +1277,7 @@ public class FrmTable extends JPanel {
 				tableModel.fireTableDataChanged();
 			}
 		}
-		
+
 		return;
-    }
+	}
 }
