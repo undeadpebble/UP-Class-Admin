@@ -154,7 +154,7 @@ public class FrmTable extends JPanel {
 	private void createGUI() {
 		// ------------------------------------------------------------------------------------------------------------
 
-		addCounters(project.getHead(), project.getHead());
+		addCounters(project.getHead(), project.getHead());	
 
 		JButton tempss = new JButton("temp");
 		tempss.addActionListener(new ActionListener() {
@@ -454,7 +454,7 @@ public class FrmTable extends JPanel {
 							int modelRow = table
 									.convertRowIndexToModel(viewRow);
 						}
-
+						
 					}
 
 				});
