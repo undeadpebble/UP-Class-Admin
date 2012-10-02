@@ -652,7 +652,7 @@ public class Frame extends JFrame implements ActionListener {
 		scatterButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Scatter.png")));
 		conditionalFormatButton = new ReflectionButton(ImageIO.read(getClass().getResource(
 				"/ClassAdminFrontEnd/resources/ConditionalFormatting.png")));
-		bordercaseButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/BordercaseAdd.png")));
+		bordercaseButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Bordercase.png")));
 		addRowButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/AddRow.png")));
 		filterButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Filter.png")));
 		maxValButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/maxValue.png")));
@@ -667,9 +667,9 @@ public class Frame extends JFrame implements ActionListener {
 		boxButton.setBounds(405, 12, 68, 80);
 		scatterButton.setBounds(473, 12, 68, 80);
 		conditionalFormatButton.setBounds(535, 2, 68, 80);
-		bordercaseButton.setBounds(597, 8, 68, 80);
-		addRowButton.setBounds(657, 8, 68, 80);
-		filterButton.setBounds(715, 13, 68, 80);
+		bordercaseButton.setBounds(600, 11, 68, 80);
+		filterButton.setBounds(657, 13, 68, 80);
+		addRowButton.setBounds(715, 8, 68, 80);
 		maxValButton.setBounds(774, 11, 68, 80);
 		rulesButton.setBounds(830, 10, 68, 80);
 
@@ -715,10 +715,10 @@ public class Frame extends JFrame implements ActionListener {
 		histogramInfoPanel.setBounds(315, 0, 125, infoPanel.getHeight());
 		boxplotInfoPanel.setBounds(400, 0, 125, infoPanel.getHeight());
 		scatterplotInfoPanel.setBounds(457, 0, 125, infoPanel.getHeight());
-		conditionalFormattingInfoPanel.setBounds(504, 0, 129, infoPanel.getHeight());
-		bordercaseInfoPanel.setBounds(560, 0, 129, infoPanel.getHeight());
-		addRowInfoPanel.setBounds(650, 0, 129, infoPanel.getHeight());
-		filterInfoPanel.setBounds(697, 0, 129, infoPanel.getHeight());
+		conditionalFormattingInfoPanel.setBounds(503, 0, 129, infoPanel.getHeight());
+		bordercaseInfoPanel.setBounds(566, 0, 129, infoPanel.getHeight());
+		filterInfoPanel.setBounds(637, 0, 129, infoPanel.getHeight());
+		addRowInfoPanel.setBounds(697, 0, 129, infoPanel.getHeight());
 		maxValInfoPanel.setBounds(738, 0, 129, infoPanel.getHeight());
 		rulesInfoPanel.setBounds(820, 0, 129, infoPanel.getHeight());
 
@@ -998,8 +998,13 @@ public class Frame extends JFrame implements ActionListener {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (!bordercaseButton.isDisabled()) {
-					BordercaseFrame bordercaseFrame = new BordercaseFrame(table);
-					bordercaseFrame.setVisible(true);
+					BordercaseFrame bordercaseFrame;
+					try {
+						bordercaseFrame = new BordercaseFrame(table);
+						bordercaseFrame.setVisible(true);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 
