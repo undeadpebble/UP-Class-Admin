@@ -42,6 +42,7 @@ import com.sun.image.codec.jpeg.JPEGEncodeParam;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
 import ClassAdminBackEnd.Global;
+import ClassAdminBackEnd.Project;
 import ClassAdminBackEnd.SuperEntity;
 
 public class BoxPlotFrame extends JFrame implements ActionListener {
@@ -49,29 +50,30 @@ public class BoxPlotFrame extends JFrame implements ActionListener {
 	static JFreeChart chart;
 	int houerx;
 	int headerindex = 0;
-	protected final String[] kolom = Global.getGlobal().getActiveProject().getHead().getNumberHeaders();
-	protected final LinkedList<LinkedList<SuperEntity>> diedata = Global.getGlobal().getActiveProject().getHead().getDataLinkedList();
-	protected final String[] headers = Global.getGlobal().getActiveProject().getHead().getHeaders();
-	protected static int teller = 0;
-	protected final int seriesCount = 1;
-	protected final int categoryCount = 1;
-	protected final int entityCount = diedata.size();
-	protected final BoxPlotOptionMenu box = new BoxPlotOptionMenu();
-	protected static final DefaultBoxAndWhiskerCategoryDataset dataset = new DefaultBoxAndWhiskerCategoryDataset();
-
+	private final String[] kolom = Global.getGlobal().getActiveProject().getHead().getNumberHeaders();
+	private final LinkedList<LinkedList<SuperEntity>> diedata = Global.getGlobal().getActiveProject().getHead().getDataLinkedList();
+	private final String[] headers = Global.getGlobal().getActiveProject().getHead().getHeaders();
+	private static int teller = 0;
+	private final int seriesCount = 1;
+	private final int categoryCount = 1;
+	private final int entityCount = diedata.size();
+	private final BoxPlotOptionMenu box = new BoxPlotOptionMenu();
+	private static DefaultBoxAndWhiskerCategoryDataset dataset = new DefaultBoxAndWhiskerCategoryDataset();
+	private Project project;
+	
 	public BoxPlotFrame() {
 
 	}
 
-	public void createBoxPlotFrame() {
+	public void createBoxPlotFrame(final Project project) {
 
 		JFrame f = new JFrame("BoxPlot");
 		final Container content = f.getContentPane();
 		f.setSize(450, 500);
 
-		
+		this.project = project;
         
-		
+		dataset =  new DefaultBoxAndWhiskerCategoryDataset();
 		
 		final BoxPlot nuweChart = new BoxPlot();
 		chart = nuweChart.createBoxPlot("BoxPlot", "", "", dataset);
@@ -126,7 +128,7 @@ public class BoxPlotFrame extends JFrame implements ActionListener {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
+				
 
 			}
 
@@ -220,7 +222,7 @@ public class BoxPlotFrame extends JFrame implements ActionListener {
 		
 		chartpanel.getChart().getCategoryPlot().setDataset(dataset);
 	}
-
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub

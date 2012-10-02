@@ -332,7 +332,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 				else
 					nuweChart.setWidthBar(nuweChart.getWidthBar() +9);
 				
-				System.out.println("Barwidth smaller " + nuweChart.getWidthBar());
+			
 				chartpanel.getChart().getXYPlot()
 						.setDataset(nuweChart.changebarWidth(nuweChart.getWidthBar()));
 				project.updatecharts();
