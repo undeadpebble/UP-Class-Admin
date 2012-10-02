@@ -18,4 +18,22 @@ public class BooleanRule extends Rule {
 
 		return true;
 	}
+
+	public char getOpperator() {
+		return opperator;
+	}
+
+	public void setOpperator(char opperator) {
+		this.opperator = opperator;
+	}
+
+	public boolean isValue() {
+		return value;
+	}
+
+	public void setValue(boolean value) {
+		this.value = value;
+	}
+	
+	
 }

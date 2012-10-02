@@ -35,9 +35,10 @@ public class BestNMarkEntity extends MarkEntity{
 		Boolean hasval = false;
 		for (int i = 0; i < this.getSubEntity().size(); ++i) {
 			try {
-				w =  this.getSubEntity().get(i).getWeight();
-				m = this.getSubEntity().get(i).calcMark()
-						* w;
+				w =  this.getSubEntity().get(i).getWeight()
+						* this.getSubEntity().get(i).getType().getMaxValue();
+				m = this.getSubEntity().get(i).getMark()
+						* this.getSubEntity().get(i).getWeight();
 				
 				if(ofN < N){
 					mTotal += m;
@@ -67,9 +68,9 @@ public class BestNMarkEntity extends MarkEntity{
 		}
 
 		if (wTotal != 0)
-			return mTotal / wTotal;
+			return mTotal / wTotal * this.getType().getMaxValue();
 		else
-			return mTotal;
+			return 0.0;
 	}
 	
 	public long saveToDB(SqlJetDb db, long parentID, PDatIDGenerator idgen) throws SqlJetException {

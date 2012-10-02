@@ -97,7 +97,7 @@ public class FrmTable extends JPanel {
 		}
 		
 		Object[] temp = new Object[data.get(0).size()];
-
+		
 		for(int x = 0; x <data.size();x++){
 			for (int y = 0; y < data.get(0).size(); y++) {
 				temp[y] = data.get(x).get(y).getValue();
@@ -106,32 +106,13 @@ public class FrmTable extends JPanel {
 		}
 		
 	}
-	
-	public SuperEntity[] getFirstSelectedStudent() {
-		if (table.getSelectedRow() != -1) {
-			SuperEntity[] tempForReturn = new SuperEntity[data.get(0).size()];
-			int selected = table.getSelectedRow();
-
-			for (int x = 0; x < data.get(0).size(); x++) {
-				tempForReturn[x] = data.get(selected).get(x);
-			}
-
-			return tempForReturn;
-		} else {
-			return null;
-		}
-	}
-
-	public String getFirstSelectedStudentNr() {
-		return (data.get(table.getSelectedRow()).get(0).getValue());
-	}
 
 	public void filterTable() {
 		boolean filtered = false;
 		LinkedList<Integer> removes = new LinkedList<Integer>();
 
 		// --------------------------------------
-		// adds all the rows to tha table again
+		// adds all the rows to the table again
 		Object[][] temp = new Object[data.size()][data.get(0).size()];
 
 		for (int x = 0; x < data.size(); x++) {
@@ -174,6 +155,21 @@ public class FrmTable extends JPanel {
 	}
 
 	private void createGUI() {
+		//------------------------------------------------------------------------------------------------------------
+		
+		addCounters(project.getHead(), project.getHead());	
+		
+		JButton tempss = new JButton("temp");
+		tempss.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				for(int x = 0; x < data.get(0).size();x++){
+					System.out.println(data.get(0).get(x).getType().getName() + data.get(0).get(x).getRowFollowCount());
+				}
+			}
+		});
+		
 		// -------------------------------------------------------------------------------------------------------
 				// create the filters array with everything false
 				for (int x = 0; x < data.size(); x++) {
@@ -215,6 +211,7 @@ public class FrmTable extends JPanel {
 										.setMark(
 												(Double.parseDouble((String) tcl
 														.getNewValue())));
+								System.out.println("AAAAAAAAAAAAAAAAAAAAAAAA");
 							} else {
 								table.getModel().setValueAt(tcl.getOldValue(),
 										tcl.getRow(), tcl.getColumn());
@@ -391,7 +388,6 @@ public class FrmTable extends JPanel {
 
 					return comp;
 				} catch (Exception e) {
-					// TODO: handle exception
 					return null;
 				}
 
@@ -433,7 +429,6 @@ public class FrmTable extends JPanel {
 
 					table.setToolTipText(toolTip);
 				} catch (Exception ex) {
-					// TODO: handle exception
 				}
 			}// end MouseMoved
 		}); // end MouseMotionAdapter
@@ -455,6 +450,7 @@ public class FrmTable extends JPanel {
 							int modelRow = table
 									.convertRowIndexToModel(viewRow);
 						}
+						
 					}
 
 				});
@@ -495,7 +491,6 @@ public class FrmTable extends JPanel {
 			@Override
 			public void keyReleased(KeyEvent arg0) {
 
-				// TODO Auto-generated method stub
 				boolean temp = false;
 				if (searchTxt.getText().compareTo("") != 0) {
 					project.getSelected().clear();
@@ -886,7 +881,7 @@ public class FrmTable extends JPanel {
 				table.getSelectedRow();
 
 				TreeView.createStudentFrm("name",
-						data.get(table.getSelectedRow()).get(0));
+						data.get(table.getSelectedRow()).get(0),project);
 			}
 		});
 		// ----------------------------------------------------------------------------------------------------------------
@@ -1098,6 +1093,7 @@ public class FrmTable extends JPanel {
 			}
 		});
 
+		
 		JButton removeAllFilters = new JButton("Remove All Filters");
 
 		removeAllFilters.addActionListener(new ActionListener() {
@@ -1135,6 +1131,8 @@ public class FrmTable extends JPanel {
 		Filter.add(cbFilter);
 		Filter.add(removeAllFilters);
 		eastPanel.add(Filter);
+		
+		//this.add(tempss);
 
 	}
 
@@ -1183,4 +1181,53 @@ public class FrmTable extends JPanel {
 	public LinkedList<LinkedList<SuperEntity>> getData() {
 		return data;
 	}
+	
+    public void addCounters(SuperEntity ent, SuperEntity head){
+    	ent.increaseRowFollowCount();
+    	
+    	SuperEntity temp = ent;
+    	
+    	while(temp != head){
+    		temp = temp.getParentEntity();
+    		temp.increaseRowFollowCount();
+    	}
+    	
+    	LinkedList<SuperEntity> temp2 = ent.getSubEntity();
+    	
+    	for(int x = 0; x < temp2.size();x++){
+    		addCounters(temp2.get(x), head);
+    	}
+    	
+    	
+    }
+    
+    public void search(String text){
+    	boolean temp = false;
+		if (text.compareTo("") != 0) {
+			project.getSelected().clear();
+			for (int x = 0; x < data.size(); x++) {
+				for (int y = 0; y < data.get(0).size(); y++) {
+					if (data.get(x).get(y).getValue()
+							.contains(text)) {
+						temp = true;
+						if (!project.getSelected().contains(
+								data.get(x).get(0)))
+							;
+						for (int z = 0; z < data.get(x).size(); z++) {
+							project.getSelected().add(
+									data.get(x).get(z));
+						}
+						tableModel.fireTableDataChanged();
+					}
+				}
+			}
+
+			if (!temp) {
+				project.getSelected().clear();
+				tableModel.fireTableDataChanged();
+			}
+		}
+		
+		return;
+    }
 }

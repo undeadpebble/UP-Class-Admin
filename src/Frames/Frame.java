@@ -8,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
@@ -627,9 +629,31 @@ public class Frame extends JFrame implements ActionListener {
 		searchPanel.setLayout(null);
 		workspacePanel.add(searchPanel);
 
-		JTextField searchBox = new JTextField();
+		final JTextField searchBox = new JTextField();
 		searchBox.setBounds(25, 5, 124, 25);
 		searchPanel.add(searchBox);
+		
+		searchBox.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				table.search(searchBox.getText());
+				
+			}
+		});
 
 		searchImage = new ImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Search.png")));
 		searchImage.setBounds(0, 8, 30, 30);
@@ -881,7 +905,7 @@ public class Frame extends JFrame implements ActionListener {
 			public void mousePressed(MouseEvent arg0) {
 				if (!studentsButton.isDisabled()) {
 					table.getTable().getSelectedRow();
-					TreeView.createStudentFrm("name", table.getData().get(table.getTable().getSelectedRow()).get(0));
+					TreeView.createStudentFrm("name",table.getData().get(table.getTable().getSelectedRow()).get(0),Global.getGlobal().getActiveProject());
 				}
 			}
 
@@ -899,12 +923,7 @@ public class Frame extends JFrame implements ActionListener {
 			public void mousePressed(MouseEvent arg0) {
 				if (!treeButton.isDisabled()) {
 					table.getTable().getSelectedRow();
-
-					// kom by build tree btn
 					TreeView.createEntityTypeFrm("name", Global.getGlobal().getActiveProject());
-					// moet hier bly
-					// TreeView.createStudentFrm("name",
-					// table.getData().get(table.getTable().getSelectedRow()).get(0));
 				}
 			}
 
