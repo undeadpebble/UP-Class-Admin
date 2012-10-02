@@ -145,7 +145,7 @@ public class FilterFrame extends JFrame {
 		lblLowerValue.setForeground(new Color(0xEDEDED));
 		
 		final JLabel lblSelectValues = new JLabel("Select Values to Filter");
-		lblSelectValues.setBounds(61, 131, 102, 14);
+		lblSelectValues.setBounds(61, 180, 150, 14);
 		backgroundPanel.add(lblSelectValues);
 		lblSelectValues.setForeground(new Color(0xEDEDED));
 
@@ -180,6 +180,7 @@ public class FilterFrame extends JFrame {
 			maxVal.setVisible(false);
 			lblLowerValue.setVisible(false);
 			lblUpperValue.setVisible(false);
+			lblSelectValues.setVisible(true);
 		} else {
 			lblSelectField.setVisible(true);
 			lblConditionalRuleType.setVisible(true);
@@ -187,6 +188,7 @@ public class FilterFrame extends JFrame {
 			maxVal.setVisible(true);
 			lblLowerValue.setVisible(true);
 			lblUpperValue.setVisible(true);
+			lblSelectValues.setVisible(false);
 			cbxFormatType = new JComboBox(formatTypesStr);
 		}
 
@@ -380,6 +382,7 @@ public class FilterFrame extends JFrame {
 					lblLowerValue.setVisible(false);
 					lblUpperValue.setVisible(false);
 					cbxFormatType.setVisible(false);
+					lblSelectValues.setVisible(true);
 				} else {
 					lblSelectField.setVisible(true);
 					lblConditionalRuleType.setVisible(true);
@@ -388,6 +391,7 @@ public class FilterFrame extends JFrame {
 					lblLowerValue.setVisible(true);
 					lblUpperValue.setVisible(true);
 					cbxFormatType.setVisible(true);
+					lblSelectValues.setVisible(false);
 				}
 
 			}
