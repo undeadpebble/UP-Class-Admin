@@ -395,7 +395,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 				chartpanel.getChart().getXYPlot()
 						.setDataset(nuweChart.changebarWidth(nuweChart.getWidthBar()));
 
-				
+				project.updatecharts();
 				
 				
 				
