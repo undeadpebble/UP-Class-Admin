@@ -537,7 +537,7 @@ public class frmRule extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				lblselected1.setVisible(true);
 				lblselected2.setVisible(false);
-
+				
 				switch (cbxRuleChooser.getSelectedIndex()) {
 				case 0:
 					reactivateFloat();
@@ -695,8 +695,8 @@ public class frmRule extends JFrame {
 						valid = false;
 					}
 				}
-
-				if (BoolRuleList.size() > 0)
+				
+				if(BoolRuleList.size() > 0)
 					rule3 = (BooleanRule) BoolRuleList.get(cbxStringComp
 							.getSelectedIndex());
 				else
@@ -760,11 +760,12 @@ public class frmRule extends JFrame {
 
 				// check if works allways
 				int selected = cbxRules.getSelectedIndex();
+				System.out.println(selected);
+				System.out.println(cbxRules.getItemCount());
+				System.out.println(cbxRules.getSelectedItem().toString());
 
 				for (int x = 0; x < ruleList.size(); x++) {
-					if (!ruleList.get(x).getName().contains("reqwuiop")
-							&& !ruleList.get(x).getName()
-									.contains("referencespsaiodfhnosaudhf")) {
+					if (!ruleList.get(x).getName().contains("reqwuiop")&& !ruleList.get(x).getName().contains("referencespsaiodfhnosaudhf")) {
 						acktualRules.add(ruleList.get(x));
 					}
 				}
@@ -1039,7 +1040,7 @@ public class frmRule extends JFrame {
 
 					int charop = 0;
 					for (int x = 0; x < BoolRuleList.size(); x++) {
-						if (boolrule == BoolRuleList.get(x)) {
+						if(boolrule == BoolRuleList.get(x)){
 							charop = x;
 						}
 					}
@@ -1134,59 +1135,59 @@ public class frmRule extends JFrame {
 
 		int a = 0;
 
-		if (lblselected1.isVisible()) {
+		if(lblselected1.isVisible()){
 			for (int x = 0; x < ruleList.size(); x++) {
 				if (!(ruleList.get(x).getName().contains("reqwuiop"))) {
 					if (!(ruleList.get(x).getName()
 							.contains("referencespsaiodfhnosaudhf"))) {
 						a++;
-
+	
 					}
 				}
 			}
-		} else {
+		}
+		else{
 			for (int x = 0; x < ruleList.size(); x++) {
-				if (!(ruleList.get(x).getName().contains("reqwuiop"))
-						&& !(ruleList.get(x).getName()
-								.contains("referencespsaiodfhnosaudhf"))
-						&& !(ruleList.get(x).getName().contains(cbxRules
-								.getSelectedItem().toString()))) {
-					a++;
-
+				if (!(ruleList.get(x).getName().contains("reqwuiop")) && !(ruleList.get(x).getName().contains(cbxRules.getSelectedItem().toString()))) {
+					if (!(ruleList.get(x).getName().contains("referencespsaiodfhnosaudhf"))) {
+						a++;
+					}
 				}
+			}
+		}
 			}
 		}
 
 		ruleStrings = new String[a];
-		if (lblselected1.isVisible()) {
+		if(lblselected1.isVisible()){
 			for (int x = 0; x < ruleList.size(); x++) {
 				if (!ruleList.get(x).getName().contains("reqwuiop")
 						&& !ruleList.get(x).getName()
 								.contains("referencespsaiodfhnosaudhf")) {
-
-					ruleStrings[ruleReferences.size()] = ruleList.get(x)
+	
+					ruleStrings[ruleReferences.size()] = ruleList.get(x).getName();
 							.getName();
 					ruleReferences.add(x);
 					acktualRules.add(ruleList.get(x));
 				}
 			}
 			cbxRules.setModel(new DefaultComboBoxModel(ruleStrings));
-		} else {
+		}
+		else{
 			for (int x = 0; x < ruleList.size(); x++) {
 				if (!ruleList.get(x).getName().contains("reqwuiop")
 						&& !ruleList.get(x).getName()
-								.contains("referencespsaiodfhnosaudhf")
-						&& !(ruleList.get(x).getName().contains(cbxRules
-								.getSelectedItem().toString()))) {
-
-					ruleStrings[ruleReferences.size()] = ruleList.get(x)
-							.getName();
+								.contains("referencespsaiodfhnosaudhf") && !(ruleList.get(x).getName().contains(cbxRules.getSelectedItem().toString()))) {
+	
+					ruleStrings[ruleReferences.size()] = ruleList.get(x).getName();
 					ruleReferences.add(x);
 					acktualRules.add(ruleList.get(x));
 				}
 			}
+				
+			}
 
-		}
+		
 
 		lblEntityType1.setVisible(true);
 		lblEntityType2.setVisible(true);
