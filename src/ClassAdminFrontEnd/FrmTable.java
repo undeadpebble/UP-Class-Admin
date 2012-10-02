@@ -278,8 +278,7 @@ public class FrmTable extends JPanel {
 							backgroundColors.add(Color.orange);
 							comp.setBackground(Color.orange);
 
-							// table.addRowSelectionInterval(Index_row,
-							// Index_row);
+							
 						}
 					} else {
 						comp.setBackground(Color.white);
