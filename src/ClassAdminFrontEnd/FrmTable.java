@@ -315,6 +315,7 @@ public class FrmTable extends JPanel {
 
 						comp.setForeground(Color.black);
 						// table.repaint();
+						table.repaint();
 					}
 
 					for (int x = 0; x < format.size(); x++) {

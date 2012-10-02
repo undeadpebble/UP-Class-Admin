@@ -715,8 +715,6 @@ public class frmRule extends JFrame {
 						temp.getParentEntitytype().getSubEntityType().add(temp);
 
 						temp.populateTreeWithEntities();
-						if (project.getTables().size() > 0)
-							project.getTables().get(0).getTable().repaint();
 					} else {
 						int whichToEdit = 0;
 						for (int x = 0; x < ruleList.size(); x++) {
@@ -727,12 +725,14 @@ public class frmRule extends JFrame {
 											cbxRules.getSelectedItem()
 													.toString())) {
 								whichToEdit = x;
-
+								
 							}
 						}
-
-						((StringRule) ruleList.get(whichToEdit))
-								.setChild1(rule1);
+						
+						((StringRule)ruleList.get(whichToEdit)).setChild1(rule1);
+						((StringRule)ruleList.get(whichToEdit)).setChild2(rule2);
+						((StringRule)ruleList.get(whichToEdit)).setBoolRule(rule3);
+					}
 						((StringRule) ruleList.get(whichToEdit))
 								.setChild2(rule2);
 						((StringRule) ruleList.get(whichToEdit))
