@@ -3,6 +3,7 @@ package ClassAdminFrontEnd;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -29,6 +30,8 @@ import javax.swing.JPanel;
 import org.imgscalr.Scalr;
 import org.imgscalr.Scalr.Method;
 import org.imgscalr.Scalr.Mode;
+
+import com.sun.media.sound.Toolkit;
 
 import sun.java2d.pipe.BufferedBufImgOps;
 
@@ -616,11 +619,12 @@ public class RapidAssessmentCanvas extends JFrame {
 
 	public RapidAssessmentCanvas(String backGroundFilename,
 			EntityType assessedEntity) {
+		Dimension screen = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		this.setLayout(null);
 		ContainerPanel canvas = new ContainerPanel();
 		parentPanel = canvas;
 		this.setContentPane(canvas);
-		this.setSize(600, 600);
+		this.setSize(screen.width, screen.height);
 		this.backgroundFileName = backGroundFilename;
 		try {
 			this.backGround = ImageIO.read(getClass().getResource(
@@ -629,17 +633,28 @@ public class RapidAssessmentCanvas extends JFrame {
 			e1.printStackTrace();
 		}
 		this.assessedEntity = assessedEntity;
-		parentRect = new MyRectangle(0, 0, 500, 500);
+		
+		parentRect = new MyRectangle(0, 0,(int) screen.getWidth()-100,(int) screen.getHeight()-50);
 		parentRect.setVisible(true);
 		this.setLayout(null);
 		canvas.add(parentRect);
 
-		JButton saveButton = new JButton("Save");
-		saveButton.setLocation(520, 520);
-		saveButton.setSize(200, 50);
-		saveButton.setFocusable(false);
-		parentPanel.add(saveButton);
-		saveButton.addActionListener(new ActionListener() {
+		
+		JButton btnNewButton = new JButton("Image");
+		btnNewButton.setBounds(parentRect.getWidth()+5, 79, 89, 23);
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		setLayout(null);
+		btnNewButton.setFocusable(false);
+		parentPanel.add(btnNewButton);
+		
+		JButton btnSave = new JButton("Save");
+		btnSave.setBounds(parentRect.getWidth()+5, 45, 89, 23);
+		parentPanel.add(btnSave);
+		btnSave.setFocusable(false);
+		btnSave.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -647,7 +662,21 @@ public class RapidAssessmentCanvas extends JFrame {
 
 			}
 		});
-		saveButton.setVisible(true);
+		
+		JButton btnLoad = new JButton("Load");
+		btnLoad.setBounds(parentRect.getWidth()+5, 11, 89, 23);
+		parentPanel.add(btnLoad);
+		btnLoad.setFocusable(false);
+		btnLoad.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+	
+		
 
 		this.addKeyListener(new KeyListener() {
 
@@ -804,6 +833,8 @@ public class RapidAssessmentCanvas extends JFrame {
 		 */
 
 		public void save() {
+			if(assessedEntity == null)
+				return;
 			RapidAssessmentContainerType parent = new RapidAssessmentContainerType(
 					assessedEntity, this.getX(), this.getY(), this.getWidth(),
 					this.getHeight());

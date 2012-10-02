@@ -354,7 +354,7 @@ public class SuperEntity {
 		return "";
 	}
 
-	public void setValue(String str) {
+	public void setValue(String str) throws NumberFormatException{
 		this.setMark(Double.parseDouble(str));
 	}
 
