@@ -1078,8 +1078,13 @@ public class Frame extends JFrame implements ActionListener {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (!filterButton.isDisabled()) {
-					FilterFrame filterframe = new FilterFrame(table);
-					filterframe.setVisible(true);
+					FilterFrame filterframe;
+					try {
+						filterframe = new FilterFrame(table);
+						filterframe.setVisible(true);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 

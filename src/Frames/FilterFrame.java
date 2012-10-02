@@ -9,8 +9,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.io.IOException;
 import java.util.LinkedList;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
@@ -20,6 +22,7 @@ import ClassAdminBackEnd.Format;
 import ClassAdminFrontEnd.BackgroundGradientPanel;
 import ClassAdminFrontEnd.FrmTable;
 import ClassAdminFrontEnd.JComboCheckBox;
+import ClassAdminFrontEnd.ReflectionButton;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.JCheckBox;
@@ -87,10 +90,11 @@ public class FilterFrame extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @throws IOException 
 	 */
-	public FilterFrame(final FrmTable table) {
+	public FilterFrame(final FrmTable table) throws IOException {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 450, 313);
+		setBounds(100, 100, 450, 336);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(null);
@@ -113,6 +117,9 @@ public class FilterFrame extends JFrame {
 		// Move the window
 		setLocation(x, y);
 
+		Image icon = Toolkit.getDefaultToolkit().getImage("Logo.png");
+		this.setIconImage(icon);
+		
 		this.setTitle("Filter");
 
 		backgroundPanel = new BackgroundGradientPanel(contentPane);
@@ -162,15 +169,20 @@ public class FilterFrame extends JFrame {
 		maxVal.setBounds(261, 166, 102, 27);
 		backgroundPanel.add(maxVal);
 
-		final JButton btnCreateFilter = new JButton("Create Filter");
-		btnCreateFilter.setBounds(75, 223, 114, 23);
+		final ReflectionButton btnCreateFilter = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/FilterFrame.png")));
+		//final JButton btnCreateFilter = new JButton("Create Filter");
+		btnCreateFilter.setBounds(129, 223, 59, 76);
 		backgroundPanel.add(btnCreateFilter);
+		btnCreateFilter.setToolTipText("Create Filter");
 
-		final JButton btnRemoveAllFilters = new JButton("Remove All Filters");
-		btnRemoveAllFilters.setBounds(222, 223, 141, 23);
+		final ReflectionButton btnRemoveAllFilters = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/FilterFrameRemove.png")));
+		//final JButton btnRemoveAllFilters = new JButton("Remove All Filters");
+		btnRemoveAllFilters.setBounds(230, 223, 59, 76);
 		backgroundPanel.add(btnRemoveAllFilters);
+		btnRemoveAllFilters.setToolTipText("Remove All Filters");
 
 		btnCreateFilter.setEnabled(false);
+	//	btnCreateFilter.setDisabled();
 
 		if (table.data.get(0).get(cbxFilters.getSelectedIndex()).getType()
 				.getIsTextField()) {
@@ -232,17 +244,20 @@ public class FilterFrame extends JFrame {
 						maxVal.setEnabled(true);
 
 						btnCreateFilter.setEnabled(true);
+					//	btnCreateFilter.setEnabled();
 					} else {
 						minVal.setEnabled(true);
 						maxVal.setEnabled(false);
 
 						btnCreateFilter.setEnabled(true);
+					//	btnCreateFilter.setEnabled();
 					}
 				} else {
 					minVal.setEnabled(false);
 					maxVal.setEnabled(false);
 
 					btnCreateFilter.setEnabled(false);
+				//	btnCreateFilter.setDisabled();
 				}
 			}
 		});
@@ -402,6 +417,7 @@ public class FilterFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 
 				btnCreateFilter.setEnabled(true);
+			//	btnCreateFilter.setEnabled();
 
 			}
 		});

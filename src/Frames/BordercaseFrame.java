@@ -106,6 +106,9 @@ public class BordercaseFrame extends JFrame {
 		int y = (dim.height - h) / 2;
 		// Move the window
 		setLocation(x, y);
+		
+		Image icon = Toolkit.getDefaultToolkit().getImage("Logo.png");
+		this.setIconImage(icon);
 
 		backgroundPanel = new BackgroundGradientPanel(contentPane);
 		backgroundPanel.setBounds(0, 0, getWidth(), getHeight());
