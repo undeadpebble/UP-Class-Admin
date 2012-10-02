@@ -402,12 +402,42 @@ public class frmRule extends JFrame {
 				}
 
 				if (valid) {
-					ruleList.add(new StringBoolRule(rule1, rule2,
-							opStringBoolChar[cbxStringComp.getSelectedIndex()],
-							txtName.getText(), project));
+
+					if (lblselected1.isVisible()) {
+						ruleList.add(new StringBoolRule(rule1, rule2,
+								opStringBoolChar[cbxStringComp
+										.getSelectedIndex()],
+								txtName.getText(), project));
+					} else {
+
+					}
+
+					if (project.getTables().size() > 0)
+						project.getTables().get(0).redraw();
 
 					exitFrame();
 				} else {
+					int whichToEdit = 0;
+					for (int x = 0; x < ruleList.size(); x++) {
+						if (ruleList
+								.get(x)
+								.getName()
+								.contains(cbxRules.getSelectedItem().toString())) {
+							whichToEdit = x;
+
+						}
+					}
+
+					((StringBoolRule) ruleList.get(whichToEdit))
+							.setChild1(rule1);
+					((StringBoolRule) ruleList.get(whichToEdit))
+							.setChild2(rule2);
+					((StringBoolRule) ruleList.get(whichToEdit))
+							.setOpperator(opStringBoolChar[cbxStringComp
+									.getSelectedIndex()]);
+
+					if (project.getTables().size() > 0)
+						project.getTables().get(0).redraw();
 
 				}
 			}
@@ -456,10 +486,40 @@ public class frmRule extends JFrame {
 				}
 
 				if (valid) {
-					FloatBoolRule temp = new FloatBoolRule(
-							opFloatBoolChar[cbxOpperator.getSelectedIndex()],
-							rule1, rule2, txtName.getText(), project);
-					ruleList.add(temp);
+
+					if (lblselected1.isVisible()) {
+						FloatBoolRule temp = new FloatBoolRule(
+								opFloatBoolChar[cbxOpperator.getSelectedIndex()],
+								rule1, rule2, txtName.getText(), project);
+						ruleList.add(temp);
+
+						if (project.getTables().size() > 0)
+							project.getTables().get(0).redraw();
+					} else {
+						int whichToEdit = 0;
+						for (int x = 0; x < ruleList.size(); x++) {
+							if (ruleList
+									.get(x)
+									.getName()
+									.contains(
+											cbxRules.getSelectedItem()
+													.toString())) {
+								whichToEdit = x;
+
+							}
+						}
+
+						((FloatBoolRule) ruleList.get(whichToEdit))
+								.setChild1(rule1);
+						((FloatBoolRule) ruleList.get(whichToEdit))
+								.setChild2(rule2);
+						((FloatBoolRule) ruleList.get(whichToEdit))
+								.setOpperator(opFloatBoolChar[cbxOpperator
+										.getSelectedIndex()]);
+
+						if (project.getTables().size() > 0)
+							project.getTables().get(0).redraw();
+					}
 
 					exitFrame();
 				} else {
@@ -538,17 +598,47 @@ public class frmRule extends JFrame {
 				}
 
 				if (valid) {
-					FloatRule temp = new FloatRule(opFloatChar[cbxOpperator
-							.getSelectedIndex()], rule1, rule2, txtName
-							.getText(), project);
 
-					ruleList.add(temp);
+					if (lblselected1.isVisible()) {
+						FloatRule temp = new FloatRule(opFloatChar[cbxOpperator
+								.getSelectedIndex()], rule1, rule2, txtName
+								.getText(), project);
 
-					temp.setParentEntitytype(project.getHeadEntityType()
-							.getSubEntityType().get(0));
-					temp.getParentEntitytype().getSubEntityType().add(temp);
+						ruleList.add(temp);
 
-					temp.populateTreeWithEntities();
+						temp.setParentEntitytype(project.getHeadEntityType()
+								.getSubEntityType().get(0));
+						temp.getParentEntitytype().getSubEntityType().add(temp);
+
+						temp.populateTreeWithEntities();
+
+						if (project.getTables().size() > 0)
+							project.getTables().get(0).redraw();
+					} else {
+						int whichToEdit = 0;
+						for (int x = 0; x < ruleList.size(); x++) {
+							if (ruleList
+									.get(x)
+									.getName()
+									.contains(
+											cbxRules.getSelectedItem()
+													.toString())) {
+								whichToEdit = x;
+
+							}
+						}
+
+						((FloatRule) ruleList.get(whichToEdit))
+								.setChild1(rule1);
+						((FloatRule) ruleList.get(whichToEdit))
+								.setChild2(rule2);
+						((FloatRule) ruleList.get(whichToEdit))
+								.setOpperator(opFloatChar[cbxOpperator
+										.getSelectedIndex()]);
+
+						if (project.getTables().size() > 0)
+							project.getTables().get(0).redraw();
+					}
 
 					exitFrame();
 				} else {
@@ -621,6 +711,8 @@ public class frmRule extends JFrame {
 						temp.getParentEntitytype().getSubEntityType().add(temp);
 
 						temp.populateTreeWithEntities();
+						if (project.getTables().size() > 0)
+							project.getTables().get(0).getTable().repaint();
 					} else {
 						int whichToEdit = 0;
 						for (int x = 0; x < ruleList.size(); x++) {
@@ -631,13 +723,20 @@ public class frmRule extends JFrame {
 											cbxRules.getSelectedItem()
 													.toString())) {
 								whichToEdit = x;
-								
+
 							}
 						}
-						
-						((StringRule)ruleList.get(whichToEdit)).setChild1(rule1);
-						((StringRule)ruleList.get(whichToEdit)).setChild2(rule2);
-						((StringRule)ruleList.get(whichToEdit)).setBoolRule(rule3);
+
+						((StringRule) ruleList.get(whichToEdit))
+								.setChild1(rule1);
+						((StringRule) ruleList.get(whichToEdit))
+								.setChild2(rule2);
+						((StringRule) ruleList.get(whichToEdit))
+								.setBoolRule(rule3);
+						((StringRule) ruleList.get(whichToEdit))
+								.populateTreeWithEntities();
+						if (project.getTables().size() > 0)
+							project.getTables().get(0).redraw();
 					}
 
 					exitFrame();
