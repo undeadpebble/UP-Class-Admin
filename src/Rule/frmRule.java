@@ -473,7 +473,7 @@ public class frmRule extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				lblselected1.setVisible(true);
 				lblselected2.setVisible(false);
-				
+
 				switch (cbxRuleChooser.getSelectedIndex()) {
 				case 0:
 					reactivateFloat();
@@ -601,10 +601,10 @@ public class frmRule extends JFrame {
 						valid = false;
 					}
 				}
-				
-				if(BoolRuleList.size() > 0)
-				rule3 = (BooleanRule) BoolRuleList.get(cbxStringComp
-						.getSelectedIndex());
+
+				if (BoolRuleList.size() > 0)
+					rule3 = (BooleanRule) BoolRuleList.get(cbxStringComp
+							.getSelectedIndex());
 				else
 					valid = false;
 
@@ -637,12 +637,11 @@ public class frmRule extends JFrame {
 
 				// check if works allways
 				int selected = cbxRules.getSelectedIndex();
-				System.out.println(selected);
-				System.out.println(cbxRules.getItemCount());
-				System.out.println(cbxRules.getSelectedItem().toString());
 
 				for (int x = 0; x < ruleList.size(); x++) {
-					if (!ruleList.get(x).getName().contains("reqwuiop")&& !ruleList.get(x).getName().contains("referencespsaiodfhnosaudhf")) {
+					if (!ruleList.get(x).getName().contains("reqwuiop")
+							&& !ruleList.get(x).getName()
+									.contains("referencespsaiodfhnosaudhf")) {
 						acktualRules.add(ruleList.get(x));
 					}
 				}
@@ -917,11 +916,11 @@ public class frmRule extends JFrame {
 
 					int charop = 0;
 					for (int x = 0; x < BoolRuleList.size(); x++) {
-						if(boolrule == BoolRuleList.get(x)){
+						if (boolrule == BoolRuleList.get(x)) {
 							charop = x;
 						}
 					}
-					
+
 					cbxStringComp.setSelectedIndex(charop);
 
 					if (child1 != null) {
@@ -1012,56 +1011,59 @@ public class frmRule extends JFrame {
 
 		int a = 0;
 
-		if(lblselected1.isVisible()){
+		if (lblselected1.isVisible()) {
 			for (int x = 0; x < ruleList.size(); x++) {
 				if (!(ruleList.get(x).getName().contains("reqwuiop"))) {
 					if (!(ruleList.get(x).getName()
 							.contains("referencespsaiodfhnosaudhf"))) {
 						a++;
-	
+
 					}
 				}
 			}
-		}
-		else{
+		} else {
 			for (int x = 0; x < ruleList.size(); x++) {
-				if (!(ruleList.get(x).getName().contains("reqwuiop")) && !(ruleList.get(x).getName().contains(cbxRules.getSelectedItem().toString()))) {
-					if (!(ruleList.get(x).getName().contains("referencespsaiodfhnosaudhf"))) {
-						a++;
-					}
+				if (!(ruleList.get(x).getName().contains("reqwuiop"))
+						&& !(ruleList.get(x).getName()
+								.contains("referencespsaiodfhnosaudhf"))
+						&& !(ruleList.get(x).getName().contains(cbxRules
+								.getSelectedItem().toString()))) {
+					a++;
+
 				}
 			}
 		}
 
 		ruleStrings = new String[a];
-		if(lblselected1.isVisible()){
+		if (lblselected1.isVisible()) {
 			for (int x = 0; x < ruleList.size(); x++) {
 				if (!ruleList.get(x).getName().contains("reqwuiop")
 						&& !ruleList.get(x).getName()
 								.contains("referencespsaiodfhnosaudhf")) {
-	
-					ruleStrings[ruleReferences.size()] = ruleList.get(x).getName();
+
+					ruleStrings[ruleReferences.size()] = ruleList.get(x)
+							.getName();
 					ruleReferences.add(x);
 					acktualRules.add(ruleList.get(x));
 				}
 			}
 			cbxRules.setModel(new DefaultComboBoxModel(ruleStrings));
-		}
-		else{
+		} else {
 			for (int x = 0; x < ruleList.size(); x++) {
 				if (!ruleList.get(x).getName().contains("reqwuiop")
 						&& !ruleList.get(x).getName()
-								.contains("referencespsaiodfhnosaudhf") && !(ruleList.get(x).getName().contains(cbxRules.getSelectedItem().toString()))) {
-	
-					ruleStrings[ruleReferences.size()] = ruleList.get(x).getName();
+								.contains("referencespsaiodfhnosaudhf")
+						&& !(ruleList.get(x).getName().contains(cbxRules
+								.getSelectedItem().toString()))) {
+
+					ruleStrings[ruleReferences.size()] = ruleList.get(x)
+							.getName();
 					ruleReferences.add(x);
 					acktualRules.add(ruleList.get(x));
 				}
 			}
-				
-			}
 
-		
+		}
 
 		lblEntityType1.setVisible(true);
 		lblEntityType2.setVisible(true);
@@ -1134,7 +1136,11 @@ public class frmRule extends JFrame {
 				if (ruleList.get(x).getName().compareTo("reqwuiop") != 0
 						&& ruleList.get(x).getName()
 								.compareTo("referencespsaiodfhnosaudhf") != 0) {
-					StringRuleList.add(ruleList.get(x));
+					if (lblselected1.isVisible())
+						StringRuleList.add(ruleList.get(x));
+					else if (ruleList.get(x).getName() != cbxRules
+							.getSelectedItem().toString())
+						StringRuleList.add(ruleList.get(x));
 				}
 				break;
 
@@ -1219,8 +1225,14 @@ public class frmRule extends JFrame {
 		for (int x = 0; x < ruleList.size(); x++) {
 			switch (ruleList.get(x).getType()) {
 			case 1:
-				floatBoolRuleList.add(ruleList.get(x));
-				BoolRuleList.add(ruleList.get(x));
+				if (lblselected1.isVisible()) {
+					floatBoolRuleList.add(ruleList.get(x));
+					BoolRuleList.add(ruleList.get(x));
+				} else if (ruleList.get(x).getName() != cbxRules
+						.getSelectedItem().toString()) {
+					floatBoolRuleList.add(ruleList.get(x));
+					BoolRuleList.add(ruleList.get(x));
+				}
 				break;
 			case 2:
 				StringBoolRuleList.add(ruleList.get(x));
@@ -1230,8 +1242,10 @@ public class frmRule extends JFrame {
 				if (ruleList.get(x).getName().compareTo("reqwuiop") != 0
 						&& ruleList.get(x).getName()
 								.compareTo("referencespsaiodfhnosaudhf") != 0) {
+
 					floatRuleList.add(ruleList.get(x));
 				}
+
 				break;
 			case 4:
 				StringRuleList.add(ruleList.get(x));
@@ -1337,8 +1351,16 @@ public class frmRule extends JFrame {
 				if (ruleList.get(x).getName().compareTo("reqwuiop") != 0
 						&& ruleList.get(x).getName()
 								.compareTo("referencespsaiodfhnosaudhf") != 0) {
-					StringBoolRuleList.add(ruleList.get(x));
-					BoolRuleList.add(ruleList.get(x));
+					if (lblselected1.isVisible()) {
+						StringBoolRuleList.add(ruleList.get(x));
+						BoolRuleList.add(ruleList.get(x));
+					}
+
+					else if (ruleList.get(x).getName() != cbxRules
+							.getSelectedItem().toString()) {
+						StringBoolRuleList.add(ruleList.get(x));
+						BoolRuleList.add(ruleList.get(x));
+					}
 				}
 				break;
 			case 3:
@@ -1492,7 +1514,13 @@ public class frmRule extends JFrame {
 				if (ruleList.get(x).getName().compareTo("reqwuiop") != 0
 						&& ruleList.get(x).getName()
 								.compareTo("referencespsaiodfhnosaudhf") != 0) {
-					floatRuleList.add(ruleList.get(x));
+					if (lblselected1.isVisible())
+						floatRuleList.add(ruleList.get(x));
+					else if (ruleList.get(x).getName() != cbxRules
+							.getSelectedItem().toString()) {
+						floatRuleList.add(ruleList.get(x));
+					}
+
 				}
 				break;
 			case 4:
