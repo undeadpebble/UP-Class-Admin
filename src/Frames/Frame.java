@@ -871,7 +871,7 @@ public class Frame extends JFrame implements ActionListener {
 			public void mousePressed(MouseEvent arg0) {
 				if (!studentsButton.isDisabled()) {
 					table.getTable().getSelectedRow();
-					TreeView.createStudentFrm("name",table.getData().get(table.getTable().getSelectedRow()).get(0));
+					TreeView.createStudentFrm("name",table.getData().get(table.getTable().getSelectedRow()).get(0),Global.getGlobal().getActiveProject());
 				}
 			}
 
@@ -889,12 +889,7 @@ public class Frame extends JFrame implements ActionListener {
 			public void mousePressed(MouseEvent arg0) {
 				if (!treeButton.isDisabled()) {
 					table.getTable().getSelectedRow();
-
-					// kom by build tree btn
 					TreeView.createEntityTypeFrm("name", Global.getGlobal().getActiveProject());
-					// moet hier bly
-					// TreeView.createStudentFrm("name",
-					// table.getData().get(table.getTable().getSelectedRow()).get(0));
 				}
 			}
 

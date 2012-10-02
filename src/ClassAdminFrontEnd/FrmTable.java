@@ -886,7 +886,7 @@ public class FrmTable extends JPanel {
 				table.getSelectedRow();
 
 				TreeView.createStudentFrm("name",
-						data.get(table.getSelectedRow()).get(0));
+						data.get(table.getSelectedRow()).get(0),project);
 			}
 		});
 		// ----------------------------------------------------------------------------------------------------------------

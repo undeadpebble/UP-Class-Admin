@@ -243,6 +243,7 @@ public class EntityType {
 	public String createTreeFromHead(LinkedList<EntityType> treeLinkedList)
 	{
 		treeLinkedList.add(this);
+		
 		if(this.getSubEntityType().size()>0){
 			String str = "";
 			str += "<branch>" +
