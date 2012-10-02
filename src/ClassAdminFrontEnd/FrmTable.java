@@ -101,25 +101,6 @@ public class FrmTable extends JPanel {
 		}
 		
 	}
-	
-	public SuperEntity[] getFirstSelectedStudent() {
-		if (table.getSelectedRow() != -1) {
-			SuperEntity[] tempForReturn = new SuperEntity[data.get(0).size()];
-			int selected = table.getSelectedRow();
-
-			for (int x = 0; x < data.get(0).size(); x++) {
-				tempForReturn[x] = data.get(selected).get(x);
-			}
-
-			return tempForReturn;
-		} else {
-			return null;
-		}
-	}
-
-	public String getFirstSelectedStudentNr() {
-		return (data.get(table.getSelectedRow()).get(0).getValue());
-	}
 
 	public void filterTable() {
 		boolean filtered = false;
@@ -171,16 +152,13 @@ public class FrmTable extends JPanel {
 	private void createGUI() {
 		//------------------------------------------------------------------------------------------------------------
 		
-		addCounters(project.getHead(), project.getHead());
-		
-		
+		addCounters(project.getHead(), project.getHead());	
 		
 		JButton tempss = new JButton("temp");
 		tempss.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
 				for(int x = 0; x < data.get(0).size();x++){
 					System.out.println(data.get(0).get(x).getType().getName() + data.get(0).get(x).getRowFollowCount());
 				}
@@ -228,6 +206,7 @@ public class FrmTable extends JPanel {
 										.setMark(
 												(Double.parseDouble((String) tcl
 														.getNewValue())));
+								System.out.println("AAAAAAAAAAAAAAAAAAAAAAAA");
 							} else {
 								table.getModel().setValueAt(tcl.getOldValue(),
 										tcl.getRow(), tcl.getColumn());
@@ -449,6 +428,7 @@ public class FrmTable extends JPanel {
 							int modelRow = table
 									.convertRowIndexToModel(viewRow);
 						}
+						
 					}
 
 				});
