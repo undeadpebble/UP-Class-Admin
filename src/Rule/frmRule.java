@@ -609,16 +609,36 @@ public class frmRule extends JFrame {
 					valid = false;
 
 				if (valid) {
-					StringRule temp = new StringRule(rule1, rule2, rule3,
-							txtName.getText(), project);
 
-					ruleList.add(temp);
+					if (lblselected1.isVisible()) {
+						StringRule temp = new StringRule(rule1, rule2, rule3,
+								txtName.getText(), project);
 
-					temp.setParentEntitytype(project.getHeadEntityType()
-							.getSubEntityType().get(0));
-					temp.getParentEntitytype().getSubEntityType().add(temp);
+						ruleList.add(temp);
 
-					temp.populateTreeWithEntities();
+						temp.setParentEntitytype(project.getHeadEntityType()
+								.getSubEntityType().get(0));
+						temp.getParentEntitytype().getSubEntityType().add(temp);
+
+						temp.populateTreeWithEntities();
+					} else {
+						int whichToEdit = 0;
+						for (int x = 0; x < ruleList.size(); x++) {
+							if (ruleList
+									.get(x)
+									.getName()
+									.contains(
+											cbxRules.getSelectedItem()
+													.toString())) {
+								whichToEdit = x;
+								
+							}
+						}
+						
+						((StringRule)ruleList.get(whichToEdit)).setChild1(rule1);
+						((StringRule)ruleList.get(whichToEdit)).setChild2(rule2);
+						((StringRule)ruleList.get(whichToEdit)).setBoolRule(rule3);
+					}
 
 					exitFrame();
 				} else {

@@ -310,7 +310,6 @@ public class FrmTable extends JPanel {
 														Index_row)).get(
 										Index_col));
 						comp.setForeground(Color.black);
-						System.out.println("Hello");
 						table.repaint();
 					}
 
