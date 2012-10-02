@@ -145,7 +145,7 @@ public class FilterFrame extends JFrame {
 		lblLowerValue.setForeground(new Color(0xEDEDED));
 		
 		final JLabel lblSelectValues = new JLabel("Select Values to Filter");
-		lblSelectValues.setBounds(61, 131, 102, 14);
+		lblSelectValues.setBounds(61, 180, 150, 14);
 		backgroundPanel.add(lblSelectValues);
 		lblSelectValues.setForeground(new Color(0xEDEDED));
 
