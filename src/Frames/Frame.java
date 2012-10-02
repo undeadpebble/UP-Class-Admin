@@ -402,7 +402,7 @@ public class Frame extends JFrame implements ActionListener {
 		mFile.setForeground(Color.white);
 		mProject.setForeground(Color.white);
 		mSettings.setForeground(Color.white);
-		
+
 		miExit.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
@@ -495,8 +495,8 @@ public class Frame extends JFrame implements ActionListener {
 		mGraph.add(miHistogram);
 		mGraph.add(miBoxPlot);
 		mGraph.add(miScatterPlot);
-		
-		//menu actions
+
+		// menu actions
 
 		// menu actions
 
@@ -907,7 +907,7 @@ public class Frame extends JFrame implements ActionListener {
 			public void mousePressed(MouseEvent arg0) {
 				if (!studentsButton.isDisabled()) {
 					table.getTable().getSelectedRow();
-					TreeView.createStudentFrm("name",table.getData().get(table.getTable().getSelectedRow()).get(0),Global.getGlobal().getActiveProject());
+					TreeView.createStudentFrm("name", table.getData().get(table.getTable().getSelectedRow()).get(0));
 				}
 			}
 
@@ -1288,7 +1288,7 @@ public class Frame extends JFrame implements ActionListener {
 				@Override
 				public void stateChanged(ChangeEvent arg0) {
 					Global.getGlobal().setActiveProjectIndex(tabbedPane.getSelectedIndex() + 1);
-					if(Global.getGlobal().getActiveProject().getTables().size() > 0)
+					if (Global.getGlobal().getActiveProject().getTables().size() > 0)
 						table = Global.getGlobal().getActiveProject().getTables().get(0);
 				}
 			});
