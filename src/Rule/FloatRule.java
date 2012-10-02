@@ -94,7 +94,12 @@ public class FloatRule extends Rule {
 		}
 
 		if(references != null){
-			value = sE.findEntityOfTypeUpDown(references).getMark();
+			try{
+				value = sE.findEntityOfTypeUpDown(references).getMark();
+			}
+			catch (Exception e) {
+				// TODO: handle exception
+			}
 		}
 		return value;
 	}
