@@ -143,6 +143,11 @@ public class FilterFrame extends JFrame {
 		lblLowerValue.setBounds(61, 131, 102, 14);
 		backgroundPanel.add(lblLowerValue);
 		lblLowerValue.setForeground(new Color(0xEDEDED));
+		
+		final JLabel lblSelectValues = new JLabel("Select Values to Filter");
+		lblSelectValues.setBounds(61, 131, 102, 14);
+		backgroundPanel.add(lblSelectValues);
+		lblSelectValues.setForeground(new Color(0xEDEDED));
 
 		final JLabel lblUpperValue = new JLabel("Upper Value");
 		lblUpperValue.setBounds(61, 169, 77, 14);
@@ -269,7 +274,7 @@ public class FilterFrame extends JFrame {
 			 * System.out.println(selectData[z].getName());
 			 */
 
-			lblSelectField.setVisible(false);
+			lblSelectField.setVisible(true);
 			lblConditionalRuleType.setVisible(false);
 			minVal.setVisible(false);
 			maxVal.setVisible(false);
@@ -368,7 +373,7 @@ public class FilterFrame extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				if (table.data.get(0).get(cbxFilters.getSelectedIndex())
 						.getType().getIsTextField()) {
-					lblSelectField.setVisible(false);
+					lblSelectField.setVisible(true);
 					lblConditionalRuleType.setVisible(false);
 					minVal.setVisible(false);
 					maxVal.setVisible(false);
