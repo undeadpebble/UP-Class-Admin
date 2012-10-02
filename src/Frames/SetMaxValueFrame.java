@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
+import ClassAdminBackEnd.AbsentException;
 import ClassAdminFrontEnd.BackgroundGradientPanel;
 import ClassAdminFrontEnd.FrmTable;
 
@@ -162,8 +163,12 @@ public class SetMaxValueFrame extends JFrame {
 									Integer.parseInt(spinner.getValue().toString()));
 
 					for(int x = 0; x < table.data.get(0).size(); x++){
-						if ((table.data.get(0).get(MaxValEditing.getSelectedIndex()).getMark() > (table.data.get(0).get(MaxValEditing.getSelectedIndex()).getType().getMaxValue()))){
-							table.data.get(0).get(MaxValEditing.getSelectedIndex()).setMark(table.data.get(0).get(MaxValEditing.getSelectedIndex()).getType().getMaxValue());
+						try {
+							if ((table.data.get(0).get(MaxValEditing.getSelectedIndex()).getMark() > (table.data.get(0).get(MaxValEditing.getSelectedIndex()).getType().getMaxValue()))){
+								table.data.get(0).get(MaxValEditing.getSelectedIndex()).setMark(table.data.get(0).get(MaxValEditing.getSelectedIndex()).getType().getMaxValue());
+							}
+						} catch (AbsentException e1) {
+							
 						}
 					}
 				}

@@ -11,6 +11,46 @@ public class FloatRule extends Rule {
 	private Double value = 0.0;
 	private EntityType references = null;
 
+	public char getOpperator() {
+		return opperator;
+	}
+
+	public void setOpperator(char opperator) {
+		this.opperator = opperator;
+	}
+
+	public FloatRule getChild1() {
+		return child1;
+	}
+
+	public void setChild1(FloatRule child1) {
+		this.child1 = child1;
+	}
+
+	public FloatRule getChild2() {
+		return child2;
+	}
+
+	public void setChild2(FloatRule child2) {
+		this.child2 = child2;
+	}
+
+	public EntityType getReferences() {
+		return references;
+	}
+
+	public void setReferences(EntityType references) {
+		this.references = references;
+	}
+
+	public Double getValue() {
+		return value;
+	}
+
+	public void setValue(Double value) {
+		this.value = value;
+	}
+
 	public FloatRule(char opperator, FloatRule child1, FloatRule child2,
 			String name, Project project) {
 		super(name, project);
