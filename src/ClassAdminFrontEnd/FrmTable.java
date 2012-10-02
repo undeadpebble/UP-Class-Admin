@@ -1256,4 +1256,34 @@ public class FrmTable extends JPanel {
     	
     	
     }
+    
+    public void search(String text){
+    	boolean temp = false;
+		if (text.compareTo("") != 0) {
+			project.getSelected().clear();
+			for (int x = 0; x < data.size(); x++) {
+				for (int y = 0; y < data.get(0).size(); y++) {
+					if (data.get(x).get(y).getValue()
+							.contains(text)) {
+						temp = true;
+						if (!project.getSelected().contains(
+								data.get(x).get(0)))
+							;
+						for (int z = 0; z < data.get(x).size(); z++) {
+							project.getSelected().add(
+									data.get(x).get(z));
+						}
+						tableModel.fireTableDataChanged();
+					}
+				}
+			}
+
+			if (!temp) {
+				project.getSelected().clear();
+				tableModel.fireTableDataChanged();
+			}
+		}
+		
+		return;
+    }
 }
