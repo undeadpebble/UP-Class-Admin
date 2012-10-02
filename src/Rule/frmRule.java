@@ -471,7 +471,9 @@ public class frmRule extends JFrame {
 		cbxRuleChooser.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
+				lblselected1.setVisible(true);
+				lblselected2.setVisible(false);
+				
 				switch (cbxRuleChooser.getSelectedIndex()) {
 				case 0:
 					reactivateFloat();
@@ -599,9 +601,12 @@ public class frmRule extends JFrame {
 						valid = false;
 					}
 				}
-
+				
+				if(BoolRuleList.size() > 0)
 				rule3 = (BooleanRule) BoolRuleList.get(cbxStringComp
 						.getSelectedIndex());
+				else
+					valid = false;
 
 				if (valid) {
 					StringRule temp = new StringRule(rule1, rule2, rule3,
@@ -627,15 +632,17 @@ public class frmRule extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
+				lblselected1.setVisible(false);
+				lblselected2.setVisible(true);
 
 				// check if works allways
 				int selected = cbxRules.getSelectedIndex();
+				System.out.println(selected);
+				System.out.println(cbxRules.getItemCount());
+				System.out.println(cbxRules.getSelectedItem().toString());
 
 				for (int x = 0; x < ruleList.size(); x++) {
-					if (!ruleList.get(x).getName().contains("reqwuiop")
-							&& !ruleList.get(x).getName()
-									.contains("referencespsaiodfhnosaudhf")) {
+					if (!ruleList.get(x).getName().contains("reqwuiop")&& !ruleList.get(x).getName().contains("referencespsaiodfhnosaudhf")) {
 						acktualRules.add(ruleList.get(x));
 					}
 				}
@@ -900,17 +907,22 @@ public class frmRule extends JFrame {
 
 				case 4: {
 					reactivateString();
+
 					cbxRules.setSelectedIndex(selected);
 
 					txtName.setText(rule.getName());
 					StringRule child1 = ((StringRule) rule).getChild1();
 					StringRule child2 = ((StringRule) rule).getChild2();
+					BooleanRule boolrule = ((StringRule) rule).getBoolRule();
 
 					int charop = 0;
-					for (int x = 0; x < opStringBoolChar.length; x++) {
-						
+					for (int x = 0; x < BoolRuleList.size(); x++) {
+						if(boolrule == BoolRuleList.get(x)){
+							charop = x;
+						}
 					}
 					
+					cbxStringComp.setSelectedIndex(charop);
 
 					if (child1 != null) {
 						if (child1.getName().contains("reqwuiop")) {
@@ -1000,29 +1012,56 @@ public class frmRule extends JFrame {
 
 		int a = 0;
 
-		for (int x = 0; x < ruleList.size(); x++) {
-			if (!(ruleList.get(x).getName().contains("reqwuiop"))) {
-				if (!(ruleList.get(x).getName()
-						.contains("referencespsaiodfhnosaudhf"))) {
-					a++;
-
+		if(lblselected1.isVisible()){
+			for (int x = 0; x < ruleList.size(); x++) {
+				if (!(ruleList.get(x).getName().contains("reqwuiop"))) {
+					if (!(ruleList.get(x).getName()
+							.contains("referencespsaiodfhnosaudhf"))) {
+						a++;
+	
+					}
+				}
+			}
+		}
+		else{
+			for (int x = 0; x < ruleList.size(); x++) {
+				if (!(ruleList.get(x).getName().contains("reqwuiop")) && !(ruleList.get(x).getName().contains(cbxRules.getSelectedItem().toString()))) {
+					if (!(ruleList.get(x).getName().contains("referencespsaiodfhnosaudhf"))) {
+						a++;
+					}
 				}
 			}
 		}
 
 		ruleStrings = new String[a];
-		for (int x = 0; x < ruleList.size(); x++) {
-			if (!ruleList.get(x).getName().contains("reqwuiop")
-					&& !ruleList.get(x).getName()
-							.contains("referencespsaiodfhnosaudhf")) {
-
-				ruleStrings[ruleReferences.size()] = ruleList.get(x).getName();
-				ruleReferences.add(x);
-				acktualRules.add(ruleList.get(x));
+		if(lblselected1.isVisible()){
+			for (int x = 0; x < ruleList.size(); x++) {
+				if (!ruleList.get(x).getName().contains("reqwuiop")
+						&& !ruleList.get(x).getName()
+								.contains("referencespsaiodfhnosaudhf")) {
+	
+					ruleStrings[ruleReferences.size()] = ruleList.get(x).getName();
+					ruleReferences.add(x);
+					acktualRules.add(ruleList.get(x));
+				}
 			}
+			cbxRules.setModel(new DefaultComboBoxModel(ruleStrings));
 		}
+		else{
+			for (int x = 0; x < ruleList.size(); x++) {
+				if (!ruleList.get(x).getName().contains("reqwuiop")
+						&& !ruleList.get(x).getName()
+								.contains("referencespsaiodfhnosaudhf") && !(ruleList.get(x).getName().contains(cbxRules.getSelectedItem().toString()))) {
+	
+					ruleStrings[ruleReferences.size()] = ruleList.get(x).getName();
+					ruleReferences.add(x);
+					acktualRules.add(ruleList.get(x));
+				}
+			}
+				
+			}
 
-		cbxRules.setModel(new DefaultComboBoxModel(ruleStrings));
+		
 
 		lblEntityType1.setVisible(true);
 		lblEntityType2.setVisible(true);
