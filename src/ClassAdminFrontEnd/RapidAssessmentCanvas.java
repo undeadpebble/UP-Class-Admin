@@ -27,6 +27,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import org.imgscalr.Scalr;
+import org.imgscalr.Scalr.Method;
+import org.imgscalr.Scalr.Mode;
 
 import sun.java2d.pipe.BufferedBufImgOps;
 
@@ -775,10 +777,9 @@ public class RapidAssessmentCanvas extends JFrame {
 
 			super.paintComponent(g);
 			Graphics g2 = g.create();
-
 			if (resizedBackGround == null) {
-				resizedBackGround = Scalr.resize(backGround, this.getWidth(),
-						this.getHeight(),(BufferedImageOp[]) null);
+				resizedBackGround = Scalr.resize(backGround,Method.QUALITY,Mode.FIT_EXACT, parentRect.getWidth(),
+						parentRect.getHeight(),Scalr.OP_ANTIALIAS);
 			}
 
 			g2.drawImage(resizedBackGround, 0, 0, null);
@@ -807,7 +808,7 @@ public class RapidAssessmentCanvas extends JFrame {
 					assessedEntity, this.getX(), this.getY(), this.getWidth(),
 					this.getHeight());
 
-			parent.setImage(backgroundFileName);
+			parent.setImage(backGround);
 
 			LinkedList<MyComponent> list = new LinkedList<RapidAssessmentCanvas.MyComponent>();
 			for (int x = 0; x < this.getComponentCount(); ++x) {
@@ -856,7 +857,75 @@ public class RapidAssessmentCanvas extends JFrame {
 				}
 			}*/
 		}
+		
+		
 
+	}
+	public void load(RapidAssessmentContainerType container){
+		this.removeAll();
+		this.parentPanel = null;
+		this.lastcreated = null;
+		this.resizedBackGround = null;
+		this.parentRect = null;
+		
+		parentPanel = new ContainerPanel();
+		parentPanel.setBounds((int)container.getX(), (int)container.getY(), (int)container.getW(),(int) container.getH());
+		this.backGround = container.getImage();
+		this.setContentPane(parentPanel);
+		
+		for(int x = 0;x<container.getSubEntityType().size();++x){
+			try{
+				createCanvasComponent((RapidAssessmentComponentType)(container.getSubEntityType().get(x)),parentPanel);
+			}
+			catch(ClassCastException e){
+				
+			}
+		}
+		
+	}
+	
+	private void createCanvasComponent(RapidAssessmentComponentType component,
+			ContainerPanel parentPanel2) {
+		this.parentRect = new MyRectangle((int)component.getX(), (int)component.getY(),(int) component.getW(), (int)component.getH());
+		parentPanel2.add(parentRect);
+		
+		for(int x = 0;x<component.getSubEntityType().size();++x){
+			try{
+				createCanvasComponent((RapidAssessmentComponentType)(component.getSubEntityType().get(x)),parentRect);
+			}
+			catch(ClassCastException e){
+				
+			}
+		}
+	}
+
+	public void createCanvasComponent(RapidAssessmentComponentType component, MyComponent parent){
+
+		
+		try{
+			RapidAssessmentRectangleType comp = ((RapidAssessmentRectangleType)component);
+			MyRectangle rect = new MyRectangle((int)comp.getX(), (int)comp.getY(), (int)comp.getW(), (int)comp.getH());
+			parent.add(rect);
+			for(int x = 0;x<component.getSubEntityType().size();++x){
+				try{
+					createCanvasComponent((RapidAssessmentComponentType)(component.getSubEntityType().get(x)),rect);
+				}
+				catch(ClassCastException e){
+					
+				}
+			}
+		}
+		catch(ClassCastException e){
+			
+		}
+		try{
+			RapidAssessmentMarkType comp = ((RapidAssessmentMarkType)component);
+			MyMarkPoint mark = new MyMarkPoint((int)comp.getX(), (int)comp.getY(), parent);
+			mark.setMark(comp.getMaxValue());
+		}
+		catch(ClassCastException e){
+			
+		}
 	}
 
 }

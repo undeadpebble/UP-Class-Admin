@@ -1,14 +1,16 @@
 package ClassAdminBackEnd;
 
+import java.awt.image.BufferedImage;
+
 import ClassAdminBackEnd.RapidAssessmentTree.TreeContainerNode;
 
 public class RapidAssessmentContainerType extends RapidAssessmentRectangleType {
-	private String Image;
+	private BufferedImage Image;
 
 	/**
 	 * @return the image
 	 */
-	public String getImage() {
+	public BufferedImage getImage() {
 		return Image;
 	}
 
@@ -16,7 +18,7 @@ public class RapidAssessmentContainerType extends RapidAssessmentRectangleType {
 	 * @param image
 	 *            the image to set
 	 */
-	public void setImage(String image) {
+	public void setImage(BufferedImage image) {
 		Image = image;
 	}
 

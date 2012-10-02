@@ -6,13 +6,13 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.HeadlessException;
-import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImageOp;
 import java.io.IOException;
 import java.util.LinkedList;
 
@@ -20,7 +20,6 @@ import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.text.JTextComponent.KeyBinding;
 
 import org.imgscalr.Scalr;
 
@@ -31,8 +30,6 @@ import ClassAdminBackEnd.RapidAssessmentContainerType;
 import ClassAdminBackEnd.RapidAssessmentMarkType;
 import ClassAdminBackEnd.RapidAssessmentRectangleType;
 import ClassAdminBackEnd.SuperEntity;
-import ClassAdminFrontEnd.RapidAssessmentCanvas.MyComponent;
-import ClassAdminFrontEnd.RapidAssessmentMarkingCanvas.MyMark;
 
 public class RapidAssessmentMarkingCanvas extends JFrame {
 	/**
@@ -131,7 +128,7 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 
 			if (resizedBackGround == null) {
 				resizedBackGround = Scalr.resize(backGround, this.getWidth(),
-						this.getHeight(), null);
+						this.getHeight(), (BufferedImageOp)null);
 			}
 
 			g2.drawImage(resizedBackGround, 0, 0, null);
@@ -153,7 +150,7 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 		try {
 			RapidAssessmentContainerType n = ((RapidAssessmentContainerType) node);
 			contentPanel = new ContentPanel();
-			backgroundFileName = n.getImage();
+			backGround = n.getImage();
 
 			parentFrame.setSize((int) (n.getW() + 20), (int) (n.getH() + 20));
 			for (int x = 0; x < n.getSubEntityType().size(); ++x) {
@@ -336,6 +333,10 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 	}
 
 	public class MyMark extends MyComponent {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 		private String strValue = "";
 
 		/**
@@ -469,7 +470,6 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 		private static final int HEIGHT = (int) (RapidAssessmentCanvas.MARK_SIZE * 1.5);
 
 		public MyMarkTotalComponent(MyComponent parent) {
-			Rectangle bound = parent.getBounds();
 			this.setSize(WIDTH, HEIGHT);
 			this.setLocation((int) parent.getWidth() - WIDTH,
 					(int) parent.getHeight() - HEIGHT);

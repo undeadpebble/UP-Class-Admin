@@ -23,7 +23,6 @@ public class EntityType {
 	private Double defaultWeight;
 	private long ID;
 	private double maxValue = 100;
-	
 
 	public Boolean getIsRule() {
 		return isRule;
@@ -39,11 +38,10 @@ public class EntityType {
 
 	public void setMaxValue(double maxmark) {
 		this.maxValue = maxmark;
-		try{
+		try {
 			this.parentEntitytype.updateMaxValue();
-		}
-		catch(NullPointerException e){
-			
+		} catch (NullPointerException e) {
+
 		}
 	}
 
@@ -311,10 +309,9 @@ public class EntityType {
 	public void removeDeletingChildren() {
 		for (int x = 0; x < this.getEntityList().size(); ++x) {
 			this.getEntityList().get(x).getParentEntity().getSubEntity()
-					.remove(this.getEntityList().get(x));
-			this.getParentEntitytype().getSubEntityType().remove(this);
-			this.getEntityList().clear();
+					.remove(this.getEntityList().get(x));	
 		}
+		this.getEntityList().clear();
 		this.getParentEntitytype().getSubEntityType().remove(this);
 		this.setParentEntitytype(null);
 	}
