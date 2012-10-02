@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import Frames.Frame;
+
 import com.csvreader.CsvReader;
 
 public class CsvImport extends FileImport{

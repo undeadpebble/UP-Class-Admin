@@ -53,6 +53,7 @@ public class FrmTable extends JPanel {
 	private JButton btnAdd;
 	private JTextField txtField1;
 	private JTextField txtField2;
+
 	
 	public String[] headers;
 	public LinkedList<LinkedList<Boolean>> filters = new LinkedList<LinkedList<Boolean>>();
@@ -65,6 +66,10 @@ public class FrmTable extends JPanel {
 	public String[] numberHeads;
 	public DefaultTableModel tableModel;
 	public Project project;
+
+
+	
+	private int count =0;
 
 	private LinkedList<Integer> selected = new LinkedList<Integer>();
 
@@ -156,7 +161,7 @@ public class FrmTable extends JPanel {
 		}
 
 	}
-
+	
 	public FrmTable(String[] headers, LinkedList<LinkedList<SuperEntity>> data,
 			Project project) {
 		this.data = data;
@@ -285,14 +290,31 @@ public class FrmTable extends JPanel {
 					if (isCellSelected(Index_row, Index_col)) {
 						backgroundColors.add(Color.orange);
 						comp.setBackground(Color.orange);
-						project.getSelected().add(
-								data.get(
-										table.getRowSorter()
-												.convertRowIndexToModel(
-														Index_row)).get(
-										Index_col));
+					// project.getSelected().add(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col));
+					//	if(count == 0)
+						//{
+						 count++;
+						System.out.println(count);
+						/*System.out.println("FrmTable se clear");
+						if(project.getCleared() == false)
+						{	*/
+						if(Index_col ==0)
+							 if(!project.getSelected().contains(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col)))
+							 {
+								 project.clearselected();
+								
+								// project.setCleared(true);
+									System.out.println(Index_col + ":"+Index_row);
+							 }
+						 project.setSelected(Index_row);
+						//count++;
+						//}
+					/*	}*/
+						
+					
+					
 						comp.setForeground(Color.black);
-						table.repaint();
+						//table.repaint();
 					}
 
 					for (int x = 0; x < format.size(); x++) {
@@ -483,11 +505,12 @@ public class FrmTable extends JPanel {
 									.contains(searchTxt.getText())) {
 								temp = true;
 								if (!project.getSelected().contains(
-										data.get(x).get(0)))
-									;
+										data.get(x).get(0)));
+								
 								for (int z = 0; z < data.get(x).size(); z++) {
-									project.getSelected().add(
-											data.get(x).get(z));
+									//project.getSelected().add(data.get(x).get(z));
+									System.out.println("Group selected");
+									project.setSelected(x);
 								}
 								tableModel.fireTableDataChanged();
 							}
@@ -596,8 +619,9 @@ public class FrmTable extends JPanel {
 										data.get(x).get(0)))
 									;
 								for (int z = 0; z < data.get(x).size(); z++) {
-									project.getSelected().add(
-											data.get(x).get(z));
+									System.out.println("Groep selected");
+									//project.getSelected().add(data.get(x).get(z));
+									project.setSelected(x);
 									tableModel.fireTableDataChanged();
 								}
 								tableModel.fireTableDataChanged();

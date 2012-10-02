@@ -339,4 +339,18 @@ public class EntityType {
 		removeDeletingChildren();
 	}
 
+
+	public double getWeight()
+	{
+		return defaultWeight;
+	}
+
+	public void updateEntity(String pName, Boolean pIsTextField, Date pDate, Double weight)
+	{
+		name =pName;
+		isTextField = pIsTextField;
+		date = pDate;
+		defaultWeight = weight;
+	}
+
 }
