@@ -290,8 +290,7 @@ public class FrmTable extends JPanel {
 						comp.setBackground(Color.orange);
 						//project.getSelected().add(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col));
 	
-						 count++;
-						System.out.println(count);
+						
 	
 						if(Index_col ==0)
 							 if(!project.getSelected().contains(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col)))
@@ -308,9 +307,7 @@ public class FrmTable extends JPanel {
 									 
 									 project.setSelected(table.convertRowIndexToModel(Index_row),false);
 								 }
-								
-								
-									System.out.println(Index_col + ":"+Index_row);
+														
 							 }
 						 
 				
