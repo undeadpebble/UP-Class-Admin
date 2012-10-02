@@ -306,10 +306,11 @@ public class TreeView extends Display {
 
 	public static void createEntityTypeFrm(String label, Project project) {
 		myProject = project;
-		JComponent treeview = createPanelEntityTypeTreeView(label,
-				myProject.getHeadEntityType());
-
 		JFrame frame = new JFrame();
+
+		JComponent treeview = createPanelEntityTypeTreeView(label,
+				myProject.getHeadEntityType(),frame);
+
 		frame.setContentPane(treeview);
 		frame.pack();
 		frame.setVisible(true);
@@ -318,9 +319,11 @@ public class TreeView extends Display {
 	}
 
 	public static void createStudentFrm(String label, SuperEntity treeHead) {
-		JComponent treeview = createPanelTreeView(label, treeHead);
 
 		JFrame frame = new JFrame();
+		
+		JComponent treeview = createPanelTreeView(label, treeHead);
+
 
 		frame.setContentPane(treeview);
 		frame.pack();
@@ -328,7 +331,7 @@ public class TreeView extends Display {
 	}
 
 	public static JComponent createPanelEntityTypeTreeView(final String label,
-			EntityType th) {
+			EntityType th, JFrame parentFrame) {
 		Color BACKGROUND = Color.WHITE;
 		Color FOREGROUND = Color.BLACK;
 
@@ -369,7 +372,7 @@ public class TreeView extends Display {
 		// create a new treemap
 		tview = new TreeView(t, label);
         PopUpMenu p = new PopUpMenu();
-        p.setTreeView(tview,myTree,myProject);
+        p.setTreeView(tview,myTree,myProject,parentFrame);
 		tview.setBackground(BACKGROUND);
 		tview.setForeground(FOREGROUND);
 

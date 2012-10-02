@@ -156,9 +156,10 @@ public class FrmNewNode {
 					EntityType newE = new EntityType(txtName.getText(), activeProject.getTreeLinkedList().get(cmbParent.getSelectedIndex()), isText, d, (Double) txtWeight.getValue());
 
 					
-					//REQUIRED NEEDS FIXING//					
+					//backend func//					
 					activeProject.getTreeLinkedList().add(newE);
 					newE.populateTreeWithEntities();
+					activeProject.updateTables();
 
 					
 					// refresh cmbParent content

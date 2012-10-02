@@ -131,7 +131,7 @@ public class FrmTable extends JPanel {
 		LinkedList<Integer> removes = new LinkedList<Integer>();
 
 		// --------------------------------------
-		// adds all the rows to tha table again
+		// adds all the rows to the table again
 		Object[][] temp = new Object[data.size()][data.get(0).size()];
 
 		for (int x = 0; x < data.size(); x++) {

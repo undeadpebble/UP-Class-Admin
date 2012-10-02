@@ -100,13 +100,6 @@ public class FrmUpdateNode {
 		}
 		else
 		{
-/*			Date d = null;
-			try {
-				d = dateFormat.parse(txtDate.getText());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-*/
 			txtDate.setText(dateFormat.format(activeentity.getDate()).toString());
 		}
 		btnDate.addActionListener(new ActionListener() {
@@ -147,12 +140,10 @@ public class FrmUpdateNode {
 
 				if (b) {
 					
-					//REQUIRED NEEDS FIXING//					
-		//			activeProject.getTreeLinkedList().add(newE);
-					//newE.populateTreeWithEntities();
+					//backend func//					
 					activeentity.updateEntity(txtName.getText(), isText, d, (Double) txtWeight.getValue());
 					activeItem.setString("name",txtName.getText());
-
+					activeProject.updateTables();
 					
 
 					// reset all values
@@ -163,7 +154,7 @@ public class FrmUpdateNode {
 					lblName.setForeground(Color.BLACK);
 					lblDate.setForeground(Color.BLACK);
 					isText = false;
-					//activeTreeView.getVisualization().run("filter");
+
 					txtName.requestFocus(true);
 					activeProject.updateTables();
 					frame.dispose();
