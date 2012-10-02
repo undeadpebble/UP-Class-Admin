@@ -12,9 +12,8 @@ public class markRuleEntity extends MarkEntity{
 	}
 
 	@Override
-	public double calcMark() {
+	public void calcMark() {
 		this.setMark(((FloatRule)this.getType()).evaluateDouble(this));
 		
-		return this.getMark();
 	}
 }

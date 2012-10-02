@@ -50,5 +50,10 @@ public class Global {
 		return projects.get(activeProjectIndex);
 		
 	}
+	
+	public void addProject(Project newProject){
+		this.projects.add(newProject);
+		this.setActiveProjectIndex(this.projects.size()-1);
+	}
 
 }
