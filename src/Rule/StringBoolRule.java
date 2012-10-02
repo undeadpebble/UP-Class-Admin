@@ -6,8 +6,8 @@ import ClassAdminBackEnd.SuperEntity;
 
 
 public class StringBoolRule extends BooleanRule{
-	StringRule child1;
-	StringRule child2;
+	private StringRule child1;
+	private StringRule child2;
 	
 	public StringBoolRule(StringRule child1, StringRule child2, char opperator,String name,Project project) {
 		super(name, project);
@@ -19,6 +19,22 @@ public class StringBoolRule extends BooleanRule{
 		this.setIsTextField(true);
 	}
 	
+	public StringRule getChild1() {
+		return child1;
+	}
+
+	public void setChild1(StringRule child1) {
+		this.child1 = child1;
+	}
+
+	public StringRule getChild2() {
+		return child2;
+	}
+
+	public void setChild2(StringRule child2) {
+		this.child2 = child2;
+	}
+
 	@Override
 	public Boolean evaluateBool(SuperEntity sE){
 		switch (opperator) {

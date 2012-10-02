@@ -306,6 +306,7 @@ public class EntityType {
 		}
 	}
 
+
 	public void removeDeletingChildren() {
 		for (int x = 0; x < this.getEntityList().size(); ++x) {
 			this.getEntityList().get(x).getParentEntity().getSubEntity()
