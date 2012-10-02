@@ -1,6 +1,5 @@
 package Frames;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -10,18 +9,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
+import javax.swing.JButton;
 import javax.swing.JColorChooser;
-import javax.swing.JEditorPane;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
+import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JButton;
 
 import ClassAdminBackEnd.BetweenFormat;
 import ClassAdminBackEnd.Format;
@@ -29,7 +30,7 @@ import ClassAdminBackEnd.GreaterThanFormat;
 import ClassAdminBackEnd.LessThanFormat;
 import ClassAdminFrontEnd.BackgroundGradientPanel;
 import ClassAdminFrontEnd.FrmTable;
-import javax.swing.JTextField;
+import ClassAdminFrontEnd.ReflectionButton;
 
 public class ConditionalFormattingFrame extends JFrame {
 
@@ -81,8 +82,9 @@ public class ConditionalFormattingFrame extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @throws IOException 
 	 */
-	public ConditionalFormattingFrame(final FrmTable table) {
+	public ConditionalFormattingFrame(final FrmTable table) throws IOException {
 		String[] formatTypesStr = new String[Format.formatTypes.length + 1];
 		formatTypesStr[0] = "";
 
@@ -171,8 +173,9 @@ public class ConditionalFormattingFrame extends JFrame {
 		lblAffectedArea.setForeground(new Color(0xEDEDED));
 		backgroundPanel.add(lblAffectedArea);
 
-		final JButton btnAddFormatting = new JButton("Add Formatting");
-		btnAddFormatting.setBounds(335, 451, 113, 23);
+		final ReflectionButton btnAddFormatting = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/ConditionalFormattingFrame.png")));
+		//final JButton btnAddFormatting = new JButton("Add Formatting");
+		btnAddFormatting.setBounds(747, 437, 70, 100);
 		backgroundPanel.add(btnAddFormatting);
 		
 		final JLabel lblColour = new JLabel("Colour");
@@ -195,13 +198,11 @@ public class ConditionalFormattingFrame extends JFrame {
 
 			@Override
 			public void componentHidden(ComponentEvent e) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void componentMoved(ComponentEvent e) {
-				// TODO Auto-generated method stub
 
 			}
 
@@ -214,7 +215,6 @@ public class ConditionalFormattingFrame extends JFrame {
 
 			@Override
 			public void componentShown(ComponentEvent e) {
-				// TODO Auto-generated method stub
 
 			}
 
