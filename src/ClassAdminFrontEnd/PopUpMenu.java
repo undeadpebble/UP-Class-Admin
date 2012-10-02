@@ -83,10 +83,9 @@ public class PopUpMenu {
 				activeTree.removeNode(i);
 
 				activeTreeLinkedList.get(i).removeDeletingChildren();
-				activeTree.updateNodeData(i,false);
 				activeProject.updateTables();
-				tview.updateTree(activeTree);
-//				item.getVisualization().run("filter");
+				parentFrame.dispose();
+				TreeView.createEntityTypeFrm("name",activeProject);
 			}
 		});
 
@@ -109,14 +108,6 @@ public class PopUpMenu {
 					}
 				}
 				activeTree.removeNode(i);
-				activeTree.updateNodeData(i,false);
-				tview.updateTree(activeTree);
-/*				for(int n = i+1; n < activeTree.getNodeTable().getRowCount(); n++)
-				{
-					activeTree.updateNodeData(n,false);
-					System.out.print(n + ":\t" + activeTree.getNodeTable().get(n,0)+ "\n");
-				}
-*/				
 				activeTreeLinkedList.get(i).removeSavingChildren();
 				item.getVisualization().repaint();
 				activeProject.updateTables();
