@@ -143,7 +143,7 @@ public class FrmUpdateNode {
 					//backend func//					
 					activeentity.updateEntity(txtName.getText(), isText, d, (Double) txtWeight.getValue());
 					activeItem.setString("name",txtName.getText());
-					activeProject.updateTables();
+					//activeProject.updateTables();
 					
 
 					// reset all values

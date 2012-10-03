@@ -3,6 +3,7 @@
  */
 package ClassAdminBackEnd;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -37,6 +38,8 @@ public class Project {
 	private LinkedList<SuperEntity> studentLinkedList;
 	private LinkedList<FrmTable> tables = new LinkedList<FrmTable>();
 	private boolean cleared= false;
+	private String fileName;
+	private Audit audit;
 	
 	public void clearselected() {
 		System.out.println("Cleared");
@@ -184,5 +187,27 @@ public class Project {
 		if (studentLinkedList == null)
 			studentLinkedList = new LinkedList<SuperEntity>();
 		return studentLinkedList;
+	}
+	
+	public String getFileName()
+	{
+		return fileName;
+	}
+	
+	public void setFileName(String fname)
+	{
+		fileName = fname;
+	}
+	public void createAudit()
+	{
+		try {
+			audit = new Audit(this);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	public Audit getAudit()
+	{
+		return audit;
 	}
 }

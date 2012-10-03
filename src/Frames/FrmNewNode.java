@@ -33,6 +33,7 @@ import prefuse.data.Table;
 import prefuse.data.Tree;
 import ClassAdminBackEnd.EntityType;
 import ClassAdminBackEnd.Project;
+import ClassAdminBackEnd.SuperEntity;
 import ClassAdminFrontEnd.DatePicker;
 import ClassAdminFrontEnd.TreeView;
 
@@ -154,12 +155,30 @@ public class FrmNewNode {
 
 					// add child to parent in back end
 					EntityType newE = new EntityType(txtName.getText(), activeProject.getTreeLinkedList().get(cmbParent.getSelectedIndex()), isText, d, (Double) txtWeight.getValue());
-
+					System.out.println(activeProject.getTreeLinkedList().get(cmbParent.getSelectedIndex()).getName());
 					
 					//backend func//					
 					activeProject.getTreeLinkedList().add(newE);
 					newE.populateTreeWithEntities();
-					activeProject.updateTables();
+					//activeProject.updateTables();
+					
+					
+					LinkedList<LinkedList<SuperEntity>> data = activeProject.getTreeLinkedList().get(cmbParent.getSelectedIndex()).getParentEntitytype()
+							.getParentEntitytype().getEntityList().get(0)
+							.getDataLinkedList();
+					System.out.println();
+					for (int x = 0; x < data.size(); ++x) {
+						for (int y = 0; y < data.get(x).size(); ++y) {
+							String g = "";
+							SuperEntity s = data.get(x).get(y);
+							while (s != null) {
+								g += " ";
+								s = s.getParentEntity();
+							}
+							System.out.println(g
+									+ data.get(x).get(y).getType().getName());
+						}
+					}
 
 					
 					// refresh cmbParent content

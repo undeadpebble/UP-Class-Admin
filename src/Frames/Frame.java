@@ -1239,8 +1239,14 @@ public class Frame extends JFrame implements ActionListener {
 		// table = Global.getGlobal().getActiveProject().getTables().get(0);
 
 		try {
-			Global.getGlobal().addProject(new Project());
+			Project p = new Project();
+			Global.getGlobal().addProject(p);
 			fileHandler.openFile(file.getAbsolutePath(), Global.getGlobal().getActiveProject());
+			p.setFileName(file.getName());
+			p.createAudit();
+			p.getAudit().openedProject();
+
+		
 		} catch (UnsupportedFileTypeException e) {
 			e.printStackTrace();
 		}
