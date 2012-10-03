@@ -104,31 +104,12 @@ public class FrmTable extends JPanel {
 
 	}
 
-	public SuperEntity[] getFirstSelectedStudent() {
-		if (table.getSelectedRow() != -1) {
-			SuperEntity[] tempForReturn = new SuperEntity[data.get(0).size()];
-			int selected = table.getSelectedRow();
-
-			for (int x = 0; x < data.get(0).size(); x++) {
-				tempForReturn[x] = data.get(selected).get(x);
-			}
-
-			return tempForReturn;
-		} else {
-			return null;
-		}
-	}
-
-	public String getFirstSelectedStudentNr() {
-		return (data.get(table.getSelectedRow()).get(0).getValue());
-	}
-
 	public void filterTable() {
 		boolean filtered = false;
 		LinkedList<Integer> removes = new LinkedList<Integer>();
 
 		// --------------------------------------
-		// adds all the rows to tha table again
+		// adds all the rows to the table again
 		Object[][] temp = new Object[data.size()][data.get(0).size()];
 
 		for (int x = 0; x < data.size(); x++) {
@@ -170,6 +151,24 @@ public class FrmTable extends JPanel {
 	}
 
 	private void createGUI() {
+		// ------------------------------------------------------------------------------------------------------------
+
+		addCounters(project.getHead(), project.getHead());
+
+		JButton tempss = new JButton("temp");
+		tempss.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				for (int x = 0; x < data.get(0).size(); x++) {
+					System.out.println(data.get(0).get(x).getType().getName()
+							+ data.get(0).get(x).getRowFollowCount());
+				}
+			}
+		});
+
+		});
+		
 		// -------------------------------------------------------------------------------------------------------
 		// create the filters array with everything false
 		for (int x = 0; x < data.size(); x++) {
@@ -201,6 +200,7 @@ public class FrmTable extends JPanel {
 									&& data.get(tcl.getRow()).get(tcl.getColumn()).getType().getMaxValue() >= Double
 											.parseDouble((String) tcl.getNewValue())) {
 								data.get(tcl.getRow()).get(tcl.getColumn()).setMark((Double.parseDouble((String) tcl.getNewValue())));
+								System.out.println("AAAAAAAAAAAAAAAAAAAAAAAA");
 							} else {
 								table.getModel().setValueAt(tcl.getOldValue(), tcl.getRow(), tcl.getColumn());
 							}
@@ -261,6 +261,7 @@ public class FrmTable extends JPanel {
 						comp.setBackground(Color.orange);
 						// project.getSelected().add(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col));
 
+						 */
 						if (Index_col == 0)
 							if (!project.getSelected().contains(
 									data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col))) {
@@ -280,6 +281,7 @@ public class FrmTable extends JPanel {
 
 						comp.setForeground(Color.black);
 						// table.repaint();
+						table.repaint();
 					}
 
 					for (int x = 0; x < format.size(); x++) {
@@ -345,7 +347,6 @@ public class FrmTable extends JPanel {
 
 					return comp;
 				} catch (Exception e) {
-					// TODO: handle exception
 					return null;
 				}
 
@@ -380,7 +381,6 @@ public class FrmTable extends JPanel {
 
 					table.setToolTipText(toolTip);
 				} catch (Exception ex) {
-					// TODO: handle exception
 				}
 			}// end MouseMoved
 		}); // end MouseMotionAdapter
@@ -400,6 +400,7 @@ public class FrmTable extends JPanel {
 				} else {
 					int modelRow = table.convertRowIndexToModel(viewRow);
 				}
+
 			}
 
 		});
@@ -448,6 +449,7 @@ public class FrmTable extends JPanel {
 							if (data.get(x).get(y).getValue().contains(searchTxt.getText())) {
 								temp = true;
 								if (!project.getSelected().contains(data.get(x).get(0)))
+									;
 									;
 
 								for (int z = 0; z < data.get(x).size(); z++) {
@@ -724,6 +726,7 @@ public class FrmTable extends JPanel {
 										.getFormatting()
 										.add(new BetweenFormat(Double.parseDouble(minVal.getValue().toString()), Double.parseDouble(maxVal
 												.getValue().toString()), colCombo.getColor(), null, description.getText()));
+												.getText()));
 
 							}
 							table.repaint();
@@ -744,7 +747,8 @@ public class FrmTable extends JPanel {
 										.getType()
 										.getFormatting()
 										.add(new GreaterThanFormat(Double.parseDouble(minVal.getValue().toString()), colCombo.getColor(),
-												null, description.getText()));
+												.getColor(), null, description
+												.getText()));
 
 							}
 							table.repaint();
@@ -765,7 +769,8 @@ public class FrmTable extends JPanel {
 										.getType()
 										.getFormatting()
 										.add(new LessThanFormat(Double.parseDouble(minVal.getValue().toString()), colCombo.getColor(),
-												null, description.getText()));
+												 null, description
+												.getText()));
 
 							}
 							table.repaint();
@@ -867,50 +872,59 @@ public class FrmTable extends JPanel {
 					addFilter.addActionListener(new ActionListener() {
 						@Override
 						public void actionPerformed(ActionEvent e) {
-							switch (formatTypes.getSelectedIndex()) {
-							case 1: {
-								for (int x = 0; x < dataFilter.length; x++) {
+							try {
+								switch (formatTypes.getSelectedIndex()) {
+								case 1: {
+									for (int x = 0; x < dataFilter.length; x++) {
 									if (data.get(x).get(cbFilter.getSelectedIndex()).getMark() > Double.parseDouble(maxVal.getValue()
+														.getSelectedIndex())
 											.toString())
 											|| data.get(x).get(cbFilter.getSelectedIndex()).getMark() < Double.parseDouble(minVal
 													.getValue().toString())) {
 										filters.get(x).set(cbFormatting.getSelectedIndex(), true);
-									}
+										}
 
+									}
+									filterFrame.setVisible(false);
+									break;
 								}
-								filterFrame.setVisible(false);
-								break;
-							}
-							case 2: {
-								for (int x = 0; x < dataFilter.length; x++) {
+								case 2: {
+									for (int x = 0; x < dataFilter.length; x++) {
 									if (data.get(x).get(cbFilter.getSelectedIndex()).getMark() < Double.parseDouble(minVal.getValue()
+														.getSelectedIndex())
 											.toString())) {
 										filters.get(x).set(cbFormatting.getSelectedIndex(), true);
+										}
+
 									}
 
+									filterFrame.setVisible(false);
+									break;
 								}
-
-								filterFrame.setVisible(false);
-								break;
-							}
-							case 3: {
-								for (int x = 0; x < dataFilter.length; x++) {
+								case 3: {
+									for (int x = 0; x < dataFilter.length; x++) {
 									if (data.get(x).get(cbFilter.getSelectedIndex()).getMark() > Double.parseDouble(minVal.getValue()
+														.getSelectedIndex())
 											.toString())) {
 										filters.get(x).set(cbFormatting.getSelectedIndex(), true);
+										}
+
 									}
+
+									filterFrame.setVisible(false);
+									break;
+								}
 
 								}
 
-								filterFrame.setVisible(false);
-								break;
+								LinkedList<Integer> removes = new LinkedList<Integer>();
+
+								filterTable();
 							}
 
+							catch (Exception ex) {
+								// TODO: handle exception
 							}
-
-							LinkedList<Integer> removes = new LinkedList<Integer>();
-
-							filterTable();
 						}
 
 					});
@@ -1005,8 +1019,9 @@ public class FrmTable extends JPanel {
 		Filter.add(removeAllFilters);
 		eastPanel.add(Filter);
 
-	}
+		// this.add(tempss);
 
+	}
 	// =--------------------------------------------------------------------------------------------------------------
 	public void createEntities(EntityType entType, SuperEntityPointer parent) {
 		LinkedList<EntityType> list = entType.getSubEntityType();
@@ -1048,5 +1063,95 @@ public class FrmTable extends JPanel {
 
 	public LinkedList<LinkedList<SuperEntity>> getData() {
 		return data;
+	}
+
+	public void addCounters(SuperEntity ent, SuperEntity head) {
+		ent.increaseRowFollowCount();
+
+		SuperEntity temp = ent;
+
+		while (temp != head) {
+			temp = temp.getParentEntity();
+			temp.increaseRowFollowCount();
+		}
+
+		LinkedList<SuperEntity> temp2 = ent.getSubEntity();
+
+		for (int x = 0; x < temp2.size(); x++) {
+			addCounters(temp2.get(x), head);
+		}
+
+	}
+
+	public void search(String text) {
+		boolean temp = false;
+		if (text.compareTo("") != 0) {
+			project.getSelected().clear();
+			for (int x = 0; x < data.size(); x++) {
+				for (int y = 0; y < data.get(0).size(); y++) {
+					if (data.get(x).get(y).getValue().contains(text)) {
+						temp = true;
+						if (!project.getSelected().contains(data.get(x).get(0)))
+							;
+						for (int z = 0; z < data.get(x).size(); z++) {
+							project.getSelected().add(data.get(x).get(z));
+						}
+						tableModel.fireTableDataChanged();
+					}
+				}
+			}
+
+			if (!temp) {
+				project.getSelected().clear();
+				tableModel.fireTableDataChanged();
+			}
+		}
+
+		return;
+	}
+
+	public void addCounters(SuperEntity ent, SuperEntity head) {
+		ent.increaseRowFollowCount();
+
+		SuperEntity temp = ent;
+
+		while (temp != head) {
+			temp = temp.getParentEntity();
+			temp.increaseRowFollowCount();
+		}
+
+		LinkedList<SuperEntity> temp2 = ent.getSubEntity();
+
+		for (int x = 0; x < temp2.size(); x++) {
+			addCounters(temp2.get(x), head);
+		}
+
+	}
+
+	public void search(String text) {
+		boolean temp = false;
+		if (text.compareTo("") != 0) {
+			project.getSelected().clear();
+			for (int x = 0; x < data.size(); x++) {
+				for (int y = 0; y < data.get(0).size(); y++) {
+					if (data.get(x).get(y).getValue().contains(text)) {
+						temp = true;
+						if (!project.getSelected().contains(data.get(x).get(0)))
+							;
+						for (int z = 0; z < data.get(x).size(); z++) {
+							project.getSelected().add(data.get(x).get(z));
+						}
+						tableModel.fireTableDataChanged();
+					}
+				}
+			}
+
+			if (!temp) {
+				project.getSelected().clear();
+				tableModel.fireTableDataChanged();
+			}
+		}
+
+		return;
 	}
 }

@@ -12,7 +12,7 @@ public class DatePicker {
         JDialog d;
         JButton[] button = new JButton[49];
 
-        public DatePicker(JFrame parent) {
+        public DatePicker(JDialog frame) {
                 d = new JDialog();
                 d.setModal(true);
                 String[] header = { "Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat" };
@@ -58,7 +58,7 @@ public class DatePicker {
                 d.add(p1, BorderLayout.CENTER);
                 d.add(p2, BorderLayout.SOUTH);
                 d.pack();
-                d.setLocationRelativeTo(parent);
+                d.setLocationRelativeTo(frame);
                 displayDate();
                 d.setVisible(true);
         }

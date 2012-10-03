@@ -25,7 +25,8 @@ public class StringEntity extends SuperEntity{
 			return this.getField();
 	}
 	
-	public void setValue(String newValue){
+	@Override
+	public void setValue(String newValue) throws NumberFormatException{
 		this.setField(newValue);
 	}
 	

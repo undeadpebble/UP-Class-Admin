@@ -1,5 +1,7 @@
 package ClassAdminBackEnd;
 
+import java.util.LinkedList;
+
 public class LeafMarkEntity extends MarkEntity{
 
 
@@ -24,8 +26,9 @@ public class LeafMarkEntity extends MarkEntity{
 	public SuperEntity unLeaf(){
 		return new MarkEntity(this);
 	}
-	public String createTreeFromHead()
+	public String createTreeFromHead(LinkedList<SuperEntity> studentLinkedList)
 	{
+		studentLinkedList.add((SuperEntity) this);
 		String str = "";
 		str += "<leaf>" +
 				"<attribute name = \"name\" value= \"" + this.getValue() + "\" />";
