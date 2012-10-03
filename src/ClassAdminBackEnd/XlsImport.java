@@ -176,9 +176,7 @@ public class XlsImport extends FileImport {
 		Image icon = Toolkit.getDefaultToolkit().getImage("Logo.png");
 		dialog.setTitle("Specify Header");
 
-		// set frame icon
-		Image icon = Toolkit.getDefaultToolkit().getImage("Logo.png");
-		dialog.setIconImage(icon);
+		
 		dialog.setIconImage(icon);
 
 		// create background panel

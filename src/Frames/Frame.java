@@ -656,28 +656,6 @@ public class Frame extends JFrame implements ActionListener {
 				
 			}
 		});
-		
-		searchBox.addKeyListener(new KeyListener() {
-			
-			@Override
-			public void keyTyped(KeyEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void keyReleased(KeyEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void keyPressed(KeyEvent arg0) {
-				// TODO Auto-generated method stub
-				table.search(searchBox.getText());
-				
-			}
-		});
 
 		searchImage = new ImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Search.png")));
 		searchImage.setBounds(0, 8, 30, 30);
