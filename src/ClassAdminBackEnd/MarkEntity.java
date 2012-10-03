@@ -31,7 +31,11 @@ public class MarkEntity extends SuperEntity{
 	public String getValue(){
 		
 
-		return Double.toString(this.getMark());
+		try {
+			return Double.toString(this.getMark());
+		} catch (AbsentException e) {
+			return "N/A";
+		}
 
 	}
 	
@@ -44,7 +48,11 @@ public class MarkEntity extends SuperEntity{
         	ISqlJetTable table = db.getTable(PDatExport.MARK_ENTITY_TABLE);
         	//insert statements
         	
-        	table.insert(id,this.getMark());
+        	try {
+				table.insert(id,this.getMark());
+			} catch (AbsentException e) {
+				table.insert(id,0);
+			}
 
         return id;
 	}

@@ -1,3 +1,4 @@
+
 package Frames;
 
 import java.awt.Color;
@@ -8,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
@@ -33,6 +36,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.MenuSelectionManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -68,8 +72,8 @@ import ClassAdminFrontEnd.ScatterPlotFrame;
 import ClassAdminFrontEnd.ShadowPanel;
 import ClassAdminFrontEnd.ThreeStopGradientPanel;
 import ClassAdminFrontEnd.TreeView;
+import Frames.Frame.TabButton;
 import Rule.frmRule;
-
 public class Frame extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
@@ -91,11 +95,14 @@ public class Frame extends JFrame implements ActionListener {
 	private BlurBackground blur;
 	private ReflectionButton homeButton, importButton, exportButton, studentsButton, histogramButton, boxButton, scatterButton,
 			conditionalFormatButton, bordercaseButton, addRowButton, homeImportButton, homeStudents, ButtonWorkspace, filterButton,
-			maxValButton, rulesButton, homeRapidAssessment, treeButton;
+			maxValButton, rulesButton, homeRapidAssessment, treeButton, statisticsButton;
 	private FadePanel homeInfoPanel, importInfoPanel, exportInfoPanel, studentsInfoPanel, histogramInfoPanel, boxplotInfoPanel,
-			conditionalFormattingInfoPanel, bordercaseInfoPanel, addRowInfoPanel, filterInfoPanel, maxValInfoPanel, rulesInfoPanel, buildInfoPanel;
+			conditionalFormattingInfoPanel, bordercaseInfoPanel, addRowInfoPanel, filterInfoPanel, maxValInfoPanel, rulesInfoPanel,
+			buildInfoPanel, statisticsInfoPanel;
 	private ShadowPanel studentPanel;
 	private ReflectionButtonWithLabel[] buttonArray;
+	private JMenuItem miExport;
+	private JMenu mProject;
 
 	private Database db;
 
@@ -140,6 +147,12 @@ public class Frame extends JFrame implements ActionListener {
 					tabCount--;
 					if (tabCount == -1) {
 						setNavButtonsDisabled();
+						if (miExport != null) {
+							miExport.setEnabled(false);
+						}
+						if (mProject != null) {
+							mProject.setEnabled(false);
+						}
 					}
 
 				}
@@ -340,7 +353,7 @@ public class Frame extends JFrame implements ActionListener {
 		JMenuItem miCloseAll = new JMenuItem("Close All");
 		JSeparator sfile = new JSeparator();
 		JMenuItem miImport = new JMenuItem("Import");
-		JMenuItem miExport = new JMenuItem("Export");
+		miExport = new JMenuItem("Export");
 		JSeparator sfile2 = new JSeparator();
 		JMenuItem miExit = new JMenuItem("Exit");
 
@@ -360,7 +373,7 @@ public class Frame extends JFrame implements ActionListener {
 		mFile.add(miExit);
 
 		// PROJECT
-		JMenu mProject = new JMenu("Project");
+		mProject = new JMenu("Project");
 		JMenuItem miConditionalFormatting = new JMenuItem("Conditional Formatting");
 		JMenuItem miBordercases = new JMenuItem("Bordercases");
 		JMenuItem miRules = new JMenuItem("Rules");
@@ -399,6 +412,43 @@ public class Frame extends JFrame implements ActionListener {
 		mFile.setForeground(Color.white);
 		mProject.setForeground(Color.white);
 		mSettings.setForeground(Color.white);
+
+		miImport.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				MenuSelectionManager.defaultManager().clearSelectedPath();
+				try {
+					openFile();
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (BadLocationException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		
+		if (tabCount < 0) {
+			miExport.setEnabled(false);
+		}
+		
+		miExport.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				MenuSelectionManager.defaultManager().clearSelectedPath();
+				try {
+					saveFileAs();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		
+		miExit.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				frame.dispose();
+			}
+		});
 
 		// setup space constants
 		HOME_SPACE_LEFT_X = 3;
@@ -485,6 +535,10 @@ public class Frame extends JFrame implements ActionListener {
 		mGraph.add(miHistogram);
 		mGraph.add(miBoxPlot);
 		mGraph.add(miScatterPlot);
+
+		// menu actions
+
+		// menu actions
 
 		// setup space constants
 		HOME_SPACE_LEFT_X = 3;
@@ -583,7 +637,6 @@ public class Frame extends JFrame implements ActionListener {
 			}
 		});
 
-
 		// fade in containers on program launch
 		recentDocsPanel.fadeIn();
 		homePanel.fadeIn();
@@ -618,9 +671,50 @@ public class Frame extends JFrame implements ActionListener {
 		searchPanel.setLayout(null);
 		workspacePanel.add(searchPanel);
 
-		JTextField searchBox = new JTextField();
+		final JTextField searchBox = new JTextField();
 		searchBox.setBounds(25, 5, 124, 25);
 		searchPanel.add(searchBox);
+		
+		searchBox.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				table.search(searchBox.getText());
+				
+			}
+		});
+
+		searchBox.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+
+			}
+
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+
+			}
+
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				table.search(searchBox.getText());
+
+			}
+		});
 
 		searchImage = new ImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Search.png")));
 		searchImage.setBounds(0, 8, 30, 30);
@@ -642,12 +736,13 @@ public class Frame extends JFrame implements ActionListener {
 		boxButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Box.png")));
 		scatterButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Scatter.png")));
 		conditionalFormatButton = new ReflectionButton(ImageIO.read(getClass().getResource(
-				"/ClassAdminFrontEnd/resources/ConditionalFormattingAdd.png")));
-		bordercaseButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/BordercaseAdd.png")));
+				"/ClassAdminFrontEnd/resources/ConditionalFormatting.png")));
+		bordercaseButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Bordercase.png")));
 		addRowButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/AddRow.png")));
 		filterButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Filter.png")));
 		maxValButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/maxValue.png")));
 		rulesButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Rules2.png")));
+		statisticsButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Statistics.png")));
 
 		homeButton.setBounds(8, 8, 68, 80);
 		importButton.setBounds(75, 8, 68, 80);
@@ -657,12 +752,13 @@ public class Frame extends JFrame implements ActionListener {
 		histogramButton.setBounds(335, 12, 68, 80);
 		boxButton.setBounds(405, 12, 68, 80);
 		scatterButton.setBounds(473, 12, 68, 80);
-		conditionalFormatButton.setBounds(537, 8, 68, 80);
-		bordercaseButton.setBounds(597, 8, 68, 80);
-		addRowButton.setBounds(657, 8, 68, 80);
-		filterButton.setBounds(715, 13, 68, 80);
-		maxValButton.setBounds(774, 11, 68, 80);
-		rulesButton.setBounds(830, 10, 68, 80);
+		conditionalFormatButton.setBounds(535, 2, 68, 80);
+		bordercaseButton.setBounds(600, 11, 68, 80);
+		filterButton.setBounds(657, 13, 68, 80);
+		addRowButton.setBounds(720, 12, 68, 80);
+		maxValButton.setBounds(782, 11, 68, 80);
+		rulesButton.setBounds(837, 10, 68, 80);
+		statisticsButton.setBounds(903,11,68,80);
 
 		navBar.add(homeButton);
 		navBar.add(importButton);
@@ -678,7 +774,8 @@ public class Frame extends JFrame implements ActionListener {
 		navBar.add(filterButton);
 		navBar.add(maxValButton);
 		navBar.add(rulesButton);
-
+		navBar.add(statisticsButton);
+		
 		setNavButtonsDisabled();
 
 		// create info bubbles panel
@@ -686,7 +783,7 @@ public class Frame extends JFrame implements ActionListener {
 		importInfoPanel = new FadePanel(false, 200, 200);
 		exportInfoPanel = new FadePanel(false, 200, 200);
 		studentsInfoPanel = new FadePanel(false, 200, 200);
-		buildInfoPanel = new FadePanel(false, 200, 200); 
+		buildInfoPanel = new FadePanel(false, 200, 200);
 		histogramInfoPanel = new FadePanel(false, 200, 200);
 		boxplotInfoPanel = new FadePanel(false, 200, 200);
 		scatterplotInfoPanel = new FadePanel(false, 200, 200);
@@ -696,7 +793,7 @@ public class Frame extends JFrame implements ActionListener {
 		filterInfoPanel = new FadePanel(false, 200, 200);
 		maxValInfoPanel = new FadePanel(false, 200, 200);
 		rulesInfoPanel = new FadePanel(false, 200, 200);
-		buildInfoPanel = new FadePanel(false, 200, 200);
+		statisticsInfoPanel = new FadePanel(false, 200, 200);
 
 		homeInfoPanel.setBounds(8, 0, 62, infoPanel.getHeight());
 		importInfoPanel.setBounds(67, 0, 62, infoPanel.getHeight());
@@ -706,12 +803,13 @@ public class Frame extends JFrame implements ActionListener {
 		histogramInfoPanel.setBounds(315, 0, 125, infoPanel.getHeight());
 		boxplotInfoPanel.setBounds(400, 0, 125, infoPanel.getHeight());
 		scatterplotInfoPanel.setBounds(457, 0, 125, infoPanel.getHeight());
-		conditionalFormattingInfoPanel.setBounds(504, 0, 129, infoPanel.getHeight());
-		bordercaseInfoPanel.setBounds(560, 0, 129, infoPanel.getHeight());
-		addRowInfoPanel.setBounds(650, 0, 129, infoPanel.getHeight());
-		filterInfoPanel.setBounds(697, 0, 129, infoPanel.getHeight());
-		maxValInfoPanel.setBounds(738, 0, 129, infoPanel.getHeight());
-		rulesInfoPanel.setBounds(820, 0, 129, infoPanel.getHeight());
+		conditionalFormattingInfoPanel.setBounds(503, 0, 129, infoPanel.getHeight());
+		bordercaseInfoPanel.setBounds(566, 0, 129, infoPanel.getHeight());
+		filterInfoPanel.setBounds(637, 0, 129, infoPanel.getHeight());
+		addRowInfoPanel.setBounds(715, 0, 129, infoPanel.getHeight());
+		maxValInfoPanel.setBounds(749, 0, 129, infoPanel.getHeight());
+		rulesInfoPanel.setBounds(830, 0, 129, infoPanel.getHeight());
+		statisticsInfoPanel.setBounds(885, 0, 129, infoPanel.getHeight());
 
 		homeInfoPanel.setLayout(null);
 		importInfoPanel.setLayout(null);
@@ -727,6 +825,7 @@ public class Frame extends JFrame implements ActionListener {
 		filterInfoPanel.setLayout(null);
 		maxValInfoPanel.setLayout(null);
 		rulesInfoPanel.setLayout(null);
+		statisticsInfoPanel.setLayout(null);
 
 		infoPanel.add(homeInfoPanel);
 		infoPanel.add(importInfoPanel);
@@ -742,13 +841,15 @@ public class Frame extends JFrame implements ActionListener {
 		infoPanel.add(filterInfoPanel);
 		infoPanel.add(maxValInfoPanel);
 		infoPanel.add(rulesInfoPanel);
+		infoPanel.add(statisticsInfoPanel);
 
 		// create info bubble image
 		ImagePanel infoBubble = new ImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/HomeInfo.png")));
 		ImagePanel importBubble = new ImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/ImportInfo.png")));
 		ImagePanel exportBubble = new ImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/ExportInfo.png")));
 		ImagePanel studentsBubble = new ImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/StudentsInfo.png")));
-		ImagePanel buildBubble = new ImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/InfoStructureModule.png")));
+		ImagePanel buildBubble = new ImagePanel(ImageIO.read(getClass()
+				.getResource("/ClassAdminFrontEnd/resources/InfoStructureModule.png")));
 		ImagePanel histogramBubble = new ImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/InfoHistogram.png")));
 		ImagePanel boxplotBubble = new ImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/InfoBoxPlot.png")));
 		ImagePanel scatterplotBubble = new ImagePanel(ImageIO.read(getClass().getResource(
@@ -761,6 +862,7 @@ public class Frame extends JFrame implements ActionListener {
 		ImagePanel filterBubble = new ImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/InfoAddFilter.png")));
 		ImagePanel maxValBubble = new ImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/InfoAddMaxValues.png")));
 		ImagePanel rulesBubble = new ImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/InfoAddRule.png")));
+		ImagePanel statisticsBubble = new ImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/InfoStatistics.png")));
 
 		infoBubble.setBounds(0, 0, infoPanel.getWidth(), infoPanel.getHeight());
 		importBubble.setBounds(0, 0, infoPanel.getWidth(), infoPanel.getHeight());
@@ -776,6 +878,7 @@ public class Frame extends JFrame implements ActionListener {
 		filterBubble.setBounds(0, 0, infoPanel.getWidth(), infoPanel.getHeight());
 		maxValBubble.setBounds(0, 0, infoPanel.getWidth(), infoPanel.getHeight());
 		rulesBubble.setBounds(0, 0, infoPanel.getWidth(), infoPanel.getHeight());
+		statisticsBubble.setBounds(0, 0, infoPanel.getWidth(), infoPanel.getHeight());
 
 		infoBubble.setLayout(null);
 		importBubble.setLayout(null);
@@ -791,6 +894,7 @@ public class Frame extends JFrame implements ActionListener {
 		filterBubble.setLayout(null);
 		rulesBubble.setLayout(null);
 		maxValBubble.setLayout(null);
+		statisticsBubble.setLayout(null);
 
 		homeInfoPanel.add(infoBubble);
 		importInfoPanel.add(importBubble);
@@ -806,6 +910,7 @@ public class Frame extends JFrame implements ActionListener {
 		filterInfoPanel.add(filterBubble);
 		maxValInfoPanel.add(maxValBubble);
 		rulesInfoPanel.add(rulesBubble);
+		statisticsInfoPanel.add(statisticsBubble);
 
 		homeButton.addMouseListener(new MouseAdapter() {
 			@Override
@@ -871,7 +976,8 @@ public class Frame extends JFrame implements ActionListener {
 			public void mousePressed(MouseEvent arg0) {
 				if (!studentsButton.isDisabled()) {
 					table.getTable().getSelectedRow();
-					TreeView.createStudentFrm("name",table.getData().get(table.getTable().getSelectedRow()).get(0));
+					TreeView.createStudentFrm("name", table.getData().get(table.getTable().getSelectedRow()).get(0), Global.getGlobal()
+							.getActiveProject());
 				}
 			}
 
@@ -883,35 +989,13 @@ public class Frame extends JFrame implements ActionListener {
 				studentsInfoPanel.fadeOut();
 			}
 		});
-		
-		treeButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-				if (!treeButton.isDisabled()) {
-					TreeView.createEntityTypeFrm("name", Global.getGlobal().getActiveProject());					
-				}
-			}
-
-			public void mouseEntered(MouseEvent arg0) {
-				
-			}
-
-			public void mouseExited(MouseEvent arg0) {
-				
-			}
-		});
 
 		treeButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (!treeButton.isDisabled()) {
 					table.getTable().getSelectedRow();
-
-					// kom by build tree btn
 					TreeView.createEntityTypeFrm("name", Global.getGlobal().getActiveProject());
-					// moet hier bly
-					// TreeView.createStudentFrm("name",
-					// table.getData().get(table.getTable().getSelectedRow()).get(0));
 				}
 			}
 
@@ -923,7 +1007,7 @@ public class Frame extends JFrame implements ActionListener {
 				buildInfoPanel.fadeOut();
 			}
 		});
-		
+
 		histogramButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
@@ -984,8 +1068,13 @@ public class Frame extends JFrame implements ActionListener {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (!conditionalFormatButton.isDisabled()) {
-					ConditionalFormattingFrame conditionalformatFrame = new ConditionalFormattingFrame(table);
-					conditionalformatFrame.setVisible(true);
+					ConditionalFormattingFrame conditionalformatFrame;
+					try {
+						conditionalformatFrame = new ConditionalFormattingFrame(table);
+						conditionalformatFrame.setVisible(true);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 
@@ -1002,8 +1091,13 @@ public class Frame extends JFrame implements ActionListener {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (!bordercaseButton.isDisabled()) {
-					BordercaseFrame bordercaseFrame = new BordercaseFrame(table);
-					bordercaseFrame.setVisible(true);
+					BordercaseFrame bordercaseFrame;
+					try {
+						bordercaseFrame = new BordercaseFrame(table);
+						bordercaseFrame.setVisible(true);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 
@@ -1058,8 +1152,13 @@ public class Frame extends JFrame implements ActionListener {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (!filterButton.isDisabled()) {
-					FilterFrame filterframe = new FilterFrame(table);
-					filterframe.setVisible(true);
+					FilterFrame filterframe;
+					try {
+						filterframe = new FilterFrame(table);
+						filterframe.setVisible(true);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 
@@ -1106,6 +1205,19 @@ public class Frame extends JFrame implements ActionListener {
 			}
 		});
 
+		statisticsButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+			}
+
+			public void mouseEntered(MouseEvent arg0) {
+				statisticsInfoPanel.fadeIn();
+			}
+
+			public void mouseExited(MouseEvent arg0) {
+				statisticsInfoPanel.fadeOut();
+			}
+		});
 	}
 
 	/*
@@ -1186,6 +1298,7 @@ public class Frame extends JFrame implements ActionListener {
 		File file;
 		// set the file extentions that may be chosen
 		FileFilter filter = new FileNameExtensionFilter("Supported files types: pdat, csv", "pdat", "csv");
+		blur.fadeIn();
 
 		// Create a file chooser
 		final JFileChooser filechooser = new JFileChooser();
@@ -1205,8 +1318,9 @@ public class Frame extends JFrame implements ActionListener {
 			} catch (UnsupportedFileTypeException e) {
 				e.printStackTrace();
 			}
+			blur.fadeOut();
 		} else {
-
+			blur.fadeOut();
 		}
 	}
 
@@ -1266,7 +1380,8 @@ public class Frame extends JFrame implements ActionListener {
 				@Override
 				public void stateChanged(ChangeEvent arg0) {
 					Global.getGlobal().setActiveProjectIndex(tabbedPane.getSelectedIndex() + 1);
-					table = Global.getGlobal().getActiveProject().getTables().get(0);
+					if (Global.getGlobal().getActiveProject().getTables().size() > 0)
+						table = Global.getGlobal().getActiveProject().getTables().get(0);
 				}
 			});
 		}
@@ -1280,10 +1395,10 @@ public class Frame extends JFrame implements ActionListener {
 		tabBar.add(tabbedPane);
 
 		workspacePanel.add(tabBar);
-
 		// put panel with table on a new tab
 		tabbedPane.addTab(file.getName(), table);
-
+		miExport.setEnabled(true);
+		mProject.setEnabled(true);
 		tabCount++;
 		tabbedPane.setTabComponentAt(tabCount, new TabButton(file.getName()));
 		// tabbedPane.add(table, tabCount);
@@ -1415,9 +1530,9 @@ public class Frame extends JFrame implements ActionListener {
 
 		int i = 0;
 		int m = 0;
-		
-		//restrict recent docs to 7
-		while ((i < count) && (m < 7))  {
+
+		// restrict recent docs to 7
+		while ((i < count) && (m < 7)) {
 
 			BufferedImage icon = null;
 
@@ -1542,3 +1657,4 @@ public class Frame extends JFrame implements ActionListener {
 	}
 
 }
+

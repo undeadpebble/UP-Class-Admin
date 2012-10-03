@@ -24,8 +24,8 @@ public class AbsentLeafMarkEntity extends LeafMarkEntity{
 		return new MarkEntity(this);
 	}
 
-	public Boolean isAbsent(){
-		return true;
+	public double getMark() throws AbsentException{
+		throw new AbsentException();
 	}
 	
 	public long saveToDB(SqlJetDb db, long parentID, PDatIDGenerator idgen) throws SqlJetException {

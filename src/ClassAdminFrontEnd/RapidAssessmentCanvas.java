@@ -1,45 +1,49 @@
 package ClassAdminFrontEnd;
 
-import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Composite;
-import java.awt.CompositeContext;
-import java.awt.EventQueue;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.awt.image.ColorModel;
+import java.awt.image.BufferedImageOp;
+import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
-import java.util.EventListener;
 import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
+import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.imgscalr.Scalr;
+import org.imgscalr.Scalr.Method;
+import org.imgscalr.Scalr.Mode;
 
-import com.jhlabs.vecmath.Color4f;
+import com.sun.media.sound.Toolkit;
 
-import ClassAdminBackEnd.RapidAssessmentTree;
-import ClassAdminBackEnd.SuperEntity;
-import ClassAdminBackEnd.RapidAssessmentTree.TreeContainerNode;
-import ClassAdminBackEnd.RapidAssessmentTree.TreeMarkNode;
-import ClassAdminBackEnd.RapidAssessmentTree.TreeNode;
-import ClassAdminBackEnd.RapidAssessmentTree.TreeRectangleNode;
+import sun.java2d.pipe.BufferedBufImgOps;
+
+import ClassAdminBackEnd.EntityType;
+import ClassAdminBackEnd.RapidAssessmentComponentType;
+import ClassAdminBackEnd.RapidAssessmentContainerType;
+import ClassAdminBackEnd.RapidAssessmentMarkType;
+import ClassAdminBackEnd.RapidAssessmentRectangleType;
 
 public class RapidAssessmentCanvas extends JFrame {
 	/**
@@ -52,7 +56,7 @@ public class RapidAssessmentCanvas extends JFrame {
 	private BufferedImage resizedBackGround = null;
 	// private LinkedList<MyRectangle> rectangles = new
 	// LinkedList<MyRectangle>();
-	private SuperEntity assessedEntity;
+	private EntityType assessedEntity;
 	private MyMarkPoint lastcreated = null;
 	// private LinkedList<MyMarkPoint> marks = new LinkedList<MyMarkPoint>();
 	private ContainerPanel parentPanel;
@@ -68,7 +72,6 @@ public class RapidAssessmentCanvas extends JFrame {
 		private static final int HEIGHT = (int) (MARK_SIZE * 1.5);
 
 		public MyMarkTotalComponent(MyComponent parent) {
-			Rectangle bound = parent.getBounds();
 			this.setSize(WIDTH, HEIGHT);
 			this.setLocation((int) parent.getWidth() - WIDTH,
 					(int) parent.getHeight() - HEIGHT);
@@ -113,8 +116,8 @@ public class RapidAssessmentCanvas extends JFrame {
 
 		}
 
-		public TreeNode createTreeNode(RapidAssessmentTree tree)
-				throws ClassCastException {
+		public RapidAssessmentComponentType createTreeNode(String name,
+				RapidAssessmentComponentType parent) throws ClassCastException {
 			throw new ClassCastException();
 		}
 
@@ -128,8 +131,6 @@ public class RapidAssessmentCanvas extends JFrame {
 			this.mark = mark;
 			if (this.getParent() != parentPanel)
 				((MyComponent) this.getParent()).updateMark();
-			else
-				System.out.println("not updataing ");
 		}
 
 		public void updateMark() {
@@ -217,6 +218,10 @@ public class RapidAssessmentCanvas extends JFrame {
 
 	public class MyMarkPoint extends MyComponent {
 
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 		private int editingPosition = 0;
 
 		/**
@@ -237,11 +242,13 @@ public class RapidAssessmentCanvas extends JFrame {
 		}
 
 		@Override
-		public TreeNode createTreeNode(RapidAssessmentTree tree)
-				throws ClassCastException {
-			TreeMarkNode tmp = tree.new TreeMarkNode(this.getX(), this.getY(),
-					this.getMark());
-
+		public RapidAssessmentComponentType createTreeNode(String name,
+				RapidAssessmentComponentType parent) throws ClassCastException {
+			RapidAssessmentMarkType tmp = new RapidAssessmentMarkType(name,
+					this.getX(), this.getY(), this.getWidth(),
+					this.getHeight(), this.getMark(), parent);
+			tmp.setMaxValue(this.getMark());
+			tmp.populateTreeWithEntities();
 			return tmp;
 		}
 
@@ -272,7 +279,7 @@ public class RapidAssessmentCanvas extends JFrame {
 					if (lastcreated != null)
 						lastcreated.setEditingPosition(0);
 					lastcreated = (MyMarkPoint) arg0.getSource();
-					if (arg0.getButton() == arg0.BUTTON3) {
+					if (arg0.getButton() == MouseEvent.BUTTON3) {
 						lastcreated.setMark(0);
 						lastcreated.getParent().remove(lastcreated);
 						lastcreated = null;
@@ -375,17 +382,27 @@ public class RapidAssessmentCanvas extends JFrame {
 		}
 
 		@Override
-		public TreeNode createTreeNode(RapidAssessmentTree tree)
-				throws ClassCastException {
-			TreeRectangleNode tmp = tree.new TreeRectangleNode(this.getX(),
-					this.getY(), this.getWidth(), this.getHeight());
+		public RapidAssessmentComponentType createTreeNode(String name,
+				RapidAssessmentComponentType parent) throws ClassCastException {
+			
+			RapidAssessmentRectangleType tmp = new RapidAssessmentRectangleType(
+					name, this.getX(), this.getY(), this.getWidth(),
+					this.getHeight(), parent);
+			tmp.setMaxValue(this.getMark());
+			tmp.populateTreeWithEntities();
+			int count = 0;
+
 			for (int x = 0; x < this.getComponentCount(); ++x) {
 				try {
-					tmp.getChildNodes().add(
-							((MyComponent) this.getComponent(x))
-									.createTreeNode(tree));
+					String newName;
+					if (name.compareTo("Assessment") == 0)
+						newName = "Q" + ++count;
+					else
+						newName = name + "." + ++count;
+					((MyComponent) this.getComponent(x)).createTreeNode(
+							newName, tmp);
 				} catch (ClassCastException e) {
-
+					--count;
 				}
 			}
 			return tmp;
@@ -415,9 +432,7 @@ public class RapidAssessmentCanvas extends JFrame {
 			g2.setStroke(new BasicStroke(3f));
 			if (hover)
 				g2.setColor(g2.getColor().darker().darker());
-			
-				
-			
+
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 					RenderingHints.VALUE_ANTIALIAS_ON);
 			g2.drawRoundRect(0, 0, this.getWidth() - 1, this.getHeight() - 1,
@@ -488,14 +503,12 @@ public class RapidAssessmentCanvas extends JFrame {
 		public void mouseEntered(MouseEvent e) {
 			((MyRectangle) e.getSource()).setHover(true);
 			((MyRectangle) e.getSource()).repaint();
-			System.out.print("hover");
 		}
 
 		@Override
 		public void mouseExited(MouseEvent e) {
 			((MyRectangle) e.getSource()).setHover(false);
 			((MyRectangle) e.getSource()).repaint();
-			System.out.print("unhover");
 		}
 
 		@Override
@@ -506,13 +519,12 @@ public class RapidAssessmentCanvas extends JFrame {
 			((MyRectangle) e.getSource()).setEnd(new Point(e.getX(), e.getY()));
 			((MyRectangle) e.getSource()).setPressing(true);
 			((MyRectangle) e.getSource()).setTimePressed(e.getWhen());
-			System.out.println("press");
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
 
-			if (e.getButton() == e.BUTTON3) {
+			if (e.getButton() == MouseEvent.BUTTON3) {
 
 				if (e.getWhen()
 						- ((MyRectangle) e.getSource()).getTimePressed() < 150
@@ -536,7 +548,6 @@ public class RapidAssessmentCanvas extends JFrame {
 		}
 
 		private void createComponent(Point p1, Point p2, MyRectangle source) {
-			System.out.println("create");
 			if (p1.getX() > p2.getX() || p1.getY() > p2.getY())
 				return;
 
@@ -560,17 +571,12 @@ public class RapidAssessmentCanvas extends JFrame {
 					try {
 						MyComponent component = (MyComponent) (siblings[x]);
 						if (tmp.overlaps(component)) {
-							System.out.println("overlaps");
 
 							collision = true;
 
 						} else {
-							System.out.println("not overlap: "
-									+ tmp.getBounds() + "; "
-									+ component.getBounds());
 							if (tmp.contains(component)) {
 								contained.add(component);
-								System.out.println("contains");
 							}
 						}
 					} catch (ClassCastException e) {
@@ -607,7 +613,6 @@ public class RapidAssessmentCanvas extends JFrame {
 			((MyRectangle) e.getSource()).setEnd(new Point(e.getX(), e.getY()));
 			((MyRectangle) e.getSource()).repaint();
 
-			System.out.println(((MyRectangle) e.getSource()).getEnd());
 		}
 
 		@Override
@@ -617,25 +622,74 @@ public class RapidAssessmentCanvas extends JFrame {
 	}
 
 	public RapidAssessmentCanvas(String backGroundFilename,
-			SuperEntity assessedEntity) {
+			EntityType assessedEntity) {
+		Dimension screen = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		this.setLayout(null);
 		ContainerPanel canvas = new ContainerPanel();
 		parentPanel = canvas;
 		this.setContentPane(canvas);
-		this.setSize(600, 600);
+		this.setSize(screen.width, screen.height);
 		this.backgroundFileName = backGroundFilename;
 		try {
 			this.backGround = ImageIO.read(getClass().getResource(
 					this.backgroundFileName));
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		this.assessedEntity = assessedEntity;
-		parentRect = new MyRectangle(0, 0, 500, 500);
+		
+		parentRect = new MyRectangle(0, 0,(int) screen.getWidth()-100,(int) screen.getHeight()-50);
 		parentRect.setVisible(true);
 		this.setLayout(null);
 		canvas.add(parentRect);
+
+		
+		JButton btnNewButton = new JButton("Image");
+		btnNewButton.setBounds(parentRect.getWidth()+5, 79, 89, 23);
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JFileChooser fc = new JFileChooser();
+				FileNameExtensionFilter ff = new FileNameExtensionFilter("Image Files", "jpeg","png");
+				int returnVal = fc.showOpenDialog(parentPanel);
+				File file;
+				if(returnVal == JFileChooser.APPROVE_OPTION){
+					file = fc.getSelectedFile();
+				}
+				
+			}
+		});
+		setLayout(null);
+		btnNewButton.setFocusable(false);
+		parentPanel.add(btnNewButton);
+		
+		JButton btnSave = new JButton("Save");
+		btnSave.setBounds(parentRect.getWidth()+5, 45, 89, 23);
+		parentPanel.add(btnSave);
+		btnSave.setFocusable(false);
+		btnSave.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				parentPanel.save();
+
+			}
+		});
+		
+		JButton btnLoad = new JButton("Load");
+		btnLoad.setBounds(parentRect.getWidth()+5, 11, 89, 23);
+		parentPanel.add(btnLoad);
+		btnLoad.setFocusable(false);
+		btnLoad.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+	
+		
+
 		this.addKeyListener(new KeyListener() {
 
 			@Override
@@ -653,7 +707,6 @@ public class RapidAssessmentCanvas extends JFrame {
 				if (lastcreated == null)
 					return;
 				MyMarkPoint source = lastcreated;
-				System.out.println("press: " + arg0.getKeyChar());
 				switch (arg0.getKeyCode()) {
 				case '.':
 					if (arg0.getKeyChar() == '.') {
@@ -765,38 +818,156 @@ public class RapidAssessmentCanvas extends JFrame {
 
 			super.paintComponent(g);
 			Graphics g2 = g.create();
-
 			if (resizedBackGround == null) {
-				resizedBackGround = Scalr.resize(backGround, this.getWidth(),
-						this.getHeight(), null);
+				resizedBackGround = Scalr.resize(backGround,Method.QUALITY,Mode.FIT_EXACT, parentRect.getWidth(),
+						parentRect.getHeight(),Scalr.OP_ANTIALIAS);
 			}
 
 			g2.drawImage(resizedBackGround, 0, 0, null);
 			g2.dispose();
 		}
 
-		public RapidAssessmentTree createTree() {
-			//RapidAssessmentTree tree = new RapidAssessmentTree(null);
-			//tree.setHead(this.createRapidAssessmentTreeNode(tree));
-			//return tree;
-			return null;
-		}
+		/*
+		 * public RapidAssessmentTree createTree() { //RapidAssessmentTree tree
+		 * = new RapidAssessmentTree(null);
+		 * //tree.setHead(this.createRapidAssessmentTreeNode(tree)); //return
+		 * tree; return null; }
+		 * 
+		 * public TreeContainerNode createRapidAssessmentTreeNode(
+		 * RapidAssessmentTree tree) { TreeContainerNode tmp = tree.new
+		 * TreeContainerNode(this.getX(), this.getY(), this.getWidth(),
+		 * this.getHeight(), backgroundFileName); for (int x = 0; x <
+		 * this.getComponentCount(); ++x) { try { tmp.getChildNodes().add(
+		 * ((MyComponent) this.getComponent(x)) .createTreeNode(tree)); } catch
+		 * (ClassCastException e) {
+		 * 
+		 * } } return tmp; }
+		 */
 
-		public TreeContainerNode createRapidAssessmentTreeNode(
-				RapidAssessmentTree tree) {
-			TreeContainerNode tmp = tree.new TreeContainerNode(this.getX(),
-					this.getY(), this.getWidth(), this.getHeight(),
-					backgroundFileName);
+		public void save() {
+			if(assessedEntity == null)
+				return;
+			RapidAssessmentContainerType parent = new RapidAssessmentContainerType(
+					assessedEntity, this.getX(), this.getY(), this.getWidth(),
+					this.getHeight());
+
+			parent.setImage(backGround);
+
+			LinkedList<MyComponent> list = new LinkedList<RapidAssessmentCanvas.MyComponent>();
 			for (int x = 0; x < this.getComponentCount(); ++x) {
 				try {
-					tmp.getChildNodes().add(
-							((MyComponent) this.getComponent(x))
-									.createTreeNode(tree));
+					list.add((MyComponent) (this.getComponent(x)));
 				} catch (ClassCastException e) {
 
 				}
 			}
-			return tmp;
+
+			for (int x = 0; x < list.size() - 1; ++x) {
+				for (int y = x; y < list.size(); ++y) {
+					if (list.get(x).getX() + list.get(x).getY() * 3 > list.get(
+							y).getX()
+							+ list.get(y).getY() * 3) {
+						MyComponent tmp = list.get(x);
+						list.set(x, list.get(y));
+						list.set(y, tmp);
+					}
+				}
+			}
+
+			for (int x = 0; x < list.size(); ++x) {
+
+				list.get(x).createTreeNode("Assessment", parent);
+			}
+
+			JFrame frame = new RapidAssessmentMarkingCanvas(parent);
+
+			frame.setVisible(true);
+
+			/*LinkedList<LinkedList<SuperEntity>> data = parent
+					.getParentEntitytype().getEntityList().get(0)
+					.getDataLinkedList();
+			System.out.println();
+			for (int x = 0; x < data.size(); ++x) {
+				for (int y = 0; y < data.get(x).size(); ++y) {
+					String g = "";
+					SuperEntity s = data.get(x).get(y);
+					while (s != null) {
+						g += " ";
+						s = s.getParentEntity();
+					}
+					System.out.println(g
+							+ data.get(x).get(y).getType().getName());
+				}
+			}*/
+		}
+		
+		
+
+	}
+	public void load(RapidAssessmentContainerType container){
+		this.removeAll();
+		this.parentPanel = null;
+		this.lastcreated = null;
+		this.resizedBackGround = null;
+		this.parentRect = null;
+		
+		parentPanel = new ContainerPanel();
+		parentPanel.setBounds((int)container.getX(), (int)container.getY(), (int)container.getW(),(int) container.getH());
+		this.backGround = container.getImage();
+		this.setContentPane(parentPanel);
+		
+		for(int x = 0;x<container.getSubEntityType().size();++x){
+			try{
+				createCanvasComponent((RapidAssessmentComponentType)(container.getSubEntityType().get(x)),parentPanel);
+			}
+			catch(ClassCastException e){
+				
+			}
+		}
+		
+	}
+	
+	private void createCanvasComponent(RapidAssessmentComponentType component,
+			ContainerPanel parentPanel2) {
+		this.parentRect = new MyRectangle((int)component.getX(), (int)component.getY(),(int) component.getW(), (int)component.getH());
+		parentPanel2.add(parentRect);
+		
+		for(int x = 0;x<component.getSubEntityType().size();++x){
+			try{
+				createCanvasComponent((RapidAssessmentComponentType)(component.getSubEntityType().get(x)),parentRect);
+			}
+			catch(ClassCastException e){
+				
+			}
+		}
+	}
+
+	public void createCanvasComponent(RapidAssessmentComponentType component, MyComponent parent){
+
+		
+		try{
+			RapidAssessmentRectangleType comp = ((RapidAssessmentRectangleType)component);
+			MyRectangle rect = new MyRectangle((int)comp.getX(), (int)comp.getY(), (int)comp.getW(), (int)comp.getH());
+			parent.add(rect);
+			for(int x = 0;x<component.getSubEntityType().size();++x){
+				try{
+					createCanvasComponent((RapidAssessmentComponentType)(component.getSubEntityType().get(x)),rect);
+				}
+				catch(ClassCastException e){
+					
+				}
+			}
+		}
+		catch(ClassCastException e){
+			
+		}
+		try{
+			RapidAssessmentMarkType comp = ((RapidAssessmentMarkType)component);
+			MyMarkPoint mark = new MyMarkPoint((int)comp.getX(), (int)comp.getY(), parent);
+			mark.setMark(comp.getMaxValue());
+		}
+		catch(ClassCastException e){
+			
 		}
 	}
 

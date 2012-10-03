@@ -1,11 +1,15 @@
 package ClassAdminBackEnd;
 
+import java.awt.image.BufferedImage;
+
 import org.tmatesoft.sqljet.core.SqlJetException;
 import org.tmatesoft.sqljet.core.SqlJetTransactionMode;
 import org.tmatesoft.sqljet.core.table.ISqlJetTable;
 import org.tmatesoft.sqljet.core.table.SqlJetDb;
 
 public class IMGEntity extends SuperEntity {
+	
+	private BufferedImage image;
 
 	public IMGEntity(EntityType type, SuperEntity parentEntity, String text) {
 		super(type, parentEntity, 0);
@@ -44,6 +48,22 @@ public class IMGEntity extends SuperEntity {
 	public IMGEntity findPortrait(int i){
 		return this;
 	}
+
+	/**
+	 * @return the image
+	 */
+	public BufferedImage getImage() {
+		return image;
+	}
+
+	/**
+	 * @param image the image to set
+	 */
+	public void setImage(BufferedImage image) {
+		this.image = image;
+	}
+	
+	
 
 	
 }
