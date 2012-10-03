@@ -1,4 +1,3 @@
-
 package Frames;
 
 import java.awt.Color;
@@ -74,6 +73,7 @@ import ClassAdminFrontEnd.ThreeStopGradientPanel;
 import ClassAdminFrontEnd.TreeView;
 import Frames.Frame.TabButton;
 import Rule.frmRule;
+
 public class Frame extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
@@ -95,14 +95,14 @@ public class Frame extends JFrame implements ActionListener {
 	private BlurBackground blur;
 	private ReflectionButton homeButton, importButton, exportButton, studentsButton, histogramButton, boxButton, scatterButton,
 			conditionalFormatButton, bordercaseButton, addRowButton, homeImportButton, homeStudents, ButtonWorkspace, filterButton,
-			maxValButton, rulesButton, homeRapidAssessment, treeButton, statisticsButton;
+			maxValButton, rulesButton, homeRapidAssessment, structureModuleButton, statisticsButton;
 	private FadePanel homeInfoPanel, importInfoPanel, exportInfoPanel, studentsInfoPanel, histogramInfoPanel, boxplotInfoPanel,
 			conditionalFormattingInfoPanel, bordercaseInfoPanel, addRowInfoPanel, filterInfoPanel, maxValInfoPanel, rulesInfoPanel,
 			buildInfoPanel, statisticsInfoPanel;
 	private ShadowPanel studentPanel;
-	private ReflectionButtonWithLabel[] buttonArray;
-	private JMenuItem miExport;
-	private JMenu mProject;
+	private JMenu mProject, mGraph, mView;
+	private JMenuItem miConditionalFormatting, miBordercases, miRules, miAddRow, miAddMaxValues, miFilter, miViewStudent, miHistogram,
+			miBoxPlot, miScatterPlot, miExport, miImport, miExit, miStructureModule, miHome, miWorkspace;
 
 	private Database db;
 
@@ -147,12 +147,7 @@ public class Frame extends JFrame implements ActionListener {
 					tabCount--;
 					if (tabCount == -1) {
 						setNavButtonsDisabled();
-						if (miExport != null) {
-							miExport.setEnabled(false);
-						}
-						if (mProject != null) {
-							mProject.setEnabled(false);
-						}
+						setMenuItemsDisabled();
 					}
 
 				}
@@ -352,10 +347,10 @@ public class Frame extends JFrame implements ActionListener {
 		JMenuItem miClose = new JMenuItem("Close");
 		JMenuItem miCloseAll = new JMenuItem("Close All");
 		JSeparator sfile = new JSeparator();
-		JMenuItem miImport = new JMenuItem("Import");
+		miImport = new JMenuItem("Import");
 		miExport = new JMenuItem("Export");
 		JSeparator sfile2 = new JSeparator();
-		JMenuItem miExit = new JMenuItem("Exit");
+		miExit = new JMenuItem("Exit");
 
 		mFile.setForeground(Color.white);
 
@@ -374,20 +369,21 @@ public class Frame extends JFrame implements ActionListener {
 
 		// PROJECT
 		mProject = new JMenu("Project");
-		JMenuItem miConditionalFormatting = new JMenuItem("Conditional Formatting");
-		JMenuItem miBordercases = new JMenuItem("Bordercases");
-		JMenuItem miRules = new JMenuItem("Rules");
+		miConditionalFormatting = new JMenuItem("Conditional Formatting");
+		miBordercases = new JMenuItem("Bordercases");
+		miRules = new JMenuItem("Rules");
 		JSeparator sproject = new JSeparator();
-		JMenuItem miAddRow = new JMenuItem("Rules");
-		JMenuItem miAddMaxValues = new JMenuItem("Add Max Values");
+		miAddRow = new JMenuItem("Add Row");
+		miAddMaxValues = new JMenuItem("Add Max Values");
 		JSeparator sproject2 = new JSeparator();
-		JMenuItem miFilter = new JMenuItem("Filter");
-		JMenuItem miViewStudent = new JMenuItem("View Selected Student");
+		miFilter = new JMenuItem("Filter");
+		miStructureModule = new JMenuItem("Structure Module");
+		miViewStudent = new JMenuItem("View Selected Student");
 		JSeparator sproject3 = new JSeparator();
-		JMenu mGraph = new JMenu("View Graph");
-		JMenuItem miHistogram = new JMenuItem("Histogram");
-		JMenuItem miBoxPlot = new JMenuItem("Box Plot");
-		JMenuItem miScatterPlot = new JMenuItem("Histogram");
+		mGraph = new JMenu("View Graph");
+		miHistogram = new JMenuItem("Histogram");
+		miBoxPlot = new JMenuItem("Box Plot");
+		miScatterPlot = new JMenuItem("ScatterPlot");
 
 		menuBarWindows.add(mProject);
 		mProject.add(miConditionalFormatting);
@@ -398,6 +394,7 @@ public class Frame extends JFrame implements ActionListener {
 		mProject.add(miAddMaxValues);
 		mProject.add(sproject2);
 		mProject.add(miFilter);
+		mProject.add(miStructureModule);
 		mProject.add(miViewStudent);
 		mProject.add(sproject3);
 		mProject.add(mGraph);
@@ -405,50 +402,29 @@ public class Frame extends JFrame implements ActionListener {
 		mGraph.add(miBoxPlot);
 		mGraph.add(miScatterPlot);
 
+		//VIEW
+		mView = new JMenu("View");
+		menuBarWindows.add(mView);
+		miHome = new JMenuItem("Home");
+		miWorkspace = new JMenuItem("Workspace");
+		mView.add(miHome);
+		mView.add(miWorkspace);
+		miHome.setEnabled(false);
+		
 		// SETTINGS
 		JMenu mSettings = new JMenu("Settings");
 		menuBarWindows.add(mSettings);
 
 		mFile.setForeground(Color.white);
 		mProject.setForeground(Color.white);
+		mView.setForeground(Color.white);
 		mSettings.setForeground(Color.white);
 
-		miImport.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-				MenuSelectionManager.defaultManager().clearSelectedPath();
-				try {
-					openFile();
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (BadLocationException e) {
-					e.printStackTrace();
-				}
-			}
-		});
-		
 		if (tabCount < 0) {
-			miExport.setEnabled(false);
+			setMenuItemsDisabled();
 		}
 		
-		miExport.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-				MenuSelectionManager.defaultManager().clearSelectedPath();
-				try {
-					saveFileAs();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		});
-		
-		miExit.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-				frame.dispose();
-			}
-		});
+		addMenuMouseListeners();
 
 		// setup space constants
 		HOME_SPACE_LEFT_X = 3;
@@ -479,13 +455,12 @@ public class Frame extends JFrame implements ActionListener {
 		JMenu mNew = new JMenu("New");
 		JMenuItem miSpreadsheet = new JMenuItem("Spreadsheet");
 		JMenuItem miRapidAssessment = new JMenuItem("Rapid Assessment");
-		JMenuItem miOpen = new JMenuItem("Open");
 		JMenu mRecent = new JMenu("Recent");
 		JMenuItem miClose = new JMenuItem("Close");
 		JMenuItem miCloseAll = new JMenuItem("Close All");
 		JSeparator sfile = new JSeparator();
 		JMenuItem miImport = new JMenuItem("Import");
-		JMenuItem miExport = new JMenuItem("Export");
+		miExport = new JMenuItem("Export");
 		JSeparator sfile2 = new JSeparator();
 		JMenuItem miExit = new JMenuItem("Exit");
 
@@ -493,7 +468,6 @@ public class Frame extends JFrame implements ActionListener {
 		mFile.add(mNew);
 		mNew.add(miSpreadsheet);
 		mNew.add(miRapidAssessment);
-		mFile.add(miOpen);
 		mFile.add(mRecent);
 		mFile.add(miClose);
 		mFile.add(miCloseAll);
@@ -504,21 +478,21 @@ public class Frame extends JFrame implements ActionListener {
 		mFile.add(miExit);
 
 		// PROJECT
-		JMenu mProject = new JMenu("Project");
-		JMenuItem miConditionalFormatting = new JMenuItem("Conditional Formatting");
-		JMenuItem miBordercases = new JMenuItem("Bordercases");
-		JMenuItem miRules = new JMenuItem("Rules");
+		mProject = new JMenu("Project");
+		miConditionalFormatting = new JMenuItem("Conditional Formatting");
+		miBordercases = new JMenuItem("Bordercases");
+		miRules = new JMenuItem("Rules");
 		JSeparator sproject = new JSeparator();
-		JMenuItem miAddRow = new JMenuItem("Rules");
-		JMenuItem miAddMaxValues = new JMenuItem("Add Max Values");
+		miAddRow = new JMenuItem("Rules");
+		miAddMaxValues = new JMenuItem("Add Max Values");
 		JSeparator sproject2 = new JSeparator();
-		JMenuItem miFilter = new JMenuItem("Filter");
-		JMenuItem miViewStudent = new JMenuItem("View Selected Student");
+		miFilter = new JMenuItem("Filter");
+		miViewStudent = new JMenuItem("View Selected Student");
 		JSeparator sproject3 = new JSeparator();
-		JMenu mGraph = new JMenu("View Graph");
-		JMenuItem miHistogram = new JMenuItem("Histogram");
-		JMenuItem miBoxPlot = new JMenuItem("Box Plot");
-		JMenuItem miScatterPlot = new JMenuItem("Histogram");
+		mGraph = new JMenu("View Graph");
+		miHistogram = new JMenuItem("Histogram");
+		miBoxPlot = new JMenuItem("Box Plot");
+		miScatterPlot = new JMenuItem("Histogram");
 
 		menuBarMAC.add(mProject);
 		mProject.add(miConditionalFormatting);
@@ -536,8 +510,12 @@ public class Frame extends JFrame implements ActionListener {
 		mGraph.add(miBoxPlot);
 		mGraph.add(miScatterPlot);
 
-		// menu actions
+		// SETTINGS
+		JMenu mSettings = new JMenu("Settings");
+		menuBarWindows.add(mSettings);
 
+		addMenuMouseListeners();
+		
 		// setup space constants
 		HOME_SPACE_LEFT_X = 3;
 		HOME_SPACE_Y = 41;
@@ -707,7 +685,7 @@ public class Frame extends JFrame implements ActionListener {
 		importButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Import.png")));
 		exportButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Export.png")));
 		studentsButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Students.png")));
-		treeButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Tree.png")));
+		structureModuleButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Tree.png")));
 		histogramButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Histogram.png")));
 		boxButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Box.png")));
 		scatterButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Scatter.png")));
@@ -724,7 +702,7 @@ public class Frame extends JFrame implements ActionListener {
 		importButton.setBounds(75, 8, 68, 80);
 		exportButton.setBounds(135, 8, 68, 80);
 		studentsButton.setBounds(200, 8, 68, 80);
-		treeButton.setBounds(268, 11, 68, 80);
+		structureModuleButton.setBounds(268, 11, 68, 80);
 		histogramButton.setBounds(335, 12, 68, 80);
 		boxButton.setBounds(405, 12, 68, 80);
 		scatterButton.setBounds(473, 12, 68, 80);
@@ -734,13 +712,13 @@ public class Frame extends JFrame implements ActionListener {
 		addRowButton.setBounds(720, 12, 68, 80);
 		maxValButton.setBounds(782, 11, 68, 80);
 		rulesButton.setBounds(837, 10, 68, 80);
-		statisticsButton.setBounds(903,11,68,80);
+		statisticsButton.setBounds(903, 11, 68, 80);
 
 		navBar.add(homeButton);
 		navBar.add(importButton);
 		navBar.add(exportButton);
 		navBar.add(studentsButton);
-		navBar.add(treeButton);
+		navBar.add(structureModuleButton);
 		navBar.add(histogramButton);
 		navBar.add(boxButton);
 		navBar.add(scatterButton);
@@ -751,7 +729,7 @@ public class Frame extends JFrame implements ActionListener {
 		navBar.add(maxValButton);
 		navBar.add(rulesButton);
 		navBar.add(statisticsButton);
-		
+
 		setNavButtonsDisabled();
 
 		// create info bubbles panel
@@ -838,7 +816,8 @@ public class Frame extends JFrame implements ActionListener {
 		ImagePanel filterBubble = new ImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/InfoAddFilter.png")));
 		ImagePanel maxValBubble = new ImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/InfoAddMaxValues.png")));
 		ImagePanel rulesBubble = new ImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/InfoAddRule.png")));
-		ImagePanel statisticsBubble = new ImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/InfoStatistics.png")));
+		ImagePanel statisticsBubble = new ImagePanel(ImageIO.read(getClass()
+				.getResource("/ClassAdminFrontEnd/resources/InfoStatistics.png")));
 
 		infoBubble.setBounds(0, 0, infoPanel.getWidth(), infoPanel.getHeight());
 		importBubble.setBounds(0, 0, infoPanel.getWidth(), infoPanel.getHeight());
@@ -951,9 +930,7 @@ public class Frame extends JFrame implements ActionListener {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (!studentsButton.isDisabled()) {
-					table.getTable().getSelectedRow();
-					TreeView.createStudentFrm("name", table.getData().get(table.getTable().getSelectedRow()).get(0), Global.getGlobal()
-							.getActiveProject());
+					showViewStudent();
 				}
 			}
 
@@ -966,12 +943,11 @@ public class Frame extends JFrame implements ActionListener {
 			}
 		});
 
-		treeButton.addMouseListener(new MouseAdapter() {
+		structureModuleButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				if (!treeButton.isDisabled()) {
-					table.getTable().getSelectedRow();
-					TreeView.createEntityTypeFrm("name", Global.getGlobal().getActiveProject());
+				if (!structureModuleButton.isDisabled()) {
+					showViewStudent();
 				}
 			}
 
@@ -988,8 +964,7 @@ public class Frame extends JFrame implements ActionListener {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (!histogramButton.isDisabled()) {
-					HistogramFrame x = new HistogramFrame(Global.getGlobal().getActiveProject());
-					Global.getGlobal().getActiveProject().addhistogramcharts(x);
+					showHistogram();
 				}
 			}
 
@@ -1006,8 +981,7 @@ public class Frame extends JFrame implements ActionListener {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (!boxButton.isDisabled()) {
-					BoxPlotFrame x = new BoxPlotFrame();
-					x.createBoxPlotFrame();
+					showBoxPlot();
 				}
 			}
 
@@ -1024,8 +998,7 @@ public class Frame extends JFrame implements ActionListener {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (!scatterButton.isDisabled()) {
-					ScatterPlotFrame x = new ScatterPlotFrame(Global.getGlobal().getActiveProject());// project);
-					Global.getGlobal().getActiveProject().addscattercharts(x);
+					showScatterPlot();
 				}
 			}
 
@@ -1042,13 +1015,7 @@ public class Frame extends JFrame implements ActionListener {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (!conditionalFormatButton.isDisabled()) {
-					ConditionalFormattingFrame conditionalformatFrame;
-					try {
-						conditionalformatFrame = new ConditionalFormattingFrame(table);
-						conditionalformatFrame.setVisible(true);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+					showConditionalFormatting();
 				}
 			}
 
@@ -1065,13 +1032,7 @@ public class Frame extends JFrame implements ActionListener {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (!bordercaseButton.isDisabled()) {
-					BordercaseFrame bordercaseFrame;
-					try {
-						bordercaseFrame = new BordercaseFrame(table);
-						bordercaseFrame.setVisible(true);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+					showBordercases();
 				}
 			}
 
@@ -1088,28 +1049,7 @@ public class Frame extends JFrame implements ActionListener {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (!addRowButton.isDisabled()) {
-					EntityType testHead = table.project.getHeadEntityType();
-					LinkedList<EntityType> list = testHead.getSubEntityType();
-
-					for (int x = 0; x < list.size(); x++) {
-						table.createEntities(list.get(x), new SuperEntityPointer(table.project.getHead()));
-					}
-
-					table.data = table.project.getHead().getDataLinkedList();
-
-					/*
-					 * tableModel.addRow(new Object[] { txtField1.getText(),
-					 * txtField1.getText() });
-					 */
-
-					Object[] temp = new Object[table.data.get(0).size()];
-
-					for (int y = 0; y < table.data.get(0).size(); y++) {
-						temp[y] = table.data.getLast().get(y).getValue();
-					}
-
-					table.tableModel.addRow(temp);
-					table.repaint();
+					showAddRule();
 				}
 			}
 
@@ -1126,13 +1066,7 @@ public class Frame extends JFrame implements ActionListener {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (!filterButton.isDisabled()) {
-					FilterFrame filterframe;
-					try {
-						filterframe = new FilterFrame(table);
-						filterframe.setVisible(true);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+					showFilter();
 				}
 			}
 
@@ -1149,8 +1083,7 @@ public class Frame extends JFrame implements ActionListener {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (!maxValButton.isDisabled()) {
-					SetMaxValueFrame maxframe = new SetMaxValueFrame(table);
-					maxframe.setVisible(true);
+					setMaxValues();
 				}
 			}
 
@@ -1166,8 +1099,7 @@ public class Frame extends JFrame implements ActionListener {
 		rulesButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				frmRule rules = new frmRule(Global.getGlobal().getActiveProject());
-				rules.setVisible(true);
+				showRules();
 			}
 
 			public void mouseEntered(MouseEvent arg0) {
@@ -1320,6 +1252,7 @@ public class Frame extends JFrame implements ActionListener {
 		// set selected index to new file opened
 		// tabbedPane.setSelectedIndex(tabbedPane.getTabCount()-1);
 		setNavButtonsEnabled();
+		setMenuItemsEnabled();
 
 		studentPanel.moveIn();
 
@@ -1387,6 +1320,9 @@ public class Frame extends JFrame implements ActionListener {
 		navBar.fadeIn();
 		frame.remove(blur);
 		recentDocsPanel.fadeOut();
+		
+		miHome.setEnabled(true);
+		miWorkspace.setEnabled(false);
 	}
 
 	/*
@@ -1403,6 +1339,9 @@ public class Frame extends JFrame implements ActionListener {
 
 		recentDocsPanel.fadeIn();
 		createRecentDocsView();
+		
+		miHome.setEnabled(false);
+		miWorkspace.setEnabled(true);
 
 	}
 
@@ -1548,8 +1487,8 @@ public class Frame extends JFrame implements ActionListener {
 		filterButton.setEnabled();
 		maxValButton.setEnabled();
 		rulesButton.setEnabled();
-		treeButton.setEnabled();
-
+		structureModuleButton.setEnabled();
+		statisticsButton.setEnabled();
 		searchPanel.fadeIn();
 	}
 
@@ -1558,49 +1497,47 @@ public class Frame extends JFrame implements ActionListener {
 	 * students, graphs...)
 	 */
 	public void setNavButtonsDisabled() {
-		if (studentsButton != null) {
-			studentsButton.setDisabled();
-		}
-		if (histogramButton != null) {
-			histogramButton.setDisabled();
-		}
-		if (boxButton != null) {
-			boxButton.setDisabled();
-		}
-		if (scatterButton != null) {
-			scatterButton.setDisabled();
-		}
-		if (exportButton != null) {
-			exportButton.setDisabled();
-		}
-		if (conditionalFormatButton != null) {
-			conditionalFormatButton.setDisabled();
-		}
-		if (bordercaseButton != null) {
-			bordercaseButton.setDisabled();
-		}
-		if (addRowButton != null) {
-			addRowButton.setDisabled();
-		}
-		if (filterButton != null) {
-			filterButton.setDisabled();
-		}
-		if (maxValButton != null) {
-			maxValButton.setDisabled();
-		}
-		if (rulesButton != null) {
-			rulesButton.setDisabled();
-		}
-		if (treeButton != null) {
-			treeButton.setDisabled();
-		}
-		if (searchPanel != null) {
-			searchPanel.fadeOut();
-		}
-		if (studentPanel != null) {
-			studentPanel.setVisible(false);
-		}
+		studentsButton.setDisabled();
+		histogramButton.setDisabled();
+		boxButton.setDisabled();
+		scatterButton.setDisabled();
+		exportButton.setDisabled();
+		conditionalFormatButton.setDisabled();
+		bordercaseButton.setDisabled();
+		addRowButton.setDisabled();
+		filterButton.setDisabled();
+		maxValButton.setDisabled();
+		rulesButton.setDisabled();
+		structureModuleButton.setDisabled();
+		statisticsButton.setDisabled();
+		searchPanel.fadeOut();
+		studentPanel.setVisible(false);
+	}
 
+	public void setMenuItemsDisabled() {
+		miExport.setEnabled(false);
+		miConditionalFormatting.setEnabled(false);
+		miBordercases.setEnabled(false);
+		miRules.setEnabled(false);
+		miAddRow.setEnabled(false);
+		miAddMaxValues.setEnabled(false);
+		miFilter.setEnabled(false);
+		miStructureModule.setEnabled(false);
+		miViewStudent.setEnabled(false);
+		mGraph.setEnabled(false);
+	}
+
+	public void setMenuItemsEnabled() {
+		miExport.setEnabled(true);
+		miConditionalFormatting.setEnabled(true);
+		miBordercases.setEnabled(true);
+		miRules.setEnabled(true);
+		miAddRow.setEnabled(true);
+		miAddMaxValues.setEnabled(true);
+		miFilter.setEnabled(true);
+		miStructureModule.setEnabled(true);
+		miViewStudent.setEnabled(true);
+		mGraph.setEnabled(true);
 	}
 
 	// action for recent docs buttons
@@ -1630,5 +1567,266 @@ public class Frame extends JFrame implements ActionListener {
 
 	}
 
-}
+	public void showConditionalFormatting() {
+		ConditionalFormattingFrame conditionalformatFrame;
+		MenuSelectionManager.defaultManager().clearSelectedPath();
+		try {
+			conditionalformatFrame = new ConditionalFormattingFrame(table);
+			conditionalformatFrame.setVisible(true);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
+	public void showBordercases() {
+		BordercaseFrame bordercaseFrame;
+		try {
+			bordercaseFrame = new BordercaseFrame(table);
+			bordercaseFrame.setVisible(true);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void showRules() {
+		frmRule rules = new frmRule(Global.getGlobal().getActiveProject());
+		rules.setVisible(true);
+	}
+
+	public void showAddRule() {
+		EntityType testHead = table.project.getHeadEntityType();
+		LinkedList<EntityType> list = testHead.getSubEntityType();
+
+		for (int x = 0; x < list.size(); x++) {
+			table.createEntities(list.get(x), new SuperEntityPointer(table.project.getHead()));
+		}
+
+		table.data = table.project.getHead().getDataLinkedList();
+
+		/*
+		 * tableModel.addRow(new Object[] { txtField1.getText(),
+		 * txtField1.getText() });
+		 */
+
+		Object[] temp = new Object[table.data.get(0).size()];
+
+		for (int y = 0; y < table.data.get(0).size(); y++) {
+			temp[y] = table.data.getLast().get(y).getValue();
+		}
+
+		table.tableModel.addRow(temp);
+		table.repaint();
+	}
+
+	public void setMaxValues() {
+		SetMaxValueFrame maxframe = new SetMaxValueFrame(table);
+		maxframe.setVisible(true);
+	}
+
+	public void showFilter() {
+		FilterFrame filterframe;
+		try {
+			filterframe = new FilterFrame(table);
+			filterframe.setVisible(true);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void showViewStudent() {
+		table.getTable().getSelectedRow();
+		TreeView.createStudentFrm("name", table.getData().get(table.getTable().getSelectedRow()).get(0), Global.getGlobal()
+				.getActiveProject());
+	}
+
+	public void showStructureModule() {
+		table.getTable().getSelectedRow();
+		TreeView.createEntityTypeFrm("name", Global.getGlobal().getActiveProject());
+	}
+
+	public void showHistogram() {
+		HistogramFrame x = new HistogramFrame(Global.getGlobal().getActiveProject());
+		Global.getGlobal().getActiveProject().addhistogramcharts(x);
+	}
+
+	public void showBoxPlot() {
+		BoxPlotFrame x = new BoxPlotFrame();
+		x.createBoxPlotFrame();
+	}
+
+	public void showScatterPlot() {
+		ScatterPlotFrame x = new ScatterPlotFrame(Global.getGlobal().getActiveProject());// project);
+		Global.getGlobal().getActiveProject().addscattercharts(x);
+	}
+
+	public void addMenuMouseListeners() {
+		
+
+		miImport.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				MenuSelectionManager.defaultManager().clearSelectedPath();
+				try {
+					openFile();
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (BadLocationException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		
+		miExport.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				MenuSelectionManager.defaultManager().clearSelectedPath();
+				try {
+					saveFileAs();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+
+		miExit.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				frame.dispose();
+			}
+		});
+
+		miConditionalFormatting.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				MenuSelectionManager.defaultManager().clearSelectedPath();
+				if (miConditionalFormatting.isEnabled()) {
+					showConditionalFormatting();
+				}
+			}
+		});
+
+		miRules.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				MenuSelectionManager.defaultManager().clearSelectedPath();
+				if (miRules.isEnabled()) {
+					showRules();
+				}
+			}
+		});
+
+		miAddRow.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				MenuSelectionManager.defaultManager().clearSelectedPath();
+				if (miAddRow.isEnabled()) {
+					showAddRule();
+				}
+			}
+		});
+
+		miAddMaxValues.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				MenuSelectionManager.defaultManager().clearSelectedPath();
+				if (miAddMaxValues.isEnabled()) {
+					setMaxValues();
+				}
+			}
+		});
+
+		miFilter.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				MenuSelectionManager.defaultManager().clearSelectedPath();
+				if (miFilter.isEnabled()) {
+					showFilter();
+				}
+			}
+		});
+		
+		miStructureModule.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				MenuSelectionManager.defaultManager().clearSelectedPath();
+				if (miStructureModule.isEnabled()) {
+					showStructureModule();
+				}
+			}
+		});
+
+		miViewStudent.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				MenuSelectionManager.defaultManager().clearSelectedPath();
+				if (miViewStudent.isEnabled()) {
+					showViewStudent();
+				}
+			}
+		});
+
+		miBordercases.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				MenuSelectionManager.defaultManager().clearSelectedPath();
+				if (miBordercases.isEnabled()) {
+					showBordercases();
+				}
+			}
+		});
+
+		miHistogram.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				MenuSelectionManager.defaultManager().clearSelectedPath();
+				if (miHistogram.isEnabled()) {
+					showHistogram();
+				}
+			}
+		});
+
+		miBoxPlot.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				MenuSelectionManager.defaultManager().clearSelectedPath();
+				if (miBoxPlot.isEnabled()) {
+					showBoxPlot();
+				}
+			}
+		});
+
+		miScatterPlot.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				MenuSelectionManager.defaultManager().clearSelectedPath();
+				if (miScatterPlot.isEnabled()) {
+					showScatterPlot();
+				}
+			}
+		});
+		
+		miHome.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				MenuSelectionManager.defaultManager().clearSelectedPath();
+				if (miHome.isEnabled()) {
+					try {
+						workspaceToHomeTransition();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+		
+		miWorkspace.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				MenuSelectionManager.defaultManager().clearSelectedPath();
+				if (miWorkspace.isEnabled()) {
+					homeToWorkspaceTransition();
+				}
+			}
+		});
+	}
+}
