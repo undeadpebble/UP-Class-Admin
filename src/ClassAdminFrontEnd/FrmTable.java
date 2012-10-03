@@ -288,8 +288,8 @@ public class FrmTable extends JPanel {
 						// project.getSelected().add(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col));
 						// if(count == 0)
 						// {
-						count++;
-						System.out.println(count);
+						//count++;
+					//	System.out.println(count);
 						/*
 						 * System.out.println("FrmTable se clear");
 						 * if(project.getCleared() == false) {
