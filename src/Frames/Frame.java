@@ -1,3 +1,4 @@
+
 package Frames;
 
 import java.awt.Color;
@@ -71,8 +72,8 @@ import ClassAdminFrontEnd.ScatterPlotFrame;
 import ClassAdminFrontEnd.ShadowPanel;
 import ClassAdminFrontEnd.ThreeStopGradientPanel;
 import ClassAdminFrontEnd.TreeView;
+import Frames.Frame.TabButton;
 import Rule.frmRule;
-
 public class Frame extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
@@ -1630,3 +1631,4 @@ public class Frame extends JFrame implements ActionListener {
 	}
 
 }
+

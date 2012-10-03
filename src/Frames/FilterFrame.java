@@ -210,13 +210,11 @@ public class FilterFrame extends JFrame {
 
 			@Override
 			public void componentHidden(ComponentEvent e) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void componentMoved(ComponentEvent e) {
-				// TODO Auto-generated method stub
 
 			}
 
@@ -230,7 +228,6 @@ public class FilterFrame extends JFrame {
 
 			@Override
 			public void componentShown(ComponentEvent e) {
-				// TODO Auto-generated method stub
 
 			}
 
@@ -329,6 +326,7 @@ public class FilterFrame extends JFrame {
 			btnCreateFilter.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					try{
 
 					switch (cbxFormatType.getSelectedIndex()) {
 					case 1: {
@@ -381,7 +379,11 @@ public class FilterFrame extends JFrame {
 					}
 
 					table.filterTable();
-
+				
+				}
+				catch (Exception ex) {
+					// TODO: handle exception
+				}
 				}
 			});
 		}
