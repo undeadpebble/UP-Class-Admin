@@ -54,7 +54,6 @@ public class FrmTable extends JPanel {
 	private JTextField txtField1;
 	private JTextField txtField2;
 
-	
 	public String[] headers;
 	public LinkedList<LinkedList<Boolean>> filters = new LinkedList<LinkedList<Boolean>>();
 	public Boolean[] dataFilter;
@@ -95,7 +94,11 @@ public class FrmTable extends JPanel {
 		}
 
 		Object[] temp = new Object[data.get(0).size()];
+<<<<<<< HEAD
+		
+=======
 
+>>>>>>> added try block so people will stop complaining
 		for (int x = 0; x < data.size(); x++) {
 			for (int y = 0; y < data.get(0).size(); y++) {
 				temp[y] = data.get(x).get(y).getValue();
@@ -155,7 +158,11 @@ public class FrmTable extends JPanel {
 	private void createGUI() {
 		// ------------------------------------------------------------------------------------------------------------
 
+<<<<<<< HEAD
+		addCounters(project.getHead(), project.getHead());	
+=======
 		addCounters(project.getHead(), project.getHead());
+>>>>>>> added try block so people will stop complaining
 
 		JButton tempss = new JButton("temp");
 		tempss.addActionListener(new ActionListener() {
@@ -169,6 +176,11 @@ public class FrmTable extends JPanel {
 			}
 		});
 
+<<<<<<< HEAD
+		});
+		
+=======
+>>>>>>> added try block so people will stop complaining
 		// -------------------------------------------------------------------------------------------------------
 		// create the filters array with everything false
 		for (int x = 0; x < data.size(); x++) {
@@ -1140,8 +1152,14 @@ public class FrmTable extends JPanel {
 		Filter.add(cbFilter);
 		Filter.add(removeAllFilters);
 		eastPanel.add(Filter);
+<<<<<<< HEAD
+		
+		// this.add(tempss);
+
+=======
 
 		// this.add(tempss);
+>>>>>>> added try block so people will stop complaining
 
 	}
 
@@ -1210,6 +1228,55 @@ public class FrmTable extends JPanel {
 
 	public void search(String text) {
 		boolean temp = false;
+<<<<<<< HEAD
+		if (text.compareTo("") != 0) {
+			project.getSelected().clear();
+			for (int x = 0; x < data.size(); x++) {
+				for (int y = 0; y < data.get(0).size(); y++) {
+					if (data.get(x).get(y).getValue().contains(text)) {
+						temp = true;
+						if (!project.getSelected().contains(data.get(x).get(0)))
+							;
+						for (int z = 0; z < data.get(x).size(); z++) {
+							project.getSelected().add(data.get(x).get(z));
+						}
+						tableModel.fireTableDataChanged();
+					}
+				}
+			}
+
+			if (!temp) {
+				project.getSelected().clear();
+				tableModel.fireTableDataChanged();
+			}
+		}
+
+		return;
+	}
+	
+    public void addCounters(SuperEntity ent, SuperEntity head){
+    	ent.increaseRowFollowCount();
+    	
+    	SuperEntity temp = ent;
+    	
+    	while(temp != head){
+    		temp = temp.getParentEntity();
+    		temp.increaseRowFollowCount();
+    	}
+    	
+    	LinkedList<SuperEntity> temp2 = ent.getSubEntity();
+    	
+    	for(int x = 0; x < temp2.size();x++){
+    		addCounters(temp2.get(x), head);
+    	}
+    	
+    	
+    }
+    
+    public void search(String text){
+    	boolean temp = false;
+=======
+>>>>>>> added try block so people will stop complaining
 		if (text.compareTo("") != 0) {
 			project.getSelected().clear();
 			for (int x = 0; x < data.size(); x++) {
