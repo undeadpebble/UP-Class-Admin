@@ -80,16 +80,12 @@ public class PopUpMenu {
 				VisualItem item = activeItem;
 
 				int i = item.getRow();
+				activeProject.getAudit().RemoveNode(item.getString("name"),true);
 				activeTree.removeNode(i);
 
 				activeTreeLinkedList.get(i).removeDeletingChildren();
 				activeProject.updateTables();
 				
-				activeProject.getAudit().closedProject();
-				//Project();
-				//(item.getString("name"),true);
-				//toString());
-				//.RemoveNode(item.getString("name"), true);
 				
 				parentFrame.dispose();
 				TreeView.createEntityTypeFrm("name",activeProject);
@@ -114,12 +110,12 @@ public class PopUpMenu {
 						activeTree.addEdge(source, target);
 					}
 				}
+				activeProject.getAudit().RemoveNode(item.getString("name"), false);
 				activeTree.removeNode(i);
 				
 				activeTreeLinkedList.get(i).removeSavingChildren();
 				item.getVisualization().repaint();
 				activeProject.updateTables();
-	//			activeProject.getAudit().RemoveNode(item.getString("name"), false);
 				parentFrame.dispose();
 				TreeView.createEntityTypeFrm("name",activeProject);
 				

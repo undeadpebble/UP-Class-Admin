@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 
+import javax.activity.ActivityCompletedException;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -156,7 +157,7 @@ public class FrmNewNode {
 					// add child to parent in back end
 					EntityType newE = new EntityType(txtName.getText(), activeProject.getTreeLinkedList().get(cmbParent.getSelectedIndex()), isText, d, (Double) txtWeight.getValue());
 					System.out.println(activeProject.getTreeLinkedList().get(cmbParent.getSelectedIndex()).getName());
-					
+					activeProject.getAudit().AddNode((String) cmbParent.getSelectedItem(), txtName.getText());
 					//backend func//					
 					activeProject.getTreeLinkedList().add(newE);
 					newE.populateTreeWithEntities();

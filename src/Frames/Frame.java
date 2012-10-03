@@ -138,6 +138,7 @@ public class Frame extends JFrame implements ActionListener {
 			button.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mousePressed(MouseEvent e) {
+					Global.getGlobal().getActiveProject().getAudit().closedProject();
 					tabbedPane.remove(tabbedPane.indexOfTabComponent(tabbutton));
 					tabCount--;
 					if (tabCount == -1) {

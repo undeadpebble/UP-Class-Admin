@@ -20,14 +20,6 @@ public class Audit {
 	public Audit(Project project) throws IOException {
 		activeProject = project;
 		projectName = activeProject.getFileName().substring(0, activeProject.getFileName().indexOf(".")) + ".txt";
-		try {
-			f = new File(projectName);
-			fstream = new FileWriter(projectName, true);
-		} catch (IOException e) {
-			f = new File(projectName);
-			fstream = new FileWriter(projectName);
-			e.printStackTrace();
-		}
 		dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 	}
 
@@ -37,6 +29,8 @@ public class Audit {
 
 	public void openedProject() {
 		try {
+			f = new File(projectName);
+			fstream = new FileWriter(projectName, true);
 			out = new BufferedWriter(fstream);
 			out.append(d() + "\tPROJECT OPENED: " + projectName);
 			out.newLine();
@@ -48,6 +42,8 @@ public class Audit {
 
 	public void closedProject() {
 		try {
+			f = new File(projectName);
+			fstream = new FileWriter(projectName, true);
 			out = new BufferedWriter(fstream);
 			out.append(d() + "\tPROJECT CLOSED: " + projectName);
 			out.newLine();
@@ -60,6 +56,8 @@ public class Audit {
 
 	public void AddNode(String parent, String child) {
 		try {
+			f = new File(projectName);
+			fstream = new FileWriter(projectName, true);
 			out = new BufferedWriter(fstream);
 			out.append(d() + "\tSTRUCTURE ADDITION: " + child + " added as child node to " + parent);
 			out.newLine();
@@ -71,11 +69,15 @@ public class Audit {
 	public void RemoveNode(String node, boolean withChildren) {
 		try {
 			if (withChildren) {
+				f = new File(projectName);
+				fstream = new FileWriter(projectName, true);
 				out = new BufferedWriter(fstream);
 				out.append(d() + "\tSTRUCTURE REMOVAL: " + node + " removed with children");
 				out.newLine();
 				out.close();
 			} else {
+				f = new File(projectName);
+				fstream = new FileWriter(projectName, true);
 				out = new BufferedWriter(fstream);
 				out.append(d() + "\tSTRUCTURE REMOVAL: " + node + " removed without children");
 				out.newLine();
@@ -88,8 +90,11 @@ public class Audit {
 
 	public void updateNode(String node, String isText, String assDate, String weight) {
 		try {
+			f = new File(projectName);
+			fstream = new FileWriter(projectName, true);
+			out = new BufferedWriter(fstream);
 			out.append(d() + "\tSTRUCTURE UPDATE: " + node + " Weight: " + weight + " Text Field: " + isText + " Assesment Date: " + assDate);
-			out.append("\n");
+			out.newLine();
 			out.close();
 		} catch (IOException e) {
 		}
@@ -97,16 +102,24 @@ public class Audit {
 
 	public void moveNode(String node, String oldParent, String newParent) {
 		try {
-			out.write(d() + "\tSTRUCTURE UPDATE: " + node + " changed parents from: " + oldParent + " to: " + newParent);
-			out.write("\n");
+			f = new File(projectName);
+			fstream = new FileWriter(projectName, true);
+			out = new BufferedWriter(fstream);
+			out.append(d() + "\tSTRUCTURE UPDATE: " + node + " changed parents from: " + oldParent + " to: " + newParent);
+			out.newLine();
+			out.close();
 		} catch (IOException e) {
 		}
 	}
 
 	public void updateStudent(String student, String node, String oldVal, String newVal) {
 		try {
-			out.write(d() + "\tSTUDENT UPDATE: " + student + " MARK: " + node + " FROM: " + oldVal + " TO: " + newVal);
-			out.write("\n");
+			f = new File(projectName);
+			fstream = new FileWriter(projectName, true);
+			out = new BufferedWriter(fstream);
+			out.append(d() + "\tSTUDENT UPDATE: " + student + " MARK: " + node + " FROM: " + oldVal + " TO: " + newVal);
+			out.newLine();
+			out.close();
 		} catch (IOException e) {
 		}
 	}
