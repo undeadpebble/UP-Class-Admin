@@ -41,8 +41,8 @@ public class Audit {
 			out.append(d() + "\tPROJECT OPENED: " + projectName);
 			out.newLine();
 			out.close();
+			out = null;
 		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
 
@@ -51,6 +51,9 @@ public class Audit {
 			out = new BufferedWriter(fstream);
 			out.append(d() + "\tPROJECT CLOSED: " + projectName);
 			out.newLine();
+			out.close();
+			out = null;
+			System.out.println("close");
 		} catch (IOException e) {
 		}
 	}
@@ -60,6 +63,7 @@ public class Audit {
 			out = new BufferedWriter(fstream);
 			out.append(d() + "\tSTRUCTURE ADDITION: " + child + " added as child node to " + parent);
 			out.newLine();
+			out.close();
 		} catch (IOException e) {
 		}
 	}
@@ -70,10 +74,12 @@ public class Audit {
 				out = new BufferedWriter(fstream);
 				out.append(d() + "\tSTRUCTURE REMOVAL: " + node + " removed with children");
 				out.newLine();
+				out.close();
 			} else {
 				out = new BufferedWriter(fstream);
 				out.append(d() + "\tSTRUCTURE REMOVAL: " + node + " removed without children");
 				out.newLine();
+				out.close();
 			}
 		} catch (IOException e) {
 
@@ -84,6 +90,7 @@ public class Audit {
 		try {
 			out.append(d() + "\tSTRUCTURE UPDATE: " + node + " Weight: " + weight + " Text Field: " + isText + " Assesment Date: " + assDate);
 			out.append("\n");
+			out.close();
 		} catch (IOException e) {
 		}
 	}
