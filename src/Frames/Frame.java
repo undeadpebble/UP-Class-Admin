@@ -64,6 +64,7 @@ import ClassAdminFrontEnd.GradientMenuBar;
 import ClassAdminFrontEnd.HistogramFrame;
 import ClassAdminFrontEnd.ImagePanel;
 import ClassAdminFrontEnd.MenuImagePanel;
+import ClassAdminFrontEnd.RecentDocsMenuItem;
 import ClassAdminFrontEnd.ReflectionButton;
 import ClassAdminFrontEnd.ReflectionButtonWithLabel;
 import ClassAdminFrontEnd.ReflectionImagePanel;
@@ -100,9 +101,11 @@ public class Frame extends JFrame implements ActionListener {
 			conditionalFormattingInfoPanel, bordercaseInfoPanel, addRowInfoPanel, filterInfoPanel, maxValInfoPanel, rulesInfoPanel,
 			buildInfoPanel, statisticsInfoPanel;
 	private ShadowPanel studentPanel;
-	private JMenu mProject, mGraph, mView;
+	private JMenu mProject, mGraph, mView, mRecent;
 	private JMenuItem miConditionalFormatting, miBordercases, miRules, miAddRow, miAddMaxValues, miFilter, miViewStudent, miHistogram,
 			miBoxPlot, miScatterPlot, miExport, miImport, miExit, miStructureModule, miHome, miWorkspace;
+	private ReflectionButtonWithLabel[] buttonArray;
+	private int buttonCount;
 
 	private Database db;
 
@@ -237,6 +240,8 @@ public class Frame extends JFrame implements ActionListener {
 		bottomPanel.setBounds(HOME_SPACE_LEFT_X, getHeight() - HOME_BOTTOM_SPACE_Y, bottomPanel.getWidth(), bottomPanel.getHeight());
 		contentPane.add(bottomPanel);
 
+		createRecentDocsDB();
+		
 		setupHomeScreen();
 		setupWorkspaceScreen();
 
@@ -323,8 +328,6 @@ public class Frame extends JFrame implements ActionListener {
 
 		// get current filehandler (ClassAdminBackEnd)
 		fileHandler = FileHandler.get();
-
-		createRecentDocsDB();
 		createRecentDocsView();
 	}
 
@@ -343,7 +346,7 @@ public class Frame extends JFrame implements ActionListener {
 		JMenu mNew = new JMenu("New");
 		JMenuItem miSpreadsheet = new JMenuItem("Spreadsheet");
 		JMenuItem miRapidAssessment = new JMenuItem("Rapid Assessment");
-		JMenu mRecent = new JMenu("Recent");
+		mRecent = new JMenu("Recent");
 		JMenuItem miClose = new JMenuItem("Close");
 		JMenuItem miCloseAll = new JMenuItem("Close All");
 		JSeparator sfile = new JSeparator();
@@ -402,7 +405,7 @@ public class Frame extends JFrame implements ActionListener {
 		mGraph.add(miBoxPlot);
 		mGraph.add(miScatterPlot);
 
-		//VIEW
+		// VIEW
 		mView = new JMenu("View");
 		menuBarWindows.add(mView);
 		miHome = new JMenuItem("Home");
@@ -410,7 +413,7 @@ public class Frame extends JFrame implements ActionListener {
 		mView.add(miHome);
 		mView.add(miWorkspace);
 		miHome.setEnabled(false);
-		
+
 		// SETTINGS
 		JMenu mSettings = new JMenu("Settings");
 		menuBarWindows.add(mSettings);
@@ -423,7 +426,7 @@ public class Frame extends JFrame implements ActionListener {
 		if (tabCount < 0) {
 			setMenuItemsDisabled();
 		}
-		
+
 		addMenuMouseListeners();
 
 		// setup space constants
@@ -455,7 +458,7 @@ public class Frame extends JFrame implements ActionListener {
 		JMenu mNew = new JMenu("New");
 		JMenuItem miSpreadsheet = new JMenuItem("Spreadsheet");
 		JMenuItem miRapidAssessment = new JMenuItem("Rapid Assessment");
-		JMenu mRecent = new JMenu("Recent");
+		mRecent = new JMenu("Recent");
 		JMenuItem miClose = new JMenuItem("Close");
 		JMenuItem miCloseAll = new JMenuItem("Close All");
 		JSeparator sfile = new JSeparator();
@@ -515,7 +518,7 @@ public class Frame extends JFrame implements ActionListener {
 		menuBarWindows.add(mSettings);
 
 		addMenuMouseListeners();
-		
+
 		// setup space constants
 		HOME_SPACE_LEFT_X = 3;
 		HOME_SPACE_Y = 41;
@@ -613,9 +616,12 @@ public class Frame extends JFrame implements ActionListener {
 			}
 		});
 
+		
 		// fade in containers on program launch
 		recentDocsPanel.fadeIn();
 		homePanel.fadeIn();
+		
+		populateRecentDocsInMenu();
 	}
 
 	/*
@@ -1320,7 +1326,7 @@ public class Frame extends JFrame implements ActionListener {
 		navBar.fadeIn();
 		frame.remove(blur);
 		recentDocsPanel.fadeOut();
-		
+
 		miHome.setEnabled(true);
 		miWorkspace.setEnabled(false);
 	}
@@ -1339,7 +1345,7 @@ public class Frame extends JFrame implements ActionListener {
 
 		recentDocsPanel.fadeIn();
 		createRecentDocsView();
-		
+
 		miHome.setEnabled(false);
 		miWorkspace.setEnabled(true);
 
@@ -1436,7 +1442,7 @@ public class Frame extends JFrame implements ActionListener {
 
 		recentDocsPanel.removeAll();
 
-		ReflectionButtonWithLabel[] buttonArray = new ReflectionButtonWithLabel[10];
+		buttonArray = new ReflectionButtonWithLabel[10];
 		String[] filenamesarray = db.getDocumentNames();
 		String[] filepathsarray = db.getDocumentPaths();
 		int count = db.getDocumentCount();
@@ -1470,7 +1476,31 @@ public class Frame extends JFrame implements ActionListener {
 			i++;
 			m++;
 		}
+		buttonCount = i-1;
 	}
+
+	public void populateRecentDocsInMenu() {
+		
+		mRecent.removeAll();
+		
+		JMenuItem[] recentDocsMenuArray = new JMenuItem[7]; 
+		String[] filenamesarray = db.getDocumentNames();
+		String[] filepathsarray = db.getDocumentPaths();
+		int count = db.getDocumentCount();
+
+		int i = 0;
+		int m = 0;
+
+		// restrict recent docs to 7
+		while ((i < count) && (m < 7)) {
+			recentDocsMenuArray[i] = new RecentDocsMenuItem(filenamesarray[i], filepathsarray[i]);
+			mRecent.add(recentDocsMenuArray[i]);
+			recentDocsMenuArray[i].addActionListener(this);
+			i++;
+			m++;
+		}
+	}
+
 
 	/*
 	 * Enables buttons that has been disabled because of no spreadsheet
@@ -1543,6 +1573,7 @@ public class Frame extends JFrame implements ActionListener {
 	// action for recent docs buttons
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		
 		if (e.getSource() instanceof ReflectionButtonWithLabel) {
 			File testFile = new File(((ReflectionButtonWithLabel) e.getSource()).getPath());
 			if (testFile.exists()) {
@@ -1560,12 +1591,54 @@ public class Frame extends JFrame implements ActionListener {
 				JOptionPane.showMessageDialog(frame, "File seems to be missing from last directory location, removing shortcut.",
 						"File Missing", JOptionPane.ERROR_MESSAGE);
 
+				try {
+					createRecentDocsView();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				populateRecentDocsInMenu();
+				
 				recentDocsPanel.revalidate();
 				recentDocsPanel.repaint();
 			}
 		}
+		
+		if (e.getSource() instanceof RecentDocsMenuItem) {
+			File testFile = new File(((RecentDocsMenuItem) e.getSource()).getPath());
+			if (testFile.exists()) {
+				try {
+					openRecentFile(testFile);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				} catch (BadLocationException e1) {
+					e1.printStackTrace();
+				}
+			} else {
+				mRecent.remove(((RecentDocsMenuItem) e.getSource()));
+				db.deleteRecentDocuments(((RecentDocsMenuItem) e.getSource()).getPath());
+
+				mRecent.revalidate();
+				mRecent.repaint();
+				
+				try {
+					createRecentDocsView();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				
+				recentDocsPanel.revalidate();
+				recentDocsPanel.repaint();
+				
+				JOptionPane.showMessageDialog(frame, "File seems to be missing from last directory location, removing shortcut.",
+						"File Missing", JOptionPane.ERROR_MESSAGE);
+				
+			}
+		}
+	
 
 	}
+	
+	
 
 	public void showConditionalFormatting() {
 		ConditionalFormattingFrame conditionalformatFrame;
@@ -1660,7 +1733,6 @@ public class Frame extends JFrame implements ActionListener {
 	}
 
 	public void addMenuMouseListeners() {
-		
 
 		miImport.addMouseListener(new MouseAdapter() {
 			@Override
@@ -1675,7 +1747,7 @@ public class Frame extends JFrame implements ActionListener {
 				}
 			}
 		});
-		
+
 		miExport.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
@@ -1744,7 +1816,7 @@ public class Frame extends JFrame implements ActionListener {
 				}
 			}
 		});
-		
+
 		miStructureModule.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
@@ -1804,7 +1876,7 @@ public class Frame extends JFrame implements ActionListener {
 				}
 			}
 		});
-		
+
 		miHome.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
@@ -1818,7 +1890,7 @@ public class Frame extends JFrame implements ActionListener {
 				}
 			}
 		});
-		
+
 		miWorkspace.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
