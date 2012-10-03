@@ -145,7 +145,9 @@ public class SuperEntity {
 
 	public SuperEntity(EntityType type, double mark) {
 		this.setType(type);
-		this.mark = mark;
+		this.setMark(mark);
+
+			
 
 	}
 
@@ -225,6 +227,7 @@ public class SuperEntity {
 	public void updateMark(){
 		try {
 			this.calcMark();
+			this.hasMark = true;
 		} catch (Exception e) {
 			this.hasMark = false;
 		}
