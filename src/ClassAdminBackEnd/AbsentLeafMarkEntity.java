@@ -1,7 +1,5 @@
 package ClassAdminBackEnd;
 
-import java.util.Date;
-
 import org.tmatesoft.sqljet.core.SqlJetException;
 import org.tmatesoft.sqljet.core.SqlJetTransactionMode;
 import org.tmatesoft.sqljet.core.table.ISqlJetTable;
