@@ -41,6 +41,7 @@ import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGEncodeParam;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
+import ClassAdminBackEnd.AbsentException;
 import ClassAdminBackEnd.Global;
 import ClassAdminBackEnd.Project;
 import ClassAdminBackEnd.SuperEntity;
@@ -213,7 +214,11 @@ public class BoxPlotFrame extends JFrame implements ActionListener {
 		
 		for (int k = 0; k < diedata.size(); k++) {
 			
-			nuwe.add(diedata.get(k).get(box.getIndexOfHeader()).getMark());
+			try {
+				nuwe.add(diedata.get(k).get(box.getIndexOfHeader()).getMark());
+			} catch (AbsentException e) {
+				nuwe.add(0);
+			}
 			
 		}
 		teller += 1;

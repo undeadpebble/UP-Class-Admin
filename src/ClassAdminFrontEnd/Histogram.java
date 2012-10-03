@@ -32,6 +32,7 @@ import org.jfree.data.xy.XYDataset;
 
 import com.sun.swing.internal.plaf.basic.resources.basic;
 
+import ClassAdminBackEnd.AbsentException;
 import ClassAdminBackEnd.Global;
 import ClassAdminBackEnd.Project;
 import ClassAdminBackEnd.SuperEntity;
@@ -79,15 +80,23 @@ public class Histogram {
 					//Check for last value in histogrambar
 					if (q == (intervalle - 1)) {
 					
-						if ((diedata.get((Integer) u.get(x)).get(currentdata).getMark() <= (q * intervalle + intervalle))
-								&& (diedata.get((Integer) u.get(x)).get(currentdata).getMark() >= (q * intervalle)))
-							barsused[q] = 1;
+						try {
+							if ((diedata.get((Integer) u.get(x)).get(currentdata).getMark() <= (q * intervalle + intervalle))
+									&& (diedata.get((Integer) u.get(x)).get(currentdata).getMark() >= (q * intervalle)))
+								barsused[q] = 1;
+						} catch (AbsentException e) {
+							barsused[q] = 0;
+						}
 					} else {
 
-						if ((diedata.get((Integer) u.get(x)).get(currentdata).getMark() <= (q * intervalle + intervalhalf))
-								&& (diedata.get((Integer) u.get(x)).get(currentdata).getMark() >= (q * intervalle))) {
+						try {
+							if ((diedata.get((Integer) u.get(x)).get(currentdata).getMark() <= (q * intervalle + intervalhalf))
+									&& (diedata.get((Integer) u.get(x)).get(currentdata).getMark() >= (q * intervalle))) {
 
-							barsused[q] = 1;
+								barsused[q] = 1;
+							}
+						} catch (AbsentException e) {
+							barsused[q] = 0;
 						}
 					}
 				}
@@ -281,7 +290,11 @@ public class Histogram {
 
 		for (int q = 0; q < diedata.size(); q++) {
 
-			values[q] = diedata.get(q).get(houer).getMark();
+			try {
+				values[q] = diedata.get(q).get(houer).getMark();
+			} catch (AbsentException e) {
+				values[q] = 0;
+			}
 
 			studentnr[q] = diedata.get(q).get(0).getValue();
 
@@ -301,7 +314,11 @@ public class Histogram {
 		values = new double[diedata.size()];
 		for (int q = 0; q < diedata.size(); q++) {
 
-			values[q] = diedata.get(q).get(houer).getMark();
+			try {
+				values[q] = diedata.get(q).get(houer).getMark();
+			} catch (AbsentException e) {
+				values[q]=0;
+			}
 
 		}
 		HistogramDataset nuwedataset = new HistogramDataset();

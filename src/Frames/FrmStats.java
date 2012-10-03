@@ -19,6 +19,7 @@ import java.util.LinkedList;
 import javax.swing.border.CompoundBorder;
 import javax.swing.JComboBox;
 
+import ClassAdminBackEnd.AbsentException;
 import ClassAdminBackEnd.Project;
 import ClassAdminBackEnd.SuperEntity;
 
@@ -164,12 +165,20 @@ public class FrmStats extends JFrame {
 		
 		for(int x=0;x<diedata.size();x++)
 		{
-			if(hoogste < diedata.get(x).get(hou).getMark())
-			{
-				hoogste = diedata.get(x).get(hou).getMark();
-			
+			try {
+				if(hoogste < diedata.get(x).get(hou).getMark())
+				{
+					try {
+						hoogste = diedata.get(x).get(hou).getMark();
+					} catch (AbsentException e) {
+						hoogste =0;
+					}
+				
+				}
+			} catch (AbsentException e) {
+				hoogste =0;
 			}
-			System.out.println(diedata.get(x).get(hou).getMark());
+		
 		}
 		return hoogste;
 	}
@@ -183,12 +192,20 @@ public class FrmStats extends JFrame {
 		
 		for(int x=0;x<diedata.size();x++)
 		{
-			if(laagste > diedata.get(x).get(hou).getMark())
-			{
-				laagste = diedata.get(x).get(hou).getMark();
-			
+			try {
+				if(laagste > diedata.get(x).get(hou).getMark())
+				{
+					try {
+						laagste = diedata.get(x).get(hou).getMark();
+					} catch (AbsentException e) {
+						laagste=9999;
+					}
+				
+				}
+			} catch (AbsentException e) {
+				laagste =9999;
 			}
-			System.out.println(diedata.get(x).get(hou).getMark());
+			
 		}
 		return laagste;
 	}
@@ -203,7 +220,11 @@ public class FrmStats extends JFrame {
 		for(int x=0;x<diedata.size();x++)
 		{
 			count++;
-			som= som +diedata.get(x).get(hou).getMark();
+			try {
+				som= som +diedata.get(x).get(hou).getMark();
+			} catch (AbsentException e) {
+				som= som +0;
+			}
 		}
 		
 		gemid = som/count;
@@ -217,8 +238,13 @@ public class FrmStats extends JFrame {
 		int nrVanDruip =0;
 		for(int x=0;x<diedata.size();x++)
 		{
-			if(diedata.get(x).get(hou).getMark()<50.0)
-				nrVanDruip++;
+			try {
+				if(diedata.get(x).get(hou).getMark()<50.0)
+					nrVanDruip++;
+			} catch (AbsentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return nrVanDruip;
 	}
@@ -229,8 +255,12 @@ public class FrmStats extends JFrame {
 		int nrVanSlaag =0;
 		for(int x=0;x<diedata.size();x++)
 		{
-			if(diedata.get(x).get(hou).getMark()>=50.0)
-				nrVanSlaag++;
+			try {
+				if(diedata.get(x).get(hou).getMark()>=50.0)
+					nrVanSlaag++;
+			} catch (AbsentException e) {
+				
+			}
 		}
 		return nrVanSlaag;
 	}
@@ -242,7 +272,12 @@ public class FrmStats extends JFrame {
 		double[] sort = new double[diedata.size()];
 		for(int x=0;x<diedata.size();x++)
 		{
-			sort[x] =diedata.get(x).get(hou).getMark();
+			try {
+				sort[x] =diedata.get(x).get(hou).getMark();
+			} catch (AbsentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 		}
 		

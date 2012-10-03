@@ -34,6 +34,7 @@ import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGEncodeParam;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
+import ClassAdminBackEnd.AbsentException;
 import ClassAdminBackEnd.EntityType;
 import ClassAdminBackEnd.Global;
 import ClassAdminBackEnd.Project;
@@ -63,8 +64,16 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 				double[] sorteermidw = new double[diedata.size()];
 				int[] scattergetalle = new int[diedata.size()];
 				for (int q = 0; q < diedata.size(); q++) {
-					sorteermidq[q] = diedata.get(q).get(xgetal).getMark();
-					sorteermidw[q] = diedata.get(q).get(ygetal).getMark();
+					try {
+						sorteermidq[q] = diedata.get(q).get(xgetal).getMark();
+					} catch (AbsentException e) {
+						sorteermidq[q]=0;
+					}
+					try {
+						sorteermidw[q] = diedata.get(q).get(ygetal).getMark();
+					} catch (AbsentException e) {
+						sorteermidw[q]=0;
+					}
 					scattergetalle[q] = q;
 
 				}
@@ -159,7 +168,11 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 		// Add to series
 
 		for (int q = 0; q < diedata.size(); q++) {
-			series.add(diedata.get(q).get(houerx).getMark(), diedata.get(q).get(houery).getMark());
+			try {
+				series.add(diedata.get(q).get(houerx).getMark(), diedata.get(q).get(houery).getMark());
+			} catch (AbsentException e1) {
+				series.add(0,0);
+			}
 
 		}
 		
@@ -204,7 +217,11 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 				XYSeries series = new XYSeries("Scatter");
 
 				for (int q = 0; q < diedata.size(); q++) {
-					series.add(diedata.get(q).get(houerx).getMark(), diedata.get(q).get(houery).getMark());
+					try {
+						series.add(diedata.get(q).get(houerx).getMark(), diedata.get(q).get(houery).getMark());
+					} catch (AbsentException e1) {
+						series.add(0,0);
+					}
 
 				}
 			
@@ -317,7 +334,12 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 				XYSeries series = new XYSeries("Scatter");
 
 				for (int q = 0; q < diedata.size() ; q++) {
-					series.add(diedata.get(q).get(houerx).getMark(), diedata.get(q).get(houery).getMark());
+					try {
+						series.add(diedata.get(q).get(houerx).getMark(), diedata.get(q).get(houery).getMark());
+					} catch (AbsentException e1) {
+
+						series.add(0,0);
+					}
 
 				}
 				

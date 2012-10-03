@@ -499,6 +499,8 @@ public class Frame extends JFrame implements ActionListener {
 
 		// menu actions
 
+		// menu actions
+
 		// setup space constants
 		HOME_SPACE_LEFT_X = 3;
 		HOME_SPACE_Y = 41;
@@ -633,6 +635,28 @@ public class Frame extends JFrame implements ActionListener {
 		final JTextField searchBox = new JTextField();
 		searchBox.setBounds(25, 5, 124, 25);
 		searchPanel.add(searchBox);
+		
+		searchBox.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				table.search(searchBox.getText());
+				
+			}
+		});
 		
 		searchBox.addKeyListener(new KeyListener() {
 			
@@ -906,7 +930,7 @@ public class Frame extends JFrame implements ActionListener {
 			public void mousePressed(MouseEvent arg0) {
 				if (!studentsButton.isDisabled()) {
 					table.getTable().getSelectedRow();
-					TreeView.createStudentFrm("name",table.getData().get(table.getTable().getSelectedRow()).get(0),Global.getGlobal().getActiveProject());
+					TreeView.createStudentFrm("name", table.getData().get(table.getTable().getSelectedRow()).get(0));
 				}
 			}
 
@@ -3130,4 +3154,4 @@ public class Frame extends JFrame implements ActionListener {
 	}
 
 }
->>>>>>> stuff
+>>>>>>> studview
