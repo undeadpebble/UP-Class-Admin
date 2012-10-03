@@ -13,6 +13,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 import java.util.LinkedList;
 
 import javax.swing.border.CompoundBorder;
@@ -87,12 +88,8 @@ public class FrmStats extends JFrame {
 		lblNumberOfPasses.setBounds(34, 184, 120, 14);
 		contentPane.add(lblNumberOfPasses);
 		
-		JLabel lblMode = new JLabel("Mode:");
-		lblMode.setBounds(34, 209, 46, 14);
-		contentPane.add(lblMode);
-		
 		JLabel lblMedian = new JLabel("Median");
-		lblMedian.setBounds(34, 234, 46, 14);
+		lblMedian.setBounds(34, 209, 46, 14);
 		contentPane.add(lblMedian);
 		
 		final JLabel lblHighestmarkvalue = new JLabel("");
@@ -115,12 +112,8 @@ public class FrmStats extends JFrame {
 		lblPassesvalue.setBounds(185, 184, 46, 14);
 		contentPane.add(lblPassesvalue);
 		
-		JLabel lblModevalue = new JLabel("");
-		lblModevalue.setBounds(185, 209, 46, 14);
-		contentPane.add(lblModevalue);
-		
 		final JLabel lblMedianvalue = new JLabel("");
-		lblMedianvalue.setBounds(185, 234, 46, 14);
+		lblMedianvalue.setBounds(185, 209, 46, 14);
 		contentPane.add(lblMedianvalue);
 		
 		JComboBox comboBox = new JComboBox();
@@ -143,12 +136,12 @@ public class FrmStats extends JFrame {
 
 				}
 			
-				lblHighestmarkvalue.setText(Double.toString(hoogstepunt(houerx)));
-				lblLowestmarkvalue.setText(Double.toString(laagstepunt(houerx)));
-				lblClassAverageValue.setText(Double.toString(gemidpunt(houerx)));
+				lblHighestmarkvalue.setText(Double.toString(roundTwoDecimals(hoogstepunt(houerx))));
+				lblLowestmarkvalue.setText(Double.toString(roundTwoDecimals(laagstepunt(houerx))));
+				lblClassAverageValue.setText(Double.toString(roundTwoDecimals(gemidpunt(houerx))));
 				lblFailuresvalue.setText(Integer.toString(fails(houerx)));
 				lblPassesvalue.setText(Integer.toString(slaag(houerx)));
-				lblMedianvalue.setText(Double.toString(median(houerx)));
+				lblMedianvalue.setText(Double.toString(roundTwoDecimals(median(houerx)));
 			}
 
 		});
@@ -279,4 +272,9 @@ public class FrmStats extends JFrame {
 		
 		return sort[n/2];
 	}
+	public double roundTwoDecimals(double d) {
+	    DecimalFormat twoDForm = new DecimalFormat("#.##");
+	    return Double.valueOf(twoDForm.format(d));
+	}
+
 }
