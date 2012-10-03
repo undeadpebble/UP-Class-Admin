@@ -54,6 +54,7 @@ public class FrmTable extends JPanel {
 	private JTextField txtField1;
 	private JTextField txtField2;
 	
+	
 
 	public String[] headers;
 	public LinkedList<LinkedList<Boolean>> filters = new LinkedList<LinkedList<Boolean>>();
@@ -289,6 +290,7 @@ public class FrmTable extends JPanel {
 						// }
 						/* } */
 
+							}
 							}
 						comp.setForeground(Color.black);
 						// table.repaint();
