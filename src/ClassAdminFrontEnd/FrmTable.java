@@ -787,7 +787,7 @@ public class FrmTable extends JPanel {
 				table.repaint();
 				table.getSelectedRow();
 
-				TreeView.createStudentFrm("name", data.get(table.getSelectedRow()).get(0));
+				TreeView.createStudentFrm("name", data.get(table.getSelectedRow()).get(0),project);
 			}
 		});
 		// ----------------------------------------------------------------------------------------------------------------
@@ -867,6 +867,7 @@ public class FrmTable extends JPanel {
 					addFilter.addActionListener(new ActionListener() {
 						@Override
 						public void actionPerformed(ActionEvent e) {
+							try{
 							switch (formatTypes.getSelectedIndex()) {
 							case 1: {
 								for (int x = 0; x < dataFilter.length; x++) {
@@ -906,6 +907,10 @@ public class FrmTable extends JPanel {
 								break;
 							}
 
+							}
+							}
+							catch (Exception ex) {
+								// TODO: handle exception
 							}
 
 							LinkedList<Integer> removes = new LinkedList<Integer>();

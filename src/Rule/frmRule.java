@@ -739,9 +739,10 @@ public class frmRule extends JFrame {
 								.setBoolRule(rule3);
 						((StringRule) ruleList.get(whichToEdit))
 								.populateTreeWithEntities();
+						
 						if (project.getTables().size() > 0)
 							project.getTables().get(0).redraw();
-					}
+					
 						((StringRule) ruleList.get(whichToEdit))
 								.setChild2(rule2);
 						((StringRule) ruleList.get(whichToEdit))
@@ -1165,8 +1166,6 @@ public class frmRule extends JFrame {
 				}
 			}
 		}
-			}
-		}
 
 		ruleStrings = new String[a];
 		if (lblselected1.isVisible()) {
@@ -1329,10 +1328,6 @@ public class frmRule extends JFrame {
 
 		cbxRules.setModel(new DefaultComboBoxModel(ruleStrings));
 
-		}
-
-		cbxRules.setModel(new DefaultComboBoxModel(ruleStrings));
-
 		lblEntityType1.setVisible(true);
 		lblEntityType2.setVisible(true);
 		lblRule1.setVisible(false);
@@ -1461,10 +1456,6 @@ public class frmRule extends JFrame {
 				ruleStrings[ruleReferences.size()] = ruleList.get(x).getName();
 				ruleReferences.add(x);
 			}
-		}
-
-		cbxRules.setModel(new DefaultComboBoxModel(ruleStrings));
-
 		}
 
 		cbxRules.setModel(new DefaultComboBoxModel(ruleStrings));
