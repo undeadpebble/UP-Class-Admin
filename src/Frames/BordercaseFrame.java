@@ -191,9 +191,9 @@ public class BordercaseFrame extends JFrame {
 		
 		cbxHeaders.setModel(new DefaultComboBoxModel(table.project.getHead().getNumberHeaders()));
 		
-		JButton btnNewBorderCase = new JButton("Remove bordercase");
-		btnNewBorderCase.setBounds(54, 198, 137, 23);
-		backgroundPanel.add(btnNewBorderCase);
+		JButton btnRemoveBorderCase = new JButton("Remove bordercase");
+		btnRemoveBorderCase.setBounds(54, 198, 137, 23);
+		backgroundPanel.add(btnRemoveBorderCase);
 		
 		btnAddBordercase.addActionListener(new ActionListener() {
 			@Override
@@ -211,6 +211,17 @@ public class BordercaseFrame extends JFrame {
 
 				table.repaint();
 				closeFrame();
+			}
+		});
+		
+		btnRemoveBorderCase.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				closeFrame();
+				RemoveBorderCase temp = new RemoveBorderCase(table);
+				temp.setVisible(true);
+				
 			}
 		});
 		
