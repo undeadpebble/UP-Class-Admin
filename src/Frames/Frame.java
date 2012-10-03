@@ -983,7 +983,9 @@ public class Frame extends JFrame implements ActionListener {
 			public void mousePressed(MouseEvent arg0) {
 				if (!boxButton.isDisabled()) {
 					BoxPlotFrame x = new BoxPlotFrame();
-					x.createBoxPlotFrame();
+					x.createBoxPlotFrame(Global.getGlobal().getActiveProject());
+					
+					Global.getGlobal().getActiveProject().addboxplotcharts(x);
 				}
 			}
 

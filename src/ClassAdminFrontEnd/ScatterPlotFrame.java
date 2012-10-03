@@ -25,6 +25,7 @@ import javax.swing.JPanel;
 
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
@@ -39,8 +40,8 @@ import ClassAdminBackEnd.Project;
 import ClassAdminBackEnd.SuperEntity;
 
 public class ScatterPlotFrame extends JFrame implements ActionListener {
-	static ChartPanel chartpanel;
-	static JFreeChart chart;
+	private ChartPanel chartpanel;
+	private JFreeChart chart;
 	private int houerx = 0;
 	private int houery = 0;
 	private ScatterPlot nuweChart;
@@ -52,6 +53,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 	public void update() {
 
 		nuweChart.updateSelectedvalues();
+	
 	}
 	//sort scatterchart
 	public int[] doensorteer(int xgetal, int ygetal)
@@ -98,11 +100,8 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 
 				int[] houer = new int[scattergetalle.length];
 
-			/*	for (int x = 0; x < sorteermidq.length; x++) {
-					System.out.println("Sorteer deeerder " + x + "   " + sorteermidq[x] + " " + sorteermidw[x] + " " + scattergetalle[x]);
+			
 
-				}
-*/
 				int houerflip;
 				int houerflip2;
 				for (int i = 0; i < scattergetalle.length; i++) {
@@ -110,22 +109,21 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 					houerflip = scattergetalle[i];
 					houerflip2 = scattergetalle[houerflip];
 					houer[houerflip2] = houerflip;
-					// System.out.println(flipen2+" "+flipen);
+					
 
 				}
 
-			/*	for (int x = 0; x < scattergetalle.length; x++)
-					System.out.println(houer[x]);*/
+			
 				
 				return houer;
 	}
 	// Create the scatterplotframe
 	public ScatterPlotFrame(final Project project) {
-		System.out.println("Toet2s");
+
 		JFrame f = new JFrame("ScatterPlot");
 		this.project = project;
 		final Container content = f.getContentPane();
-		f.setSize(550, 500);
+		f.setSize(550, 380);
 		diedata = project.getHead().getDataLinkedList();
 
 		final XYSeriesCollection dataset = new XYSeriesCollection();
@@ -134,13 +132,15 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 		nuweChart = new ScatterPlot(project);
 
 		String[] kolom = project.getHead().getNumberHeaders();
-
-		String xas = kolom[0];
-		String yas = kolom[1];
+		if(kolom.length >=2)
+		{
+			project.incscattercount();
+		String xas = kolom[project.getscattercount()];
+		String yas = kolom[project.getscattercount()+1];
 
 		// get the first headers value
 		for (int s = 0; s < headers.length; s++) {
-			if (headers[s].equals(kolom[0])) {
+			if (headers[s].equals(kolom[project.getscattercount()])) {
 				houerx = s;
 
 			}
@@ -148,7 +148,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 		}
 		// get the second headers value
 		for (int s = 0; s < headers.length; s++) {
-			if (headers[s].equals(kolom[1])) {
+			if (headers[s].equals(kolom[project.getscattercount()+1])) {
 				houery = s;
 
 			}
@@ -166,17 +166,24 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 
 		
 		
-		project.setScatterSelect(doensorteer(houerx, houery));
+	
 
 		dataset.addSeries(series);
-
+		nuweChart.setScatterArray(doensorteer(houerx, houery));
 		chart = nuweChart.createScatter("asd", dataset, xas, yas);
+		
 		chartpanel = nuweChart.createPanel();
-
+		
+	
+		
+		
+		
+		
 		JLabel lblNewLabel = new JLabel("X-axis");
 		final JComboBox xascb = new JComboBox();
 		// Combobox of X-axis
 		xascb.setModel(new DefaultComboBoxModel(kolom));
+		xascb.setSelectedIndex(project.getscattercount());
 		xascb.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -200,7 +207,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 					series.add(diedata.get(q).get(houerx).getMark(), diedata.get(q).get(houery).getMark());
 
 				}
-				project.setScatterSelect(doensorteer(houerx, houery));
+			
 				nuwedataset.addSeries(series);
 				chartpanel.getChart().getXYPlot().setDataset(nuwedataset);
 				nuweChart.setDatasetmain(nuwedataset);
@@ -241,8 +248,8 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 				if (xascb.getSelectedIndex() >= 1)
 				{
 					xascb.setSelectedIndex(xascb.getSelectedIndex() - 1);
-				//	project.setScatterSelect(doensorteer(houerx, houery));
-				project.updatecharts();
+				
+					project.updatecharts();
 				}
 			}
 		});
@@ -288,7 +295,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 
 		final JComboBox yascb = new JComboBox();
 		yascb.setModel(new DefaultComboBoxModel(kolom));
-		yascb.setSelectedIndex(1);
+		yascb.setSelectedIndex(project.getscattercount() +1);
 		// Combobox of Y-axis
 		yascb.addActionListener(new ActionListener() {
 
@@ -313,7 +320,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 					series.add(diedata.get(q).get(houerx).getMark(), diedata.get(q).get(houery).getMark());
 
 				}
-				project.setScatterSelect(doensorteer(houerx, houery));
+				
 				nuwedataset.addSeries(series);
 				chartpanel.getChart().getXYPlot().setDataset(nuwedataset);
 				nuweChart.setDatasetmain(nuwedataset);
@@ -474,7 +481,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 			}
 		});
 
-		content.setBackground(Color.white);
+		
 		content.setLayout(new FlowLayout());
 		content.add(chartpanel);
 		content.add(lblNewLabel);
@@ -487,6 +494,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 		content.add(switchregsy);
 		content.add(rotate);
 		content.add(extractPic);
+		}
 
 		f.setVisible(true);
 	}

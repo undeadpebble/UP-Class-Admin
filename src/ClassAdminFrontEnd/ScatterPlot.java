@@ -32,6 +32,7 @@ import org.jfree.chart.entity.ChartEntity;
 import org.jfree.chart.entity.XYItemEntity;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYItemRenderer;
 
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
@@ -46,21 +47,25 @@ import ClassAdminBackEnd.Project;
 
 public class ScatterPlot {
 
-	ChartPanel chartPanel ;
-	JFreeChart chart; 
-	XYPlot plot;
-	static XYDataset datasetMain;
-	Project project;
+	private ChartPanel chartPanel ;
+	private JFreeChart chart; 
+	private XYPlot plot;
+	private XYDataset datasetMain;
+	private int[] scatterarray;
+	private Project project;
 	//Constructor
 	public ScatterPlot(Project project)
 	{
 		this.project = project;
 		project.updatecharts();
+		
+		System.out.println("CREAETED ");
 	}
 	
 	//Set the dataset of the chart
 	public void setDatasetmain(XYDataset x)
 	{
+	
 		datasetMain = x;
 	}
 	
@@ -68,12 +73,15 @@ public class ScatterPlot {
 	public JFreeChart createScatter(String title,final XYDataset chartdata,String xas,String yas)
 	{
 		chart = ChartFactory.createScatterPlot(
-				"Scatter Plot Demo", xas, yas, chartdata,
+				"Scatter Plot", xas, yas, chartdata,
 				PlotOrientation.VERTICAL, false, false, false);
 		datasetMain = chartdata;
 		NumberAxis domainAxis = (NumberAxis) chart.getXYPlot().getDomainAxis();
 		domainAxis.setAutoRangeIncludesZero(false);
+		XYPlot plot = (XYPlot) chart.getPlot();
 		
+		XYItemRenderer renderer = plot.getRenderer();
+		renderer.setSeriesPaint(0, new Color(0xFF8400));
 		return chart;
 	}	
 	
@@ -84,25 +92,19 @@ public class ScatterPlot {
 		System.out.println("Ek update scatterchart");
 		ArrayList u= project.getSelectedIndexes();
 		System.out.println("Size van "+ u.size());
-		int [] scatterwaardes = project.getScatterIndexes();
+	
 		final CircleDrawer cd = new CircleDrawer(Color.red,
 				new BasicStroke(1.0f), null);
 		
 		for(int x=0;x<u.size();x++)
 		{
+			final XYAnnotation selectPlots = new XYDrawableAnnotation(datasetMain
+					.getXValue(0, scatterarray[(Integer)u.get(x)]), datasetMain.getYValue(0,
+							scatterarray[(Integer)u.get(x)]), 11, 11, cd);
 		
-		final XYAnnotation selectPlots = new XYDrawableAnnotation(datasetMain
-				.getXValue(0, scatterwaardes[(Integer)u.get(x)]), datasetMain.getYValue(0,
-						scatterwaardes[(Integer)u.get(x)]), 11, 11, cd);
 		
 		chart.getXYPlot().addAnnotation(selectPlots);
-		System.out.println(u.get(x));
-		System.out.println(scatterwaardes[(Integer)u.get(x)]);
-		System.out.println(datasetMain.getXValue(0, scatterwaardes[(Integer)u.get(x)])+"  " + datasetMain.getYValue(0,scatterwaardes[(Integer)u.get(x)]));
-		/*for(int w=0;w<scatterwaardes.length;w++)
-			System.out.println(scatterwaardes[w]);
-		System.out.println(datasetMain.getXValue(0, 76));
-		System.out.println(datasetMain.getYValue(0, 76));*/
+		
 		}
 	}
 	//Put the chart on the chartpanel
@@ -125,7 +127,6 @@ public class ScatterPlot {
 					{
 					chart.getXYPlot().clearAnnotations();
 					project.clearselected();
-				//	project.setCleared(true);
 					}
 					ChartEntity entity = ((ChartMouseEvent) e).getEntity();
 				
@@ -137,34 +138,17 @@ public class ScatterPlot {
 						
 						int sindex = ent.getSeriesIndex();
 						int iindex = ent.getItem();
-						for(int q=0;q<scatterwaardes.length;q++)
+						System.out.println("Selected "+ datasetMain.getXValue(sindex, iindex)+"  " + datasetMain.getYValue(sindex,iindex));
+						for(int q=0;q<scatterarray.length;q++)
 						{
-							if(scatterwaardes[q]== iindex)
+							if(scatterarray[q]== iindex)
 							{
-								project.setSelected(q);
-								project.setCleared(true);
+								project.setSelected(q,true);
+								
 							}
 						}
 						System.out.println("Ek het klaar geset");
 						
-					/*
-						final CircleDrawer cd = new CircleDrawer(Color.red,
-								new BasicStroke(1.0f), null);
-						final XYAnnotation bestBid = new XYDrawableAnnotation(datasetMain
-								.getXValue(sindex, iindex), datasetMain.getYValue(sindex,
-								iindex), 11, 11, cd);
-					
-						
-						
-						chart.getXYPlot().addAnnotation(bestBid);*/
-						//project.updatecharts();
-						
-						
-					
-						
-					/*	System.out.println("Series"+sindex +" Index"+iindex);
-						System.out.println("x = " + datasetMain.getXValue(sindex, iindex));
-						System.out.println("y = " + datasetMain.getYValue(sindex, iindex));*/
 					}
 
 				}
@@ -180,6 +164,9 @@ public class ScatterPlot {
 		chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
 		return chartPanel;
 	}
-	
+	public void setScatterArray(int[] x)
+	{
+		scatterarray = x;
+	}
 	    
 }
