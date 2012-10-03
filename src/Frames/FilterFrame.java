@@ -451,4 +451,5 @@ public class FilterFrame extends JFrame {
 			}
 		});
 	}
+	
 }
