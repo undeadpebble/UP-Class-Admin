@@ -141,7 +141,7 @@ public class FrmStats extends JFrame {
 				lblClassAverageValue.setText(Double.toString(roundTwoDecimals(gemidpunt(houerx))));
 				lblFailuresvalue.setText(Integer.toString(fails(houerx)));
 				lblPassesvalue.setText(Integer.toString(slaag(houerx)));
-				lblMedianvalue.setText(Double.toString(roundTwoDecimals(median(houerx)));
+				lblMedianvalue.setText(Double.toString(roundTwoDecimals(median(houerx))));
 			}
 
 		});
