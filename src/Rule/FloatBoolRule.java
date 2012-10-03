@@ -5,8 +5,8 @@ import ClassAdminBackEnd.Project;
 import ClassAdminBackEnd.SuperEntity;
 
 public class FloatBoolRule extends BooleanRule {
-	FloatRule child1;
-	FloatRule child2;
+	private FloatRule child1;
+	private FloatRule child2;
 
 	public FloatBoolRule(char opperator, FloatRule child1, FloatRule child2,
 			String name, Project project) {
@@ -17,6 +17,32 @@ public class FloatBoolRule extends BooleanRule {
 		this.setIsRule(true);
 		this.setIsTextField(true);
 	}
+	
+	
+
+	public FloatRule getChild1() {
+		return child1;
+	}
+
+
+
+	public void setChild1(FloatRule child1) {
+		this.child1 = child1;
+	}
+
+
+
+	public FloatRule getChild2() {
+		return child2;
+	}
+
+
+
+	public void setChild2(FloatRule child2) {
+		this.child2 = child2;
+	}
+
+
 
 	@Override
 	public Boolean evaluateBool(SuperEntity sE) {

@@ -357,7 +357,7 @@ public class SuperEntity {
 		return "";
 	}
 
-	public void setValue(String str) {
+	public void setValue(String str) throws NumberFormatException{
 		this.setMark(Double.parseDouble(str));
 	}
 
@@ -429,12 +429,15 @@ public class SuperEntity {
 		return (str);
 	}
 
-	public String createTreeFromHead() {
+	public String createTreeFromHead(LinkedList<SuperEntity> studentLinkedList) {
+		
+		studentLinkedList.add(this);
+
 		String str = "";
 		str += "<branch>" + "<attribute name = \"name\" value= \""
 				+ this.getValue() + "\" />";
 		for (int i = 0; i < this.getSubEntity().size(); i++) {
-			str += this.getSubEntity().get(i).createTreeFromHead();
+			str += this.getSubEntity().get(i).createTreeFromHead(studentLinkedList);
 		}
 		str += "</branch>";
 		return str;

@@ -1,5 +1,6 @@
 package ClassAdminBackEnd;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
 
@@ -264,6 +265,7 @@ public class EntityType {
 
 	public String createTreeFromHead(LinkedList<EntityType> treeLinkedList) {
 		treeLinkedList.add(this);
+		
 		if (this.getSubEntityType().size() > 0) {
 			String str = "";
 			str += "<branch>" + "<attribute name = \"name\" value= \""
@@ -305,6 +307,7 @@ public class EntityType {
 
 		}
 	}
+
 
 	public void removeDeletingChildren() {
 		for (int x = 0; x < this.getEntityList().size(); ++x) {

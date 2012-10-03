@@ -34,6 +34,7 @@ public class Project {
 	private ArrayList scatterArrayListIndexes = new ArrayList();
 	private LinkedList<Rule> rules = new LinkedList<Rule>();
 	private LinkedList<EntityType> treeLinkedList;
+	private LinkedList<SuperEntity> studentLinkedList;
 	private LinkedList<FrmTable> tables = new LinkedList<FrmTable>();
 	private boolean cleared= false;
 	
@@ -177,5 +178,11 @@ public class Project {
 		if (treeLinkedList == null)
 			treeLinkedList = new LinkedList<EntityType>();
 		return treeLinkedList;
+	}
+
+	public LinkedList<SuperEntity> getStudentLinkedList() {
+		if (studentLinkedList == null)
+			studentLinkedList = new LinkedList<SuperEntity>();
+		return studentLinkedList;
 	}
 }
