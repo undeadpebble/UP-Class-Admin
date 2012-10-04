@@ -118,6 +118,30 @@ public class FrmStats extends JFrame {
 		lblMedianvalue.setBounds(185, 209, 46, 14);
 		contentPane.add(lblMedianvalue);
 		
+		JLabel lblNumberOfPossible = new JLabel("Number of possible supplementary:");
+		lblNumberOfPossible.setBounds(34, 147, 246, 14);
+		contentPane.add(lblNumberOfPossible);
+		
+		JLabel lblNumberOfDistinctions = new JLabel("Number of distinctions:");
+		lblNumberOfDistinctions.setBounds(34, 195, 169, 14);
+		contentPane.add(lblNumberOfDistinctions);
+		
+		JLabel lblTotalNumberOf = new JLabel("Total number of students:");
+		lblTotalNumberOf.setBounds(34, 220, 222, 14);
+		contentPane.add(lblTotalNumberOf);
+		
+		final JLabel lblTotalnrofstud = new JLabel("");
+		lblTotalnrofstud.setBounds(280, 220, 46, 14);
+		contentPane.add(lblTotalnrofstud);
+		
+		final JLabel lblNrdistinction = new JLabel("");
+		lblNrdistinction.setBounds(280, 195, 46, 14);
+		contentPane.add(lblNrdistinction);
+		
+		final JLabel lblNrofsupps = new JLabel("");
+		lblNrofsupps.setBounds(280, 147, 46, 14);
+		contentPane.add(lblNrofsupps);
+		
 		JComboBox comboBox = new JComboBox();
 		comboBox.setBounds(198, 11, 128, 20);
 		contentPane.add(comboBox);
@@ -142,7 +166,10 @@ public class FrmStats extends JFrame {
 				lblLowestmarkvalue.setText(Double.toString(stats.roundTwoDecimals(stats.laagstepunt(houerx))));
 				lblClassAverageValue.setText(Double.toString(stats.roundTwoDecimals(stats.gemidpunt(houerx))));
 				lblFailuresvalue.setText(Integer.toString(stats.fails(houerx)));
+				lblNrofsupps.setText((Integer.toString(stats.her(houerx))));
 				lblPassesvalue.setText(Integer.toString(stats.slaag(houerx)));
+				lblNrdistinction.setText(Integer.toString(stats.distinction(houerx)));
+				lblTotalnrofstud.setText(Integer.toString(stats.totalnrstd()));
 				lblMedianvalue.setText(Double.toString(stats.roundTwoDecimals(stats.median(houerx))));
 			}
 
