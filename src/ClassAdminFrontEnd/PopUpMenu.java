@@ -2,32 +2,17 @@ package ClassAdminFrontEnd;
 
 import javax.swing.*;
 
-import org.tmatesoft.sqljet.core.SqlJetException;
-
 import ClassAdminBackEnd.EntityType;
-import ClassAdminBackEnd.Global;
 import ClassAdminBackEnd.Project;
-import Frames.Frame;
 import Frames.FrmNewNode;
 import Frames.FrmUpdateNode;
 
-import prefuse.Display;
-import prefuse.Visualization;
 import prefuse.controls.ControlAdapter;
-import prefuse.data.Edge;
-import prefuse.data.Graph;
-import prefuse.data.Node;
 import prefuse.data.Table;
 import prefuse.data.Tree;
 import prefuse.visual.VisualItem;
 
-import java.awt.Color;
-import java.awt.GridLayout;
 import java.awt.event.*;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.LinkedList;
 
 public class PopUpMenu {
