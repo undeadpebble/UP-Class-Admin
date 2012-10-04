@@ -1,6 +1,5 @@
 package Frames;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -10,18 +9,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
+import javax.swing.JButton;
 import javax.swing.JColorChooser;
-import javax.swing.JEditorPane;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
+import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JButton;
 
 import ClassAdminBackEnd.BetweenFormat;
 import ClassAdminBackEnd.Format;
@@ -29,7 +30,7 @@ import ClassAdminBackEnd.GreaterThanFormat;
 import ClassAdminBackEnd.LessThanFormat;
 import ClassAdminFrontEnd.BackgroundGradientPanel;
 import ClassAdminFrontEnd.FrmTable;
-import javax.swing.JTextField;
+import ClassAdminFrontEnd.ReflectionButton;
 
 public class ConditionalFormattingFrame extends JFrame {
 
@@ -81,8 +82,9 @@ public class ConditionalFormattingFrame extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @throws IOException 
 	 */
-	public ConditionalFormattingFrame(final FrmTable table) {
+	public ConditionalFormattingFrame(final FrmTable table) throws IOException {
 		String[] formatTypesStr = new String[Format.formatTypes.length + 1];
 		formatTypesStr[0] = "";
 
@@ -92,7 +94,7 @@ public class ConditionalFormattingFrame extends JFrame {
 		
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 561, 625);
+		setBounds(100, 100, 863, 559);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(null);
@@ -119,13 +121,13 @@ public class ConditionalFormattingFrame extends JFrame {
 		backgroundPanel.setLayout(null);
 
 		cbxConditionalRuleType = new JComboBox(formatTypesStr);
-		cbxConditionalRuleType.setBounds(361, 38, 113, 26);
+		cbxConditionalRuleType.setBounds(237, 116, 113, 26);
 		backgroundPanel.add(cbxConditionalRuleType);
 
 		final JColorChooser colCombo = new JColorChooser();
 		colCombo.remove(colCombo.getComponent(1));
 		backgroundPanel.add(colCombo);
-		colCombo.setBounds(58, 186, 416, 269);
+		colCombo.setBounds(380, 93, 416, 269);
 		/*
 		 * add combo box options
 		 */
@@ -135,7 +137,7 @@ public class ConditionalFormattingFrame extends JFrame {
 				new Integer(1) // step
 		);
 		final JSpinner minVal = new JSpinner(SNMmin);
-		minVal.setBounds(361, 75, 113, 26);
+		minVal.setBounds(237, 167, 113, 26);
 		backgroundPanel.add(minVal);
 
 		SpinnerNumberModel SNMmax = new SpinnerNumberModel(new Integer(0), // value
@@ -144,49 +146,50 @@ public class ConditionalFormattingFrame extends JFrame {
 				new Integer(1) // step
 		);
 		final JSpinner maxVal = new JSpinner(SNMmax);
-		maxVal.setBounds(361, 113, 113, 26);
+		maxVal.setBounds(237, 221, 113, 26);
 		backgroundPanel.add(maxVal);
 
 		final JComboBox whatToFormatCombo = new JComboBox(table.numberHeads);
-		whatToFormatCombo.setBounds(361, 466, 113, 26);
+		whatToFormatCombo.setBounds(237, 273, 113, 26);
 		backgroundPanel.add(whatToFormatCombo);
 
 		final JLabel lblConditionalRuleType = new JLabel("Conditional Rule Type");
-		lblConditionalRuleType.setBounds(58, 44, 134, 14);
+		lblConditionalRuleType.setBounds(58, 122, 134, 14);
 		lblConditionalRuleType.setForeground(new Color(0xEDEDED));
 		backgroundPanel.add(lblConditionalRuleType);
 
 		final JLabel lblLowerValue = new JLabel("Lower Value");
-		lblLowerValue.setBounds(58, 81, 134, 14);
+		lblLowerValue.setBounds(58, 173, 134, 14);
 		lblLowerValue.setForeground(new Color(0xEDEDED));
 		backgroundPanel.add(lblLowerValue);
 
 		final JLabel lblUpperValue = new JLabel("Upper Value");
-		lblUpperValue.setBounds(58, 119, 134, 14);
+		lblUpperValue.setBounds(58, 227, 134, 14);
 		lblUpperValue.setForeground(new Color(0xEDEDED));
 		backgroundPanel.add(lblUpperValue);
 
 		final JLabel lblAffectedArea = new JLabel("Affected Area");
-		lblAffectedArea.setBounds(58, 466, 134, 14);
+		lblAffectedArea.setBounds(58, 279, 134, 14);
 		lblAffectedArea.setForeground(new Color(0xEDEDED));
 		backgroundPanel.add(lblAffectedArea);
 
-		final JButton btnAddFormatting = new JButton("Add Formatting");
-		btnAddFormatting.setBounds(361, 553, 113, 23);
+		final ReflectionButton btnAddFormatting = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/ConditionalFormattingFrame.png")));
+		//final JButton btnAddFormatting = new JButton("Add Formatting");
+		btnAddFormatting.setBounds(747, 437, 70, 100);
 		backgroundPanel.add(btnAddFormatting);
 		
 		final JLabel lblColour = new JLabel("Colour");
 		lblColour.setForeground(new Color(237, 237, 237));
-		lblColour.setBounds(58, 161, 134, 14);
+		lblColour.setBounds(742, 99, 134, 14);
 		backgroundPanel.add(lblColour);
 		
 		JLabel lblTooltip = new JLabel("Tooltip");
 		lblTooltip.setForeground(new Color(237, 237, 237));
-		lblTooltip.setBounds(58, 515, 134, 14);
+		lblTooltip.setBounds(58, 399, 134, 14);
 		backgroundPanel.add(lblTooltip);
 		
 		description = new JTextField();
-		description.setBounds(361, 503, 113, 39);
+		description.setBounds(237, 387, 559, 39);
 		backgroundPanel.add(description);
 		description.setColumns(10);
 
@@ -195,13 +198,11 @@ public class ConditionalFormattingFrame extends JFrame {
 
 			@Override
 			public void componentHidden(ComponentEvent e) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void componentMoved(ComponentEvent e) {
-				// TODO Auto-generated method stub
 
 			}
 
@@ -214,7 +215,6 @@ public class ConditionalFormattingFrame extends JFrame {
 
 			@Override
 			public void componentShown(ComponentEvent e) {
-				// TODO Auto-generated method stub
 
 			}
 

@@ -143,6 +143,11 @@ public class FilterFrame extends JFrame {
 		lblLowerValue.setBounds(61, 131, 102, 14);
 		backgroundPanel.add(lblLowerValue);
 		lblLowerValue.setForeground(new Color(0xEDEDED));
+		
+		final JLabel lblSelectValues = new JLabel("Select Values to Filter");
+		lblSelectValues.setBounds(61, 180, 150, 14);
+		backgroundPanel.add(lblSelectValues);
+		lblSelectValues.setForeground(new Color(0xEDEDED));
 
 		final JLabel lblUpperValue = new JLabel("Upper Value");
 		lblUpperValue.setBounds(61, 169, 77, 14);
@@ -175,6 +180,7 @@ public class FilterFrame extends JFrame {
 			maxVal.setVisible(false);
 			lblLowerValue.setVisible(false);
 			lblUpperValue.setVisible(false);
+			lblSelectValues.setVisible(true);
 		} else {
 			lblSelectField.setVisible(true);
 			lblConditionalRuleType.setVisible(true);
@@ -182,6 +188,7 @@ public class FilterFrame extends JFrame {
 			maxVal.setVisible(true);
 			lblLowerValue.setVisible(true);
 			lblUpperValue.setVisible(true);
+			lblSelectValues.setVisible(false);
 			cbxFormatType = new JComboBox(formatTypesStr);
 		}
 
@@ -190,13 +197,11 @@ public class FilterFrame extends JFrame {
 
 			@Override
 			public void componentHidden(ComponentEvent e) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void componentMoved(ComponentEvent e) {
-				// TODO Auto-generated method stub
 
 			}
 
@@ -210,7 +215,6 @@ public class FilterFrame extends JFrame {
 
 			@Override
 			public void componentShown(ComponentEvent e) {
-				// TODO Auto-generated method stub
 
 			}
 
@@ -269,7 +273,7 @@ public class FilterFrame extends JFrame {
 			 * System.out.println(selectData[z].getName());
 			 */
 
-			lblSelectField.setVisible(false);
+			lblSelectField.setVisible(true);
 			lblConditionalRuleType.setVisible(false);
 			minVal.setVisible(false);
 			maxVal.setVisible(false);
@@ -306,6 +310,7 @@ public class FilterFrame extends JFrame {
 			btnCreateFilter.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					try{
 
 					switch (cbxFormatType.getSelectedIndex()) {
 					case 1: {
@@ -358,7 +363,11 @@ public class FilterFrame extends JFrame {
 					}
 
 					table.filterTable();
-
+				
+				}
+				catch (Exception ex) {
+					// TODO: handle exception
+				}
 				}
 			});
 		}
@@ -368,13 +377,14 @@ public class FilterFrame extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				if (table.data.get(0).get(cbxFilters.getSelectedIndex())
 						.getType().getIsTextField()) {
-					lblSelectField.setVisible(false);
+					lblSelectField.setVisible(true);
 					lblConditionalRuleType.setVisible(false);
 					minVal.setVisible(false);
 					maxVal.setVisible(false);
 					lblLowerValue.setVisible(false);
 					lblUpperValue.setVisible(false);
 					cbxFormatType.setVisible(false);
+					lblSelectValues.setVisible(true);
 				} else {
 					lblSelectField.setVisible(true);
 					lblConditionalRuleType.setVisible(true);
@@ -383,6 +393,7 @@ public class FilterFrame extends JFrame {
 					lblLowerValue.setVisible(true);
 					lblUpperValue.setVisible(true);
 					cbxFormatType.setVisible(true);
+					lblSelectValues.setVisible(false);
 				}
 
 			}
