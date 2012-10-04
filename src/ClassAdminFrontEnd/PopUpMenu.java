@@ -67,8 +67,7 @@ public class PopUpMenu {
 
 		miEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(activeItem.canSetString("name"))
-				{
+				if (activeItem.canSetString("name")) {
 					updateNode.showFrmUpdateNode(0);
 					activeItem.getVisualization().run("filter");
 				}
@@ -80,12 +79,14 @@ public class PopUpMenu {
 				VisualItem item = activeItem;
 
 				int i = item.getRow();
+				activeProject.getAudit().RemoveNode(item.getString("name"), true);
 				activeTree.removeNode(i);
 
 				activeTreeLinkedList.get(i).removeDeletingChildren();
 				activeProject.updateTables();
+
 				parentFrame.dispose();
-				TreeView.createEntityTypeFrm("name",activeProject);
+				TreeView.createEntityTypeFrm("name", activeProject);
 			}
 		});
 
@@ -107,13 +108,15 @@ public class PopUpMenu {
 						activeTree.addEdge(source, target);
 					}
 				}
+				activeProject.getAudit().RemoveNode(item.getString("name"), false);
 				activeTree.removeNode(i);
+
 				activeTreeLinkedList.get(i).removeSavingChildren();
 				item.getVisualization().repaint();
 				activeProject.updateTables();
 				parentFrame.dispose();
-				TreeView.createEntityTypeFrm("name",activeProject);
-				
+				TreeView.createEntityTypeFrm("name", activeProject);
+
 			}
 		});
 
@@ -133,8 +136,8 @@ public class PopUpMenu {
 						pMenu.show(e.getComponent(), e.getX(), e.getY());
 						activeItem = item;
 						activeEntity = activeTreeLinkedList.get(activeItem.getRow());
-						newNode = new FrmNewNode(activeTree, activeProject, new JFrame(),tview);
-						updateNode = new FrmUpdateNode(activeProject, new JFrame(), activeEntity,activeItem);
+						newNode = new FrmNewNode(activeTree, activeProject, new JFrame(), tview);
+						updateNode = new FrmUpdateNode(activeProject, new JFrame(), activeEntity, activeItem);
 					}
 				}
 			}
