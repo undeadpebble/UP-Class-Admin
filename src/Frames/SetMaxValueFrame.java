@@ -9,7 +9,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
@@ -18,6 +20,7 @@ import javax.swing.border.EmptyBorder;
 import ClassAdminBackEnd.AbsentException;
 import ClassAdminFrontEnd.BackgroundGradientPanel;
 import ClassAdminFrontEnd.FrmTable;
+import ClassAdminFrontEnd.ReflectionButton;
 
 import javax.swing.JComboBox;
 import javax.swing.JSpinner;
@@ -71,10 +74,11 @@ public class SetMaxValueFrame extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @throws IOException 
 	 */
-	public SetMaxValueFrame(final FrmTable table) {
+	public SetMaxValueFrame(final FrmTable table) throws IOException {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 408, 335);
+		setBounds(100, 100, 408, 317);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(null);
@@ -106,17 +110,18 @@ public class SetMaxValueFrame extends JFrame {
 		backgroundPanel.add(spinner);
 
 		JLabel lblSelectField = new JLabel("Select Field");
-		lblSelectField.setBounds(49, 75, 128, 14);
+		lblSelectField.setBounds(59, 76, 128, 14);
 		backgroundPanel.add(lblSelectField);
 		lblSelectField.setForeground(new Color(0xEDEDED));
 
 		JLabel lblSelectMaximumValue = new JLabel("Select Maximum Value");
-		lblSelectMaximumValue.setBounds(49, 126, 128, 14);
+		lblSelectMaximumValue.setBounds(59, 127, 128, 14);
 		backgroundPanel.add(lblSelectMaximumValue);
 		lblSelectMaximumValue.setForeground(new Color(0xEDEDED));
 
-		JButton btnSetMaxValues = new JButton("Set Max Values");
-		btnSetMaxValues.setBounds(142, 218, 122, 23);
+		final ReflectionButton btnSetMaxValues = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/MaxValueFrame.png")));
+		//JButton btnSetMaxValues = new JButton("Set Max Values");
+		btnSetMaxValues.setBounds(275, 190, 59, 83);
 		backgroundPanel.add(btnSetMaxValues);
 
 		// frame resize listener adjust components accordingly

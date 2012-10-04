@@ -1692,8 +1692,13 @@ public class Frame extends JFrame implements ActionListener {
 	}
 
 	public void setMaxValues() {
-		SetMaxValueFrame maxframe = new SetMaxValueFrame(table);
-		maxframe.setVisible(true);
+		SetMaxValueFrame maxframe;
+		try {
+			maxframe = new SetMaxValueFrame(table);
+			maxframe.setVisible(true);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void showFilter() {
