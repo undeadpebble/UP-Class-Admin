@@ -120,6 +120,7 @@ public class ReflectionButton extends JButton implements MouseListener {
 				g2.drawImage(grayreflection, 0, 0, null);
 			}
 		}
+		repaint();
 
 	}
 	
