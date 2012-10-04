@@ -1530,7 +1530,7 @@ public class Frame extends JFrame implements ActionListener {
 		setNavButtonsEnabled();
 		setMenuItemsEnabled();
 
-		studentPanel.moveOut();
+		studentPanel.moveIn();
 
 		// set selected table
 		// table = Global.getGlobal().getActiveProject().getTables().get(0);
