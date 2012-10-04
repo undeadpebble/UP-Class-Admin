@@ -55,6 +55,7 @@ import com.sun.imageio.plugins.png.PNGImageWriter;
 import ClassAdminBackEnd.EntityType;
 import ClassAdminBackEnd.Global;
 import ClassAdminBackEnd.Project;
+import ClassAdminBackEnd.Stats;
 import ClassAdminBackEnd.SuperEntity;
 import ClassAdminFrontEnd.Histogram.CustomBarRenderer;
 
@@ -69,7 +70,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 	private ArrayList selectedindex = new ArrayList();
 	private Histogram nuweChart;
 	private Project project;
-
+	private Stats stats;
 	//Update the values of the histogram
 	public void update() {
 		nuweChart.updateSelectedValues();
@@ -80,7 +81,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 		JFrame f = new JFrame("Histogram");
 		final Container content = f.getContentPane();
 		f.setSize(550, 620);
-
+		stats = new Stats(project);
 		this.project = project;
 		final LinkedList<LinkedList<SuperEntity>> diedata = project.getHead()
 				.getDataLinkedList();
@@ -112,6 +113,11 @@ public class HistogramFrame extends JFrame implements ActionListener {
 
 		chartpanel = nuweChart.createPanel();
 
+		final JLabel classaverage = new JLabel("Class average:"+stats.gemidpunt(houerx)+"                            ");
+		final JLabel failures = new JLabel("Number of failures:"+stats.fails(houerx)+"                     ");
+		final JLabel passes = new JLabel("Number of passes:"+stats.slaag(houerx)+"                       ");
+		
+		
 		JLabel lblNewLabel = new JLabel("X-axis");
 
 		final JComboBox xascb = new JComboBox();
@@ -140,7 +146,9 @@ public class HistogramFrame extends JFrame implements ActionListener {
 				chartpanel.getChart().getXYPlot()
 						.setDataset(nuweChart.changeDataset(houerx));
 				project.updatecharts();
-
+				classaverage.setText("Class average: "+stats.roundTwoDecimals(stats.gemidpunt(houerx))+"                            ");
+				passes.setText("Number of failures:"+stats.fails(houerx)+"                     ");
+				failures.setText("Number of passes:"+stats.slaag(houerx)+"                       ");
 			}
 
 		});
@@ -178,7 +186,10 @@ public class HistogramFrame extends JFrame implements ActionListener {
 				{
 					xascb.setSelectedIndex(xascb.getSelectedIndex() - 1);
 					project.updatecharts();
-				}
+					classaverage.setText("Class average: "+stats.roundTwoDecimals(stats.gemidpunt(houerx))+"                            ");
+					passes.setText("Number of failures:"+stats.fails(houerx)+"                     ");
+					failures.setText("Number of passes:"+stats.slaag(houerx)+"                       ");
+					}
 			}
 		});
 		//Cycle through data right
@@ -215,6 +226,9 @@ public class HistogramFrame extends JFrame implements ActionListener {
 				{
 					xascb.setSelectedIndex(xascb.getSelectedIndex() + 1);
 					project.updatecharts();
+					classaverage.setText("Class average: "+stats.roundTwoDecimals(stats.gemidpunt(houerx))+"                            ");
+					passes.setText("Number of failures:"+stats.fails(houerx)+"                     ");
+					failures.setText("Number of passes:"+stats.slaag(houerx)+"                       ");
 				}
 			}
 		});
@@ -407,10 +421,11 @@ public class HistogramFrame extends JFrame implements ActionListener {
 		});
 		
 		
-		
-		
 		content.setLayout(new FlowLayout());
 		content.add(chartpanel);
+		content.add(classaverage);
+		content.add(failures);
+		content.add(passes);
 		content.add(lblNewLabel);
 		content.add(xascb);
 		content.add(switchlinksx);
