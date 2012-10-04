@@ -26,6 +26,7 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.annotations.XYAnnotation;
 import org.jfree.chart.annotations.XYDrawableAnnotation;
+import org.jfree.chart.annotations.XYLineAnnotation;
 
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.entity.ChartEntity;
@@ -59,7 +60,7 @@ public class ScatterPlot {
 		this.project = project;
 		project.updatecharts();
 		
-		System.out.println("CREAETED ");
+	
 	}
 	
 	//Set the dataset of the chart
@@ -89,9 +90,26 @@ public class ScatterPlot {
 	public void updateSelectedvalues()
 	{
 		chart.getXYPlot().clearAnnotations();
-		System.out.println("Ek update scatterchart");
+		
+		 XYLineAnnotation a2 = new XYLineAnnotation(79.5, 0.5, 100.0, 0.5);
+		 chart.getXYPlot().addAnnotation(a2);
+		 XYLineAnnotation a3 = new XYLineAnnotation(79.5, 0.5, 49.5, 29.5);
+		 chart.getXYPlot().addAnnotation(a3);
+		 XYLineAnnotation a4 = new XYLineAnnotation(49.5, 39.5, 49.5, 29.5);
+		 chart.getXYPlot().addAnnotation(a4);
+		 XYLineAnnotation a5 = new XYLineAnnotation(49.5, 39.5, 39.5, 49.5);
+		 chart.getXYPlot().addAnnotation(a5);
+		 XYLineAnnotation a6 = new XYLineAnnotation(39.5, 59, 39.5, 49.5);
+		 chart.getXYPlot().addAnnotation(a6);
+		 XYLineAnnotation a7 = new XYLineAnnotation(39.5, 59, 59,39.5);
+		 chart.getXYPlot().addAnnotation(a7);
+		 XYLineAnnotation a8 = new XYLineAnnotation( 59,39.5, 99.5,39.5);
+		 chart.getXYPlot().addAnnotation(a8);
+		 XYLineAnnotation a9 = new XYLineAnnotation(99.5, 0.5, 99.5,39.5);
+		 chart.getXYPlot().addAnnotation(a9);
+		
 		ArrayList u= project.getSelectedIndexes();
-		System.out.println("Size van "+ u.size());
+		
 	
 		final CircleDrawer cd = new CircleDrawer(Color.red,
 				new BasicStroke(1.0f), null);
