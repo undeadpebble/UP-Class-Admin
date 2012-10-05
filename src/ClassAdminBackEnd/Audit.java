@@ -100,26 +100,38 @@ public class Audit {
 		}
 	}
 
-	public void moveNode(String node, String oldParent, String newParent) {
+	public void moveNode(String node, String newParent) {
 		try {
 			f = new File(projectName);
 			fstream = new FileWriter(projectName, true);
 			out = new BufferedWriter(fstream);
-			out.append(d() + "\tSTRUCTURE UPDATE: " + node + " changed parents from: " + oldParent + " to: " + newParent);
+			out.append(d() + "\tSTRUCTURE UPDATE: " + node + " changed parent to: " + newParent);
 			out.newLine();
 			out.close();
 		} catch (IOException e) {
 		}
 	}
 
-	public void updateStudent(String student, String node, String oldVal, String newVal) {
+	public void updateStudent(String student, String oldVal, String newVal, boolean mark) {
 		try {
+			if (mark)
+			{
 			f = new File(projectName);
 			fstream = new FileWriter(projectName, true);
 			out = new BufferedWriter(fstream);
-			out.append(d() + "\tSTUDENT UPDATE: " + student + " MARK: " + node + " FROM: " + oldVal + " TO: " + newVal);
+			out.append(d() + "\tSTUDENT UPDATE: " + student + " MARK CHANGED FROM: " + oldVal + " TO: " + newVal);
 			out.newLine();
 			out.close();
+			}
+			else
+			{
+				f = new File(projectName);
+				fstream = new FileWriter(projectName, true);
+				out = new BufferedWriter(fstream);
+				out.append(d() + "\tSTUDENT UPDATE: " + student + " VALUE CHANGED FROM: " + oldVal + " TO: " + newVal);
+				out.newLine();
+				out.close();
+			}
 		} catch (IOException e) {
 		}
 	}

@@ -157,11 +157,13 @@ public class FrmNewNode {
 					// add child to parent in back end
 					EntityType newE = new EntityType(txtName.getText(), activeProject.getTreeLinkedList().get(cmbParent.getSelectedIndex()), isText, d, (Double) txtWeight.getValue());
 					System.out.println(activeProject.getTreeLinkedList().get(cmbParent.getSelectedIndex()).getName());
+					
+					//create audit entry
 					activeProject.getAudit().AddNode((String) cmbParent.getSelectedItem(), txtName.getText());
 					//backend func//					
 					activeProject.getTreeLinkedList().add(newE);
 					newE.populateTreeWithEntities();
-					//activeProject.updateTables();
+					activeProject.updateTables();
 					
 					
 					LinkedList<LinkedList<SuperEntity>> data = activeProject.getTreeLinkedList().get(cmbParent.getSelectedIndex()).getParentEntitytype()

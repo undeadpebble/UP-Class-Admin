@@ -505,11 +505,13 @@ public class TreeView extends Display {
 			public void actionPerformed(ActionEvent arg0) {
 
 				if (myProject.getStudentLinkedList().get(selectedEntity).getDetails().getType().getIsTextField()) {
+					myProject.getAudit().updateStudent(myProject.getTreeLinkedList().get(0).getName(),myProject.getStudentLinkedList().get(selectedEntity).getValue(), txtChange.getText(),false);
 					myProject.getStudentLinkedList().get(selectedEntity).setValue(txtChange.getText());
 					myTree.getNode(selectedEntity).set("name", txtChange.getText());
 				} else {
 					try {
 						if (Double.parseDouble(txtChange.getText()) >= 0 && myProject.getStudentLinkedList().get(selectedEntity).getType().getMaxValue() >= Double.parseDouble(txtChange.getText())) {
+							myProject.getAudit().updateStudent(myProject.getTreeLinkedList().get(0).getName(),Double.toString(myProject.getStudentLinkedList().get(selectedEntity).getMark()), txtChange.getText(),true);
 							myProject.getStudentLinkedList().get(selectedEntity).setMark(Double.parseDouble(txtChange.getText()));
 							myTree.getNode(selectedEntity).set("name", txtChange.getText());
 						}
@@ -535,12 +537,15 @@ public class TreeView extends Display {
 			public void keyPressed(KeyEvent key) {
 				int id = key.getKeyCode();
 				if (id == KeyEvent.VK_ENTER) {
+
 					if (myProject.getStudentLinkedList().get(selectedEntity).getDetails().getType().getIsTextField()) {
+						myProject.getAudit().updateStudent(myProject.getTreeLinkedList().get(1).getName(),myProject.getStudentLinkedList().get(selectedEntity).getValue(), txtChange.getText(),false);
 						myProject.getStudentLinkedList().get(selectedEntity).setValue(txtChange.getText());
 						myTree.getNode(selectedEntity).set("name", txtChange.getText());
 					} else {
 						try {
 							if (Double.parseDouble(txtChange.getText()) >= 0 && myProject.getStudentLinkedList().get(selectedEntity).getType().getMaxValue() >= Double.parseDouble(txtChange.getText())) {
+								myProject.getAudit().updateStudent(myProject.getTreeLinkedList().get(1).getName(),Double.toString(myProject.getStudentLinkedList().get(selectedEntity).getMark()), txtChange.getText(),true);
 								myProject.getStudentLinkedList().get(selectedEntity).setMark(Double.parseDouble(txtChange.getText()));
 								myTree.getNode(selectedEntity).set("name", txtChange.getText());
 							}
@@ -551,7 +556,6 @@ public class TreeView extends Display {
 					txtChange.setText("");
 					txtChange.setVisible(false);
 					btnChange.setVisible(false);
-					selectedEntity = -1;
 				}
 
 			}
@@ -755,6 +759,7 @@ public class TreeView extends Display {
 									if ((edgeTable.get(r, 1).equals(iChild))) {
 										edgeTable.set(r, 0, iParent);
 										myProject.getTreeLinkedList().get(iChild).changeParent(myProject.getTreeLinkedList().get(iParent));
+										myProject.getAudit().moveNode(myProject.getTreeLinkedList().get(iChild).getName(), myProject.getTreeLinkedList().get(iParent).getName());
 										bChild = false;
 										iChild = -1;
 										lblSelectedChild.setText("please select child");
