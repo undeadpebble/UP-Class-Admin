@@ -3,6 +3,7 @@
  */
 package ClassAdminBackEnd;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -37,9 +38,41 @@ public class Project {
 	private LinkedList<SuperEntity> studentLinkedList;
 	private LinkedList<FrmTable> tables = new LinkedList<FrmTable>();
 	private boolean cleared= false;
+	private String fileName;
+	private Audit audit;
+	private int histogramdatacount=-1;
+	private int scatterdatacount=-1;
 	
+	public int getHistogramcount()
+	{
+		return histogramdatacount;
+	}
+	public void incHistogramcount()
+	{
+		int modgetal = this.getHead().getNumberHeaders().length;
+		
+		histogramdatacount= histogramdatacount+1;
+		
+		histogramdatacount = histogramdatacount % modgetal;
+		
+	}
+	
+	
+	public int getscattercount()
+	{
+		return scatterdatacount;
+	}
+	public void incscattercount()
+	{
+		int modgetal = this.getHead().getNumberHeaders().length;
+		
+		scatterdatacount= scatterdatacount+1;
+		
+		scatterdatacount = scatterdatacount % (modgetal-1);
+		
+	}
 	public void clearselected() {
-		System.out.println("Cleared");
+	
 		this.getSelectedIndexes().clear();
 		this.getSelected().clear();
 		updatecharts();
@@ -58,12 +91,12 @@ public class Project {
 	public void addscattercharts(ScatterPlotFrame x) {
 
 		scattercharts.add(x);
-
+		
 	}
 
 	public void addboxplotcharts(BoxPlotFrame x) {
 
-		scattercharts.add(x);
+		boxplotcharts.add(x);
 
 	}
 
@@ -81,7 +114,7 @@ public class Project {
 		}
 	}
 
-	public void setSelected(int x) {
+	public void setSelected(int x,boolean toetso) {
 	
 		boolean duplicate = false;
 		for (int i = 0; i < selectedIndexes.size(); i++) {
@@ -102,8 +135,13 @@ public class Project {
 			
 			System.out.println("Set selected index" + x);
 			updatecharts();
-			for(int y=0;y<tables.size();y++)
-				tables.get(y).repaint();
+			if(toetso ==true)
+			for(int y=0;y<tables.size();y++){
+			
+					tables.get(y).getTable().clearSelection();
+					
+					tables.get(y).getTable().repaint();
+			}
 		}
 		
 		
@@ -184,5 +222,27 @@ public class Project {
 		if (studentLinkedList == null)
 			studentLinkedList = new LinkedList<SuperEntity>();
 		return studentLinkedList;
+	}
+	
+	public String getFileName()
+	{
+		return fileName;
+	}
+	
+	public void setFileName(String fname)
+	{
+		fileName = fname;
+	}
+	public void createAudit()
+	{
+		try {
+			audit = new Audit(this);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	public Audit getAudit()
+	{
+		return audit;
 	}
 }
