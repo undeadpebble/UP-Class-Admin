@@ -58,7 +58,7 @@ public class FrmNewNode {
 	
 		JPanel pnlRad = new JPanel(new GridLayout(1, 2));
 		frame.setSize(600, 600);
-		frame.setLayout(new GridLayout(6, 2));
+		frame.setLayout(new GridLayout(7, 2));
 
 		final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		Date date = new Date();
@@ -76,6 +76,8 @@ public class FrmNewNode {
 		final JLabel lblWeight = new JLabel("Weight");
 		JButton btnAdd = new JButton("Add");
 		JButton btnClose = new JButton("Close");
+		final JLabel lblType = new JLabel("Type:");
+		final JComboBox cmbType = new JComboBox();
 
 		SpinnerNumberModel snmWeight = new SpinnerNumberModel(new Double(1.00), // value
 				new Double(0.00), // min
@@ -88,6 +90,15 @@ public class FrmNewNode {
 		rblNo.setSelected(true);
 		group.add(rblYes);
 		group.add(rblNo);
+
+		cmbType.addItem("Mark - Weighted Average");
+		cmbType.addItem("Mark - Sum ");
+		cmbType.addItem("Mark - Best N");
+		cmbType.addItem("Text");
+		cmbType.addItem("Mixed");
+		
+		
+		cmbType.setSelectedIndex(0);
 
 		for (int r = 0; r < nodes.getRowCount(); r++) {
 			for (int c = 0; c < nodes.getColumnCount(); c++) {
@@ -163,6 +174,7 @@ public class FrmNewNode {
 					//backend func//					
 					activeProject.getTreeLinkedList().add(newE);
 					newE.populateTreeWithEntities();
+					newE.setEntityTypeClass(cmbType.getSelectedIndex());
 					activeProject.updateTables();
 					
 					
@@ -196,6 +208,7 @@ public class FrmNewNode {
 					cmbParent.setSelectedIndex(selectedIndex);
 
 					// reset all values
+					cmbType.setSelectedIndex(0);
 					rblNo.setSelected(true);
 					txtWeight.setValue(new Double(1.0));
 					txtName.setText(null);
@@ -256,6 +269,8 @@ public class FrmNewNode {
 		JPanel pnlDate = new JPanel(new GridLayout(1, 2));
 		pnlDate.add(txtDate);
 		pnlDate.add(btnDate);
+		frame.add(lblType);
+		frame.add(cmbType);
 		frame.add(lblParent);
 		frame.add(cmbParent);
 		frame.add(lblName);

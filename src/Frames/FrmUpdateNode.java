@@ -1,5 +1,6 @@
 package Frames;
 
+import java.awt.ActiveEvent;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -26,6 +27,8 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 
 import org.tmatesoft.sqljet.core.SqlJetException;
+
+import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
 
 import prefuse.data.Node;
 import prefuse.data.Table;
@@ -58,7 +61,7 @@ public class FrmUpdateNode {
 		
 		JPanel pnlRad = new JPanel(new GridLayout(1, 2));
 		frame.setSize(600, 600);
-		frame.setLayout(new GridLayout(5, 2));
+		frame.setLayout(new GridLayout(6, 2));
 
 		final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		Date date = new Date();
@@ -70,11 +73,22 @@ public class FrmUpdateNode {
 		final ButtonGroup group = new ButtonGroup();
 		final JLabel lblDate = new JLabel("Date of assesment:");
 		final JTextArea txtDate = new JTextArea();
+		final JLabel lblType = new JLabel("Type:");
+		final JComboBox cmbType = new JComboBox();
 		final JButton btnDate = new JButton("change");
 		final JLabel lblWeight = new JLabel("Weight");
 		JButton btnUpdate = new JButton("Update");
 		JButton btnClose = new JButton("Close");
 
+		cmbType.addItem("Mark - Weighted Average");
+		cmbType.addItem("Mark - Sum ");
+		cmbType.addItem("Mark - Best N");
+		cmbType.addItem("Text");
+		cmbType.addItem("Mixed");
+		
+		
+		cmbType.setSelectedIndex(activeentity.getEntityTypeClass());
+		
 		SpinnerNumberModel snmWeight = new SpinnerNumberModel(new Double(1.00), // value
 				new Double(0.00), // min
 				new Double(100.00), // max
@@ -140,9 +154,11 @@ public class FrmUpdateNode {
 
 				if (b) {
 					
-					//backend func//					
-					activeProject.getAudit().updateNode(activeentity.getName(),activeentity.getIsTextField().toString(),dateFormat.format(activeentity.getDate()),Double.toString(activeentity.getWeight()));
+					//backend func//
+						System.out.print(activeentity.getIsTextField());
+						//activeProject.getAudit().updateNode(activeentity.getName(),activeentity.getIsTextField().toString(),dateFormat.format(activeentity.getDate()),Double.toString(activeentity.getWeight()));
 					activeentity.updateEntity(txtName.getText(), isText, d, (Double) txtWeight.getValue());
+					activeentity.setEntityTypeClass(cmbType.getSelectedIndex());
 					activeItem.setString("name",txtName.getText());
 					//activeProject.updateTables();
 					
@@ -209,6 +225,8 @@ public class FrmUpdateNode {
 		JPanel pnlDate = new JPanel(new GridLayout(1, 2));
 		pnlDate.add(txtDate);
 		pnlDate.add(btnDate);
+		frame.add(lblType);
+		frame.add(cmbType);
 		frame.add(lblName);
 		frame.add(txtName);
 		frame.add(lblText);
