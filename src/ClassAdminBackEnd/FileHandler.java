@@ -197,22 +197,15 @@ public class FileHandler {
 
 	private void openPDat(String filename) {
 		PDatImport pImport = new PDatImport();
-		try {
-			pImport.importFile(filename, project);
-		} catch (SqlJetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
+			pImport.importFileDB4o(project, filename);
+		
 	}
 	
 	private void savePDat(String filename){
 		PDatExport pExport = new PDatExport();
-		try {
-			pExport.exportFile(project, filename);
-		} catch (SqlJetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			pExport.exportFileDB4o(project, filename);
+		
 	}
 	
 

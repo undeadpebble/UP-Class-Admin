@@ -43,6 +43,27 @@ public class Project {
 	private int histogramdatacount=-1;
 	private int scatterdatacount=-1;
 	
+	public void load(Project p){
+		this.audit = p.audit;
+		this.boxplotcharts = p.boxplotcharts;
+		this.cleared = p.cleared;
+		this.fileName = p.fileName;
+		this.head = p.head;
+		this.headEntityType=p.headEntityType;
+		this.histogramcharts = p.histogramcharts;
+		this.histogramdatacount = p.histogramdatacount;
+		this.rules =p.rules;
+		this.scatterArrayListIndexes =p.scatterArrayListIndexes;
+		this.scattercharts =p.scattercharts;
+		this.scatterdatacount =p.scatterdatacount;
+		this.scatterIndexes =p.scatterIndexes;
+		this.selected =p.selected;
+		this.selectedIndexes =p.selectedIndexes;
+		this.studentLinkedList =p.studentLinkedList;
+		this.tables =p.tables;
+		this.treeLinkedList =p.treeLinkedList;
+	}
+	
 	public int getHistogramcount()
 	{
 		return histogramdatacount;
