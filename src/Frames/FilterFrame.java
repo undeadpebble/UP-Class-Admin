@@ -91,7 +91,7 @@ public class FilterFrame extends JFrame {
 		lblLowerValue.setBounds(61, 131, 102, 14);
 		backgroundPanel.add(lblLowerValue);
 		lblLowerValue.setForeground(new Color(0xEDEDED));
-		
+
 		final JLabel lblSelectValues = new JLabel("Select Values to Filter");
 		lblSelectValues.setBounds(61, 180, 150, 14);
 		backgroundPanel.add(lblSelectValues);
@@ -119,7 +119,7 @@ public class FilterFrame extends JFrame {
 		backgroundPanel.add(btnRemoveAllFilters);
 
 		btnCreateFilter.setEnabled(false);
-		
+
 		JButton btnRemoveSpesificFilter = new JButton("Remove Spesific Filter");
 		btnRemoveSpesificFilter.setBounds(204, 257, 159, 23);
 		backgroundPanel.add(btnRemoveSpesificFilter);
@@ -172,6 +172,10 @@ public class FilterFrame extends JFrame {
 
 		});
 
+		final LinkedList<String> selectedValues = new LinkedList<String>();
+
+		final LinkedList<String> dataInCol = new LinkedList<String>();
+		
 		cbxFormatType.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -196,137 +200,14 @@ public class FilterFrame extends JFrame {
 			}
 		});
 
-		if (table.data.get(0).get(cbxFilters.getSelectedIndex()).getType()
-				.getIsTextField()) {
-			final LinkedList<String> selectedValues = new LinkedList<String>();
-
-			final LinkedList<String> dataInCol = new LinkedList<String>();
-
-			for (int i = 0; i < table.data.size(); i++) {
-				dataInCol.add(table.data.get(i)
-						.get(cbxFilters.getSelectedIndex()).getValue());
-
-			}
-
-			final JCheckBox[] selectData = new JCheckBox[dataInCol.size()];
-
-			for (int z = 0; z < dataInCol.size(); z++) {
-				selectData[z] = new JCheckBox(dataInCol.get(z));
-			}
-
-			JComboCheckBox temps = new JComboCheckBox(selectData);
-			selectAllData = temps;
-
-			selectAllData.setBounds(261, 166, 102, 27);
-			backgroundPanel.add(selectAllData);
-
-			/*
-			 * for(int z = 0; z < selectData.length; z++)
-			 * System.out.println(selectData[z].getName());
-			 */
-
-			lblSelectField.setVisible(true);
-			lblConditionalRuleType.setVisible(false);
-			minVal.setVisible(false);
-			maxVal.setVisible(false);
-			lblLowerValue.setVisible(false);
-			lblUpperValue.setVisible(false);
-			cbxFormatType.setVisible(false);
-
-			btnCreateFilter.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-
-					for (int x = 0; x < dataInCol.size(); x++) {
-						if (selectData[x].isSelected()) {
-							selectedValues.add(dataInCol.get(x));
-						}
-					}
-
-					for (int x = 0; x < table.dataFilter.length; x++) {
-						if (!selectedValues.contains(table.data.get(x)
-								.get(cbxFilters.getSelectedIndex()).getValue())) {
-							table.filters.get(x).set(
-									cbxFilters.getSelectedIndex(), true);
-							table.dataFilter[x] = false;
-						}
-					}
-
-					table.filterTable();
-
-				}
-
-			});
-		} else {
-
-			btnCreateFilter.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					try{
-
-					switch (cbxFormatType.getSelectedIndex()) {
-					case 1: {
-						for (int x = 0; x < table.dataFilter.length; x++) {
-							if (table.data.get(x)
-									.get(cbxFilters.getSelectedIndex())
-									.getMark() > Double.parseDouble(maxVal
-									.getValue().toString())
-									|| table.data.get(x)
-											.get(cbxFilters.getSelectedIndex())
-											.getMark() < Double
-											.parseDouble(minVal.getValue()
-													.toString())) {
-								table.filters.get(x).set(
-										cbxFormatType.getSelectedIndex(), true);
-							}
-
-						}
-						break;
-					}
-					case 2: {
-						for (int x = 0; x < table.dataFilter.length; x++) {
-							if (table.data.get(x)
-									.get(cbxFilters.getSelectedIndex())
-									.getMark() < Double.parseDouble(minVal
-									.getValue().toString())) {
-								table.filters.get(x).set(
-										cbxFormatType.getSelectedIndex(), true);
-							}
-
-						}
-
-						break;
-					}
-					case 3: {
-						for (int x = 0; x < table.dataFilter.length; x++) {
-							if (table.data.get(x)
-									.get(cbxFilters.getSelectedIndex())
-									.getMark() > Double.parseDouble(minVal
-									.getValue().toString())) {
-								table.filters.get(x).set(
-										cbxFormatType.getSelectedIndex(), true);
-							}
-
-						}
-
-						break;
-					}
-
-					}
-
-					table.filterTable();
-				
-				}
-				catch (Exception ex) {
-					// TODO: handle exception
-				}
-				}
-			});
-		}
-
 		cbxFilters.addActionListener(new ActionListener() {
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				
+				while(btnCreateFilter.getActionListeners().length > 0)
+					btnCreateFilter.removeActionListener(btnCreateFilter.getActionListeners()[0]);	
+				
 				if (table.data.get(0).get(cbxFilters.getSelectedIndex())
 						.getType().getIsTextField()) {
 					lblSelectField.setVisible(true);
@@ -347,28 +228,175 @@ public class FilterFrame extends JFrame {
 					cbxFormatType.setVisible(true);
 					lblSelectValues.setVisible(false);
 				}
+				
+				
+				if (table.data.get(0).get(cbxFilters.getSelectedIndex())
+						.getType().getIsTextField()) {
+					
+
+					for (int i = 0; i < table.data.size(); i++) {
+						dataInCol.add(table.data.get(i)
+								.get(cbxFilters.getSelectedIndex()).getValue());
+
+					}
+
+					final JCheckBox[] selectData = new JCheckBox[dataInCol
+							.size()];
+
+					for (int z = 0; z < dataInCol.size(); z++) {
+						selectData[z] = new JCheckBox(dataInCol.get(z));
+					}
+
+					JComboCheckBox temps = new JComboCheckBox(selectData);
+					selectAllData = temps;
+
+					selectAllData.setBounds(261, 166, 102, 27);
+					backgroundPanel.add(selectAllData);
+
+					lblSelectField.setVisible(true);
+					lblConditionalRuleType.setVisible(false);
+					minVal.setVisible(false);
+					maxVal.setVisible(false);
+					lblLowerValue.setVisible(false);
+					lblUpperValue.setVisible(false);
+					cbxFormatType.setVisible(false);
+
+					btnCreateFilter.addActionListener(new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+
+							for (int x = 0; x < dataInCol.size(); x++) {
+								if (selectData[x].isSelected()) {
+									selectedValues.add(dataInCol.get(x));
+								}
+							}
+
+							for (int x = 0; x < table.dataFilter.length; x++) {
+								if (!selectedValues.contains(table.data.get(x)
+										.get(cbxFilters.getSelectedIndex())
+										.getValue())) {
+									table.filters.get(x)
+											.set(cbxFilters.getSelectedIndex(),
+													true);
+									table.dataFilter[x] = false;
+								}
+							}
+
+							table.filterTable();
+
+						}
+
+					});
+					
+					selectAllData.addActionListener(new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+
+							btnCreateFilter.setEnabled(true);
+
+						}
+					});
+				} else {
+					btnCreateFilter.addActionListener(new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							try {
+
+								switch (cbxFormatType.getSelectedIndex()) {
+								case 1: {
+									for (int x = 0; x < table.dataFilter.length; x++) {
+										if (table.data
+												.get(x)
+												.get(cbxFilters
+														.getSelectedIndex())
+												.getMark() > Double
+												.parseDouble(maxVal.getValue()
+														.toString())
+												|| table.data
+														.get(x)
+														.get(cbxFilters
+																.getSelectedIndex())
+														.getMark() < Double
+														.parseDouble(minVal
+																.getValue()
+																.toString())) {
+											table.filters
+													.get(x)
+													.set(cbxFormatType
+															.getSelectedIndex(),
+															true);
+										}
+
+									}
+									break;
+								}
+								case 2: {
+									for (int x = 0; x < table.dataFilter.length; x++) {
+										if (table.data
+												.get(x)
+												.get(cbxFilters
+														.getSelectedIndex())
+												.getMark() > Double
+												.parseDouble(minVal.getValue()
+														.toString())) {
+											table.filters
+													.get(x)
+													.set(cbxFormatType
+															.getSelectedIndex(),
+															true);
+										}
+
+									}
+
+									break;
+								}
+								case 3: {
+									for (int x = 0; x < table.dataFilter.length; x++) {
+										if (table.data
+												.get(x)
+												.get(cbxFilters
+														.getSelectedIndex())
+												.getMark() < Double
+												.parseDouble(minVal.getValue()
+														.toString())) {
+											table.filters
+													.get(x)
+													.set(cbxFormatType
+															.getSelectedIndex(),
+															true);
+											
+										}
+									}
+									
+									break;
+								}
+
+								}
+
+								table.filterTable();
+
+							} catch (Exception ex) {
+								// TODO: handle exception
+							}
+						}
+					});
+				}
 
 			}
 		});
 
-		selectAllData.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				btnCreateFilter.setEnabled(true);
-
-			}
-		});
 		
+
 		btnRemoveAllFilters.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				Object[][] temp = new Object[table.data.size()][table.data.get(0).size()];
+				Object[][] temp = new Object[table.data.size()][table.data.get(
+						0).size()];
 
 				for (int x = 0; x < table.data.size(); x++) {
 					for (int y = 0; y < table.data.get(0).size(); y++) {
-						temp[x][y] =table. data.get(x).get(y).getValue();
+						temp[x][y] = table.data.get(x).get(y).getValue();
 					}
 				}
 
@@ -387,9 +415,9 @@ public class FilterFrame extends JFrame {
 				}
 			}
 		});
-		
+
 		btnRemoveSpesificFilter.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				RemoveFilter removeFilter = new RemoveFilter(table);

@@ -6,23 +6,23 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
 
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JLabel;
-import javax.swing.JComboBox;
-import javax.swing.JButton;
 
-import ClassAdminBackEnd.BorderCase;
+import ClassAdminBackEnd.Format;
 import ClassAdminBackEnd.SuperEntity;
 import ClassAdminFrontEnd.FrmTable;
 
-public class RemoveBorderCase extends JFrame {
+public class RemoveFormatting extends JFrame {
 
 	private JPanel contentPane;
 
-	public RemoveBorderCase(final FrmTable table) {
+	public RemoveFormatting(final FrmTable table) {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 376, 236);
 		contentPane = new JPanel();
@@ -30,19 +30,19 @@ public class RemoveBorderCase extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblRemove = new JLabel("Remove this bordercase");
+		JLabel lblRemove = new JLabel("Remove this Format");
 		lblRemove.setBounds(10, 11, 149, 14);
 		contentPane.add(lblRemove);
 		
-		final JComboBox cbxBordercases = new JComboBox();
-		cbxBordercases.setBounds(203, 8, 149, 20);
-		contentPane.add(cbxBordercases);
+		final JComboBox cbxFormatting = new JComboBox();
+		cbxFormatting.setBounds(203, 8, 149, 20);
+		contentPane.add(cbxFormatting);
 		
-		JButton btnNewButton = new JButton("Remove bordercase");
+		JButton btnNewButton = new JButton("Remove Format");
 		btnNewButton.setBounds(12, 133, 340, 61);
 		contentPane.add(btnNewButton);
 		
-		final LinkedList<Integer> bordercases = new LinkedList<Integer>();
+		final LinkedList<Integer> formats = new LinkedList<Integer>();
 		final LinkedList<SuperEntity> heads;
 		
 		heads =  table.project.getHead().getHeadersLinkedList();
@@ -54,26 +54,26 @@ public class RemoveBorderCase extends JFrame {
 		}
 		
 		for(int x = 0; x < heads.size();x++){
-			if(heads.get(x).getType().getBorderCasing().size() > 0){
-				for(int y = 0; y < (heads.get(x).getType().getBorderCasing().size()); y++){
-					bordercases.add(y);//(heads.get(x).getType().getBorderCasing().get(y)));
-				}
+			if(heads.get(x).getType().getFormatting().size() > 0){
+				
+					formats.add(x);
+				
 			}
 		}
 		
-		String[] bcases = new String[bordercases.size()];
+		String[] bcases = new String[formats.size()];
 		
-		for(int x = 0; x < bordercases.size();x++){
-			bcases[x] = heads.get(bordercases.get(x)).getType().getName();
+		for(int x = 0; x < formats.size();x++){
+			bcases[x] = heads.get(formats.get(x)).getType().getName();
 		}
 		
-		cbxBordercases.setModel(new DefaultComboBoxModel(bcases));
+		cbxFormatting.setModel(new DefaultComboBoxModel(bcases));
 		
 		btnNewButton.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				table.headersList.get(table.headPoints.get(bordercases.get(cbxBordercases.getSelectedIndex()))).getType().getBorderCasing().clear();
+				table.headersList.get(table.headPoints.get(formats.get(cbxFormatting.getSelectedIndex()))).getType().clearFormatting();
 				closeFrame();
 				table.repaint();
 			}

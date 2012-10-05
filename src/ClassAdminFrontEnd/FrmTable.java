@@ -122,7 +122,16 @@ public class FrmTable extends JPanel {
 	}
 
 	public void filterTable() {
-		boolean filtered = false;
+		//boolean filtered = false;
+		
+
+		for(int x = 0; x < data.size();x++){
+			for(int y = 0; y < data.get(0).size();y++){
+				System.out.print(filters.get(x).get(y) + " : ");
+			}
+			System.out.println();
+		}
+		
 		LinkedList<Integer> removes = new LinkedList<Integer>();
 
 		// --------------------------------------

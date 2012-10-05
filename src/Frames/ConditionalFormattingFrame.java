@@ -108,7 +108,10 @@ public class ConditionalFormattingFrame extends JFrame {
 		maxVal.setBounds(237, 221, 113, 26);
 		backgroundPanel.add(maxVal);
 
-		final JComboBox whatToFormatCombo = new JComboBox(table.numberHeads);
+		String[] temp = new String[2];
+		temp[0] = "Background";
+		temp[1] = "Text";
+		final JComboBox whatToFormatCombo = new JComboBox(temp);
 		whatToFormatCombo.setBounds(237, 273, 113, 26);
 		backgroundPanel.add(whatToFormatCombo);
 
@@ -155,6 +158,15 @@ public class ConditionalFormattingFrame extends JFrame {
 		JButton btnRemoveFormat = new JButton("Remove a formatting");
 		btnRemoveFormat.setBounds(58, 437, 181, 39);
 		backgroundPanel.add(btnRemoveFormat);
+		
+		JLabel lblAffectedCuolumn = new JLabel("Affected Cuolumn");
+		lblAffectedCuolumn.setForeground(new Color(237, 237, 237));
+		lblAffectedCuolumn.setBounds(58, 335, 134, 14);
+		backgroundPanel.add(lblAffectedCuolumn);
+		
+		final JComboBox cbxColumns = new JComboBox(table.numberHeads);
+		cbxColumns.setBounds(237, 335, 113, 20);
+		backgroundPanel.add(cbxColumns);
 
 		// frame resize listener adjust components accordingly
 		this.addComponentListener(new ComponentListener() {
@@ -232,7 +244,7 @@ public class ConditionalFormattingFrame extends JFrame {
 				case 1: {
 					if (whatToFormatCombo.getSelectedIndex() == 0) {
 						table.headersList
-								.get(table.headPoints.get(table.cbFormatting
+								.get(table.headPoints.get(cbxColumns
 										.getSelectedIndex()))
 								.getType()
 								.getFormatting()
@@ -246,7 +258,7 @@ public class ConditionalFormattingFrame extends JFrame {
 
 					} else {
 						table.headersList
-								.get(table.headPoints.get(table.cbFormatting
+								.get(table.headPoints.get(cbxColumns
 										.getSelectedIndex()))
 								.getType()
 								.getFormatting()
@@ -264,7 +276,7 @@ public class ConditionalFormattingFrame extends JFrame {
 				case 2: {
 					if (whatToFormatCombo.getSelectedIndex() == 0) {
 						table.headersList
-								.get(table.headPoints.get(table.cbFormatting
+								.get(table.headPoints.get(cbxColumns
 										.getSelectedIndex()))
 								.getType()
 								.getFormatting()
@@ -275,7 +287,7 @@ public class ConditionalFormattingFrame extends JFrame {
 										description.getText()));
 					} else {
 						table.headersList
-								.get(table.headPoints.get(table.cbFormatting
+								.get(table.headPoints.get(cbxColumns
 										.getSelectedIndex()))
 								.getType()
 								.getFormatting()
@@ -291,7 +303,7 @@ public class ConditionalFormattingFrame extends JFrame {
 				case 3: {
 					if (whatToFormatCombo.getSelectedIndex() == 0) {
 						table.headersList
-								.get(table.headPoints.get(table.cbFormatting
+								.get(table.headPoints.get(cbxColumns
 										.getSelectedIndex()))
 								.getType()
 								.getFormatting()
@@ -302,7 +314,7 @@ public class ConditionalFormattingFrame extends JFrame {
 										description.getText()));
 					} else {
 						table.headersList
-								.get(table.headPoints.get(table.cbFormatting
+								.get(table.headPoints.get(cbxColumns
 										.getSelectedIndex()))
 								.getType()
 								.getFormatting()
