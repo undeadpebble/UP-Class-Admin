@@ -6,13 +6,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 
-import javax.activity.ActivityCompletedException;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -26,27 +24,27 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 
-import org.tmatesoft.sqljet.core.SqlJetException;
-
-import prefuse.Visualization;
-import prefuse.data.Node;
-import prefuse.data.Table;
-import prefuse.data.Tree;
 import ClassAdminBackEnd.EntityType;
 import ClassAdminBackEnd.Project;
 import ClassAdminBackEnd.SuperEntity;
+import ClassAdminFrontEnd.BackgroundGradientPanel;
 import ClassAdminFrontEnd.DatePicker;
 import ClassAdminFrontEnd.TreeView;
 
+import prefuse.data.Node;
+import prefuse.data.Table;
+import prefuse.data.Tree;
+
 public class FrmNewNode {
-	Tree activeTree = null;
-	JDialog frame = null;
-	Project activeProject = null;
-	TreeView activeTreeView = null;
-	LinkedList<EntityType> activeTreeLinkedList = null;
-	Table nodes;
-	JComboBox cmbParent;
-	JFrame parentF = null;
+	private Tree activeTree = null;
+	private JDialog frame = null;
+	private Project activeProject = null;
+	private TreeView activeTreeView = null;
+	private LinkedList<EntityType> activeTreeLinkedList = null;
+	private Table nodes;
+	private JComboBox cmbParent;
+	private JFrame parentF = null;
+	private BackgroundGradientPanel backgroundPanel;
 	
 	public FrmNewNode(Tree tree, Project project, JFrame parentFrame, TreeView treeView) {
 		activeTree = tree;
@@ -57,8 +55,22 @@ public class FrmNewNode {
 		frame = new JDialog(parentFrame, true);
 	
 		JPanel pnlRad = new JPanel(new GridLayout(1, 2));
-		frame.setSize(600, 600);
-		frame.setLayout(new GridLayout(6, 2));
+		pnlRad.setOpaque(false);
+		frame.setSize(356, 273);
+		frame.setLocation(parentF.getWidth()+parentF.getX()-250, parentF.getY()+40);
+		frame.getContentPane().setLayout(null);
+		
+		frame.setTitle("Add New Node");
+		
+		JPanel contentPane = new JPanel();
+		contentPane.setBounds(0, 0, frame.getWidth(), frame.getHeight());
+		frame.setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		backgroundPanel = new BackgroundGradientPanel(contentPane);
+		backgroundPanel.setBounds(0, 0, contentPane.getWidth(), contentPane.getHeight());
+		contentPane.add(backgroundPanel);
+		backgroundPanel.setLayout(null);
 
 		final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		Date date = new Date();
@@ -200,9 +212,6 @@ public class FrmNewNode {
 					txtWeight.setValue(new Double(1.0));
 					txtName.setText(null);
 					txtDate.setText(dateFormat.format(new Date()));
-					lblParent.setForeground(Color.BLACK);
-					lblName.setForeground(Color.BLACK);
-					lblDate.setForeground(Color.BLACK);
 					isText = false;
 					activeTreeView.getVisualization().run("filter");
 					txtName.requestFocus(true);
@@ -254,23 +263,45 @@ public class FrmNewNode {
 		});
 
 		JPanel pnlDate = new JPanel(new GridLayout(1, 2));
+		pnlDate.setOpaque(false);
 		pnlDate.add(txtDate);
 		pnlDate.add(btnDate);
-		frame.add(lblParent);
-		frame.add(cmbParent);
-		frame.add(lblName);
-		frame.add(txtName);
-		frame.add(lblText);
+		
+		lblParent.setBounds(10, 11, 91, 30);
+		cmbParent.setBounds(180, 11, 150, 30);
+		txtName.setBounds(180, 45, 150, 30);
+		lblName.setBounds(10, 43, 72, 30);
+		lblText.setBounds(10, 80, 54, 30);
+		pnlRad.setBounds(180, 80, 150, 30);
+		lblDate.setBounds(10, 116, 120, 30);
+		lblWeight.setBounds(10, 157, 130, 30);
+		pnlDate.setBounds(180,115,150,30);
+		txtWeight.setBounds(180, 150, 150, 30);
+		btnAdd.setBounds(10, 198, 150, 30);
+		btnClose.setBounds(180, 198, 150, 30);
+		
+		lblParent.setForeground(new Color(0xEDEDED));
+		lblName.setForeground(new Color(0xEDEDED));
+		lblText.setForeground(new Color(0xEDEDED));
+		rblYes.setForeground(new Color(0xEDEDED));
+		rblNo.setForeground(new Color(0xEDEDED));
+		lblDate.setForeground(new Color(0xEDEDED));
+		lblWeight.setForeground(new Color(0xEDEDED));
+		
+		backgroundPanel.add(lblParent);
+		backgroundPanel.add(cmbParent);
+		backgroundPanel.add(lblName);
+		backgroundPanel.add(txtName);
+		backgroundPanel.add(lblText);
 		pnlRad.add(rblYes);
 		pnlRad.add(rblNo);
-		frame.add(pnlRad);
-		frame.add(lblDate);
-		frame.add(pnlDate);
-		frame.add(lblWeight);
-		frame.add(txtWeight);
-		frame.add(btnAdd);
-		frame.add(btnClose);
-		frame.pack();
+		backgroundPanel.add(pnlRad);
+		backgroundPanel.add(lblDate);
+		backgroundPanel.add(pnlDate);
+		backgroundPanel.add(lblWeight);
+		backgroundPanel.add(txtWeight);
+		backgroundPanel.add(btnAdd);
+		backgroundPanel.add(btnClose);
 	}
 	
 	public void showFrmNewNode(int p){

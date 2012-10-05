@@ -530,8 +530,6 @@ public class TreeView extends Display {
 		tview.setBackground(BACKGROUND);
 		tview.setForeground(FOREGROUND);
 
-		final JFastLabel title = new JFastLabel("                 ");
-		title.setPreferredSize(new Dimension(350, 20));
 		title.setVerticalAlignment(SwingConstants.BOTTOM);
 		title.setBorder(BorderFactory.createEmptyBorder(3, 0, 0, 0));
 		title.setFont(FontLib.getFont("Tahoma", Font.PLAIN, 16));
