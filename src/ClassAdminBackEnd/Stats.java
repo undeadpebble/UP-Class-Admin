@@ -1,3 +1,4 @@
+
 package ClassAdminBackEnd;
 
 import java.text.DecimalFormat;
@@ -203,3 +204,4 @@ public class Stats {
 	    return Double.valueOf(twoDForm.format(d));
 	}
 }
+
