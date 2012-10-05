@@ -248,8 +248,8 @@ public class FrmTable extends JPanel {
 								comp.setBackground(Color.white);
 							}
 						} else {
-							backgroundColors.add(Color.orange);
-							comp.setBackground(Color.orange);
+							backgroundColors.add(new Color(0xfc8720));
+							comp.setBackground(new Color(0xfc8720));
 
 						}
 					} else {
@@ -257,8 +257,8 @@ public class FrmTable extends JPanel {
 					}
 
 					if (isCellSelected(Index_row, Index_col)) {
-						backgroundColors.add(Color.orange);
-						comp.setBackground(Color.orange);
+						backgroundColors.add(new Color(0xfc8720));
+						comp.setBackground(new Color(0xfc8720));
 						// project.getSelected().add(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(Index_col));
 
 						if (Index_col == 0)

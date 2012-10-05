@@ -219,7 +219,7 @@ public class Frame extends JFrame implements ActionListener {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1200, 700);
 
-		Image icon = Toolkit.getDefaultToolkit().getImage("Logo.png");
+		Image icon = Toolkit.getDefaultToolkit().getImage("icons/Logo.png");
 		this.setIconImage(icon);
 
 		// Get the size of the screen
@@ -1221,7 +1221,7 @@ public class Frame extends JFrame implements ActionListener {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (!structureModuleButton.isDisabled()) {
-					showViewStudent();
+					showStructureModule();
 				}
 			}
 
@@ -1373,7 +1373,9 @@ public class Frame extends JFrame implements ActionListener {
 		rulesButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				showRules();
+				if (rulesButton.isEnabled()) {
+					showRules();
+				}
 			}
 
 			public void mouseEntered(MouseEvent arg0) {
@@ -1388,6 +1390,9 @@ public class Frame extends JFrame implements ActionListener {
 		statisticsButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
+				if (statisticsButton.isEnabled()) {
+					showStatistics();
+				}
 			}
 
 			public void mouseEntered(MouseEvent arg0) {
@@ -2061,6 +2066,11 @@ public class Frame extends JFrame implements ActionListener {
 				.getActiveProject());// project);
 		Global.getGlobal().getActiveProject().addscattercharts(x);
 	}
+	
+	public void showStatistics() {
+		FrmStats stats = new FrmStats(Global.getGlobal().getActiveProject());
+		stats.setVisible(true);
+	}
 
 	public void addMenuMouseListeners() {
 
@@ -2230,5 +2240,7 @@ public class Frame extends JFrame implements ActionListener {
 				}
 			}
 		});
+		
+		
 	}
 }

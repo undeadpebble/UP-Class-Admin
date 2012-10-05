@@ -247,7 +247,7 @@ public class frmRule extends JFrame {
 		btnRemoveRule.setVisible(false);
 
 		lblrule.setForeground(Color.WHITE);
-		lblrule.setBounds(62, 45, 165, 14);
+		lblrule.setBounds(62, 49, 165, 14);
 		backgroundPanel.add(lblrule);
 
 		btnRemoveRule.setBounds(115, 331, 172, 34);
@@ -262,11 +262,7 @@ public class frmRule extends JFrame {
 		backgroundPanel.add(lblselected1);
 
 		lblselected2.setBackground(new Color(0xFF8903));
-		lblselected2.setBounds(32, 40, 24, 22);
-		backgroundPanel.add(lblselected2);
-
-		lblselected2.setBackground(Color.ORANGE);
-		lblselected2.setBounds(32, 40, 24, 22);
+		lblselected2.setBounds(32, 42, 24, 22);
 		backgroundPanel.add(lblselected2);
 
 		cbxFloat1.addActionListener(new ActionListener() {
