@@ -92,6 +92,7 @@ public class Frame extends JFrame implements ActionListener {
 	private JFileChooser filechooser;
 	private JFrame frame = this;
 	private File currentFilePath;
+	private File currentDBFilePath;
 	private int tabCount = -1;
 	private FrmTable table;
 	private JTabbedPane tabbedPane;
@@ -257,6 +258,7 @@ public class Frame extends JFrame implements ActionListener {
 		contentPane.add(bottomPanel);
 
 		createRecentDocsDB();
+		setRecentPath();
 
 		setupHomeScreen();
 		setupWorkspaceScreen();
@@ -1409,8 +1411,8 @@ public class Frame extends JFrame implements ActionListener {
 		blur.fadeIn();
 		// Create a file chooser
 		filechooser = new JFileChooser();
-		if (currentFilePath != null) {
-			filechooser.setCurrentDirectory(currentFilePath);
+		if (db.getRecentPathCount() > 0){
+			filechooser.setCurrentDirectory(currentDBFilePath);
 		}
 
 		// add the filter to the file chooser
@@ -1423,13 +1425,16 @@ public class Frame extends JFrame implements ActionListener {
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			file = filechooser.getSelectedFile();
 			currentFilePath = filechooser.getSelectedFile();
+			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+			Date date = new Date();
+			
+			db.addRecentPath(currentFilePath.getAbsolutePath(),dateFormat.format(date));
 			blur.fadeOut();
 			createTab(file);
 			homeToWorkspaceTransition();
 			tabBar.fadeIn();
 
-			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-			Date date = new Date();
+			
 			if (db != null) {
 				if (db.alreadyContains(file.getName(), file.getAbsolutePath())) {
 					db.updateRecentDocument(file.getName(),
@@ -1764,6 +1769,12 @@ public class Frame extends JFrame implements ActionListener {
 			m++;
 		}
 		buttonCount = i - 1;
+	}
+	
+	public void setRecentPath() {
+		String recentPath = db.getRecentPath();
+		currentDBFilePath = new File(recentPath);
+		
 	}
 
 	public void populateRecentDocsInMenu() {
