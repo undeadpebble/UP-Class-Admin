@@ -63,7 +63,7 @@ public class Audit {
 			f = new File(projectName);
 			fstream = new FileWriter(projectName, true);
 			out = new BufferedWriter(fstream);
-			out.append(d() + "\tSTRUCTURE ADDITION:\t" + child + " added as child node to " + parent);
+			out.append(d() + "\tMODULE UPDATE:\t" + child + " added as child node to " + parent);
 			out.newLine();
 			out.append("---------------------------------------------------------------------------------------------------------------------------------------------------------------");
 			out.newLine();
@@ -78,7 +78,7 @@ public class Audit {
 				f = new File(projectName);
 				fstream = new FileWriter(projectName, true);
 				out = new BufferedWriter(fstream);
-				out.append(d() + "\tSTRUCTURE REMOVAL:\t" + node + " removed with children");
+				out.append(d() + "\tMODULE UPDATE:\t" + node + " removed with children");
 				out.newLine();
 				out.append("---------------------------------------------------------------------------------------------------------------------------------------------------------------");
 				out.newLine();
@@ -87,7 +87,7 @@ public class Audit {
 				f = new File(projectName);
 				fstream = new FileWriter(projectName, true);
 				out = new BufferedWriter(fstream);
-				out.append(d() + "\tSTRUCTURE REMOVAL:\t" + node + " removed without children");
+				out.append(d() + "\tMODULE UPDATE:\t" + node + " removed without children");
 				out.newLine();
 				out.append("---------------------------------------------------------------------------------------------------------------------------------------------------------------");
 				out.newLine();
@@ -103,9 +103,9 @@ public class Audit {
 			f = new File(projectName);
 			fstream = new FileWriter(projectName, true);
 			out = new BufferedWriter(fstream);
-			out.append(d() + "\tSTRUCTURE UPDATE:\t" + node + ",\t Weight: " + weight + ",\t Text Field: " + isText + ",\t Assesment Date: " + assDate);
+			out.append(d() + "\tMODULE UPDATE:\t" + node + ",\t Weight: " + weight + ",\t Text Field: " + isText + ",\t Assesment Date: " + assDate);
 			out.newLine();
-			out.append("\t\t\tTO:\t\t\t" + newNode + ",\t Weight: " + newWeight + ",\t Text Field: " + newIsText + ",\t Assesment Date: " + newAssDate);
+			out.append("\t\t\tTO:\t\t" + newNode + ",\t Weight: " + newWeight + ",\t Text Field: " + newIsText + ",\t Assesment Date: " + newAssDate);
 			out.newLine();
 			out.append("---------------------------------------------------------------------------------------------------------------------------------------------------------------");
 			out.newLine();
@@ -119,7 +119,7 @@ public class Audit {
 			f = new File(projectName);
 			fstream = new FileWriter(projectName, true);
 			out = new BufferedWriter(fstream);
-			out.append(d() + "\tSTRUCT UPDATE:\t" + node + " changed parent to: " + newParent);
+			out.append(d() + "\tMODULE UPDATE:\t" + node + " changed parent to: " + newParent);
 			out.newLine();
 			out.append("---------------------------------------------------------------------------------------------------------------------------------------------------------------");
 			out.newLine();
