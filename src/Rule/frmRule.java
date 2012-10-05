@@ -265,6 +265,10 @@ public class frmRule extends JFrame {
 		lblselected2.setBounds(32, 40, 24, 22);
 		backgroundPanel.add(lblselected2);
 
+		lblselected2.setBackground(Color.ORANGE);
+		lblselected2.setBounds(32, 40, 24, 22);
+		backgroundPanel.add(lblselected2);
+
 		cbxFloat1.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -663,10 +667,31 @@ public class frmRule extends JFrame {
 							}
 						}
 
+
 						((StringRule) ruleList.get(whichToEdit)).setChild1(rule1);
 						((StringRule) ruleList.get(whichToEdit)).setChild2(rule2);
 						((StringRule) ruleList.get(whichToEdit)).setBoolRule(rule3);
 						((StringRule) ruleList.get(whichToEdit)).populateTreeWithEntities();
+
+						((StringRule) ruleList.get(whichToEdit))
+								.setChild1(rule1);
+						((StringRule) ruleList.get(whichToEdit))
+								.setChild2(rule2);
+						((StringRule) ruleList.get(whichToEdit))
+								.setBoolRule(rule3);
+						((StringRule) ruleList.get(whichToEdit))
+								.populateTreeWithEntities();
+						
+						if (project.getTables().size() > 0)
+							project.getTables().get(0).redraw();
+					
+						((StringRule) ruleList.get(whichToEdit))
+								.setChild2(rule2);
+						((StringRule) ruleList.get(whichToEdit))
+								.setBoolRule(rule3);
+						((StringRule) ruleList.get(whichToEdit))
+								.populateTreeWithEntities();
+
 						if (project.getTables().size() > 0)
 							project.getTables().get(0).redraw();
 					}
@@ -1244,6 +1269,10 @@ public class frmRule extends JFrame {
 				} else if (ruleList.get(x).getName() != cbxRules.getSelectedItem().toString()) {
 					floatBoolRuleList.add(ruleList.get(x));
 					BoolRuleList.add(ruleList.get(x));
+				} else if (ruleList.get(x).getName() != cbxRules
+						.getSelectedItem().toString()) {
+					floatBoolRuleList.add(ruleList.get(x));
+					BoolRuleList.add(ruleList.get(x));
 				}
 				break;
 			case 2:
@@ -1451,6 +1480,9 @@ public class frmRule extends JFrame {
 				ruleReferences.add(x);
 			}
 		}
+
+		cbxRules.setModel(new DefaultComboBoxModel(ruleStrings));
+
 
 		cbxRules.setModel(new DefaultComboBoxModel(ruleStrings));
 

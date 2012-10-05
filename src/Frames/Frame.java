@@ -157,6 +157,7 @@ public class Frame extends JFrame implements ActionListener {
 			button.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mousePressed(MouseEvent e) {
+					Global.getGlobal().getActiveProject().getAudit().closedProject();
 					tabbedPane.remove(tabbedPane.indexOfTabComponent(tabbutton));
 					tabCount--;
 					if (tabCount == -1) {
@@ -555,6 +556,8 @@ public class Frame extends JFrame implements ActionListener {
 		mGraph.add(miHistogram);
 		mGraph.add(miBoxPlot);
 		mGraph.add(miScatterPlot);
+
+		// menu actions
 
 		// VIEW
 		mView = new JMenu("View");
@@ -1541,9 +1544,18 @@ public class Frame extends JFrame implements ActionListener {
 		// table = Global.getGlobal().getActiveProject().getTables().get(0);
 
 		try {
-			Global.getGlobal().addProject(new Project());
-			fileHandler.openFile(file.getAbsolutePath(), Global.getGlobal()
-					.getActiveProject());
+
+		//	Global.getGlobal().addProject(new Project());
+		//	fileHandler.openFile(file.getAbsolutePath(), Global.getGlobal().getActiveProject());
+
+			Project p = new Project();
+			Global.getGlobal().addProject(p);
+			fileHandler.openFile(file.getAbsolutePath(), Global.getGlobal().getActiveProject());
+			p.setFileName(file.getName());
+			p.createAudit();
+			p.getAudit().openedProject();
+			
+
 		} catch (UnsupportedFileTypeException e) {
 			e.printStackTrace();
 		}
@@ -2039,7 +2051,9 @@ public class Frame extends JFrame implements ActionListener {
 
 	public void showBoxPlot() {
 		BoxPlotFrame x = new BoxPlotFrame();
-		x.createBoxPlotFrame();
+		x.createBoxPlotFrame(Global.getGlobal().getActiveProject());
+		
+		Global.getGlobal().getActiveProject().addboxplotcharts(x);
 	}
 
 	public void showScatterPlot() {

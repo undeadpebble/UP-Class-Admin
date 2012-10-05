@@ -174,6 +174,9 @@ public class XlsImport extends FileImport {
 
 		// set frame icon
 		Image icon = Toolkit.getDefaultToolkit().getImage("Logo.png");
+		dialog.setTitle("Specify Header");
+
+		
 		dialog.setIconImage(icon);
 
 		// create background panel
@@ -302,6 +305,7 @@ public class XlsImport extends FileImport {
 
 		dialog.setVisible(true);
 		
+		dialog.setVisible(true);
 	}
 
 	public void printAllSheets() {

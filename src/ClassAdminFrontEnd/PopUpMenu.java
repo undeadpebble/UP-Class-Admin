@@ -2,32 +2,17 @@ package ClassAdminFrontEnd;
 
 import javax.swing.*;
 
-import org.tmatesoft.sqljet.core.SqlJetException;
-
 import ClassAdminBackEnd.EntityType;
-import ClassAdminBackEnd.Global;
 import ClassAdminBackEnd.Project;
-import Frames.Frame;
 import Frames.FrmNewNode;
 import Frames.FrmUpdateNode;
 
-import prefuse.Display;
-import prefuse.Visualization;
 import prefuse.controls.ControlAdapter;
-import prefuse.data.Edge;
-import prefuse.data.Graph;
-import prefuse.data.Node;
 import prefuse.data.Table;
 import prefuse.data.Tree;
 import prefuse.visual.VisualItem;
 
-import java.awt.Color;
-import java.awt.GridLayout;
 import java.awt.event.*;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.LinkedList;
 
 public class PopUpMenu {
@@ -67,8 +52,7 @@ public class PopUpMenu {
 
 		miEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(activeItem.canSetString("name"))
-				{
+				if (activeItem.canSetString("name")) {
 					updateNode.showFrmUpdateNode(0);
 					activeItem.getVisualization().run("filter");
 				}
@@ -80,12 +64,14 @@ public class PopUpMenu {
 				VisualItem item = activeItem;
 
 				int i = item.getRow();
+				activeProject.getAudit().RemoveNode(item.getString("name"), true);
 				activeTree.removeNode(i);
 
 				activeTreeLinkedList.get(i).removeDeletingChildren();
 				activeProject.updateTables();
+
 				parentFrame.dispose();
-				TreeView.createEntityTypeFrm("name",activeProject);
+				TreeView.createEntityTypeFrm("name", activeProject);
 			}
 		});
 
@@ -107,14 +93,15 @@ public class PopUpMenu {
 						activeTree.addEdge(source, target);
 					}
 				}
+				activeProject.getAudit().RemoveNode(item.getString("name"), false);
 				activeTree.removeNode(i);
-				
+
 				activeTreeLinkedList.get(i).removeSavingChildren();
 				item.getVisualization().repaint();
 				activeProject.updateTables();
 				parentFrame.dispose();
-				TreeView.createEntityTypeFrm("name",activeProject);
-				
+				TreeView.createEntityTypeFrm("name", activeProject);
+
 			}
 		});
 
@@ -134,8 +121,8 @@ public class PopUpMenu {
 						pMenu.show(e.getComponent(), e.getX(), e.getY());
 						activeItem = item;
 						activeEntity = activeTreeLinkedList.get(activeItem.getRow());
-						newNode = new FrmNewNode(activeTree, activeProject, new JFrame(),tview);
-						updateNode = new FrmUpdateNode(activeProject, new JFrame(), activeEntity,activeItem);
+						newNode = new FrmNewNode(activeTree, activeProject, new JFrame(), tview);
+						updateNode = new FrmUpdateNode(activeProject, new JFrame(), activeEntity, activeItem);
 					}
 				}
 			}

@@ -141,9 +141,10 @@ public class FrmUpdateNode {
 				if (b) {
 					
 					//backend func//					
+					activeProject.getAudit().updateNode(activeentity.getName(),activeentity.getIsTextField().toString(),dateFormat.format(activeentity.getDate()),Double.toString(activeentity.getWeight()));
 					activeentity.updateEntity(txtName.getText(), isText, d, (Double) txtWeight.getValue());
 					activeItem.setString("name",txtName.getText());
-					activeProject.updateTables();
+					//activeProject.updateTables();
 					
 
 					// reset all values
