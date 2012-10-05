@@ -14,9 +14,13 @@ import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.Popup;
 import javax.swing.SwingConstants;
 
 import org.jfree.chart.ChartFactory;
@@ -31,6 +35,9 @@ import org.jfree.chart.annotations.XYLineAnnotation;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.entity.ChartEntity;
 import org.jfree.chart.entity.XYItemEntity;
+import org.jfree.chart.labels.StandardXYItemLabelGenerator;
+import org.jfree.chart.labels.StandardXYToolTipGenerator;
+import org.jfree.chart.labels.XYToolTipGenerator;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
@@ -40,6 +47,8 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RefineryUtilities;
+
+
 
 import ClassAdminBackEnd.Global;
 import ClassAdminBackEnd.Project;
@@ -75,7 +84,7 @@ public class ScatterPlot {
 	{
 		chart = ChartFactory.createScatterPlot(
 				"Scatter Plot", xas, yas, chartdata,
-				PlotOrientation.VERTICAL, false, false, false);
+				PlotOrientation.VERTICAL, false, true, false);
 		datasetMain = chartdata;
 		NumberAxis domainAxis = (NumberAxis) chart.getXYPlot().getDomainAxis();
 		domainAxis.setAutoRangeIncludesZero(false);
@@ -83,6 +92,8 @@ public class ScatterPlot {
 		
 		XYItemRenderer renderer = plot.getRenderer();
 		renderer.setSeriesPaint(0, new Color(0xFF8400));
+		 renderer.setBaseToolTipGenerator(new MyXYToolTipGenerator());
+                
 		return chart;
 	}	
 	
@@ -172,8 +183,8 @@ public class ScatterPlot {
 				}
 
 				@Override
-				public void chartMouseMoved(ChartMouseEvent arg0) {
-					// TODO Auto-generated method stub
+				public void chartMouseMoved(ChartMouseEvent e) {
+				
 
 				}
 				
