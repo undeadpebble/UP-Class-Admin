@@ -153,14 +153,26 @@ public class FrmUpdateNode {
 				}
 
 				if (b) {
-					
+						
 					//backend func//
-						System.out.print(activeentity.getIsTextField());
-						//activeProject.getAudit().updateNode(activeentity.getName(),activeentity.getIsTextField().toString(),dateFormat.format(activeentity.getDate()),Double.toString(activeentity.getWeight()));
+					
+						String oldName = activeentity.getName();
+						String oldIsTextField = activeentity.getIsTextField().toString();
+						String oldDate;
+					
+						if(activeentity.getDate() == null)
+							oldDate = dateFormat.format(new Date());
+						else
+								oldDate = dateFormat.format(activeentity.getDate());
+						String oldWeight = 	Double.toString(activeentity.getWeight());
+						
+					activeProject.getAudit().updateNode(oldName,oldIsTextField,oldDate,oldWeight,txtName.getText(),Boolean.toString(isText),dateFormat.format(d),txtWeight.getValue().toString());
 					activeentity.updateEntity(txtName.getText(), isText, d, (Double) txtWeight.getValue());
 					activeentity.setEntityTypeClass(cmbType.getSelectedIndex());
+					activeProject.updateTables();
+					
+					//front end func//
 					activeItem.setString("name",txtName.getText());
-					//activeProject.updateTables();
 					
 
 					// reset all values
@@ -173,7 +185,6 @@ public class FrmUpdateNode {
 					isText = false;
 
 					txtName.requestFocus(true);
-					activeProject.updateTables();
 					frame.dispose();
 					}// if b
 			}// actionListener

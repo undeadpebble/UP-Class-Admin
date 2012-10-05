@@ -504,13 +504,13 @@ public class TreeView extends Display {
 			public void actionPerformed(ActionEvent arg0) {
 
 				if (myProject.getStudentLinkedList().get(selectedEntity).getDetails().getType().getIsTextField()) {
-					myProject.getAudit().updateStudent(myProject.getTreeLinkedList().get(0).getName(),myProject.getStudentLinkedList().get(selectedEntity).getValue(), txtChange.getText(),false);
+					myProject.getAudit().updateStudent(myProject.getStudentLinkedList().get(0).getValue(),myProject.getStudentLinkedList().get(selectedEntity).getValue(), txtChange.getText(),false);
 					myProject.getStudentLinkedList().get(selectedEntity).setValue(txtChange.getText());
 					myTree.getNode(selectedEntity).set("name", txtChange.getText());
 				} else {
 					try {
 						if (Double.parseDouble(txtChange.getText()) >= 0 && myProject.getStudentLinkedList().get(selectedEntity).getType().getMaxValue() >= Double.parseDouble(txtChange.getText())) {
-							myProject.getAudit().updateStudent(myProject.getTreeLinkedList().get(0).getName(),Double.toString(myProject.getStudentLinkedList().get(selectedEntity).getMark()), txtChange.getText(),true);
+							myProject.getAudit().updateStudent(myProject.getStudentLinkedList().get(0).getValue(),Double.toString(myProject.getStudentLinkedList().get(selectedEntity).getMark()), txtChange.getText(),true);
 							myProject.getStudentLinkedList().get(selectedEntity).setMark(Double.parseDouble(txtChange.getText()));
 							myTree.getNode(selectedEntity).set("name", txtChange.getText());
 						}
@@ -526,9 +526,6 @@ public class TreeView extends Display {
 			}
 		});
 
-		// btnChange.registerKeyboardAction(btnChange.getActionForKeyStroke(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE,
-		// 0, false)), KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0,false),
-		// txtChange.WHEN_FOCUSED);
 
 		txtChange.addKeyListener(new KeyListener() {
 
@@ -538,13 +535,13 @@ public class TreeView extends Display {
 				if (id == KeyEvent.VK_ENTER) {
 
 					if (myProject.getStudentLinkedList().get(selectedEntity).getDetails().getType().getIsTextField()) {
-						myProject.getAudit().updateStudent(myProject.getTreeLinkedList().get(1).getName(),myProject.getStudentLinkedList().get(selectedEntity).getValue(), txtChange.getText(),false);
+						myProject.getAudit().updateStudent(myProject.getStudentLinkedList().get(0).getValue(),myProject.getStudentLinkedList().get(selectedEntity).getValue(), txtChange.getText(),false);
 						myProject.getStudentLinkedList().get(selectedEntity).setValue(txtChange.getText());
 						myTree.getNode(selectedEntity).set("name", txtChange.getText());
 					} else {
 						try {
 							if (Double.parseDouble(txtChange.getText()) >= 0 && myProject.getStudentLinkedList().get(selectedEntity).getType().getMaxValue() >= Double.parseDouble(txtChange.getText())) {
-								myProject.getAudit().updateStudent(myProject.getTreeLinkedList().get(1).getName(),Double.toString(myProject.getStudentLinkedList().get(selectedEntity).getMark()), txtChange.getText(),true);
+								myProject.getAudit().updateStudent(myProject.getStudentLinkedList().get(0).getValue(),Double.toString(myProject.getStudentLinkedList().get(selectedEntity).getMark()), txtChange.getText(),true);
 								myProject.getStudentLinkedList().get(selectedEntity).setMark(Double.parseDouble(txtChange.getText()));
 								myTree.getNode(selectedEntity).set("name", txtChange.getText());
 							}
@@ -555,6 +552,8 @@ public class TreeView extends Display {
 					txtChange.setText("");
 					txtChange.setVisible(false);
 					btnChange.setVisible(false);
+					selectedEntity = -1;
+
 				}
 
 			}
