@@ -23,7 +23,7 @@ public class RemoveBorderCase extends JFrame {
 	private JPanel contentPane;
 
 	public RemoveBorderCase(final FrmTable table) {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 376, 236);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -47,6 +47,12 @@ public class RemoveBorderCase extends JFrame {
 		
 		heads =  table.project.getHead().getHeadersLinkedList();
 		
+		for(int x = heads.size()-1; x >= 0; x--){
+			if(heads.get(x).getType().getIsTextField()){
+				heads.remove(x);
+			}
+		}
+		
 		for(int x = 0; x < heads.size();x++){
 			if(heads.get(x).getType().getBorderCasing().size() > 0){
 				for(int y = 0; y < (heads.get(x).getType().getBorderCasing().size()); y++){
@@ -68,9 +74,13 @@ public class RemoveBorderCase extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				table.headersList.get(bordercases.get(cbxBordercases.getSelectedIndex())).getType().getBorderCasing().clear();
-				
+				closeFrame();
 			}
 		});
+	}
+	
+	public void closeFrame(){
+		this.dispose();
 	}
 
 }

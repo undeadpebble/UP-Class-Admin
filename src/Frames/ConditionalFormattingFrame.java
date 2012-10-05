@@ -40,47 +40,6 @@ public class ConditionalFormattingFrame extends JFrame {
 	private JTextField description;
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-
-		try {
-			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-				if ("Nimbus".equals(info.getName())) {
-					javax.swing.UIManager.setLookAndFeel(info.getClassName());
-					UIManager.put("nimbusBase", new Color(0x7A7A7A));
-					UIManager.put("nimbusSelectionBackground", new Color(0x171717));
-					UIManager.put("nimbusFocus", new Color(0x00C6E0));
-					UIManager.put("Menu.background", new Color(0x2B2B2B));
-					UIManager.put("background", new Color(0x171717));
-					UIManager.put("DesktopIcon.background", new Color(0x171717));
-					UIManager.put("nimbusLightBackground", new Color(0xE3E3E3));
-
-					break;
-				}
-			}
-		} catch (ClassNotFoundException ex) {
-			java.util.logging.Logger.getLogger(Frame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		} catch (InstantiationException ex) {
-			java.util.logging.Logger.getLogger(Frame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		} catch (IllegalAccessException ex) {
-			java.util.logging.Logger.getLogger(Frame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(Frame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		}
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					/*ConditionalFormattingFrame frame = new ConditionalFormattingFrame();
-					frame.setVisible(true);*/
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
 	 * Create the frame.
 	 * @throws IOException 
 	 */
@@ -192,6 +151,10 @@ public class ConditionalFormattingFrame extends JFrame {
 		description.setBounds(237, 387, 559, 39);
 		backgroundPanel.add(description);
 		description.setColumns(10);
+		
+		JButton btnRemoveFormat = new JButton("Remove a formatting");
+		btnRemoveFormat.setBounds(58, 437, 181, 39);
+		backgroundPanel.add(btnRemoveFormat);
 
 		// frame resize listener adjust components accordingly
 		this.addComponentListener(new ComponentListener() {
@@ -354,6 +317,16 @@ public class ConditionalFormattingFrame extends JFrame {
 				}
 
 				}
+			}
+		});
+		
+		btnRemoveFormat.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				RemoveFormatting temp = new RemoveFormatting(table);
+				temp.setVisible(true);
+				
 			}
 		});
 	}

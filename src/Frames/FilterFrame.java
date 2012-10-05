@@ -36,61 +36,9 @@ public class FilterFrame extends JFrame {
 
 	private JComboCheckBox selectAllData;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager
-					.getInstalledLookAndFeels()) {
-				if ("Nimbus".equals(info.getName())) {
-					javax.swing.UIManager.setLookAndFeel(info.getClassName());
-					UIManager.put("nimbusBase", new Color(0x7A7A7A));
-					UIManager.put("nimbusSelectionBackground", new Color(
-							0x171717));
-					UIManager.put("nimbusFocus", new Color(0x00C6E0));
-					UIManager.put("Menu.background", new Color(0x2B2B2B));
-					UIManager.put("background", new Color(0x171717));
-					UIManager
-							.put("DesktopIcon.background", new Color(0x171717));
-					UIManager.put("nimbusLightBackground", new Color(0xE3E3E3));
-
-					break;
-				}
-			}
-		} catch (ClassNotFoundException ex) {
-			java.util.logging.Logger.getLogger(Frame.class.getName()).log(
-					java.util.logging.Level.SEVERE, null, ex);
-		} catch (InstantiationException ex) {
-			java.util.logging.Logger.getLogger(Frame.class.getName()).log(
-					java.util.logging.Level.SEVERE, null, ex);
-		} catch (IllegalAccessException ex) {
-			java.util.logging.Logger.getLogger(Frame.class.getName()).log(
-					java.util.logging.Level.SEVERE, null, ex);
-		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(Frame.class.getName()).log(
-					java.util.logging.Level.SEVERE, null, ex);
-		}
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					/*
-					 * FilterFrame frame = new FilterFrame();
-					 * frame.setVisible(true);
-					 */
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
 	public FilterFrame(final FrmTable table) {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 450, 313);
+		setBounds(100, 100, 450, 324);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(null);
@@ -116,7 +64,7 @@ public class FilterFrame extends JFrame {
 		this.setTitle("Filter");
 
 		backgroundPanel = new BackgroundGradientPanel(contentPane);
-		backgroundPanel.setBounds(0, 0, getWidth(), getHeight());
+		backgroundPanel.setBounds(0, 0, 446, 286);
 		contentPane.add(backgroundPanel);
 		backgroundPanel.setLayout(null);
 
@@ -167,10 +115,14 @@ public class FilterFrame extends JFrame {
 		backgroundPanel.add(btnCreateFilter);
 
 		final JButton btnRemoveAllFilters = new JButton("Remove All Filters");
-		btnRemoveAllFilters.setBounds(222, 223, 141, 23);
+		btnRemoveAllFilters.setBounds(204, 223, 159, 23);
 		backgroundPanel.add(btnRemoveAllFilters);
 
 		btnCreateFilter.setEnabled(false);
+		
+		JButton btnRemoveSpesificFilter = new JButton("Remove Spesific Filter");
+		btnRemoveSpesificFilter.setBounds(204, 257, 159, 23);
+		backgroundPanel.add(btnRemoveSpesificFilter);
 
 		if (table.data.get(0).get(cbxFilters.getSelectedIndex()).getType()
 				.getIsTextField()) {
@@ -433,6 +385,15 @@ public class FilterFrame extends JFrame {
 				for (int x = 0; x < table.data.size(); x++) {
 					table.tableModel.addRow(temp[x]);
 				}
+			}
+		});
+		
+		btnRemoveSpesificFilter.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				RemoveFilter removeFilter = new RemoveFilter(table);
+				removeFilter.setVisible(true);
 			}
 		});
 	}
