@@ -114,6 +114,7 @@ public class SuperEntity {
 		this.setType(type);
 		this.mark = mark;
 		this.parentEntity.getSubEntity().add(this);
+		this.hasMark = true;
 
 	}
 
@@ -129,6 +130,7 @@ public class SuperEntity {
 		this.parentEntity = replacedEntity.getParentEntity();
 		try {
 			this.mark = replacedEntity.getMark();
+			this.hasMark = replacedEntity.hasMark;
 		} catch (AbsentException e) {
 			this.hasMark = false;
 		}
@@ -146,6 +148,7 @@ public class SuperEntity {
 	public SuperEntity(EntityType type, double mark) {
 		this.setType(type);
 		this.mark = mark;
+		this.hasMark = true;
 
 	}
 
@@ -218,6 +221,7 @@ public class SuperEntity {
 	 */
 	public void setMark(double mark) {
 		this.mark = mark;
+		
 		this.updateMark();
 		
 	}
@@ -225,6 +229,8 @@ public class SuperEntity {
 	public void updateMark(){
 		try {
 			this.calcMark();
+			this.hasMark = true;
+
 		} catch (Exception e) {
 			this.hasMark = false;
 		}
