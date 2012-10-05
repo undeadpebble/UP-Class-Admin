@@ -368,6 +368,8 @@ public class TreeView extends Display {
 	public static JComponent createPanelEntityTypeTreeView(final String label, EntityType th, JFrame parentFrame) {
 		Color BACKGROUND = new Color(0x171717);
 		Color FOREGROUND = Color.white;
+		
+		final JFrame parentF = parentFrame;
 
 		myProject.getTreeLinkedList().clear();
 
@@ -456,7 +458,7 @@ public class TreeView extends Display {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				FrmTreeHelpDialog helper = new FrmTreeHelpDialog();
+				FrmTreeHelpDialog helper = new FrmTreeHelpDialog(parentF);
 				helper.showFrmTreeHelpDialog();
 			}
 		});
@@ -562,6 +564,7 @@ public class TreeView extends Display {
 				}
 				myProject.updateTables();
 				txtChange.setText("");
+				
 				txtChange.setVisible(false);
 				btnChange.setVisible(false);
 				selectedEntity = -1;
