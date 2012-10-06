@@ -63,7 +63,7 @@ public class FrmUpdateNode {
 		frame.setLocation(parentF.getWidth()+parentF.getX()-250, parentF.getY()+40);
 		frame.getContentPane().setLayout(null);
 
-		frame.setTitle("Add New Node");
+		frame.setTitle("Edit Node");
 
 		JPanel contentPane = new JPanel();
 		contentPane.setBounds(0, 0, frame.getWidth(), frame.getHeight());
