@@ -1059,3 +1059,4 @@ public class FrmTable extends JPanel {
 		}
 	}
 }
+
