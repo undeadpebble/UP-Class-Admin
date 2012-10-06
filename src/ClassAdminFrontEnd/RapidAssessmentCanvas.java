@@ -25,6 +25,7 @@ import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -52,6 +53,8 @@ public class RapidAssessmentCanvas extends JFrame {
 	private static final long serialVersionUID = 1L;
 	public static final int MARK_SIZE = 15;
 	private String backgroundFileName;
+	
+	JComboBox loadCombo;
 	
 
 	private BufferedImage backGround;
@@ -706,6 +709,8 @@ public class RapidAssessmentCanvas extends JFrame {
 
 			}
 		});
+		
+		
 		
 		JButton btnLoad = new JButton("Load");
 		btnLoad.setBounds(parentRect.getWidth()+5, 11, 89, 23);
