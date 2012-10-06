@@ -368,6 +368,8 @@ public class EntityType {
 
 	public void setEntityTypeClass(int classType) {
 		Object o = null;
+		boolean text = this.getIsTextField();
+		
 		this.setIsTextField(false);
 		switch (classType) {
 		
@@ -389,17 +391,32 @@ public class EntityType {
 			break;
 		}
 		for (int x = 0; x < this.getEntityList().size(); ++x) {
+			SuperEntity newE = null;
 			if (!this.getEntityList().get(x).getClass().equals(o)) {
 				if (o.equals(MarkEntity.class) || o.equals(LeafMarkEntity.class)) {
-					new MarkEntity(this.getEntityList().get(x));
+					newE = new MarkEntity(this.getEntityList().get(x));
 				} else if (o.equals(SumMarkEntity.class)) {
-					new SumMarkEntity(this.getEntityList().get(x));
+					newE = new SumMarkEntity(this.getEntityList().get(x));
 				} else if (o.equals(BestNMarkEntity.class)) {
-					new BestNMarkEntity(this.getEntityList().get(x), 1);
+					newE = new BestNMarkEntity(this.getEntityList().get(x), 1);
 				} else if (o.equals(StringEntity.class) || o.equals(LeafStringEntity.class)) {
-					new StringEntity(this.getEntityList().get(x), "#" + this.getName() + "#");
+					newE = new StringEntity(this.getEntityList().get(x), this.getEntityList().get(x).getField());
 				}
 				--x;
+				if(text){
+					try{
+					newE.setMark(Double.parseDouble(newE.getField()));
+					}
+					catch(NumberFormatException e){
+						newE.clearMark();
+					}
+				} else {
+					try {
+						newE.setField(String.valueOf(newE.getMark()));
+					} catch (AbsentException e) {
+						newE.setField("-");
+					}
+				}
 			}
 		}
 	}
