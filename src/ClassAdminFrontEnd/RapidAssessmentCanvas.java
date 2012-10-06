@@ -52,6 +52,8 @@ public class RapidAssessmentCanvas extends JFrame {
 	private static final long serialVersionUID = 1L;
 	public static final int MARK_SIZE = 15;
 	private String backgroundFileName;
+	
+
 	private BufferedImage backGround;
 	private BufferedImage resizedBackGround = null;
 	// private LinkedList<MyRectangle> rectangles = new
@@ -62,6 +64,30 @@ public class RapidAssessmentCanvas extends JFrame {
 	private ContainerPanel parentPanel;
 	private MyRectangle parentRect;
 
+	
+	public String getBackgroundFileName() {
+		return backgroundFileName;
+	}
+
+	public void setBackgroundFileName(String backgroundFileName) {
+		this.backgroundFileName = backgroundFileName;
+	}
+
+	public BufferedImage getBackGround() {
+		return backGround;
+	}
+
+	public void setBackGround(BufferedImage backGround) {
+		this.backGround = backGround;
+	}
+
+	public BufferedImage getResizedBackGround() {
+		return resizedBackGround;
+	}
+
+	public void setResizedBackGround(BufferedImage resizedBackGround) {
+		this.resizedBackGround = resizedBackGround;
+	}
 	public class MyMarkTotalComponent extends JComponent {
 
 		/**
@@ -621,22 +647,18 @@ public class RapidAssessmentCanvas extends JFrame {
 		}
 	}
 
-	public RapidAssessmentCanvas(String backGroundFilename,
-			EntityType assessedEntity) {
+	public RapidAssessmentCanvas(EntityType assessedEntity) {
 		Dimension screen = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		this.setLayout(null);
 		ContainerPanel canvas = new ContainerPanel();
 		parentPanel = canvas;
 		this.setContentPane(canvas);
 		this.setSize(screen.width, screen.height);
-		this.backgroundFileName = backGroundFilename;
-		try {
-			this.backGround = ImageIO.read(getClass().getResource(
-					this.backgroundFileName));
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
 		this.assessedEntity = assessedEntity;
+		if(assessedEntity != null)
+			this.setTitle("Create Assessment - "+assessedEntity.getName());
+		else
+			this.setTitle("Create Assessment - no entity selected");
 		
 		parentRect = new MyRectangle(0, 0,(int) screen.getWidth()-100,(int) screen.getHeight()-50);
 		parentRect.setVisible(true);
@@ -654,7 +676,17 @@ public class RapidAssessmentCanvas extends JFrame {
 				File file;
 				if(returnVal == JFileChooser.APPROVE_OPTION){
 					file = fc.getSelectedFile();
+					setBackgroundFileName(file.getAbsolutePath());
+					try {
+						setBackGround(ImageIO.read(file));
+						setResizedBackGround(null);
+					} catch (IOException e) {
+						
+					}
 				}
+				
+				
+				
 				
 			}
 		});
@@ -818,7 +850,7 @@ public class RapidAssessmentCanvas extends JFrame {
 
 			super.paintComponent(g);
 			Graphics g2 = g.create();
-			if (resizedBackGround == null) {
+			if (resizedBackGround == null && backGround != null) {
 				resizedBackGround = Scalr.resize(backGround,Method.QUALITY,Mode.FIT_EXACT, parentRect.getWidth(),
 						parentRect.getHeight(),Scalr.OP_ANTIALIAS);
 			}
