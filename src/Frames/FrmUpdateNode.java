@@ -36,19 +36,21 @@ import prefuse.data.Tree;
 import prefuse.visual.VisualItem;
 import ClassAdminBackEnd.EntityType;
 import ClassAdminBackEnd.Project;
+import ClassAdminFrontEnd.BackgroundGradientPanel;
 import ClassAdminFrontEnd.DatePicker;
 import ClassAdminFrontEnd.TreeView;
 
 public class FrmUpdateNode {
-	Tree activeTree = null;
-	JDialog frame = null;
-	Project activeProject = null;
-	TreeView activeTreeView = null;
-	LinkedList<EntityType> activeTreeLinkedList = null;
-	Table nodes;
-	JFrame parentF = null;
-	EntityType activeentity;
-	VisualItem activeItem;
+	private Tree activeTree = null;
+	private JDialog frame = null;
+	private Project activeProject = null;
+	private TreeView activeTreeView = null;
+	private LinkedList<EntityType> activeTreeLinkedList = null;
+	private Table nodes;
+	private JFrame parentF = null;
+	private EntityType activeentity;
+	private VisualItem activeItem;
+	private BackgroundGradientPanel backgroundPanel;
 
 	public FrmUpdateNode(Project project, JFrame parentFrame, EntityType entity, VisualItem visualItem) {
 		activeProject = project;
@@ -57,18 +59,26 @@ public class FrmUpdateNode {
 		activeItem = visualItem;
 
 		frame = new JDialog(parentFrame, true);
+		frame.setSize(356, 233);
+		frame.setLocation(parentF.getWidth()+parentF.getX()-250, parentF.getY()+40);
+		frame.getContentPane().setLayout(null);
 
-		JPanel pnlRad = new JPanel(new GridLayout(1, 2));
-		frame.setSize(600, 600);
-		frame.setLayout(new GridLayout(6, 2));
+		frame.setTitle("Add New Node");
+
+		JPanel contentPane = new JPanel();
+		contentPane.setBounds(0, 0, frame.getWidth(), frame.getHeight());
+		frame.setContentPane(contentPane);
+		contentPane.setLayout(null);
+
+		backgroundPanel = new BackgroundGradientPanel(contentPane);
+		backgroundPanel.setBounds(0, 0, contentPane.getWidth(), contentPane.getHeight());
+		contentPane.add(backgroundPanel);
+		backgroundPanel.setLayout(null);
 
 		final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		Date date = new Date();
 		final JLabel lblName = new JLabel("Name:");
 		final JTextField txtName = new JTextField(activeentity.getName());
-		final JLabel lblText = new JLabel("Text field");
-		final JRadioButton rblYes = new JRadioButton("Yes");
-		final JRadioButton rblNo = new JRadioButton("No");
 		final ButtonGroup group = new ButtonGroup();
 		final JLabel lblDate = new JLabel("Date of assesment:");
 		final JTextArea txtDate = new JTextArea();
@@ -96,14 +106,6 @@ public class FrmUpdateNode {
 		txtName.setSize(120, 30);
 
 		// get node's existing data
-		if (activeentity.getIsTextField()) {
-			rblYes.setSelected(true);
-		} else {
-			rblNo.setSelected(true);
-		}
-		group.add(rblYes);
-		group.add(rblNo);
-
 		if (activeentity.getDate() == null) {
 			txtDate.setText(dateFormat.format(new Date()));
 		} else {
@@ -129,9 +131,6 @@ public class FrmUpdateNode {
 					b = false;
 					lblName.setForeground(Color.red);
 				}
-
-				if (rblYes.isSelected())
-					isText = true;
 
 				Date d = null;
 				try {
@@ -168,7 +167,6 @@ public class FrmUpdateNode {
 					activeItem.setString("name", txtName.getText());
 
 					// reset all values
-					rblNo.setSelected(true);
 					txtWeight.setValue(new Double(1.0));
 					txtName.setText(null);
 					txtDate.setText(dateFormat.format(new Date()));
@@ -228,21 +226,34 @@ public class FrmUpdateNode {
 		JPanel pnlDate = new JPanel(new GridLayout(1, 2));
 		pnlDate.add(txtDate);
 		pnlDate.add(btnDate);
-		frame.add(lblType);
-		frame.add(cmbType);
-		frame.add(lblName);
-		frame.add(txtName);
-		frame.add(lblText);
-		pnlRad.add(rblYes);
-		pnlRad.add(rblNo);
-		frame.add(pnlRad);
-		frame.add(lblDate);
-		frame.add(pnlDate);
-		frame.add(lblWeight);
-		frame.add(txtWeight);
-		frame.add(btnUpdate);
-		frame.add(btnClose);
-		frame.pack();
+		
+		lblType.setBounds(10, 11, 60, 30);
+		cmbType.setBounds(175, 11, 150, 30);
+		lblName.setBounds(10, 46, 71, 30);
+		txtName.setBounds(175, 46, 150, 30);
+		lblDate.setBounds(10, 80, 158, 30);
+		pnlDate.setBounds(175, 80, 150, 30);
+		lblWeight.setBounds(10, 114, 116, 30);
+		txtWeight.setBounds(175, 114, 150, 30);
+		btnUpdate.setBounds(10, 158, 150, 30);
+		btnClose.setBounds(175, 155, 150, 30);
+		
+		lblType.setForeground(new Color(0xEDEDED));
+		lblName.setForeground(new Color(0xEDEDED));
+		lblDate.setForeground(new Color(0xEDEDED));
+		lblWeight.setForeground(new Color(0xEDEDED));
+		
+		backgroundPanel.add(lblType);
+		backgroundPanel.add(cmbType);
+		backgroundPanel.add(lblName);
+		backgroundPanel.add(txtName);
+		backgroundPanel.add(lblDate);
+		backgroundPanel.add(pnlDate);
+		backgroundPanel.add(lblWeight);
+		backgroundPanel.add(txtWeight);
+		backgroundPanel.add(btnUpdate);
+		backgroundPanel.add(btnClose);
+
 	}
 
 	public void showFrmUpdateNode(int p) {

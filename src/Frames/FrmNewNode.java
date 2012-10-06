@@ -54,11 +54,9 @@ public class FrmNewNode {
 		activeTreeView = treeView;
 		nodes = activeTree.getNodeTable();
 		parentF = parentFrame;
+		
 		frame = new JDialog(parentFrame, true);
-
-		JPanel pnlRad = new JPanel(new GridLayout(1, 2));
-		pnlRad.setOpaque(false);
-		frame.setSize(356, 301);
+		frame.setSize(356, 268);
 		frame.setLocation(parentF.getWidth()+parentF.getX()-250, parentF.getY()+40);
 		frame.getContentPane().setLayout(null);
 
@@ -81,9 +79,6 @@ public class FrmNewNode {
 		cmbParent = new JComboBox();
 		final JLabel lblParent = new JLabel("Parent:");
 		final JTextField txtName = new JTextField();
-		final JLabel lblText = new JLabel("Text field");
-		final JRadioButton rblYes = new JRadioButton("Yes");
-		final JRadioButton rblNo = new JRadioButton("No");
 		final ButtonGroup group = new ButtonGroup();
 		final JLabel lblDate = new JLabel("Date of assesment:");
 		final JTextArea txtDate = new JTextArea();
@@ -102,9 +97,6 @@ public class FrmNewNode {
 
 		txtName.setSize(120, 30);
 		txtDate.setText(dateFormat.format(date));
-		rblNo.setSelected(true);
-		group.add(rblYes);
-		group.add(rblNo);
 		
 		cmbType.addItem("Mark - Weighted Average");
 		cmbType.addItem("Mark - Sum ");
@@ -149,8 +141,6 @@ public class FrmNewNode {
 					lblName.setForeground(Color.red);
 				}
 
-				if (rblYes.isSelected())
-					isText = true;
 
 				Date d = null;
 				try {
@@ -183,11 +173,6 @@ public class FrmNewNode {
 					// add child to parent in back end
 					EntityType newE = new EntityType(txtName.getText(), activeProject.getTreeLinkedList().get(cmbParent.getSelectedIndex()), isText, d, (Double) txtWeight.getValue());
 
-
-					//backend func//					
-					activeProject.getTreeLinkedList().add(newE);
-					newE.populateTreeWithEntities();
-
 					// insert child into backend and create audit entry
 					activeProject.getAudit().AddNode((String) cmbParent.getSelectedItem(), txtName.getText());
 					activeProject.getTreeLinkedList().add(newE);
@@ -208,7 +193,6 @@ public class FrmNewNode {
 					cmbParent.setSelectedIndex(selectedIndex);
 
 					// reset all values
-					rblNo.setSelected(true);
 					txtWeight.setValue(new Double(1.0));
 					txtName.setText(null);
 					txtDate.setText(dateFormat.format(new Date()));
@@ -273,22 +257,17 @@ public class FrmNewNode {
 		cmbParent.setBounds(180, 45, 150, 30);
 		txtName.setBounds(180, 79, 150, 30);
 		lblName.setBounds(10, 79, 72, 30);
-		lblText.setBounds(10, 113, 54, 30);
-		pnlRad.setBounds(180, 113, 150, 30);
-		lblDate.setBounds(10, 147, 120, 30);
-		lblWeight.setBounds(10, 182, 130, 30);
-		pnlDate.setBounds(180,147,150,30);
-		txtWeight.setBounds(180, 182, 150, 30);
-		btnAdd.setBounds(10, 223, 150, 30);
-		btnClose.setBounds(180, 223, 150, 30);
+		lblDate.setBounds(10, 120, 120, 30);
+		lblWeight.setBounds(10, 147, 130, 30);
+		pnlDate.setBounds(180,113,150,30);
+		txtWeight.setBounds(180, 147, 150, 30);
+		btnAdd.setBounds(10, 188, 150, 30);
+		btnClose.setBounds(180, 188, 150, 30);
 		lblType.setBounds(10, 11, 50, 30);
 		cmbType.setBounds(180, 11, 150, 30);
 
 		lblParent.setForeground(new Color(0xEDEDED));
 		lblName.setForeground(new Color(0xEDEDED));
-		lblText.setForeground(new Color(0xEDEDED));
-		rblYes.setForeground(new Color(0xEDEDED));
-		rblNo.setForeground(new Color(0xEDEDED));
 		lblDate.setForeground(new Color(0xEDEDED));
 		lblWeight.setForeground(new Color(0xEDEDED));
 		lblType.setForeground(new Color(0xEDEDED));
@@ -297,10 +276,6 @@ public class FrmNewNode {
 		backgroundPanel.add(cmbParent);
 		backgroundPanel.add(lblName);
 		backgroundPanel.add(txtName);
-		backgroundPanel.add(lblText);
-		pnlRad.add(rblYes);
-		pnlRad.add(rblNo);
-		backgroundPanel.add(pnlRad);
 		backgroundPanel.add(lblDate);
 		backgroundPanel.add(pnlDate);
 		backgroundPanel.add(lblWeight);
