@@ -357,6 +357,7 @@ public class TreeView extends Display {
 		// Move the window
 		frame.setLocation(x, y);
 		frame.setVisible(true);
+		frame.setResizable(false);
 		
 		frame.setTitle("View Student");
 		
@@ -564,7 +565,8 @@ public class TreeView extends Display {
 				}
 				myProject.updateTables();
 				txtChange.setText("");
-				
+				txtChange.setPreferredSize(new Dimension(txtChange.getWidth(), txtChange.getHeight()));
+				txtChange.setLineWrap(true);
 				txtChange.setVisible(false);
 				btnChange.setVisible(false);
 				selectedEntity = -1;
