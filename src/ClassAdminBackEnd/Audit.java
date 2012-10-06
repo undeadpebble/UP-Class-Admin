@@ -19,14 +19,18 @@ public class Audit {
 
 	public Audit(Project project) throws IOException {
 		activeProject = project;
-		projectName = activeProject.getFileName().substring(0, activeProject.getFileName().indexOf(".")) + ".txt";
+		projectName = activeProject.getFileName().substring(0, activeProject.getFileName().indexOf(".")) + "_log.txt"; // create
+																													// audit
+																													// filename
 		dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 	}
 
+	// return current time and date in string form
 	private String d() {
 		return (dateFormat.format(new Date()).toString());
 	}
 
+	// log opening of project
 	public void openedProject() {
 		try {
 			f = new File(projectName);
@@ -42,6 +46,7 @@ public class Audit {
 		}
 	}
 
+	// log closing of project
 	public void closedProject() {
 		try {
 			f = new File(projectName);
@@ -58,6 +63,7 @@ public class Audit {
 		}
 	}
 
+	// log addition of node to tree structure
 	public void AddNode(String parent, String child) {
 		try {
 			f = new File(projectName);
@@ -72,6 +78,7 @@ public class Audit {
 		}
 	}
 
+	// log removal of node from tree structure
 	public void RemoveNode(String node, boolean withChildren) {
 		try {
 			if (withChildren) {
@@ -98,7 +105,8 @@ public class Audit {
 		}
 	}
 
-	public void updateNode(String node, String isText, String assDate, String weight, String newNode, String newIsText,String newAssDate, String newWeight) {
+	// log modifications of existing node to project
+	public void updateNode(String node, String isText, String assDate, String weight, String newNode, String newIsText, String newAssDate, String newWeight) {
 		try {
 			f = new File(projectName);
 			fstream = new FileWriter(projectName, true);
@@ -114,6 +122,7 @@ public class Audit {
 		}
 	}
 
+	// log parent changing of nodes in tree structure
 	public void moveNode(String node, String newParent) {
 		try {
 			f = new File(projectName);
@@ -128,6 +137,7 @@ public class Audit {
 		}
 	}
 
+	// log any modifications of student values
 	public void updateStudent(String student, String oldVal, String newVal, boolean mark) {
 		try {
 			if (mark) {

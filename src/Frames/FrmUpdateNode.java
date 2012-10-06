@@ -49,16 +49,15 @@ public class FrmUpdateNode {
 	JFrame parentF = null;
 	EntityType activeentity;
 	VisualItem activeItem;
-	
-	public FrmUpdateNode(Project project, JFrame parentFrame,EntityType entity, VisualItem visualItem) {
+
+	public FrmUpdateNode(Project project, JFrame parentFrame, EntityType entity, VisualItem visualItem) {
 		activeProject = project;
 		parentF = parentFrame;
 		activeentity = entity;
 		activeItem = visualItem;
-		
-		
+
 		frame = new JDialog(parentFrame, true);
-		
+
 		JPanel pnlRad = new JPanel(new GridLayout(1, 2));
 		frame.setSize(600, 600);
 		frame.setLayout(new GridLayout(6, 2));
@@ -85,10 +84,9 @@ public class FrmUpdateNode {
 		cmbType.addItem("Mark - Best N");
 		cmbType.addItem("Text");
 		cmbType.addItem("Mixed");
-		
-		
+
 		cmbType.setSelectedIndex(activeentity.getEntityTypeClass());
-		
+
 		SpinnerNumberModel snmWeight = new SpinnerNumberModel(new Double(1.00), // value
 				new Double(0.00), // min
 				new Double(100.00), // max
@@ -96,30 +94,25 @@ public class FrmUpdateNode {
 		final JSpinner txtWeight = new JSpinner(snmWeight);
 		txtWeight.setValue(activeentity.getWeight());
 		txtName.setSize(120, 30);
-		
-		if(activeentity.getIsTextField())
-		{
-			rblYes.setSelected(true);			
-		}
-		else
-		{
+
+		// get node's existing data
+		if (activeentity.getIsTextField()) {
+			rblYes.setSelected(true);
+		} else {
 			rblNo.setSelected(true);
 		}
 		group.add(rblYes);
 		group.add(rblNo);
 
-		if(activeentity.getDate() == null)
-		{
+		if (activeentity.getDate() == null) {
 			txtDate.setText(dateFormat.format(new Date()));
-		}
-		else
-		{
+		} else {
 			txtDate.setText(dateFormat.format(activeentity.getDate()).toString());
 		}
 		btnDate.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-					txtDate.setText(new DatePicker(frame).setPickedDate());
+				txtDate.setText(new DatePicker(frame).setPickedDate());
 			}
 		});
 
@@ -131,7 +124,7 @@ public class FrmUpdateNode {
 				String assDate = "";
 				double weight = 1.0;
 
-
+				// validation of values
 				if (txtName.getText() == null || txtName.getText().equals("")) {
 					b = false;
 					lblName.setForeground(Color.red);
@@ -153,27 +146,26 @@ public class FrmUpdateNode {
 				}
 
 				if (b) {
-						
-					//backend func//
-					
-						String oldName = activeentity.getName();
-						String oldIsTextField = activeentity.getIsTextField().toString();
-						String oldDate;
-					
-						if(activeentity.getDate() == null)
-							oldDate = dateFormat.format(new Date());
-						else
-								oldDate = dateFormat.format(activeentity.getDate());
-						String oldWeight = 	Double.toString(activeentity.getWeight());
-						
-					activeProject.getAudit().updateNode(oldName,oldIsTextField,oldDate,oldWeight,txtName.getText(),Boolean.toString(isText),dateFormat.format(d),txtWeight.getValue().toString());
+
+
+					String oldName = activeentity.getName();
+					String oldIsTextField = activeentity.getIsTextField().toString();
+					String oldDate;
+
+					if (activeentity.getDate() == null)
+						oldDate = dateFormat.format(new Date());
+					else
+						oldDate = dateFormat.format(activeentity.getDate());
+					String oldWeight = Double.toString(activeentity.getWeight());
+
+					//create audit entry and update node information
+					activeProject.getAudit().updateNode(oldName, oldIsTextField, oldDate, oldWeight, txtName.getText(), Boolean.toString(isText), dateFormat.format(d), txtWeight.getValue().toString());
 					activeentity.updateEntity(txtName.getText(), isText, d, (Double) txtWeight.getValue());
 					activeentity.setEntityTypeClass(cmbType.getSelectedIndex());
+					
+					//update front end information
 					activeProject.updateTables();
-					
-					//front end func//
-					activeItem.setString("name",txtName.getText());
-					
+					activeItem.setString("name", txtName.getText());
 
 					// reset all values
 					rblNo.setSelected(true);
@@ -186,7 +178,7 @@ public class FrmUpdateNode {
 
 					txtName.requestFocus(true);
 					frame.dispose();
-					}// if b
+				}// if b
 			}// actionListener
 		});
 
@@ -198,7 +190,6 @@ public class FrmUpdateNode {
 				frame.dispose();
 			}
 		});
-
 
 		frame.addWindowListener(new WindowListener() {
 
@@ -233,6 +224,7 @@ public class FrmUpdateNode {
 			}
 		});
 
+		//create form
 		JPanel pnlDate = new JPanel(new GridLayout(1, 2));
 		pnlDate.add(txtDate);
 		pnlDate.add(btnDate);
@@ -252,11 +244,9 @@ public class FrmUpdateNode {
 		frame.add(btnClose);
 		frame.pack();
 	}
-	
-	public void showFrmUpdateNode(int p){
+
+	public void showFrmUpdateNode(int p) {
 		frame.setVisible(true);
 	}
 
-	
-	
 }

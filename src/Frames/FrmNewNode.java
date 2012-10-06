@@ -47,7 +47,7 @@ public class FrmNewNode {
 	Table nodes;
 	JComboBox cmbParent;
 	JFrame parentF = null;
-	
+
 	public FrmNewNode(Tree tree, Project project, JFrame parentFrame, TreeView treeView) {
 		activeTree = tree;
 		activeProject = project;
@@ -55,7 +55,7 @@ public class FrmNewNode {
 		nodes = activeTree.getNodeTable();
 		parentF = parentFrame;
 		frame = new JDialog(parentFrame, true);
-	
+
 		JPanel pnlRad = new JPanel(new GridLayout(1, 2));
 		frame.setSize(600, 600);
 		frame.setLayout(new GridLayout(7, 2));
@@ -96,8 +96,7 @@ public class FrmNewNode {
 		cmbType.addItem("Mark - Best N");
 		cmbType.addItem("Text");
 		cmbType.addItem("Mixed");
-		
-		
+
 		cmbType.setSelectedIndex(0);
 
 		for (int r = 0; r < nodes.getRowCount(); r++) {
@@ -109,7 +108,7 @@ public class FrmNewNode {
 		btnDate.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-					txtDate.setText(new DatePicker(frame).setPickedDate());
+				txtDate.setText(new DatePicker(frame).setPickedDate());
 			}
 		});
 
@@ -123,6 +122,7 @@ public class FrmNewNode {
 				String assDate = "";
 				double weight = 1.0;
 
+				// validation of entered values
 				int selectedIndex = cmbParent.getSelectedIndex();
 				if (selectedIndex == 0) {
 					b = false;
@@ -158,44 +158,25 @@ public class FrmNewNode {
 						// copy parent data
 						child.set(c, parent.get(c));
 
-					child.set("name", txtName.getText()); // edit child to fit
-															// new child
+					child.set("name", txtName.getText()); // update child node
+															// information
 
 					activeTree.addEdge(parent, child); // add edge between
 														// parent
 														// and child
 
-					// add child to parent in back end
+					// create child node
 					EntityType newE = new EntityType(txtName.getText(), activeProject.getTreeLinkedList().get(cmbParent.getSelectedIndex()), isText, d, (Double) txtWeight.getValue());
-					System.out.println(activeProject.getTreeLinkedList().get(cmbParent.getSelectedIndex()).getName());
-					
-					//create audit entry
+
+					// insert child into backend and create audit entry
 					activeProject.getAudit().AddNode((String) cmbParent.getSelectedItem(), txtName.getText());
-					//backend func//					
 					activeProject.getTreeLinkedList().add(newE);
 					newE.populateTreeWithEntities();
 					newE.setEntityTypeClass(cmbType.getSelectedIndex());
-					activeProject.updateTables();
-					
-					
-					LinkedList<LinkedList<SuperEntity>> data = activeProject.getTreeLinkedList().get(cmbParent.getSelectedIndex()).getParentEntitytype()
-							.getParentEntitytype().getEntityList().get(0)
-							.getDataLinkedList();
-					System.out.println();
-					for (int x = 0; x < data.size(); ++x) {
-						for (int y = 0; y < data.get(x).size(); ++y) {
-							String g = "";
-							SuperEntity s = data.get(x).get(y);
-							while (s != null) {
-								g += " ";
-								s = s.getParentEntity();
-							}
-							System.out.println(g
-									+ data.get(x).get(y).getType().getName());
-						}
-					}
 
-					
+					// update front end information
+					activeProject.updateTables();
+
 					// refresh cmbParent content
 					cmbParent.removeAllItems();
 					for (int r = 0; r < nodes.getRowCount(); r++) {
@@ -219,7 +200,7 @@ public class FrmNewNode {
 					isText = false;
 					activeTreeView.getVisualization().run("filter");
 					txtName.requestFocus(true);
-					}// if b
+				}// if b
 			}// actionListener
 		});
 
@@ -231,7 +212,6 @@ public class FrmNewNode {
 				frame.dispose();
 			}
 		});
-
 
 		frame.addWindowListener(new WindowListener() {
 
@@ -266,6 +246,7 @@ public class FrmNewNode {
 			}
 		});
 
+		//create form
 		JPanel pnlDate = new JPanel(new GridLayout(1, 2));
 		pnlDate.add(txtDate);
 		pnlDate.add(btnDate);
@@ -287,8 +268,8 @@ public class FrmNewNode {
 		frame.add(btnClose);
 		frame.pack();
 	}
-	
-	public void showFrmNewNode(int p){
+
+	public void showFrmNewNode(int p) {
 		if (p != -1)
 			cmbParent.setSelectedIndex(p);
 		else
@@ -296,7 +277,4 @@ public class FrmNewNode {
 		frame.setVisible(true);
 	}
 
-	
-	
-	
 }
