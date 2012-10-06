@@ -283,8 +283,8 @@ public class EntityType {
 	}
 
 	public void populateTreeWithEntities() {
-		for (int x = 0; x < this.getParentEntitytype().getEntityList().size(); ++x) {
-			SuperEntity parent = this.getParentEntitytype().getEntityList().get(0);
+		for (int x = this.getParentEntitytype().getEntityList().size()-1; x >=0; --x) {
+			SuperEntity parent = this.getParentEntitytype().getEntityList().get(x);
 			if (this.getIsRule()) {
 				if (this.getIsTextField()) {
 					new StringRuleEntity(this, parent, "");
@@ -294,7 +294,7 @@ public class EntityType {
 				}
 			} else {
 				if (this.getIsTextField()) {
-					new LeafStringEntity(this, parent, "<" + this.getName() + ">");
+					new LeafStringEntity(this, parent, "#" + this.getName() + "#");
 				} else {
 					new LeafMarkEntity(this, parent, 0);
 				}
@@ -368,8 +368,9 @@ public class EntityType {
 
 	public void setEntityTypeClass(int classType) {
 		Object o = null;
+		this.setIsTextField(false);
 		switch (classType) {
-
+		
 		case 0:
 			o = MarkEntity.class;
 			break;
@@ -381,6 +382,7 @@ public class EntityType {
 			break;
 		case 3:
 			o = StringEntity.class;
+			this.setIsTextField(true);
 			break;
 
 		default:
@@ -395,7 +397,7 @@ public class EntityType {
 				} else if (o.equals(BestNMarkEntity.class)) {
 					new BestNMarkEntity(this.getEntityList().get(x), 1);
 				} else if (o.equals(StringEntity.class) || o.equals(LeafStringEntity.class)) {
-					new StringEntity(this.getEntityList().get(x), "<" + this.getName() + ">");
+					new StringEntity(this.getEntityList().get(x), "#" + this.getName() + "#");
 				}
 				--x;
 			}
