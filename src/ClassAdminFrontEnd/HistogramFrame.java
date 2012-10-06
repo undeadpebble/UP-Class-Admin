@@ -58,6 +58,7 @@ import ClassAdminBackEnd.Project;
 import ClassAdminBackEnd.Stats;
 import ClassAdminBackEnd.SuperEntity;
 import ClassAdminFrontEnd.Histogram.CustomBarRenderer;
+import javax.swing.JPanel;
 
 public class HistogramFrame extends JFrame implements ActionListener {
 	private static ChartPanel chartpanel;
@@ -80,7 +81,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 	public HistogramFrame(final Project project) {
 		JFrame f = new JFrame("Histogram");
 		final Container content = f.getContentPane();
-		f.setSize(550, 620);
+		f.setSize(550, 630);
 		stats = new Stats(project);
 		this.project = project;
 		final LinkedList<LinkedList<SuperEntity>> diedata = project.getHead()
@@ -113,9 +114,9 @@ public class HistogramFrame extends JFrame implements ActionListener {
 
 		chartpanel = nuweChart.createPanel();
 
-		final JLabel classaverage = new JLabel("Class average:"+stats.gemidpunt(houerx)+"                            ");
-		final JLabel failures = new JLabel("Number of failures:"+stats.fails(houerx)+"                     ");
-		final JLabel passes = new JLabel("Number of passes:"+stats.slaag(houerx)+"                       ");
+		final JLabel classaverage = new JLabel("Class average:"+stats.gemidpunt(houerx)+"                     ");
+		final JLabel failures = new JLabel("Number of failures:"+stats.fails(houerx)+"                ");
+		final JLabel passes = new JLabel("Number of passes:"+stats.slaag(houerx)+"                    ");
 		
 		
 		JLabel lblNewLabel = new JLabel("X-axis");

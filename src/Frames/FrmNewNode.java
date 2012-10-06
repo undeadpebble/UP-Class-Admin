@@ -151,7 +151,7 @@ public class FrmNewNode {
 
 				if (b) {
 					parent = activeTree.getNode(cmbParent.getSelectedIndex()); // get
-																				// parent
+					// parent
 					child = activeTree.addNode(); // create child
 
 					for (int c = 0; c < child.getColumnCount() - 1; c++)
@@ -159,11 +159,11 @@ public class FrmNewNode {
 						child.set(c, parent.get(c));
 
 					child.set("name", txtName.getText()); // update child node
-															// information
+					// information
 
 					activeTree.addEdge(parent, child); // add edge between
-														// parent
-														// and child
+					// parent
+					// and child
 
 					// create child node
 					EntityType newE = new EntityType(txtName.getText(), activeProject.getTreeLinkedList().get(cmbParent.getSelectedIndex()), isText, d, (Double) txtWeight.getValue());
@@ -246,7 +246,7 @@ public class FrmNewNode {
 			}
 		});
 
-		//create form
+		// create form
 		JPanel pnlDate = new JPanel(new GridLayout(1, 2));
 		pnlDate.add(txtDate);
 		pnlDate.add(btnDate);

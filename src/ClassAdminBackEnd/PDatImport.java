@@ -12,6 +12,14 @@ import org.tmatesoft.sqljet.core.table.ISqlJetCursor;
 import org.tmatesoft.sqljet.core.table.ISqlJetTable;
 import org.tmatesoft.sqljet.core.table.SqlJetDb;
 
+import com.db4o.Db4o;
+import com.db4o.ObjectContainer;
+import com.db4o.ObjectSet;
+import com.db4o.config.Configuration;
+import com.db4o.config.ConfigurationItem;
+import com.db4o.config.annotations.reflect.Db4oConfigurator;
+import com.db4o.ta.TransparentActivationSupport;
+
 public class PDatImport {
 	private Project project;
 	private LinkedList<SuperEntity> entityList = new LinkedList<SuperEntity>();
@@ -24,6 +32,20 @@ public class PDatImport {
 	private LinkedList<Long> formatList_ID = new LinkedList<Long>();
 	private LinkedList<Long> formatList_TypeID = new LinkedList<Long>();
 
+	public void importFileDB4o(Project project,String filename){
+		//Db4o.newConfiguration().add();
+		Db4o.configure().add(new TransparentActivationSupport());
+		 ObjectContainer db = Db4o.openFile(filename); 
+		 
+		 ObjectSet<Project> result  = db.query(Project.class);
+		 Project p = (Project)(result.next());
+		 
+		Global.getGlobal().getProjects().set(Global.getGlobal().getProjects().indexOf(project), p);
+			db.close();
+			System.out.println(p.getHead());
+			
+	}
+	
 	public void importFile(String filename, Project project)
 			throws SqlJetException {
 		this.project = project;

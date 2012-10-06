@@ -161,6 +161,44 @@ public class Stats {
 		
 		return sort[n/2];
 	}
+	public int distinction(int hou)
+	{
+		final LinkedList<LinkedList<SuperEntity>> diedata = project.getHead()
+				.getDataLinkedList();
+		int nrVanDistinct =0;
+		for(int x=0;x<diedata.size();x++)
+		{
+			try {
+				if(diedata.get(x).get(hou).getMark()>=75.0)
+					nrVanDistinct++;
+			} catch (AbsentException e) {
+				nrVanDistinct =nrVanDistinct;
+			}
+		}
+		return nrVanDistinct;
+	}
+	public int her(int hou)
+	{
+		final LinkedList<LinkedList<SuperEntity>> diedata = project.getHead()
+				.getDataLinkedList();
+		int nrVanHer =0;
+		for(int x=0;x<diedata.size();x++)
+		{
+			try {
+				if(diedata.get(x).get(hou).getMark()>=40.0 && diedata.get(x).get(hou).getMark() < 50.0)
+					nrVanHer++;
+			} catch (AbsentException e) {
+				nrVanHer =nrVanHer;
+			}
+		}
+		return nrVanHer;
+	}
+	public int totalnrstd()
+	{
+		final LinkedList<LinkedList<SuperEntity>> diedata = project.getHead()
+				.getDataLinkedList();
+		return diedata.size(); 
+	}
 	public double roundTwoDecimals(double d) {
 	    DecimalFormat twoDForm = new DecimalFormat("#.##");
 	    return Double.valueOf(twoDForm.format(d));

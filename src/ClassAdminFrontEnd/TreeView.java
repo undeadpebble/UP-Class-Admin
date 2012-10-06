@@ -1,3 +1,4 @@
+
 package ClassAdminFrontEnd;
 
 import java.awt.BorderLayout;
@@ -6,7 +7,9 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.PopupMenu;
+import java.awt.Toolkit;
 import java.awt.dnd.DragSource;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -155,14 +158,15 @@ public class TreeView extends Display {
 
 		// colors
 		ItemAction nodeColor = new NodeColorAction(treeNodes);
-		ItemAction textColor = new ColorAction(treeNodes, VisualItem.TEXTCOLOR, ColorLib.rgb(0, 0, 0));
+		ItemAction textColor = new ColorAction(treeNodes, VisualItem.TEXTCOLOR, ColorLib.rgb(225, 225, 225));
 		m_vis.putAction("textColor", textColor);
 
-		ItemAction edgeColor = new ColorAction(treeEdges, VisualItem.STROKECOLOR, ColorLib.rgb(200, 200, 200));
+		ItemAction edgeColor = new ColorAction(treeEdges, VisualItem.STROKECOLOR, ColorLib.rgb(232, 232, 232));
 
 		// quick repaint
 		ActionList repaint = new ActionList();
 		repaint.add(nodeColor);
+		
 		repaint.add(new RepaintAction());
 		m_vis.putAction("repaint", repaint);
 
@@ -231,10 +235,14 @@ public class TreeView extends Display {
 		addControlListener(new FocusControl(1, "filter"));
 		addControlListener(new TreeViewControl());
 		addControlListener(new StudentViewControl());
-		registerKeyboardAction(new OrientAction(Constants.ORIENT_LEFT_RIGHT), "left-to-right", KeyStroke.getKeyStroke("ctrl 1"), WHEN_FOCUSED);
-		registerKeyboardAction(new OrientAction(Constants.ORIENT_TOP_BOTTOM), "top-to-bottom", KeyStroke.getKeyStroke("ctrl 2"), WHEN_FOCUSED);
-		registerKeyboardAction(new OrientAction(Constants.ORIENT_RIGHT_LEFT), "right-to-left", KeyStroke.getKeyStroke("ctrl 3"), WHEN_FOCUSED);
-		registerKeyboardAction(new OrientAction(Constants.ORIENT_BOTTOM_TOP), "bottom-to-top", KeyStroke.getKeyStroke("ctrl 4"), WHEN_FOCUSED);
+		registerKeyboardAction(new OrientAction(Constants.ORIENT_LEFT_RIGHT), "left-to-right", KeyStroke.getKeyStroke("ctrl 1"),
+				WHEN_FOCUSED);
+		registerKeyboardAction(new OrientAction(Constants.ORIENT_TOP_BOTTOM), "top-to-bottom", KeyStroke.getKeyStroke("ctrl 2"),
+				WHEN_FOCUSED);
+		registerKeyboardAction(new OrientAction(Constants.ORIENT_RIGHT_LEFT), "right-to-left", KeyStroke.getKeyStroke("ctrl 3"),
+				WHEN_FOCUSED);
+		registerKeyboardAction(new OrientAction(Constants.ORIENT_BOTTOM_TOP), "bottom-to-top", KeyStroke.getKeyStroke("ctrl 4"),
+				WHEN_FOCUSED);
 
 		// ------------------------------------------------
 
@@ -308,8 +316,24 @@ public class TreeView extends Display {
 		JComponent treeview = createPanelEntityTypeTreeView(label, myProject.getHeadEntityType(), frame);
 
 		frame.setContentPane(treeview);
-		frame.pack();
+		frame.setSize(850,600);
+
+		// Get the size of the screen
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		// Determine the new location of the window
+		int w = frame.getSize().width;
+		int h = frame.getSize().height;
+		int x = (dim.width - w) / 2;
+		int y = (dim.height - h) / 2;
+		// Move the window
+		frame.setLocation(x, y);
 		frame.setVisible(true);
+		
+		frame.setTitle("Structure Module");
+		
+		Image icon = Toolkit.getDefaultToolkit().getImage("icons/Tree.png");
+		frame.setIconImage(icon);
+		
 		newNode = new FrmNewNode(myTree, myProject, frame, tview);
 
 	}
@@ -322,13 +346,32 @@ public class TreeView extends Display {
 		JComponent treeview = createPanelTreeView(label, treeHead);
 
 		frame.setContentPane(treeview);
-		frame.pack();
+		frame.setSize(850,600);
+
+		// Get the size of the screen
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		// Determine the new location of the window
+		int w = frame.getSize().width;
+		int h = frame.getSize().height;
+		int x = (dim.width - w) / 2;
+		int y = (dim.height - h) / 2;
+		// Move the window
+		frame.setLocation(x, y);
+		frame.setVisible(true);
+		frame.setResizable(false);
+		
+		frame.setTitle("View Student");
+		
+		Image icon = Toolkit.getDefaultToolkit().getImage("icons/Tree.png");
+		frame.setIconImage(icon);
 		frame.setVisible(true);
 	}
 
 	public static JComponent createPanelEntityTypeTreeView(final String label, EntityType th, JFrame parentFrame) {
-		Color BACKGROUND = Color.WHITE;
-		Color FOREGROUND = Color.BLACK;
+		Color BACKGROUND = new Color(0x171717);
+		Color FOREGROUND = Color.white;
+		
+		final JFrame parentF = parentFrame;
 
 		myProject.getTreeLinkedList().clear();
 
@@ -417,7 +460,7 @@ public class TreeView extends Display {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				FrmTreeHelpDialog helper = new FrmTreeHelpDialog();
+				FrmTreeHelpDialog helper = new FrmTreeHelpDialog(parentF);
 				helper.showFrmTreeHelpDialog();
 			}
 		});
@@ -449,8 +492,8 @@ public class TreeView extends Display {
 	}
 
 	public static JComponent createPanelTreeView(final String label, SuperEntity th) {
-		Color BACKGROUND = Color.WHITE;
-		Color FOREGROUND = Color.BLACK;
+		Color BACKGROUND = new Color(0x171717);
+		Color FOREGROUND = Color.white;
 
 		myProject.getStudentLinkedList().clear();
 
@@ -491,26 +534,30 @@ public class TreeView extends Display {
 		tview.setBackground(BACKGROUND);
 		tview.setForeground(FOREGROUND);
 
-		title.setPreferredSize(new Dimension(200, 20));
 		title.setVerticalAlignment(SwingConstants.BOTTOM);
 		title.setBorder(BorderFactory.createEmptyBorder(3, 0, 0, 0));
 		title.setFont(FontLib.getFont("Tahoma", Font.PLAIN, 16));
 		title.setBackground(BACKGROUND);
 		title.setForeground(FOREGROUND);
-		
+
 		btnChange.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 
 				if (myProject.getStudentLinkedList().get(selectedEntity).getDetails().getType().getIsTextField()) {
-					myProject.getAudit().updateStudent(myProject.getStudentLinkedList().get(0).getValue(),myProject.getStudentLinkedList().get(selectedEntity).getValue(), txtChange.getText(),false);
+					myProject.getAudit().updateStudent(myProject.getTreeLinkedList().get(0).getName(),
+							myProject.getStudentLinkedList().get(selectedEntity).getValue(), txtChange.getText(), false);
 					myProject.getStudentLinkedList().get(selectedEntity).setValue(txtChange.getText());
 					myTree.getNode(selectedEntity).set("name", txtChange.getText());
 				} else {
 					try {
-						if (Double.parseDouble(txtChange.getText()) >= 0 && myProject.getStudentLinkedList().get(selectedEntity).getType().getMaxValue() >= Double.parseDouble(txtChange.getText())) {
-							myProject.getAudit().updateStudent(myProject.getStudentLinkedList().get(0).getValue(),Double.toString(myProject.getStudentLinkedList().get(selectedEntity).getMark()), txtChange.getText(),true);
+						if (Double.parseDouble(txtChange.getText()) >= 0
+								&& myProject.getStudentLinkedList().get(selectedEntity).getType().getMaxValue() >= Double
+										.parseDouble(txtChange.getText())) {
+							myProject.getAudit().updateStudent(myProject.getTreeLinkedList().get(0).getName(),
+									Double.toString(myProject.getStudentLinkedList().get(selectedEntity).getMark()), txtChange.getText(),
+									true);
 							myProject.getStudentLinkedList().get(selectedEntity).setMark(Double.parseDouble(txtChange.getText()));
 							myTree.getNode(selectedEntity).set("name", txtChange.getText());
 						}
@@ -519,6 +566,8 @@ public class TreeView extends Display {
 				}
 				myProject.updateTables();
 				txtChange.setText("");
+				txtChange.setPreferredSize(new Dimension(txtChange.getWidth(), txtChange.getHeight()));
+				txtChange.setLineWrap(true);
 				txtChange.setVisible(false);
 				btnChange.setVisible(false);
 				selectedEntity = -1;
@@ -526,6 +575,9 @@ public class TreeView extends Display {
 			}
 		});
 
+		// btnChange.registerKeyboardAction(btnChange.getActionForKeyStroke(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE,
+		// 0, false)), KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0,false),
+		// txtChange.WHEN_FOCUSED);
 
 		txtChange.addKeyListener(new KeyListener() {
 
@@ -535,13 +587,18 @@ public class TreeView extends Display {
 				if (id == KeyEvent.VK_ENTER) {
 
 					if (myProject.getStudentLinkedList().get(selectedEntity).getDetails().getType().getIsTextField()) {
-						myProject.getAudit().updateStudent(myProject.getStudentLinkedList().get(0).getValue(),myProject.getStudentLinkedList().get(selectedEntity).getValue(), txtChange.getText(),false);
+						myProject.getAudit().updateStudent(myProject.getTreeLinkedList().get(1).getName(),
+								myProject.getStudentLinkedList().get(selectedEntity).getValue(), txtChange.getText(), false);
 						myProject.getStudentLinkedList().get(selectedEntity).setValue(txtChange.getText());
 						myTree.getNode(selectedEntity).set("name", txtChange.getText());
 					} else {
 						try {
-							if (Double.parseDouble(txtChange.getText()) >= 0 && myProject.getStudentLinkedList().get(selectedEntity).getType().getMaxValue() >= Double.parseDouble(txtChange.getText())) {
-								myProject.getAudit().updateStudent(myProject.getStudentLinkedList().get(0).getValue(),Double.toString(myProject.getStudentLinkedList().get(selectedEntity).getMark()), txtChange.getText(),true);
+							if (Double.parseDouble(txtChange.getText()) >= 0
+									&& myProject.getStudentLinkedList().get(selectedEntity).getType().getMaxValue() >= Double
+											.parseDouble(txtChange.getText())) {
+								myProject.getAudit().updateStudent(myProject.getTreeLinkedList().get(1).getName(),
+										Double.toString(myProject.getStudentLinkedList().get(selectedEntity).getMark()),
+										txtChange.getText(), true);
 								myProject.getStudentLinkedList().get(selectedEntity).setMark(Double.parseDouble(txtChange.getText()));
 								myTree.getNode(selectedEntity).set("name", txtChange.getText());
 							}
@@ -552,8 +609,6 @@ public class TreeView extends Display {
 					txtChange.setText("");
 					txtChange.setVisible(false);
 					btnChange.setVisible(false);
-					selectedEntity = -1;
-
 				}
 
 			}
@@ -640,7 +695,8 @@ public class TreeView extends Display {
 				getAbsoluteCoordinate(m_cur, m_start);
 				m_end.setLocation(vi.getX() + xbias, vi.getY() + ybias);
 			} else {
-				m_cur.setLocation(m_start.getX() + frac * (m_end.getX() - m_start.getX()), m_start.getY() + frac * (m_end.getY() - m_start.getY()));
+				m_cur.setLocation(m_start.getX() + frac * (m_end.getX() - m_start.getX()),
+						m_start.getY() + frac * (m_end.getY() - m_start.getY()));
 				panToAbs(m_cur);
 			}
 		}
@@ -654,13 +710,13 @@ public class TreeView extends Display {
 
 		public int getColor(VisualItem item) {
 			if (m_vis.isInGroup(item, Visualization.SEARCH_ITEMS))
-				return ColorLib.rgb(255, 190, 190);
+				return ColorLib.rgb(255, 222, 190);
 			else if (m_vis.isInGroup(item, Visualization.FOCUS_ITEMS))
-				return ColorLib.rgb(198, 229, 229);
+				return ColorLib.rgb(226, 117, 0);
 			else if (item.getDOI() > -1)
-				return ColorLib.rgb(164, 193, 193);
+				return ColorLib.rgb(203, 105, 0);
 			else
-				return ColorLib.rgba(255, 255, 255, 0);
+				return ColorLib.rgba(0, 0, 0, 0);
 		}
 
 	} // end of inner class TreeMapColorAction
@@ -757,7 +813,8 @@ public class TreeView extends Display {
 									if ((edgeTable.get(r, 1).equals(iChild))) {
 										edgeTable.set(r, 0, iParent);
 										myProject.getTreeLinkedList().get(iChild).changeParent(myProject.getTreeLinkedList().get(iParent));
-										myProject.getAudit().moveNode(myProject.getTreeLinkedList().get(iChild).getName(), myProject.getTreeLinkedList().get(iParent).getName());
+										myProject.getAudit().moveNode(myProject.getTreeLinkedList().get(iChild).getName(),
+												myProject.getTreeLinkedList().get(iParent).getName());
 										bChild = false;
 										iChild = -1;
 										lblSelectedChild.setText("please select child");
@@ -883,4 +940,3 @@ public class TreeView extends Display {
 	}
 
 } // end of class TreeMap
-
