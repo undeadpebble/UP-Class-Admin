@@ -6,7 +6,13 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
+
 import java.awt.Image;
+
+import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.PopupMenu;
+
 import java.awt.Toolkit;
 import java.awt.dnd.DragSource;
 import java.awt.event.ActionEvent;
@@ -76,6 +82,7 @@ import ClassAdminBackEnd.Project;
 import ClassAdminBackEnd.SuperEntity;
 import Frames.FrmNewNode;
 import Frames.FrmTreeHelpDialog;
+
 
 public class TreeView extends Display {
 
