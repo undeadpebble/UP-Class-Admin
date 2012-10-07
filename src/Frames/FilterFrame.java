@@ -233,19 +233,18 @@ public class FilterFrame extends JFrame {
 				if (table.data.get(0).get(cbxFilters.getSelectedIndex())
 						.getType().getIsTextField()) {
 					
-
+					dataInCol.clear();
 					for (int i = 0; i < table.data.size(); i++) {
-						dataInCol.add(table.data.get(i)
-								.get(cbxFilters.getSelectedIndex()).getValue());
-
+						dataInCol.add(table.data.get(i).get(cbxFilters.getSelectedIndex()).getValue());
 					}
 
-					final JCheckBox[] selectData = new JCheckBox[dataInCol
-							.size()];
+					final JCheckBox[] selectData = new JCheckBox[dataInCol.size()];
 
 					for (int z = 0; z < dataInCol.size(); z++) {
 						selectData[z] = new JCheckBox(dataInCol.get(z));
 					}
+					
+					backgroundPanel.remove(backgroundPanel.getComponentAt(261, 166));
 
 					JComboCheckBox temps = new JComboCheckBox(selectData);
 					selectAllData = temps;
@@ -384,6 +383,8 @@ public class FilterFrame extends JFrame {
 
 			}
 		});
+		
+		cbxFilters.setSelectedIndex(0);
 
 		
 
