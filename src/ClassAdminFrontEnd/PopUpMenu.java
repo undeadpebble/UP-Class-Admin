@@ -7,6 +7,7 @@ import ClassAdminBackEnd.Project;
 import Frames.FrmNewNode;
 import Frames.FrmUpdateNode;
 
+import prefuse.Visualization;
 import prefuse.controls.ControlAdapter;
 import prefuse.data.Table;
 import prefuse.data.Tree;
@@ -44,8 +45,8 @@ public class PopUpMenu {
 			public void actionPerformed(ActionEvent e) {
 				VisualItem item = activeItem;
 				if (item.toString().contains("ode")) {
-					int p = item.getRow();
-					newNode.showFrmNewNode(p);
+					int p = item.getRow(); //get parent id
+					newNode.showFrmNewNode(p); //show new node form with parent in place
 				}
 			}
 		});
@@ -53,8 +54,7 @@ public class PopUpMenu {
 		miEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (activeItem.canSetString("name")) {
-					updateNode.showFrmUpdateNode(0);
-					activeItem.getVisualization().run("filter");
+					updateNode.showFrmUpdateNode(0); // show update node form with information
 				}
 			}
 		});
@@ -64,13 +64,13 @@ public class PopUpMenu {
 				VisualItem item = activeItem;
 
 				int i = item.getRow();
-				activeProject.getAudit().RemoveNode(item.getString("name"), true);
-				activeTree.removeNode(i);
+				activeProject.getAudit().RemoveNode(item.getString("name"), true); //create audit entry
+				activeTree.removeNode(i); //remove node from front end
 
-				activeTreeLinkedList.get(i).removeDeletingChildren();
-				activeProject.updateTables();
+				activeTreeLinkedList.get(i).removeDeletingChildren(); //remove node in back end
+				activeProject.updateTables(); //update front end
 
-				parentFrame.dispose();
+				parentFrame.dispose(); //recreate form
 				TreeView.createEntityTypeFrm("name", activeProject);
 			}
 		});
@@ -78,14 +78,18 @@ public class PopUpMenu {
 		miRemoveWOC.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				VisualItem item = activeItem;
-				int i = item.getRow();
+				int i = item.getRow(); 
 				int source = -1, target = -1;
 				Table edgeTable = activeTree.getEdgeTable();
+				
+				//get node's parent
 				for (int r = 0; r < edgeTable.getRowCount(); r++) {
 					if (edgeTable.getInt(r, 1) == i) {
 						source = edgeTable.getInt(r, 0);
 					}
 				}
+				
+				//update edges between node's children and node's parent
 				for (int r = 0; r < edgeTable.getRowCount(); r++) {
 					if (edgeTable.getInt(r, 0) == i) {
 						target = edgeTable.getInt(r, 1);
@@ -93,13 +97,12 @@ public class PopUpMenu {
 						activeTree.addEdge(source, target);
 					}
 				}
-				activeProject.getAudit().RemoveNode(item.getString("name"), false);
-				activeTree.removeNode(i);
+				activeProject.getAudit().RemoveNode(item.getString("name"), false); //create audit entry
+				activeTree.removeNode(i); //remove node from front end
 
-				activeTreeLinkedList.get(i).removeSavingChildren();
-				item.getVisualization().repaint();
-				activeProject.updateTables();
-				parentFrame.dispose();
+				activeTreeLinkedList.get(i).removeSavingChildren(); //remove node from back end
+				activeProject.updateTables(); //update front end information
+				parentFrame.dispose(); //recreate form
 				TreeView.createEntityTypeFrm("name", activeProject);
 
 			}
@@ -113,6 +116,7 @@ public class PopUpMenu {
 		activeTree = tree;
 		tview = treeView;
 		parentFrame = pFrame;
+		//add control listener for nodes on front end treeview
 		tview.addControlListener(new ControlAdapter() {
 			public void itemReleased(VisualItem item, MouseEvent e) {
 				activeItem = null;
@@ -120,6 +124,7 @@ public class PopUpMenu {
 					if (item.canGetString("name")) {
 						pMenu.show(e.getComponent(), e.getX(), e.getY());
 						activeItem = item;
+						activeItem.getVisualization().run("filter");
 						activeEntity = activeTreeLinkedList.get(activeItem.getRow());
 						newNode = new FrmNewNode(activeTree, activeProject, new JFrame(), tview);
 						updateNode = new FrmUpdateNode(activeProject, new JFrame(), activeEntity, activeItem);
