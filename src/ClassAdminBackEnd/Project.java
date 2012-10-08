@@ -268,12 +268,27 @@ public class Project {
 		String files;
 		File folder = new File(dir);
 		File[] listOfFiles = folder.listFiles();
-		LinkedList<LinkedList<SuperEntity>> data = getHead()
-				.getDataLinkedList();
 
 		EntityType images = new EntityType("Pictures", this.getHeadEntityType()
 				.getSubEntityType().get(0), true, null, 0.0);
+		images.setIsImg(true);
+		images.setIsTextField(true);
 		images.populateTreeWithEntities();
+
+		LinkedList<LinkedList<SuperEntity>> data = getHead()
+				.getDataLinkedList();
+
+		int where = -1;
+
+		for (int y = 0; y < data.get(0).size(); y++) {
+			System.out.println(data.get(0).get(y).getType().getName());
+			if (data.get(0).get(y).getType().getIsImg()) {
+				where = y;
+				break;
+			}
+		}
+
+		System.out.println(where);
 
 		for (int i = 0; i < listOfFiles.length; i++) {
 
@@ -283,14 +298,6 @@ public class Project {
 				if (files.endsWith(".png") || files.endsWith(".PNG")
 						|| files.endsWith(".jpg") || files.endsWith(".JPG")) {
 					files = files.substring(0, files.lastIndexOf('.'));
-					int where = -1;
-
-					for (int y = 0; y < data.get(0).size(); y++) {
-						if (data.get(0).get(y).getType().getIsImg()) {
-							where = y;
-							break;
-						}
-					}
 
 					if (where != -1)
 						for (int x = 0; x < data.size(); x++) {
@@ -302,6 +309,8 @@ public class Project {
 												.get(where)
 												.setPicture(
 														dir + "\\" + filesFull);
+										System.out.println(data.get(x)
+												.get(where).getValue());
 									}
 								}
 							}
