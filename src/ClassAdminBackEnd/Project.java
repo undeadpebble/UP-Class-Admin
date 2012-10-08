@@ -281,14 +281,13 @@ public class Project {
 		int where = -1;
 
 		for (int y = 0; y < data.get(0).size(); y++) {
-			System.out.println(data.get(0).get(y).getType().getName());
 			if (data.get(0).get(y).getType().getIsImg()) {
 				where = y;
 				break;
 			}
 		}
 
-		System.out.println(where);
+
 
 		for (int i = 0; i < listOfFiles.length; i++) {
 
@@ -309,8 +308,9 @@ public class Project {
 												.get(where)
 												.setPicture(
 														dir + "\\" + filesFull);
-										System.out.println(data.get(x)
-												.get(where).getValue());
+										data.get(x).get(where).setField(filesFull);
+										if(this.tables.size() > 0)
+											this.tables.get(0).redraw();
 									}
 								}
 							}
