@@ -2064,8 +2064,6 @@ public class Frame extends JFrame implements ActionListener {
 								"File seems to be missing from last directory location, removing shortcut.",
 								"File Missing", JOptionPane.ERROR_MESSAGE);
 
-				JOptionPane.showMessageDialog(frame, "File seems to be missing from last directory location, removing shortcut.", "File Missing", JOptionPane.ERROR_MESSAGE);
-
 
 				try {
 					createRecentDocsView();
@@ -2188,10 +2186,6 @@ public class Frame extends JFrame implements ActionListener {
 
 	public void showViewStudent() {
 		table.getTable().getSelectedRow();
-
-		TreeView.createStudentFrm("name",
-				table.getData().get(table.getTable().getSelectedRow()).get(0),
-				Global.getGlobal().getActiveProject());
 
 		if (table.getTable().getSelectedRow() == -1) {
 			JOptionPane.showMessageDialog(frame, "Please select a student to view information", "Student Not Selected", JOptionPane.ERROR_MESSAGE);
