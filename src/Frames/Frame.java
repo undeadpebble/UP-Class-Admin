@@ -1417,6 +1417,52 @@ public class Frame extends JFrame implements ActionListener {
 				statisticsInfoPanel.fadeOut();
 			}
 		});
+		
+		rapidAssessmentButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				if (rapidAssessmentButton.isEnabled()) {
+
+				}
+			}
+
+			public void mouseEntered(MouseEvent arg0) {
+
+			}
+
+			public void mouseExited(MouseEvent arg0) {
+
+			}
+		});
+		
+		markingButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				if (markingButton.isEnabled()) {
+					
+				}
+			}
+
+			public void mouseEntered(MouseEvent arg0) {
+			}
+
+			public void mouseExited(MouseEvent arg0) {
+			}
+		});
+		
+		importPicturesButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				if (importPicturesButton.isEnabled()) {
+				}
+			}
+
+			public void mouseEntered(MouseEvent arg0) {
+			}
+
+			public void mouseExited(MouseEvent arg0) {
+			}
+		});
 	}
 
 	/*
