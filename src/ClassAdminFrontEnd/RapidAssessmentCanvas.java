@@ -57,7 +57,7 @@ public class RapidAssessmentCanvas extends JFrame {
 	private String backgroundFileName;
 
 	private Project project;
-	JComboBox<RapidAssessmentContainerType> loadCombo;
+	JComboBox loadCombo;
 
 	private BufferedImage backGround;
 	private BufferedImage resizedBackGround = null;
@@ -712,7 +712,7 @@ public class RapidAssessmentCanvas extends JFrame {
 			}
 		});
 
-		loadCombo = new JComboBox<RapidAssessmentContainerType>();
+		loadCombo = new JComboBox();
 		loadCombo.setBounds(parentRect.getWidth() + 5, 10, 89, 23);
 
 		parentPanel.add(loadCombo);
