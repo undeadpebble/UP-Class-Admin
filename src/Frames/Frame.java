@@ -12,6 +12,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
@@ -35,6 +36,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.MenuSelectionManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -63,6 +65,7 @@ import ClassAdminFrontEnd.GradientMenuBar;
 import ClassAdminFrontEnd.HistogramFrame;
 import ClassAdminFrontEnd.ImagePanel;
 import ClassAdminFrontEnd.MenuImagePanel;
+import ClassAdminFrontEnd.RecentDocsMenuItem;
 import ClassAdminFrontEnd.ReflectionButton;
 import ClassAdminFrontEnd.ReflectionButtonWithLabel;
 import ClassAdminFrontEnd.ReflectionImagePanel;
@@ -70,6 +73,7 @@ import ClassAdminFrontEnd.ScatterPlotFrame;
 import ClassAdminFrontEnd.ShadowPanel;
 import ClassAdminFrontEnd.ThreeStopGradientPanel;
 import ClassAdminFrontEnd.TreeView;
+import Frames.Frame.TabButton;
 import Rule.frmRule;
 
 public class Frame extends JFrame implements ActionListener {
@@ -86,17 +90,28 @@ public class Frame extends JFrame implements ActionListener {
 	private JFileChooser filechooser;
 	private JFrame frame = this;
 	private File currentFilePath;
+	private File currentDBFilePath;
 	private int tabCount = -1;
 	private FrmTable table;
 	private JTabbedPane tabbedPane;
 	private FileHandler fileHandler;
 	private BlurBackground blur;
-	private ReflectionButton homeButton, importButton, exportButton, studentsButton, histogramButton, boxButton, scatterButton, conditionalFormatButton, bordercaseButton, addRowButton, homeImportButton, homeStudents, ButtonWorkspace, filterButton,
-			maxValButton, rulesButton, homeRapidAssessment, treeButton;
-	private FadePanel homeInfoPanel, importInfoPanel, exportInfoPanel, studentsInfoPanel, histogramInfoPanel, boxplotInfoPanel, conditionalFormattingInfoPanel, bordercaseInfoPanel, addRowInfoPanel, filterInfoPanel, maxValInfoPanel, rulesInfoPanel,
-			buildInfoPanel;
+
+	
+
+	private ReflectionButton homeButton, importButton, exportButton, studentsButton, histogramButton, boxButton, scatterButton,
+			conditionalFormatButton, bordercaseButton, addRowButton, homeImportButton, homeStudents, ButtonWorkspace, filterButton,
+			maxValButton, rulesButton, homeRapidAssessment, structureModuleButton, statisticsButton;
+	private FadePanel homeInfoPanel, importInfoPanel, exportInfoPanel, studentsInfoPanel, histogramInfoPanel, boxplotInfoPanel,
+			conditionalFormattingInfoPanel, bordercaseInfoPanel, addRowInfoPanel, filterInfoPanel, maxValInfoPanel, rulesInfoPanel,
+			buildInfoPanel, statisticsInfoPanel;
+
 	private ShadowPanel studentPanel;
+	private JMenu mProject, mGraph, mView, mRecent;
+	private JMenuItem miConditionalFormatting, miBordercases, miRules, miAddRow, miAddMaxValues, miFilter, miViewStudent, miHistogram,
+			miBoxPlot, miScatterPlot, miExport, miImport, miExit, miStructureModule, miHome, miWorkspace;
 	private ReflectionButtonWithLabel[] buttonArray;
+	private int buttonCount;
 
 	private Database db;
 
@@ -142,6 +157,7 @@ public class Frame extends JFrame implements ActionListener {
 					tabCount--;
 					if (tabCount == -1) {
 						setNavButtonsDisabled();
+						setMenuItemsDisabled();
 					}
 
 				}
@@ -195,7 +211,7 @@ public class Frame extends JFrame implements ActionListener {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1200, 700);
 
-		Image icon = Toolkit.getDefaultToolkit().getImage("Logo.png");
+		Image icon = Toolkit.getDefaultToolkit().getImage("icons/Logo.png");
 		this.setIconImage(icon);
 
 		// Get the size of the screen
@@ -230,6 +246,9 @@ public class Frame extends JFrame implements ActionListener {
 		bottomPanel.setSize(getWidth() - HOME_SPACE_RIGHT_X, 12);
 		bottomPanel.setBounds(HOME_SPACE_LEFT_X, getHeight() - HOME_BOTTOM_SPACE_Y, bottomPanel.getWidth(), bottomPanel.getHeight());
 		contentPane.add(bottomPanel);
+
+		createRecentDocsDB();
+		setRecentPath();
 
 		setupHomeScreen();
 		setupWorkspaceScreen();
@@ -316,8 +335,6 @@ public class Frame extends JFrame implements ActionListener {
 
 		// get current filehandler (ClassAdminBackEnd)
 		fileHandler = FileHandler.get();
-
-		createRecentDocsDB();
 		createRecentDocsView();
 	}
 
@@ -336,14 +353,14 @@ public class Frame extends JFrame implements ActionListener {
 		JMenu mNew = new JMenu("New");
 		JMenuItem miSpreadsheet = new JMenuItem("Spreadsheet");
 		JMenuItem miRapidAssessment = new JMenuItem("Rapid Assessment");
-		JMenu mRecent = new JMenu("Recent");
+		mRecent = new JMenu("Recent");
 		JMenuItem miClose = new JMenuItem("Close");
 		JMenuItem miCloseAll = new JMenuItem("Close All");
 		JSeparator sfile = new JSeparator();
-		JMenuItem miImport = new JMenuItem("Import");
-		JMenuItem miExport = new JMenuItem("Export");
+		miImport = new JMenuItem("Import");
+		miExport = new JMenuItem("Export");
 		JSeparator sfile2 = new JSeparator();
-		JMenuItem miExit = new JMenuItem("Exit");
+		miExit = new JMenuItem("Exit");
 
 		mFile.setForeground(Color.white);
 
@@ -361,21 +378,22 @@ public class Frame extends JFrame implements ActionListener {
 		mFile.add(miExit);
 
 		// PROJECT
-		JMenu mProject = new JMenu("Project");
-		JMenuItem miConditionalFormatting = new JMenuItem("Conditional Formatting");
-		JMenuItem miBordercases = new JMenuItem("Bordercases");
-		JMenuItem miRules = new JMenuItem("Rules");
+		mProject = new JMenu("Project");
+		miConditionalFormatting = new JMenuItem("Conditional Formatting");
+		miBordercases = new JMenuItem("Bordercases");
+		miRules = new JMenuItem("Rules");
 		JSeparator sproject = new JSeparator();
-		JMenuItem miAddRow = new JMenuItem("Rules");
-		JMenuItem miAddMaxValues = new JMenuItem("Add Max Values");
+		miAddRow = new JMenuItem("Add Row");
+		miAddMaxValues = new JMenuItem("Add Max Values");
 		JSeparator sproject2 = new JSeparator();
-		JMenuItem miFilter = new JMenuItem("Filter");
-		JMenuItem miViewStudent = new JMenuItem("View Selected Student");
+		miFilter = new JMenuItem("Filter");
+		miStructureModule = new JMenuItem("Structure Module");
+		miViewStudent = new JMenuItem("View Selected Student");
 		JSeparator sproject3 = new JSeparator();
-		JMenu mGraph = new JMenu("View Graph");
-		JMenuItem miHistogram = new JMenuItem("Histogram");
-		JMenuItem miBoxPlot = new JMenuItem("Box Plot");
-		JMenuItem miScatterPlot = new JMenuItem("Histogram");
+		mGraph = new JMenu("View Graph");
+		miHistogram = new JMenuItem("Histogram");
+		miBoxPlot = new JMenuItem("Box Plot");
+		miScatterPlot = new JMenuItem("ScatterPlot");
 
 		menuBarWindows.add(mProject);
 		mProject.add(miConditionalFormatting);
@@ -386,6 +404,7 @@ public class Frame extends JFrame implements ActionListener {
 		mProject.add(miAddMaxValues);
 		mProject.add(sproject2);
 		mProject.add(miFilter);
+		mProject.add(miStructureModule);
 		mProject.add(miViewStudent);
 		mProject.add(sproject3);
 		mProject.add(mGraph);
@@ -393,20 +412,29 @@ public class Frame extends JFrame implements ActionListener {
 		mGraph.add(miBoxPlot);
 		mGraph.add(miScatterPlot);
 
+		// VIEW
+		mView = new JMenu("View");
+		menuBarWindows.add(mView);
+		miHome = new JMenuItem("Home");
+		miWorkspace = new JMenuItem("Workspace");
+		mView.add(miHome);
+		mView.add(miWorkspace);
+		miHome.setEnabled(false);
+
 		// SETTINGS
 		JMenu mSettings = new JMenu("Settings");
 		menuBarWindows.add(mSettings);
 
 		mFile.setForeground(Color.white);
 		mProject.setForeground(Color.white);
+		mView.setForeground(Color.white);
 		mSettings.setForeground(Color.white);
 
-		miExit.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-				frame.dispose();
-			}
-		});
+		if (tabCount < 0) {
+			setMenuItemsDisabled();
+		}
+
+		addMenuMouseListeners();
 
 		// setup space constants
 		HOME_SPACE_LEFT_X = 3;
@@ -437,21 +465,21 @@ public class Frame extends JFrame implements ActionListener {
 		JMenu mNew = new JMenu("New");
 		JMenuItem miSpreadsheet = new JMenuItem("Spreadsheet");
 		JMenuItem miRapidAssessment = new JMenuItem("Rapid Assessment");
-		JMenuItem miOpen = new JMenuItem("Open");
-		JMenu mRecent = new JMenu("Recent");
+		mRecent = new JMenu("Recent");
 		JMenuItem miClose = new JMenuItem("Close");
 		JMenuItem miCloseAll = new JMenuItem("Close All");
 		JSeparator sfile = new JSeparator();
-		JMenuItem miImport = new JMenuItem("Import");
-		JMenuItem miExport = new JMenuItem("Export");
+		miImport = new JMenuItem("Import");
+		miExport = new JMenuItem("Export");
 		JSeparator sfile2 = new JSeparator();
-		JMenuItem miExit = new JMenuItem("Exit");
+		miExit = new JMenuItem("Exit");
+
+		mFile.setForeground(Color.white);
 
 		menuBarMAC.add(mFile);
 		mFile.add(mNew);
 		mNew.add(miSpreadsheet);
 		mNew.add(miRapidAssessment);
-		mFile.add(miOpen);
 		mFile.add(mRecent);
 		mFile.add(miClose);
 		mFile.add(miCloseAll);
@@ -462,21 +490,22 @@ public class Frame extends JFrame implements ActionListener {
 		mFile.add(miExit);
 
 		// PROJECT
-		JMenu mProject = new JMenu("Project");
-		JMenuItem miConditionalFormatting = new JMenuItem("Conditional Formatting");
-		JMenuItem miBordercases = new JMenuItem("Bordercases");
-		JMenuItem miRules = new JMenuItem("Rules");
+		mProject = new JMenu("Project");
+		miConditionalFormatting = new JMenuItem("Conditional Formatting");
+		miBordercases = new JMenuItem("Bordercases");
+		miRules = new JMenuItem("Rules");
 		JSeparator sproject = new JSeparator();
-		JMenuItem miAddRow = new JMenuItem("Rules");
-		JMenuItem miAddMaxValues = new JMenuItem("Add Max Values");
+		miAddRow = new JMenuItem("Add Row");
+		miAddMaxValues = new JMenuItem("Add Max Values");
 		JSeparator sproject2 = new JSeparator();
-		JMenuItem miFilter = new JMenuItem("Filter");
-		JMenuItem miViewStudent = new JMenuItem("View Selected Student");
+		miFilter = new JMenuItem("Filter");
+		miStructureModule = new JMenuItem("Structure Module");
+		miViewStudent = new JMenuItem("View Selected Student");
 		JSeparator sproject3 = new JSeparator();
-		JMenu mGraph = new JMenu("View Graph");
-		JMenuItem miHistogram = new JMenuItem("Histogram");
-		JMenuItem miBoxPlot = new JMenuItem("Box Plot");
-		JMenuItem miScatterPlot = new JMenuItem("Histogram");
+		mGraph = new JMenu("View Graph");
+		miHistogram = new JMenuItem("Histogram");
+		miBoxPlot = new JMenuItem("Box Plot");
+		miScatterPlot = new JMenuItem("ScatterPlot");
 
 		menuBarMAC.add(mProject);
 		mProject.add(miConditionalFormatting);
@@ -487,6 +516,7 @@ public class Frame extends JFrame implements ActionListener {
 		mProject.add(miAddMaxValues);
 		mProject.add(sproject2);
 		mProject.add(miFilter);
+		mProject.add(miStructureModule);
 		mProject.add(miViewStudent);
 		mProject.add(sproject3);
 		mProject.add(mGraph);
@@ -496,8 +526,164 @@ public class Frame extends JFrame implements ActionListener {
 
 		// menu actions
 
-		// menu actions
+		// VIEW
+		mView = new JMenu("View");
+		menuBarMAC.add(mView);
+		miHome = new JMenuItem("Home");
+		miWorkspace = new JMenuItem("Workspace");
+		mView.add(miHome);
+		mView.add(miWorkspace);
+		miHome.setEnabled(false);
 
+		// SETTINGS
+		JMenu mSettings = new JMenu("Settings");
+		menuBarMAC.add(mSettings);
+
+		mFile.setForeground(Color.white);
+		mProject.setForeground(Color.white);
+		mView.setForeground(Color.white);
+		mSettings.setForeground(Color.white);
+
+		if (tabCount < 0) {
+			setMenuItemsDisabled();
+		}
+
+		miImport.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				try {
+					openFile();
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (BadLocationException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+
+		miExport.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				if (miExport.isEnabled())
+					try {
+						saveFileAs();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+			}
+		});
+
+		miExit.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				frame.dispose();
+			}
+		});
+
+		miConditionalFormatting.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				if (miConditionalFormatting.isEnabled()) {
+					showConditionalFormatting();
+				}
+			}
+		});
+
+		miRules.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				if (miRules.isEnabled()) {
+					showRules();
+				}
+			}
+		});
+
+		miAddRow.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				if (miAddRow.isEnabled()) {
+					showAddRule();
+				}
+			}
+		});
+
+		miAddMaxValues.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				if (miAddMaxValues.isEnabled()) {
+					setMaxValues();
+				}
+			}
+		});
+
+		miFilter.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				if (miFilter.isEnabled()) {
+					showFilter();
+				}
+			}
+		});
+
+		miStructureModule.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				if (miStructureModule.isEnabled()) {
+					showStructureModule();
+				}
+			}
+		});
+
+		miViewStudent.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				if (miViewStudent.isEnabled()) {
+					showViewStudent();
+				}
+			}
+		});
+
+		miBordercases.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				if (miBordercases.isEnabled()) {
+					showBordercases();
+				}
+			}
+		});
+
+		miHistogram.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				if (miHistogram.isEnabled()) {
+					showHistogram();
+				}
+			}
+		});
+
+		miBoxPlot.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				if (miBoxPlot.isEnabled()) {
+					showBoxPlot();
+				}
+			}
+		});
+
+		miScatterPlot.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				if (miScatterPlot.isEnabled()) {
+					showScatterPlot();
+				}
+			}
+		});
+
+		miHome.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				if (miHome.isEnabled()) {
+					try {
+						workspaceToHomeTransition();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+
+		miWorkspace.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				if (miWorkspace.isEnabled()) {
+					homeToWorkspaceTransition();
+				}
+			}
+		});
 		// setup space constants
 		HOME_SPACE_LEFT_X = 3;
 		HOME_SPACE_Y = 41;
@@ -594,6 +780,8 @@ public class Frame extends JFrame implements ActionListener {
 		// fade in containers on program launch
 		recentDocsPanel.fadeIn();
 		homePanel.fadeIn();
+
+		populateRecentDocsInMenu();
 	}
 
 	/*
@@ -633,19 +821,17 @@ public class Frame extends JFrame implements ActionListener {
 
 			@Override
 			public void keyTyped(KeyEvent arg0) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void keyReleased(KeyEvent arg0) {
-				// TODO Auto-generated method stub
+
 
 			}
 
 			@Override
 			public void keyPressed(KeyEvent arg0) {
-				// TODO Auto-generated method stub
 				table.search(searchBox.getText());
 
 			}
@@ -666,7 +852,7 @@ public class Frame extends JFrame implements ActionListener {
 		importButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Import.png")));
 		exportButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Export.png")));
 		studentsButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Students.png")));
-		treeButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Tree.png")));
+		structureModuleButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Tree.png")));
 		histogramButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Histogram.png")));
 		boxButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Box.png")));
 		scatterButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Scatter.png")));
@@ -676,12 +862,13 @@ public class Frame extends JFrame implements ActionListener {
 		filterButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Filter.png")));
 		maxValButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/maxValue.png")));
 		rulesButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Rules2.png")));
+		statisticsButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Statistics.png")));
 
 		homeButton.setBounds(8, 8, 68, 80);
 		importButton.setBounds(75, 8, 68, 80);
 		exportButton.setBounds(135, 8, 68, 80);
 		studentsButton.setBounds(200, 8, 68, 80);
-		treeButton.setBounds(268, 11, 68, 80);
+		structureModuleButton.setBounds(268, 11, 68, 80);
 		histogramButton.setBounds(335, 12, 68, 80);
 		boxButton.setBounds(405, 12, 68, 80);
 		scatterButton.setBounds(473, 12, 68, 80);
@@ -691,12 +878,13 @@ public class Frame extends JFrame implements ActionListener {
 		addRowButton.setBounds(720, 12, 68, 80);
 		maxValButton.setBounds(782, 11, 68, 80);
 		rulesButton.setBounds(837, 10, 68, 80);
+		statisticsButton.setBounds(903, 11, 68, 80);
 
 		navBar.add(homeButton);
 		navBar.add(importButton);
 		navBar.add(exportButton);
 		navBar.add(studentsButton);
-		navBar.add(treeButton);
+		navBar.add(structureModuleButton);
 		navBar.add(histogramButton);
 		navBar.add(boxButton);
 		navBar.add(scatterButton);
@@ -706,6 +894,7 @@ public class Frame extends JFrame implements ActionListener {
 		navBar.add(filterButton);
 		navBar.add(maxValButton);
 		navBar.add(rulesButton);
+		navBar.add(statisticsButton);
 
 		setNavButtonsDisabled();
 
@@ -724,7 +913,7 @@ public class Frame extends JFrame implements ActionListener {
 		filterInfoPanel = new FadePanel(false, 200, 200);
 		maxValInfoPanel = new FadePanel(false, 200, 200);
 		rulesInfoPanel = new FadePanel(false, 200, 200);
-		buildInfoPanel = new FadePanel(false, 200, 200);
+		statisticsInfoPanel = new FadePanel(false, 200, 200);
 
 		homeInfoPanel.setBounds(8, 0, 62, infoPanel.getHeight());
 		importInfoPanel.setBounds(67, 0, 62, infoPanel.getHeight());
@@ -740,6 +929,7 @@ public class Frame extends JFrame implements ActionListener {
 		addRowInfoPanel.setBounds(715, 0, 129, infoPanel.getHeight());
 		maxValInfoPanel.setBounds(749, 0, 129, infoPanel.getHeight());
 		rulesInfoPanel.setBounds(830, 0, 129, infoPanel.getHeight());
+		statisticsInfoPanel.setBounds(885, 0, 129, infoPanel.getHeight());
 
 		homeInfoPanel.setLayout(null);
 		importInfoPanel.setLayout(null);
@@ -755,6 +945,7 @@ public class Frame extends JFrame implements ActionListener {
 		filterInfoPanel.setLayout(null);
 		maxValInfoPanel.setLayout(null);
 		rulesInfoPanel.setLayout(null);
+		statisticsInfoPanel.setLayout(null);
 
 		infoPanel.add(homeInfoPanel);
 		infoPanel.add(importInfoPanel);
@@ -770,6 +961,7 @@ public class Frame extends JFrame implements ActionListener {
 		infoPanel.add(filterInfoPanel);
 		infoPanel.add(maxValInfoPanel);
 		infoPanel.add(rulesInfoPanel);
+		infoPanel.add(statisticsInfoPanel);
 
 		// create info bubble image
 		ImagePanel infoBubble = new ImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/HomeInfo.png")));
@@ -786,6 +978,8 @@ public class Frame extends JFrame implements ActionListener {
 		ImagePanel filterBubble = new ImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/InfoAddFilter.png")));
 		ImagePanel maxValBubble = new ImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/InfoAddMaxValues.png")));
 		ImagePanel rulesBubble = new ImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/InfoAddRule.png")));
+		ImagePanel statisticsBubble = new ImagePanel(ImageIO.read(getClass()
+				.getResource("/ClassAdminFrontEnd/resources/InfoStatistics.png")));
 
 		infoBubble.setBounds(0, 0, infoPanel.getWidth(), infoPanel.getHeight());
 		importBubble.setBounds(0, 0, infoPanel.getWidth(), infoPanel.getHeight());
@@ -801,6 +995,7 @@ public class Frame extends JFrame implements ActionListener {
 		filterBubble.setBounds(0, 0, infoPanel.getWidth(), infoPanel.getHeight());
 		maxValBubble.setBounds(0, 0, infoPanel.getWidth(), infoPanel.getHeight());
 		rulesBubble.setBounds(0, 0, infoPanel.getWidth(), infoPanel.getHeight());
+		statisticsBubble.setBounds(0, 0, infoPanel.getWidth(), infoPanel.getHeight());
 
 		infoBubble.setLayout(null);
 		importBubble.setLayout(null);
@@ -816,6 +1011,7 @@ public class Frame extends JFrame implements ActionListener {
 		filterBubble.setLayout(null);
 		rulesBubble.setLayout(null);
 		maxValBubble.setLayout(null);
+		statisticsBubble.setLayout(null);
 
 		homeInfoPanel.add(infoBubble);
 		importInfoPanel.add(importBubble);
@@ -831,6 +1027,7 @@ public class Frame extends JFrame implements ActionListener {
 		filterInfoPanel.add(filterBubble);
 		maxValInfoPanel.add(maxValBubble);
 		rulesInfoPanel.add(rulesBubble);
+		statisticsInfoPanel.add(statisticsBubble);
 
 		homeButton.addMouseListener(new MouseAdapter() {
 			@Override
@@ -895,11 +1092,10 @@ public class Frame extends JFrame implements ActionListener {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (!studentsButton.isDisabled()) {
-					table.getTable().getSelectedRow();
-					if (table.getTable().getSelectedRow() == -1) {
-						JOptionPane.showMessageDialog(frame, "Please select a student to view information", "Student Not Selected", JOptionPane.ERROR_MESSAGE);
-					} else
-						TreeView.createStudentFrm("name", table.getData().get(table.getTable().getSelectedRow()).get(0), Global.getGlobal().getActiveProject());
+
+
+					showViewStudent();
+
 				}
 			}
 
@@ -912,12 +1108,11 @@ public class Frame extends JFrame implements ActionListener {
 			}
 		});
 
-		treeButton.addMouseListener(new MouseAdapter() {
+		structureModuleButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				if (!treeButton.isDisabled()) {
-					table.getTable().getSelectedRow();
-					TreeView.createEntityTypeFrm("name", Global.getGlobal().getActiveProject());
+				if (!structureModuleButton.isDisabled()) {
+					showStructureModule();
 				}
 			}
 
@@ -934,8 +1129,7 @@ public class Frame extends JFrame implements ActionListener {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (!histogramButton.isDisabled()) {
-					HistogramFrame x = new HistogramFrame(Global.getGlobal().getActiveProject());
-					Global.getGlobal().getActiveProject().addhistogramcharts(x);
+					showHistogram();
 				}
 			}
 
@@ -952,10 +1146,9 @@ public class Frame extends JFrame implements ActionListener {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (!boxButton.isDisabled()) {
-					BoxPlotFrame x = new BoxPlotFrame();
-					x.createBoxPlotFrame(Global.getGlobal().getActiveProject());
 
-					Global.getGlobal().getActiveProject().addboxplotcharts(x);
+					showBoxPlot();
+
 				}
 			}
 
@@ -972,8 +1165,7 @@ public class Frame extends JFrame implements ActionListener {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (!scatterButton.isDisabled()) {
-					ScatterPlotFrame x = new ScatterPlotFrame(Global.getGlobal().getActiveProject());// project);
-					Global.getGlobal().getActiveProject().addscattercharts(x);
+					showScatterPlot();
 				}
 			}
 
@@ -990,13 +1182,7 @@ public class Frame extends JFrame implements ActionListener {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (!conditionalFormatButton.isDisabled()) {
-					ConditionalFormattingFrame conditionalformatFrame;
-					try {
-						conditionalformatFrame = new ConditionalFormattingFrame(table);
-						conditionalformatFrame.setVisible(true);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+					showConditionalFormatting();
 				}
 			}
 
@@ -1013,13 +1199,7 @@ public class Frame extends JFrame implements ActionListener {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (!bordercaseButton.isDisabled()) {
-					BordercaseFrame bordercaseFrame;
-					try {
-						bordercaseFrame = new BordercaseFrame(table);
-						bordercaseFrame.setVisible(true);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+					showBordercases();
 				}
 			}
 
@@ -1036,28 +1216,7 @@ public class Frame extends JFrame implements ActionListener {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (!addRowButton.isDisabled()) {
-					EntityType testHead = table.project.getHeadEntityType();
-					LinkedList<EntityType> list = testHead.getSubEntityType();
-
-					for (int x = 0; x < list.size(); x++) {
-						table.createEntities(list.get(x), new SuperEntityPointer(table.project.getHead()));
-					}
-
-					table.data = table.project.getHead().getDataLinkedList();
-
-					/*
-					 * tableModel.addRow(new Object[] { txtField1.getText(),
-					 * txtField1.getText() });
-					 */
-
-					Object[] temp = new Object[table.data.get(0).size()];
-
-					for (int y = 0; y < table.data.get(0).size(); y++) {
-						temp[y] = table.data.getLast().get(y).getValue();
-					}
-
-					table.tableModel.addRow(temp);
-					table.repaint();
+					showAddRule();
 				}
 			}
 
@@ -1074,8 +1233,7 @@ public class Frame extends JFrame implements ActionListener {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (!filterButton.isDisabled()) {
-					FilterFrame filterframe = new FilterFrame(table);
-					filterframe.setVisible(true);
+					showFilter();
 				}
 			}
 
@@ -1092,8 +1250,7 @@ public class Frame extends JFrame implements ActionListener {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (!maxValButton.isDisabled()) {
-					SetMaxValueFrame maxframe = new SetMaxValueFrame(table);
-					maxframe.setVisible(true);
+					setMaxValues();
 				}
 			}
 
@@ -1109,8 +1266,9 @@ public class Frame extends JFrame implements ActionListener {
 		rulesButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				frmRule rules = new frmRule(Global.getGlobal().getActiveProject());
-				rules.setVisible(true);
+				if (rulesButton.isEnabled()) {
+					showRules();
+				}
 			}
 
 			public void mouseEntered(MouseEvent arg0) {
@@ -1122,6 +1280,22 @@ public class Frame extends JFrame implements ActionListener {
 			}
 		});
 
+		statisticsButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				if (statisticsButton.isEnabled()) {
+					showStatistics();
+				}
+			}
+
+			public void mouseEntered(MouseEvent arg0) {
+				statisticsInfoPanel.fadeIn();
+			}
+
+			public void mouseExited(MouseEvent arg0) {
+				statisticsInfoPanel.fadeOut();
+			}
+		});
 	}
 
 	/*
@@ -1138,8 +1312,8 @@ public class Frame extends JFrame implements ActionListener {
 		blur.fadeIn();
 		// Create a file chooser
 		filechooser = new JFileChooser();
-		if (currentFilePath != null) {
-			filechooser.setCurrentDirectory(currentFilePath);
+		if (db.getRecentPathCount() > 0) {
+			filechooser.setCurrentDirectory(currentDBFilePath);
 		}
 
 		// add the filter to the file chooser
@@ -1152,13 +1326,15 @@ public class Frame extends JFrame implements ActionListener {
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			file = filechooser.getSelectedFile();
 			currentFilePath = filechooser.getSelectedFile();
+			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+			Date date = new Date();
+
+			db.addRecentPath(currentFilePath.getAbsolutePath(), dateFormat.format(date));
 			blur.fadeOut();
 			createTab(file);
 			homeToWorkspaceTransition();
 			tabBar.fadeIn();
 
-			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-			Date date = new Date();
 			if (db != null) {
 				if (db.alreadyContains(file.getName(), file.getAbsolutePath())) {
 					db.updateRecentDocument(file.getName(), file.getAbsolutePath(), dateFormat.format(date));
@@ -1199,9 +1375,10 @@ public class Frame extends JFrame implements ActionListener {
 	 */
 	public void saveFileAs() throws IOException {
 
-		File file;
+		final File file;
 		// set the file extentions that may be chosen
 		FileFilter filter = new FileNameExtensionFilter("Supported files types: pdat, csv", "pdat", "csv");
+		blur.fadeIn();
 
 		// Create a file chooser
 		final JFileChooser filechooser = new JFileChooser();
@@ -1218,11 +1395,51 @@ public class Frame extends JFrame implements ActionListener {
 			file = filechooser.getSelectedFile();
 			try {
 				FileHandler.get().saveFile(file.getAbsolutePath(), Global.getGlobal().getActiveProject());
-			} catch (UnsupportedFileTypeException e) {
-				e.printStackTrace();
-			}
-		} else {
 
+				if (db != null) {
+
+					DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+					Date date = new Date();
+
+					if (db.alreadyContains(file.getName(), file.getAbsolutePath())) {
+						db.updateRecentDocument(file.getName(), file.getAbsolutePath(), dateFormat.format(date));
+					} else {
+						db.addRecentDoc(file.getName(), file.getAbsolutePath(), dateFormat.format(date));
+					}
+				}
+			} catch (UnsupportedFileTypeException e) {
+				int n = JOptionPane.showConfirmDialog(frame, "Unsupported file type. Save as .pdat?", "Unsupported File Type",
+						JOptionPane.YES_NO_OPTION);
+				if (n == 0) {
+					String path = file.getAbsolutePath().toString().substring(0, file.getAbsolutePath().toString().lastIndexOf("."));
+					path = path + ".pdat";
+					
+					String name = file.getName().toString().substring(0, file.getName().toString().lastIndexOf("."));
+					name = name + ".pdat";
+					try {
+						FileHandler.get().saveFile(path, Global.getGlobal().getActiveProject());
+
+						if (db != null) {
+							DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+							Date date = new Date();
+
+							if (db.alreadyContains(name, path)) {
+								db.updateRecentDocument(name, path, dateFormat.format(date));
+							} else {
+								db.addRecentDoc(name, path, dateFormat.format(date));
+							}
+						}
+					} catch (UnsupportedFileTypeException e1) {
+						JOptionPane.showMessageDialog(frame, "Something broke again. *_*", "Error", JOptionPane.ERROR_MESSAGE);
+					}
+				} else if (n == 1) {
+
+				}
+				// e.printStackTrace();
+			}
+			blur.fadeOut();
+		} else {
+			blur.fadeOut();
 		}
 	}
 
@@ -1248,6 +1465,7 @@ public class Frame extends JFrame implements ActionListener {
 		// set selected index to new file opened
 		// tabbedPane.setSelectedIndex(tabbedPane.getTabCount()-1);
 		setNavButtonsEnabled();
+		setMenuItemsEnabled();
 
 		studentPanel.moveIn();
 
@@ -1255,12 +1473,18 @@ public class Frame extends JFrame implements ActionListener {
 		// table = Global.getGlobal().getActiveProject().getTables().get(0);
 
 		try {
+
+			// Global.getGlobal().addProject(new Project());
+			// fileHandler.openFile(file.getAbsolutePath(),
+			// Global.getGlobal().getActiveProject());
+
 			Project p = new Project();
 			Global.getGlobal().addProject(p);
 			fileHandler.openFile(file.getAbsolutePath(), Global.getGlobal().getActiveProject());
 			p.setFileName(file.getName());
 			p.createAudit();
 			p.getAudit().openedProject();
+
 		} catch (UnsupportedFileTypeException e) {
 			e.printStackTrace();
 		}
@@ -1300,10 +1524,10 @@ public class Frame extends JFrame implements ActionListener {
 		tabBar.add(tabbedPane);
 
 		workspacePanel.add(tabBar);
-
 		// put panel with table on a new tab
 		tabbedPane.addTab(file.getName(), table);
-
+		miExport.setEnabled(true);
+		mProject.setEnabled(true);
 		tabCount++;
 		tabbedPane.setTabComponentAt(tabCount, new TabButton(file.getName()));
 		// tabbedPane.add(table, tabCount);
@@ -1318,6 +1542,9 @@ public class Frame extends JFrame implements ActionListener {
 		navBar.fadeIn();
 		frame.remove(blur);
 		recentDocsPanel.fadeOut();
+
+		miHome.setEnabled(true);
+		miWorkspace.setEnabled(false);
 	}
 
 	/*
@@ -1334,6 +1561,10 @@ public class Frame extends JFrame implements ActionListener {
 
 		recentDocsPanel.fadeIn();
 		createRecentDocsView();
+		populateRecentDocsInMenu();
+
+		miHome.setEnabled(false);
+		miWorkspace.setEnabled(true);
 
 	}
 
@@ -1426,7 +1657,7 @@ public class Frame extends JFrame implements ActionListener {
 
 		recentDocsPanel.removeAll();
 
-		ReflectionButtonWithLabel[] buttonArray = new ReflectionButtonWithLabel[10];
+		buttonArray = new ReflectionButtonWithLabel[10];
 		String[] filenamesarray = db.getDocumentNames();
 		String[] filepathsarray = db.getDocumentPaths();
 		int count = db.getDocumentCount();
@@ -1459,6 +1690,35 @@ public class Frame extends JFrame implements ActionListener {
 			i++;
 			m++;
 		}
+		buttonCount = i - 1;
+	}
+
+	public void setRecentPath() {
+		String recentPath = db.getRecentPath();
+		currentDBFilePath = new File(recentPath);
+
+	}
+
+	public void populateRecentDocsInMenu() {
+
+		mRecent.removeAll();
+
+		JMenuItem[] recentDocsMenuArray = new JMenuItem[7];
+		String[] filenamesarray = db.getDocumentNames();
+		String[] filepathsarray = db.getDocumentPaths();
+		int count = db.getDocumentCount();
+
+		int i = 0;
+		int m = 0;
+
+		// restrict recent docs to 7
+		while ((i < count) && (m < 7)) {
+			recentDocsMenuArray[i] = new RecentDocsMenuItem(filenamesarray[i], filepathsarray[i]);
+			mRecent.add(recentDocsMenuArray[i]);
+			recentDocsMenuArray[i].addActionListener(this);
+			i++;
+			m++;
+		}
 	}
 
 	/*
@@ -1476,8 +1736,8 @@ public class Frame extends JFrame implements ActionListener {
 		filterButton.setEnabled();
 		maxValButton.setEnabled();
 		rulesButton.setEnabled();
-		treeButton.setEnabled();
-
+		structureModuleButton.setEnabled();
+		statisticsButton.setEnabled();
 		searchPanel.fadeIn();
 	}
 
@@ -1486,54 +1746,53 @@ public class Frame extends JFrame implements ActionListener {
 	 * students, graphs...)
 	 */
 	public void setNavButtonsDisabled() {
-		if (studentsButton != null) {
-			studentsButton.setDisabled();
-		}
-		if (histogramButton != null) {
-			histogramButton.setDisabled();
-		}
-		if (boxButton != null) {
-			boxButton.setDisabled();
-		}
-		if (scatterButton != null) {
-			scatterButton.setDisabled();
-		}
-		if (exportButton != null) {
-			exportButton.setDisabled();
-		}
-		if (conditionalFormatButton != null) {
-			conditionalFormatButton.setDisabled();
-		}
-		if (bordercaseButton != null) {
-			bordercaseButton.setDisabled();
-		}
-		if (addRowButton != null) {
-			addRowButton.setDisabled();
-		}
-		if (filterButton != null) {
-			filterButton.setDisabled();
-		}
-		if (maxValButton != null) {
-			maxValButton.setDisabled();
-		}
-		if (rulesButton != null) {
-			rulesButton.setDisabled();
-		}
-		if (treeButton != null) {
-			treeButton.setDisabled();
-		}
-		if (searchPanel != null) {
-			searchPanel.fadeOut();
-		}
-		if (studentPanel != null) {
-			studentPanel.setVisible(false);
-		}
+		studentsButton.setDisabled();
+		histogramButton.setDisabled();
+		boxButton.setDisabled();
+		scatterButton.setDisabled();
+		exportButton.setDisabled();
+		conditionalFormatButton.setDisabled();
+		bordercaseButton.setDisabled();
+		addRowButton.setDisabled();
+		filterButton.setDisabled();
+		maxValButton.setDisabled();
+		rulesButton.setDisabled();
+		structureModuleButton.setDisabled();
+		statisticsButton.setDisabled();
+		searchPanel.fadeOut();
+		studentPanel.setVisible(false);
+	}
 
+	public void setMenuItemsDisabled() {
+		miExport.setEnabled(false);
+		miConditionalFormatting.setEnabled(false);
+		miBordercases.setEnabled(false);
+		miRules.setEnabled(false);
+		miAddRow.setEnabled(false);
+		miAddMaxValues.setEnabled(false);
+		miFilter.setEnabled(false);
+		miStructureModule.setEnabled(false);
+		miViewStudent.setEnabled(false);
+		mGraph.setEnabled(false);
+	}
+
+	public void setMenuItemsEnabled() {
+		miExport.setEnabled(true);
+		miConditionalFormatting.setEnabled(true);
+		miBordercases.setEnabled(true);
+		miRules.setEnabled(true);
+		miAddRow.setEnabled(true);
+		miAddMaxValues.setEnabled(true);
+		miFilter.setEnabled(true);
+		miStructureModule.setEnabled(true);
+		miViewStudent.setEnabled(true);
+		mGraph.setEnabled(true);
 	}
 
 	// action for recent docs buttons
 	@Override
 	public void actionPerformed(ActionEvent e) {
+
 		if (e.getSource() instanceof ReflectionButtonWithLabel) {
 			File testFile = new File(((ReflectionButtonWithLabel) e.getSource()).getPath());
 			if (testFile.exists()) {
@@ -1550,11 +1809,323 @@ public class Frame extends JFrame implements ActionListener {
 
 				JOptionPane.showMessageDialog(frame, "File seems to be missing from last directory location, removing shortcut.", "File Missing", JOptionPane.ERROR_MESSAGE);
 
+				try {
+					createRecentDocsView();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				populateRecentDocsInMenu();
+
 				recentDocsPanel.revalidate();
 				recentDocsPanel.repaint();
 			}
 		}
 
+		if (e.getSource() instanceof RecentDocsMenuItem) {
+			File testFile = new File(((RecentDocsMenuItem) e.getSource()).getPath());
+			if (testFile.exists()) {
+				try {
+					openRecentFile(testFile);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				} catch (BadLocationException e1) {
+					e1.printStackTrace();
+				}
+			} else {
+				mRecent.remove(((RecentDocsMenuItem) e.getSource()));
+				db.deleteRecentDocuments(((RecentDocsMenuItem) e.getSource()).getPath());
+
+				mRecent.revalidate();
+				mRecent.repaint();
+
+				try {
+					createRecentDocsView();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+
+				recentDocsPanel.revalidate();
+				recentDocsPanel.repaint();
+
+				JOptionPane.showMessageDialog(frame, "File seems to be missing from last directory location, removing shortcut.",
+						"File Missing", JOptionPane.ERROR_MESSAGE);
+
+			}
+		}
+
 	}
 
+	public void showConditionalFormatting() {
+		ConditionalFormattingFrame conditionalformatFrame;
+		MenuSelectionManager.defaultManager().clearSelectedPath();
+		try {
+			conditionalformatFrame = new ConditionalFormattingFrame(table);
+			conditionalformatFrame.setVisible(true);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void showBordercases() {
+		BordercaseFrame bordercaseFrame;
+		try {
+			bordercaseFrame = new BordercaseFrame(table);
+			bordercaseFrame.setVisible(true);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void showRules() {
+		frmRule rules = new frmRule(Global.getGlobal().getActiveProject());
+		rules.setVisible(true);
+	}
+
+	public void showAddRule() {
+		EntityType testHead = table.project.getHeadEntityType();
+		LinkedList<EntityType> list = testHead.getSubEntityType();
+
+		for (int x = 0; x < list.size(); x++) {
+			table.createEntities(list.get(x), new SuperEntityPointer(table.project.getHead()));
+		}
+
+		table.data = table.project.getHead().getDataLinkedList();
+
+		/*
+		 * tableModel.addRow(new Object[] { txtField1.getText(),
+		 * txtField1.getText() });
+		 */
+
+		Object[] temp = new Object[table.data.get(0).size()];
+
+		for (int y = 0; y < table.data.get(0).size(); y++) {
+			temp[y] = table.data.getLast().get(y).getValue();
+		}
+
+		table.tableModel.addRow(temp);
+		table.repaint();
+	}
+
+	public void setMaxValues() {
+		SetMaxValueFrame maxframe;
+		try {
+			maxframe = new SetMaxValueFrame(table);
+			maxframe.setVisible(true);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void showFilter() {
+		FilterFrame filterframe;
+		filterframe = new FilterFrame(table);
+		filterframe.setVisible(true);
+	}
+
+	public void showViewStudent() {
+		table.getTable().getSelectedRow();
+		if (table.getTable().getSelectedRow() == -1) {
+			JOptionPane.showMessageDialog(frame, "Please select a student to view information", "Student Not Selected", JOptionPane.ERROR_MESSAGE);
+		} else
+			TreeView.createStudentFrm("name", table.getData().get(table.getTable().getSelectedRow()).get(0), Global.getGlobal().getActiveProject());
+
+	}
+
+	public void showStructureModule() {
+		table.getTable().getSelectedRow();
+		TreeView.createEntityTypeFrm("name", Global.getGlobal().getActiveProject());
+	}
+
+	public void showHistogram() {
+		HistogramFrame x = new HistogramFrame(Global.getGlobal().getActiveProject());
+		Global.getGlobal().getActiveProject().addhistogramcharts(x);
+	}
+
+	public void showBoxPlot() {
+		BoxPlotFrame x = new BoxPlotFrame();
+		x.createBoxPlotFrame(Global.getGlobal().getActiveProject());
+
+		Global.getGlobal().getActiveProject().addboxplotcharts(x);
+	}
+
+	public void showScatterPlot() {
+		ScatterPlotFrame x = new ScatterPlotFrame(Global.getGlobal().getActiveProject());// project);
+		Global.getGlobal().getActiveProject().addscattercharts(x);
+	}
+
+	public void showStatistics() {
+		FrmStats stats = new FrmStats(Global.getGlobal().getActiveProject());
+		stats.setVisible(true);
+	}
+
+	public void addMenuMouseListeners() {
+
+		miImport.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				MenuSelectionManager.defaultManager().clearSelectedPath();
+				try {
+					openFile();
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (BadLocationException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+
+		miExport.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				MenuSelectionManager.defaultManager().clearSelectedPath();
+				try {
+					saveFileAs();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+
+		miExit.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				frame.dispose();
+			}
+		});
+
+		miConditionalFormatting.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				MenuSelectionManager.defaultManager().clearSelectedPath();
+				if (miConditionalFormatting.isEnabled()) {
+					showConditionalFormatting();
+				}
+			}
+		});
+
+		miRules.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				MenuSelectionManager.defaultManager().clearSelectedPath();
+				if (miRules.isEnabled()) {
+					showRules();
+				}
+			}
+		});
+
+		miAddRow.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				MenuSelectionManager.defaultManager().clearSelectedPath();
+				if (miAddRow.isEnabled()) {
+					showAddRule();
+				}
+			}
+		});
+
+		miAddMaxValues.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				MenuSelectionManager.defaultManager().clearSelectedPath();
+				if (miAddMaxValues.isEnabled()) {
+					setMaxValues();
+				}
+			}
+		});
+
+		miFilter.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				MenuSelectionManager.defaultManager().clearSelectedPath();
+				if (miFilter.isEnabled()) {
+					showFilter();
+				}
+			}
+		});
+
+		miStructureModule.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				MenuSelectionManager.defaultManager().clearSelectedPath();
+				if (miStructureModule.isEnabled()) {
+					showStructureModule();
+				}
+			}
+		});
+
+		miViewStudent.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				MenuSelectionManager.defaultManager().clearSelectedPath();
+				if (miViewStudent.isEnabled()) {
+					showViewStudent();
+				}
+			}
+		});
+
+		miBordercases.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				MenuSelectionManager.defaultManager().clearSelectedPath();
+				if (miBordercases.isEnabled()) {
+					showBordercases();
+				}
+			}
+		});
+
+		miHistogram.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				MenuSelectionManager.defaultManager().clearSelectedPath();
+				if (miHistogram.isEnabled()) {
+					showHistogram();
+				}
+			}
+		});
+
+		miBoxPlot.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				MenuSelectionManager.defaultManager().clearSelectedPath();
+				if (miBoxPlot.isEnabled()) {
+					showBoxPlot();
+				}
+			}
+		});
+
+		miScatterPlot.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				MenuSelectionManager.defaultManager().clearSelectedPath();
+				if (miScatterPlot.isEnabled()) {
+					showScatterPlot();
+				}
+			}
+		});
+
+		miHome.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				MenuSelectionManager.defaultManager().clearSelectedPath();
+				if (miHome.isEnabled()) {
+					try {
+						workspaceToHomeTransition();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+
+		miWorkspace.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				MenuSelectionManager.defaultManager().clearSelectedPath();
+				if (miWorkspace.isEnabled()) {
+					homeToWorkspaceTransition();
+				}
+			}
+		});
+
+	}
 }

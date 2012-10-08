@@ -140,6 +140,10 @@ public class EntityType {
 	public void setFormatting(LinkedList<Format> formatting) {
 		this.formatting = formatting;
 	}
+	
+	public void clearFormatting(){
+		this.formatting = null;
+	}
 
 	/**
 	 * @param borderCasing

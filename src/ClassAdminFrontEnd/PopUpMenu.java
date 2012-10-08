@@ -126,8 +126,8 @@ public class PopUpMenu {
 						activeItem = item;
 						activeItem.getVisualization().run("filter");
 						activeEntity = activeTreeLinkedList.get(activeItem.getRow());
-						newNode = new FrmNewNode(activeTree, activeProject, new JFrame(), tview);
-						updateNode = new FrmUpdateNode(activeProject, new JFrame(), activeEntity, activeItem);
+						newNode = new FrmNewNode(activeTree, activeProject, parentFrame, tview);
+						updateNode = new FrmUpdateNode(activeProject, parentFrame, activeEntity, activeItem);
 					}
 				}
 			}
