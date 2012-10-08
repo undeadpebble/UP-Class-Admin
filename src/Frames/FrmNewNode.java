@@ -182,6 +182,10 @@ public class FrmNewNode {
 					// update front end information
 					activeProject.updateTables();
 
+			
+					
+					
+					
 					// refresh cmbParent content
 					cmbParent.removeAllItems();
 					for (int r = 0; r < nodes.getRowCount(); r++) {
