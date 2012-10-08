@@ -284,7 +284,6 @@ public class Project {
 				String filesFull = listOfFiles[i].getName();
 				if (files.endsWith(".png") || files.endsWith(".PNG")
 						|| files.endsWith(".jpg") || files.endsWith(".JPG")) {
-					System.out.println(files);
 					files = files.substring(0, files.lastIndexOf('.'));
 					int where = -1;
 
@@ -304,7 +303,7 @@ public class Project {
 										data.get(x)
 												.get(where)
 												.setPicture(
-														dir + "/" + filesFull);
+														dir + "\\" + filesFull);
 									}
 								}
 							}
