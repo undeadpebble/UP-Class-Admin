@@ -48,7 +48,6 @@ public class FrameLauncher {
 			UIManager.put("background", new Color(0x171717));
 			UIManager.put("DesktopIcon.background", new Color(0x171717));
 			UIManager.put("nimbusLightBackground", new Color(0xE3E3E3));
-
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
 			
 		}

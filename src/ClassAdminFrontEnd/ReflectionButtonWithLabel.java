@@ -139,7 +139,7 @@ public class ReflectionButtonWithLabel extends JButton implements MouseListener 
 				g2.drawImage(grayreflection, 0, 0, null);
 			}
 		}
-
+		repaint();
 	}
 
 	public void setDisabled() {
@@ -210,6 +210,12 @@ public class ReflectionButtonWithLabel extends JButton implements MouseListener 
 
 	public String getPath() {
 		return path;
+	}
+	
+	public void rerender(){
+		reflection = null;
+		highlightreflection = null;
+		repaint();
 	}
 
 }

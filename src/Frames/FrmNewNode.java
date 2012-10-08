@@ -12,7 +12,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 
-import javax.activity.ActivityCompletedException;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -34,19 +33,20 @@ import prefuse.data.Table;
 import prefuse.data.Tree;
 import ClassAdminBackEnd.EntityType;
 import ClassAdminBackEnd.Project;
-import ClassAdminBackEnd.SuperEntity;
+import ClassAdminFrontEnd.BackgroundGradientPanel;
 import ClassAdminFrontEnd.DatePicker;
 import ClassAdminFrontEnd.TreeView;
 
 public class FrmNewNode {
-	Tree activeTree = null;
-	JDialog frame = null;
-	Project activeProject = null;
-	TreeView activeTreeView = null;
-	LinkedList<EntityType> activeTreeLinkedList = null;
-	Table nodes;
-	JComboBox cmbParent;
-	JFrame parentF = null;
+	private Tree activeTree = null;
+	private JDialog frame = null;
+	private Project activeProject = null;
+	private TreeView activeTreeView = null;
+	private LinkedList<EntityType> activeTreeLinkedList = null;
+	private Table nodes;
+	private JComboBox cmbParent;
+	private JFrame parentF = null;
+	private BackgroundGradientPanel backgroundPanel;
 
 	public FrmNewNode(Tree tree, Project project, JFrame parentFrame, TreeView treeView) {
 		activeTree = tree;
@@ -54,11 +54,24 @@ public class FrmNewNode {
 		activeTreeView = treeView;
 		nodes = activeTree.getNodeTable();
 		parentF = parentFrame;
+		
 		frame = new JDialog(parentFrame, true);
+		frame.setSize(356, 268);
+		frame.setLocation(parentF.getWidth()+parentF.getX()-250, parentF.getY()+40);
+		frame.getContentPane().setLayout(null);
 
-		JPanel pnlRad = new JPanel(new GridLayout(1, 2));
-		frame.setSize(600, 600);
-		frame.setLayout(new GridLayout(7, 2));
+		frame.setTitle("Add New Node");
+
+		JPanel contentPane = new JPanel();
+		contentPane.setBounds(0, 0, frame.getWidth(), frame.getHeight());
+		frame.setContentPane(contentPane);
+		contentPane.setLayout(null);
+
+		backgroundPanel = new BackgroundGradientPanel(contentPane);
+		backgroundPanel.setBounds(0, 0, contentPane.getWidth(), contentPane.getHeight());
+		contentPane.add(backgroundPanel);
+		backgroundPanel.setLayout(null);
+
 
 		final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		Date date = new Date();
@@ -66,9 +79,6 @@ public class FrmNewNode {
 		cmbParent = new JComboBox();
 		final JLabel lblParent = new JLabel("Parent:");
 		final JTextField txtName = new JTextField();
-		final JLabel lblText = new JLabel("Text field");
-		final JRadioButton rblYes = new JRadioButton("Yes");
-		final JRadioButton rblNo = new JRadioButton("No");
 		final ButtonGroup group = new ButtonGroup();
 		final JLabel lblDate = new JLabel("Date of assesment:");
 		final JTextArea txtDate = new JTextArea();
@@ -87,10 +97,7 @@ public class FrmNewNode {
 
 		txtName.setSize(120, 30);
 		txtDate.setText(dateFormat.format(date));
-		rblNo.setSelected(true);
-		group.add(rblYes);
-		group.add(rblNo);
-
+		
 		cmbType.addItem("Mark - Weighted Average");
 		cmbType.addItem("Mark - Sum ");
 		cmbType.addItem("Mark - Best N");
@@ -108,7 +115,7 @@ public class FrmNewNode {
 		btnDate.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				txtDate.setText(new DatePicker(frame).setPickedDate());
+					txtDate.setText(new DatePicker(frame).setPickedDate());
 			}
 		});
 
@@ -134,8 +141,6 @@ public class FrmNewNode {
 					lblName.setForeground(Color.red);
 				}
 
-				if (rblYes.isSelected())
-					isText = true;
 
 				Date d = null;
 				try {
@@ -151,7 +156,7 @@ public class FrmNewNode {
 
 				if (b) {
 					parent = activeTree.getNode(cmbParent.getSelectedIndex()); // get
-					// parent
+																				// parent
 					child = activeTree.addNode(); // create child
 
 					for (int c = 0; c < child.getColumnCount() - 1; c++)
@@ -162,10 +167,10 @@ public class FrmNewNode {
 					// information
 
 					activeTree.addEdge(parent, child); // add edge between
-					// parent
-					// and child
+														// parent
+														// and child
 
-					// create child node
+					// add child to parent in back end
 					EntityType newE = new EntityType(txtName.getText(), activeProject.getTreeLinkedList().get(cmbParent.getSelectedIndex()), isText, d, (Double) txtWeight.getValue());
 
 					// insert child into backend and create audit entry
@@ -177,6 +182,10 @@ public class FrmNewNode {
 					// update front end information
 					activeProject.updateTables();
 
+			
+					
+					
+					
 					// refresh cmbParent content
 					cmbParent.removeAllItems();
 					for (int r = 0; r < nodes.getRowCount(); r++) {
@@ -184,13 +193,10 @@ public class FrmNewNode {
 							cmbParent.addItem(nodes.getString(r, c));
 						}
 					}
-
 					// set selected index to what it was
 					cmbParent.setSelectedIndex(selectedIndex);
 
 					// reset all values
-					cmbType.setSelectedIndex(0);
-					rblNo.setSelected(true);
 					txtWeight.setValue(new Double(1.0));
 					txtName.setText(null);
 					txtDate.setText(dateFormat.format(new Date()));
@@ -200,7 +206,7 @@ public class FrmNewNode {
 					isText = false;
 					activeTreeView.getVisualization().run("filter");
 					txtName.requestFocus(true);
-				}// if b
+					}// if b
 			}// actionListener
 		});
 
@@ -212,6 +218,7 @@ public class FrmNewNode {
 				frame.dispose();
 			}
 		});
+
 
 		frame.addWindowListener(new WindowListener() {
 
@@ -245,36 +252,53 @@ public class FrmNewNode {
 				txtName.requestFocus(true);
 			}
 		});
-
-		// create form
 		JPanel pnlDate = new JPanel(new GridLayout(1, 2));
+		pnlDate.setOpaque(false);
 		pnlDate.add(txtDate);
 		pnlDate.add(btnDate);
-		frame.add(lblType);
-		frame.add(cmbType);
-		frame.add(lblParent);
-		frame.add(cmbParent);
-		frame.add(lblName);
-		frame.add(txtName);
-		frame.add(lblText);
-		pnlRad.add(rblYes);
-		pnlRad.add(rblNo);
-		frame.add(pnlRad);
-		frame.add(lblDate);
-		frame.add(pnlDate);
-		frame.add(lblWeight);
-		frame.add(txtWeight);
-		frame.add(btnAdd);
-		frame.add(btnClose);
-		frame.pack();
+
+		lblParent.setBounds(10, 45, 91, 30);
+		cmbParent.setBounds(180, 45, 150, 30);
+		txtName.setBounds(180, 79, 150, 30);
+		lblName.setBounds(10, 79, 72, 30);
+		lblDate.setBounds(10, 120, 120, 30);
+		lblWeight.setBounds(10, 147, 130, 30);
+		pnlDate.setBounds(180,113,150,30);
+		txtWeight.setBounds(180, 147, 150, 30);
+		btnAdd.setBounds(10, 188, 150, 30);
+		btnClose.setBounds(180, 188, 150, 30);
+		lblType.setBounds(10, 11, 50, 30);
+		cmbType.setBounds(180, 11, 150, 30);
+
+		lblParent.setForeground(new Color(0xEDEDED));
+		lblName.setForeground(new Color(0xEDEDED));
+		lblDate.setForeground(new Color(0xEDEDED));
+		lblWeight.setForeground(new Color(0xEDEDED));
+		lblType.setForeground(new Color(0xEDEDED));
+
+		backgroundPanel.add(lblParent);
+		backgroundPanel.add(cmbParent);
+		backgroundPanel.add(lblName);
+		backgroundPanel.add(txtName);
+		backgroundPanel.add(lblDate);
+		backgroundPanel.add(pnlDate);
+		backgroundPanel.add(lblWeight);
+		backgroundPanel.add(txtWeight);
+		backgroundPanel.add(btnAdd);
+		backgroundPanel.add(btnClose);
+		backgroundPanel.add(lblType);
+		backgroundPanel.add(cmbType);
 	}
 
-	public void showFrmNewNode(int p) {
+	public void showFrmNewNode(int p){
 		if (p != -1)
 			cmbParent.setSelectedIndex(p);
 		else
 			cmbParent.setSelectedIndex(0);
 		frame.setVisible(true);
 	}
+
+
+
 
 }
