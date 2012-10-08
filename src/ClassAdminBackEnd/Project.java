@@ -154,7 +154,7 @@ public class Project {
 
 			}
 			
-			System.out.println("Set selected index" + x);
+		
 			updatecharts();
 			if(toetso ==true)
 			for(int y=0;y<tables.size();y++){
