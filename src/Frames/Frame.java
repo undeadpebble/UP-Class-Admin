@@ -155,9 +155,16 @@ public class Frame extends JFrame implements ActionListener {
 					Global.getGlobal().getActiveProject().getAudit().closedProject();
 					tabbedPane.remove(tabbedPane.indexOfTabComponent(tabbutton));
 					tabCount--;
+					table.getTable().clearSelection();
+					Global.getGlobal().getActiveProject().getSelected().clear();
+					Global.getGlobal().getActiveProject().getSelectedIndexes().clear();
 					if (tabCount == -1) {
 						setNavButtonsDisabled();
 						setMenuItemsDisabled();
+						table = null;
+					}
+					else{
+						table = Global.getGlobal().getActiveProject().getTables().get(0);
 					}
 
 				}
