@@ -355,5 +355,12 @@ public class EntityType {
 		date = pDate;
 		defaultWeight = weight;
 	}
+	
+public void findRapidAssessment(LinkedList<RapidAssessmentContainerType> list){
+		
+		for(int x = 0;x<this.getSubEntityType().size();++x){
+			this.getSubEntityType().get(x).findRapidAssessment(list);
+		}
+	}
 
 }

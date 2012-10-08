@@ -19,11 +19,12 @@ public class testMain
 			EventQueue.invokeLater(new Runnable() {
 				public void run() {
 					try {
+		
 						EntityType j = new EntityType();
 						new SuperEntity(j, 0);
 						EntityType k =new EntityType("test",j, false, null, 1.0);
 						k.populateTreeWithEntities();
-						JFrame frame = new RapidAssessmentCanvas(k);
+						JFrame frame = new RapidAssessmentCanvas(new Project(),k);
 						
 						frame.setVisible(true);
 					} catch (Exception e) {
