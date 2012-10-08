@@ -6,51 +6,37 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
+
+import java.awt.Image;
+
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.PopupMenu;
+
 import java.awt.Toolkit;
 import java.awt.dnd.DragSource;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.awt.geom.Point2D;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JSpinner;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.KeyStroke;
-import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-
-import org.tmatesoft.sqljet.core.SqlJetException;
 
 import prefuse.Constants;
 import prefuse.Display;
@@ -73,9 +59,6 @@ import prefuse.controls.ControlAdapter;
 import prefuse.controls.FocusControl;
 import prefuse.controls.PanControl;
 import prefuse.controls.WheelZoomControl;
-import prefuse.controls.ZoomControl;
-import prefuse.controls.ZoomToFitControl;
-import prefuse.data.Node;
 import prefuse.data.Table;
 import prefuse.data.Tree;
 import prefuse.data.Tuple;
@@ -97,9 +80,9 @@ import prefuse.visual.sort.TreeDepthItemSorter;
 import ClassAdminBackEnd.EntityType;
 import ClassAdminBackEnd.Project;
 import ClassAdminBackEnd.SuperEntity;
-import Frames.Frame;
 import Frames.FrmNewNode;
 import Frames.FrmTreeHelpDialog;
+
 
 public class TreeView extends Display {
 
@@ -546,13 +529,18 @@ public class TreeView extends Display {
 			public void actionPerformed(ActionEvent arg0) {
 
 				if (myProject.getStudentLinkedList().get(selectedEntity).getDetails().getType().getIsTextField()) {
-					myProject.getAudit().updateStudent(myProject.getStudentLinkedList().get(0).getValue(),myProject.getStudentLinkedList().get(selectedEntity).getValue(), txtChange.getText(),false);
+					myProject.getAudit().updateStudent(myProject.getTreeLinkedList().get(0).getName(),
+							myProject.getStudentLinkedList().get(selectedEntity).getValue(), txtChange.getText(), false);
 					myProject.getStudentLinkedList().get(selectedEntity).setValue(txtChange.getText());
 					myTree.getNode(selectedEntity).set("name", txtChange.getText());
 				} else {
 					try {
-						if (Double.parseDouble(txtChange.getText()) >= 0 && myProject.getStudentLinkedList().get(selectedEntity).getType().getMaxValue() >= Double.parseDouble(txtChange.getText())) {
-							myProject.getAudit().updateStudent(myProject.getStudentLinkedList().get(0).getValue(),Double.toString(myProject.getStudentLinkedList().get(selectedEntity).getMark()), txtChange.getText(),true);
+						if (Double.parseDouble(txtChange.getText()) >= 0
+								&& myProject.getStudentLinkedList().get(selectedEntity).getType().getMaxValue() >= Double
+										.parseDouble(txtChange.getText())) {
+							myProject.getAudit().updateStudent(myProject.getTreeLinkedList().get(0).getName(),
+									Double.toString(myProject.getStudentLinkedList().get(selectedEntity).getMark()), txtChange.getText(),
+									true);
 							myProject.getStudentLinkedList().get(selectedEntity).setMark(Double.parseDouble(txtChange.getText()));
 							myTree.getNode(selectedEntity).set("name", txtChange.getText());
 						}
@@ -561,6 +549,8 @@ public class TreeView extends Display {
 				}
 				myProject.updateTables();
 				txtChange.setText("");
+				txtChange.setPreferredSize(new Dimension(txtChange.getWidth(), txtChange.getHeight()));
+				txtChange.setLineWrap(true);
 				txtChange.setVisible(false);
 				btnChange.setVisible(false);
 				selectedEntity = -1;
@@ -568,6 +558,9 @@ public class TreeView extends Display {
 			}
 		});
 
+		// btnChange.registerKeyboardAction(btnChange.getActionForKeyStroke(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE,
+		// 0, false)), KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0,false),
+		// txtChange.WHEN_FOCUSED);
 
 		txtChange.addKeyListener(new KeyListener() {
 
@@ -577,13 +570,18 @@ public class TreeView extends Display {
 				if (id == KeyEvent.VK_ENTER) {
 
 					if (myProject.getStudentLinkedList().get(selectedEntity).getDetails().getType().getIsTextField()) {
-						myProject.getAudit().updateStudent(myProject.getStudentLinkedList().get(0).getValue(),myProject.getStudentLinkedList().get(selectedEntity).getValue(), txtChange.getText(),false);
+						myProject.getAudit().updateStudent(myProject.getTreeLinkedList().get(1).getName(),
+								myProject.getStudentLinkedList().get(selectedEntity).getValue(), txtChange.getText(), false);
 						myProject.getStudentLinkedList().get(selectedEntity).setValue(txtChange.getText());
 						myTree.getNode(selectedEntity).set("name", txtChange.getText());
 					} else {
 						try {
-							if (Double.parseDouble(txtChange.getText()) >= 0 && myProject.getStudentLinkedList().get(selectedEntity).getType().getMaxValue() >= Double.parseDouble(txtChange.getText())) {
-								myProject.getAudit().updateStudent(myProject.getStudentLinkedList().get(0).getValue(),Double.toString(myProject.getStudentLinkedList().get(selectedEntity).getMark()), txtChange.getText(),true);
+							if (Double.parseDouble(txtChange.getText()) >= 0
+									&& myProject.getStudentLinkedList().get(selectedEntity).getType().getMaxValue() >= Double
+											.parseDouble(txtChange.getText())) {
+								myProject.getAudit().updateStudent(myProject.getTreeLinkedList().get(1).getName(),
+										Double.toString(myProject.getStudentLinkedList().get(selectedEntity).getMark()),
+										txtChange.getText(), true);
 								myProject.getStudentLinkedList().get(selectedEntity).setMark(Double.parseDouble(txtChange.getText()));
 								myTree.getNode(selectedEntity).set("name", txtChange.getText());
 							}
@@ -594,8 +592,6 @@ public class TreeView extends Display {
 					txtChange.setText("");
 					txtChange.setVisible(false);
 					btnChange.setVisible(false);
-					selectedEntity = -1;
-
 				}
 
 			}
@@ -609,7 +605,7 @@ public class TreeView extends Display {
 			public void keyTyped(KeyEvent arg0) {
 			}
 		});
-		
+
 		Box box = new Box(BoxLayout.X_AXIS);
 		box.add(Box.createHorizontalStrut(10));
 		box.add(title);
