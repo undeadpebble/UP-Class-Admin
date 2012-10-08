@@ -155,8 +155,6 @@ public class Project {
 				scatterArrayListIndexes.add(scatterIndexes[x]);
 
 			}
-
-			System.out.println("Set selected index" + x);
 			updatecharts();
 			if (toetso == true)
 				for (int y = 0; y < tables.size(); y++) {

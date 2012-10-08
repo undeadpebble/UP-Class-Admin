@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -114,7 +115,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 
 		chartpanel = nuweChart.createPanel();
 
-		final JLabel classaverage = new JLabel("Class average:"+stats.gemidpunt(houerx)+"                     ");
+		final JLabel classaverage = new JLabel("Class average:"+stats.roundTwoDecimals(stats.gemidpunt(houerx))+"                     ");
 		final JLabel failures = new JLabel("Number of failures:"+stats.fails(houerx)+"                ");
 		final JLabel passes = new JLabel("Number of passes:"+stats.slaag(houerx)+"                    ");
 		
@@ -147,7 +148,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 				chartpanel.getChart().getXYPlot()
 						.setDataset(nuweChart.changeDataset(houerx));
 				project.updatecharts();
-				classaverage.setText("Class average: "+stats.roundTwoDecimals(stats.gemidpunt(houerx))+"                            ");
+				classaverage.setText("Class average: "+ stats.roundTwoDecimals(stats.gemidpunt(houerx)) +"                            ");
 				passes.setText("Number of failures:"+stats.fails(houerx)+"                     ");
 				failures.setText("Number of passes:"+stats.slaag(houerx)+"                       ");
 			}
@@ -521,4 +522,5 @@ public class HistogramFrame extends JFrame implements ActionListener {
 		return img;
 
 	}
+	
 }
