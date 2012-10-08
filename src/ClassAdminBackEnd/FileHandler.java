@@ -31,12 +31,12 @@ public class FileHandler {
 	public void openFile(String filename, Project project)
 			throws UnsupportedFileTypeException {
 		this.project = project;
-		if (filename.substring(filename.indexOf('.')).contains("csv")) {
+		if (filename.substring(filename.indexOf('.')).toLowerCase().contains("csv")) {
 			openCSV(filename);
-		} else if (filename.substring(filename.indexOf('.')).contains("xls")) {
+		} else if (filename.substring(filename.indexOf('.')).toLowerCase().contains("xls")) {
 			openXls(filename);
 
-		} else if (filename.substring(filename.indexOf('.')).contains("pdat")) {
+		} else if (filename.substring(filename.indexOf('.')).toLowerCase().contains("pdat")) {
 			openPDat(filename);
 		} else
 			throw new UnsupportedFileTypeException();

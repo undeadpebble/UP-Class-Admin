@@ -673,7 +673,7 @@ public class RapidAssessmentCanvas extends JFrame {
 		canvas.add(parentRect);
 
 		JButton btnNewButton = new JButton("Image");
-		btnNewButton.setBounds(parentRect.getWidth() + 5, 79, 89, 23);
+		btnNewButton.setBounds(parentRect.getWidth() + 5, 115, 89, 23);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				JFileChooser fc = new JFileChooser();
@@ -699,7 +699,7 @@ public class RapidAssessmentCanvas extends JFrame {
 		parentPanel.add(btnNewButton);
 
 		JButton btnSave = new JButton("Save");
-		btnSave.setBounds(parentRect.getWidth() + 5, 45, 89, 23);
+		btnSave.setBounds(parentRect.getWidth() + 5, 80, 89, 23);
 		parentPanel.add(btnSave);
 		btnSave.setFocusable(false);
 		btnSave.addActionListener(new ActionListener() {
@@ -707,28 +707,30 @@ public class RapidAssessmentCanvas extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				parentPanel.save();
+				refreshLoad();
 
 			}
 		});
 
 		loadCombo = new JComboBox<RapidAssessmentContainerType>();
-		loadCombo.setBounds(parentRect.getWidth() + 5, 36, 89, 23);
+		loadCombo.setBounds(parentRect.getWidth() + 5, 10, 89, 23);
 
-		LinkedList<RapidAssessmentContainerType> containers = new LinkedList<RapidAssessmentContainerType>();
-		this.project.getHeadEntityType().findRapidAssessment(containers);
-		for (int x = 0; x < containers.size(); ++x)
-			loadCombo.addItem(containers.get(x));
-
+		parentPanel.add(loadCombo);
 		JButton btnLoad = new JButton("Load");
-		btnLoad.setBounds(parentRect.getWidth() + 5, 11, 89, 23);
+		btnLoad.setBounds(parentRect.getWidth() + 5, 35, 89, 23);
 		parentPanel.add(btnLoad);
 		btnLoad.setFocusable(false);
 		btnLoad.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
+				if (loadCombo.getSelectedItem() != null)
+					try {
+						RapidAssessmentCanvas.this.assessedEntity = (EntityType) loadCombo
+								.getSelectedItem();
+					} catch (ClassCastException e) {
 
+					}
 			}
 		});
 
@@ -894,6 +896,7 @@ public class RapidAssessmentCanvas extends JFrame {
 					assessedEntity, this.getX(), this.getY(), this.getWidth(),
 					this.getHeight());
 
+			assessedEntity = parent;
 			parent.setImage(backGround);
 
 			LinkedList<MyComponent> list = new LinkedList<RapidAssessmentCanvas.MyComponent>();
@@ -1013,6 +1016,14 @@ public class RapidAssessmentCanvas extends JFrame {
 		} catch (ClassCastException e) {
 
 		}
+	}
+
+	public void refreshLoad() {
+		LinkedList<RapidAssessmentContainerType> containers = new LinkedList<RapidAssessmentContainerType>();
+		this.project.getHeadEntityType().findRapidAssessment(containers);
+		loadCombo.removeAllItems();
+		for (int x = 0; x < containers.size(); ++x)
+			loadCombo.addItem(containers.get(x));
 	}
 
 }

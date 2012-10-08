@@ -123,7 +123,7 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 			super.paintComponent(g);
 			Graphics g2 = g.create();
 
-			if (resizedBackGround == null) {
+			if (resizedBackGround == null && backGround != null) {
 				resizedBackGround = Scalr.resize(backGround,Method.QUALITY,Mode.FIT_EXACT, parentRect.getWidth(),
 						parentRect.getHeight(),Scalr.OP_ANTIALIAS);
 			}
