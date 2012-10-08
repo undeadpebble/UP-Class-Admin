@@ -435,7 +435,7 @@ public class SuperEntity {
 		studentLinkedList.add(this);
 
 		String str = "";
-		str += "<branch>" + "<attribute name = \"name\" value= \"" + this.getValue() + "\" />";
+		str += "<branch>" + "<attribute name = \"name\" value= \"" + this.getType().getName() + ": " + this.getValue() + "\" />";
 		for (int i = 0; i < this.getSubEntity().size(); i++) {
 			str += this.getSubEntity().get(i).createTreeFromHead(studentLinkedList);
 		}

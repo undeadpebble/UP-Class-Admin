@@ -62,7 +62,7 @@ public class FileHandler {
 		// header entity
 		int firstStringCol = -1;
 		// EntityTypeFactory eTFactory = new EntityTypeFactory();
-		EntityType headType = new EntityType("Project", null, true,null,1.0);
+		EntityType headType = new EntityType(filename.substring(filename.lastIndexOf("\\")+1), null, true,null,1.0);
 		project.setHeadEntityType(headType);
 
 		SuperEntity mE = new HeadEntity(project

@@ -31,7 +31,7 @@ public class LeafMarkEntity extends MarkEntity{
 		studentLinkedList.add((SuperEntity) this);
 		String str = "";
 		str += "<leaf>" +
-				"<attribute name = \"name\" value= \"" + this.getValue() + "\" />";
+				"<attribute name = \"name\" value= \"" + this.getType().getName() + ": " + this.getValue() + "\" />";
 		str +="</leaf>";
 		return str;
 	}
