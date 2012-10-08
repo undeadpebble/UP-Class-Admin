@@ -98,7 +98,8 @@ public class Frame extends JFrame implements ActionListener {
 	private BlurBackground blur;
 	private ReflectionButton homeButton, importButton, exportButton, studentsButton, histogramButton, boxButton, scatterButton,
 			conditionalFormatButton, bordercaseButton, addRowButton, homeImportButton, homeStudents, ButtonWorkspace, filterButton,
-			maxValButton, rulesButton, homeRapidAssessment, structureModuleButton, statisticsButton;
+			maxValButton, rulesButton, homeRapidAssessment, structureModuleButton, statisticsButton, rapidAssessmentButton, markingButton,
+			importPicturesButton;
 	private FadePanel homeInfoPanel, importInfoPanel, exportInfoPanel, studentsInfoPanel, histogramInfoPanel, boxplotInfoPanel,
 			conditionalFormattingInfoPanel, bordercaseInfoPanel, addRowInfoPanel, filterInfoPanel, maxValInfoPanel, rulesInfoPanel,
 			buildInfoPanel, statisticsInfoPanel;
@@ -864,6 +865,9 @@ public class Frame extends JFrame implements ActionListener {
 		maxValButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/maxValue.png")));
 		rulesButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Rules2.png")));
 		statisticsButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Statistics.png")));
+		rapidAssessmentButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/question.png")));
+		markingButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/question.png")));
+		importPicturesButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/question.png")));
 
 		homeButton.setBounds(8, 8, 68, 80);
 		importButton.setBounds(75, 8, 68, 80);
@@ -880,6 +884,9 @@ public class Frame extends JFrame implements ActionListener {
 		maxValButton.setBounds(782, 11, 68, 80);
 		rulesButton.setBounds(837, 10, 68, 80);
 		statisticsButton.setBounds(903, 11, 68, 80);
+		rapidAssessmentButton.setBounds(960,11,68,80);
+		markingButton.setBounds(1020,11,68,80);
+		importPicturesButton.setBounds(1080,11,68,80);
 
 		navBar.add(homeButton);
 		navBar.add(importButton);
@@ -896,6 +903,9 @@ public class Frame extends JFrame implements ActionListener {
 		navBar.add(maxValButton);
 		navBar.add(rulesButton);
 		navBar.add(statisticsButton);
+		navBar.add(rapidAssessmentButton);
+		navBar.add(markingButton);
+		navBar.add(importPicturesButton);
 
 		setNavButtonsDisabled();
 
@@ -1778,6 +1788,9 @@ public class Frame extends JFrame implements ActionListener {
 		miStructureModule.setEnabled(false);
 		miViewStudent.setEnabled(false);
 		mGraph.setEnabled(false);
+		rapidAssessmentButton.setEnabled(false);
+		markingButton.setEnabled(false);
+		importPicturesButton.setEnabled(false);
 	}
 
 	public void setMenuItemsEnabled() {
@@ -1791,6 +1804,9 @@ public class Frame extends JFrame implements ActionListener {
 		miStructureModule.setEnabled(true);
 		miViewStudent.setEnabled(true);
 		mGraph.setEnabled(true);
+		rapidAssessmentButton.setEnabled(true);
+		markingButton.setEnabled(true);
+		importPicturesButton.setEnabled(true);
 	}
 
 	// action for recent docs buttons
