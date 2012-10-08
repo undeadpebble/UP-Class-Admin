@@ -24,6 +24,7 @@ public class EntityType {
 	private Double defaultWeight;
 	private long ID;
 	private double maxValue = 100;
+	private Boolean isImg = false;
 
 	public static int WEIGHTED_AVERAGE_TYPE = 0;
 	public static int SUM_TYPE = 1;
@@ -286,11 +287,20 @@ public class EntityType {
 		}
 	}
 
+	public Boolean getIsImg() {
+		return isImg;
+	}
+
+	public void setIsImg(Boolean isImg) {
+		this.isImg = isImg;
+	}
+
 	public void populateTreeWithEntities() {
 		for (int x = 0; x < this.getParentEntitytype().getEntityList().size(); ++x) {
 			SuperEntity parent = this.getParentEntitytype().getEntityList().get(0);
 			if (this.getIsRule()) {
 				if (this.getIsTextField()) {
+					
 					new StringRuleEntity(this, parent, "");
 
 				} else {
@@ -298,11 +308,19 @@ public class EntityType {
 				}
 			} else {
 				if (this.getIsTextField()) {
+					if(isImg){
+						new IMGEntity(this, parent, "");
+					}
+					else
 					new LeafStringEntity(this, parent, "<" + this.getName() + ">");
 				} else {
+					
 					new LeafMarkEntity(this, parent, 0);
 				}
+				
 			}
+			
+			
 
 		}
 	}
