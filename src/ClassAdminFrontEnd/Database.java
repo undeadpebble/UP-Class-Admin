@@ -1,3 +1,4 @@
+
 package ClassAdminFrontEnd;
 
 
@@ -31,6 +32,11 @@ public class Database {
 	public void addRecentDoc(String filen, String filep, String string) {
 		RecentDocument recentdocument = new RecentDocument(filen, filep, string);
 		db.store(recentdocument);
+	}
+	
+	public void addRecentPath(String p, String d) {
+		RecentPath recentpath = new RecentPath(p,d);
+		db.store(recentpath);
 	}
 
 	public void deleteRecentDocuments(String filepath) {
@@ -69,6 +75,17 @@ public class Database {
 		}
 	}
 	
+	public boolean alreadyContainsPath(String p, String d) {
+		RecentPath proto=new RecentPath(p,null);
+		ObjectSet result=db.queryByExample(proto);
+		if (result.size() > 0) {
+			return true;
+		}			
+		else {
+			return false;
+		}
+	}
+	
 	public void updateRecentDocument(String filen, String filep, String d) {
 		ObjectSet result=db.queryByExample(new RecentDocument(filen,filep,null));
 		RecentDocument found=(RecentDocument)result.next();
@@ -98,6 +115,12 @@ public class Database {
 		ObjectSet result = db.queryByExample(RecentDocument.class);
 		return result.size();
 	}
+	
+	public int getRecentPathCount() {
+		
+		ObjectSet result = db.queryByExample(RecentPath.class);
+		return result.size();
+	}
 
 	public String[] getDocumentPaths() {
 		int i = 0;
@@ -114,6 +137,22 @@ public class Database {
 		}
 		return array;
 	}
+	
+	public String getRecentPath() {
+		String path = "";
+		int i = 0;
+		Query query=db.query();
+		query.constrain(RecentPath.class);
+		query.descend("date").orderAscending();
+		ObjectSet result=query.execute(); 
+		while ((result.hasNext()) && (i < 1)){
+			RecentPath rp = (RecentPath) result.next();
+			path = rp.getPath();
+			i++;
+		}
+		return path;
+	}
+
 	
 	
 }
