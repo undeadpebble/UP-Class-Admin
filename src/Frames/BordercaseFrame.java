@@ -12,6 +12,7 @@ import java.awt.event.ComponentListener;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -21,11 +22,13 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 import ClassAdminBackEnd.BorderCase;
+import ClassAdminBackEnd.Project;
 import ClassAdminFrontEnd.BackgroundGradientPanel;
 import ClassAdminFrontEnd.FrmTable;
 import ClassAdminFrontEnd.ReflectionButton;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 
 public class BordercaseFrame extends JFrame {
 
@@ -89,7 +92,7 @@ public class BordercaseFrame extends JFrame {
 	 */
 	public BordercaseFrame(final FrmTable table) throws IOException {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 486, 285);
+		setBounds(100, 100, 450, 320);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(null);
@@ -108,17 +111,17 @@ public class BordercaseFrame extends JFrame {
 		setLocation(x, y);
 
 		backgroundPanel = new BackgroundGradientPanel(contentPane);
-		backgroundPanel.setBounds(0, 0, getWidth(), getHeight());
+		backgroundPanel.setBounds(0, 0, 436, 285);
 		contentPane.add(backgroundPanel);
 		backgroundPanel.setLayout(null);
 
 		JLabel lblBottomBordercaseValue = new JLabel("Bottom bordercase Value");
-		lblBottomBordercaseValue.setBounds(54, 63, 160, 14);
+		lblBottomBordercaseValue.setBounds(54, 78, 160, 14);
 		lblBottomBordercaseValue.setForeground(new Color(0xEDEDED));
 		backgroundPanel.add(lblBottomBordercaseValue);
 		
 		JLabel lblUpperBordercaseValue = new JLabel("Upper bordercase Value");
-		lblUpperBordercaseValue.setBounds(54, 108, 160, 14);
+		lblUpperBordercaseValue.setBounds(54, 123, 160, 14);
 		lblUpperBordercaseValue.setForeground(new Color(0xEDEDED));
 		backgroundPanel.add(lblUpperBordercaseValue);
 		
@@ -129,7 +132,7 @@ public class BordercaseFrame extends JFrame {
 				new Integer(1) // step
 		);
 		final JSpinner maxVal = new JSpinner(SNMmax);
-		maxVal.setBounds(274, 101, 121, 28);
+		maxVal.setBounds(274, 116, 121, 28);
 
 		SpinnerNumberModel SNMmin = new SpinnerNumberModel(
 				new Integer(40), // value
@@ -138,14 +141,23 @@ public class BordercaseFrame extends JFrame {
 				new Integer(1) // step
 		);
 		final JSpinner minVal = new JSpinner(SNMmin);
-		minVal.setBounds(274, 56, 121, 28);
+		minVal.setBounds(274, 71, 121, 28);
 		
 		backgroundPanel.add(maxVal);
 		backgroundPanel.add(minVal);
 		
 		final ReflectionButton btnAddBordercase = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/BordercaseFrame.png")));
-		btnAddBordercase.setBounds(333, 155, 62, 86);
+		btnAddBordercase.setBounds(333, 187, 62, 86);
 		backgroundPanel.add(btnAddBordercase);
+		
+		final JComboBox cbxHeaders = new JComboBox();
+		cbxHeaders.setBounds(274, 27, 121, 20);
+		backgroundPanel.add(cbxHeaders);
+		
+		JLabel lblWhereToAdd = new JLabel("Where to add the bordercase");
+		lblWhereToAdd.setForeground(Color.WHITE);
+		lblWhereToAdd.setBounds(54, 27, 160, 14);
+		backgroundPanel.add(lblWhereToAdd);
 
 		// frame resize listener adjust components accordingly
 		this.addComponentListener(new ComponentListener() {
@@ -177,11 +189,17 @@ public class BordercaseFrame extends JFrame {
 
 		});
 		
+		cbxHeaders.setModel(new DefaultComboBoxModel(table.project.getHead().getNumberHeaders()));
+		
+		JButton btnRemoveBorderCase = new JButton("Remove bordercase");
+		btnRemoveBorderCase.setBounds(54, 198, 137, 23);
+		backgroundPanel.add(btnRemoveBorderCase);
+		
 		btnAddBordercase.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				table.headersList
-						.get(table.headPoints.get(table.cbheaders
+						.get(table.headPoints.get(cbxHeaders
 								.getSelectedIndex()))
 						.getType()
 						.getBorderCasing()
@@ -192,7 +210,26 @@ public class BordercaseFrame extends JFrame {
 										.toString())));
 
 				table.repaint();
+				closeFrame();
 			}
 		});
+		
+		btnRemoveBorderCase.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				closeFrame();
+				RemoveBorderCase temp = new RemoveBorderCase(table);
+				temp.setVisible(true);
+				
+			}
+		});
+		
+		
+	}
+	public void closeFrame(){
+		this.dispose();
+		return;
 	}
 }
+
