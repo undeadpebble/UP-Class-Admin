@@ -44,89 +44,83 @@ import ClassAdminBackEnd.SuperEntity;
 public class ScatterPlotFrame extends JFrame implements ActionListener {
 	private ChartPanel chartpanel;
 	private JFreeChart chart;
-	public int houerx = 0;
-	public int houery = 0;
+	private int houerx = 0;
+	private int houery = 0;
 	private ScatterPlot nuweChart;
 	private Project project;
-	private LinkedList<LinkedList<SuperEntity>> diedata ;
-
+	private LinkedList<LinkedList<SuperEntity>> diedata;
 
 	// Update all the values of the scatterplot
 	public void update() {
 
 		nuweChart.updateSelectedvalues();
-	
+
 	}
-	//sort scatterchart
-	public int[] doensorteer(int xgetal, int ygetal)
-	{
+
+	// sort scatterchart
+	public int[] doensorteer(int xgetal, int ygetal) {
 		// Sorting for scatterselection
-				double[] sorteermidq = new double[diedata.size()];
-				double[] sorteermidw = new double[diedata.size()];
-				int[] scattergetalle = new int[diedata.size()];
-				for (int q = 0; q < diedata.size(); q++) {
-					try {
-						sorteermidq[q] = diedata.get(q).get(xgetal).getMark();
-					} catch (AbsentException e) {
-						sorteermidq[q]=0;
-					}
-					try {
-						sorteermidw[q] = diedata.get(q).get(ygetal).getMark();
-					} catch (AbsentException e) {
-						sorteermidw[q]=0;
-					}
-					scattergetalle[q] = q;
+		double[] sorteermidq = new double[diedata.size()];
+		double[] sorteermidw = new double[diedata.size()];
+		int[] scattergetalle = new int[diedata.size()];
+		for (int q = 0; q < diedata.size(); q++) {
+			try {
+				sorteermidq[q] = diedata.get(q).get(xgetal).getMark();
+			} catch (AbsentException e) {
+				sorteermidq[q] = 0;
+			}
+			try {
+				sorteermidw[q] = diedata.get(q).get(ygetal).getMark();
+			} catch (AbsentException e) {
+				sorteermidw[q] = 0;
+			}
+			scattergetalle[q] = q;
+
+		}
+
+		int n = sorteermidq.length;
+		double temp = 0;
+		double temp2 = 0;
+		int temp3 = 0;
+		// Bubblesort
+		for (int i = 0; i < n; i++) {
+			for (int j = 1; j < (n - i); j++) {
+				if (sorteermidq[j - 1] > sorteermidq[j]) {
+
+					// swap the elements!
+					temp2 = sorteermidw[j - 1];
+					sorteermidw[j - 1] = sorteermidw[j];
+					sorteermidw[j] = temp2;
+
+					temp = sorteermidq[j - 1];
+					sorteermidq[j - 1] = sorteermidq[j];
+					sorteermidq[j] = temp;
+
+					temp3 = scattergetalle[j - 1];
+					scattergetalle[j - 1] = scattergetalle[j];
+					scattergetalle[j] = temp3;
 
 				}
 
-				
+			}
+		}
 
-				int n = sorteermidq.length;
-				double temp = 0;
-				double temp2 = 0;
-				int temp3 = 0;
-				// Bubblesort
-				for (int i = 0; i < n; i++) {
-					for (int j = 1; j < (n - i); j++) {
-						if (sorteermidq[j - 1] > sorteermidq[j]) {
+		int[] houer = new int[scattergetalle.length];
 
-							// swap the elements!
-							temp2 = sorteermidw[j - 1];
-							sorteermidw[j - 1] = sorteermidw[j];
-							sorteermidw[j] = temp2;
+		// Flip around the array
+		int houerflip;
+		int houerflip2;
+		for (int i = 0; i < scattergetalle.length; i++) {
 
-							temp = sorteermidq[j - 1];
-							sorteermidq[j - 1] = sorteermidq[j];
-							sorteermidq[j] = temp;
+			houerflip = scattergetalle[i];
+			houerflip2 = scattergetalle[houerflip];
+			houer[houerflip2] = houerflip;
 
-							temp3 = scattergetalle[j - 1];
-							scattergetalle[j - 1] = scattergetalle[j];
-							scattergetalle[j] = temp3;
+		}
 
-						}
-
-					}
-				}
-
-				int[] houer = new int[scattergetalle.length];
-
-			
-
-				int houerflip;
-				int houerflip2;
-				for (int i = 0; i < scattergetalle.length; i++) {
-
-					houerflip = scattergetalle[i];
-					houerflip2 = scattergetalle[houerflip];
-					houer[houerflip2] = houerflip;
-					
-
-				}
-
-			
-				
-				return houer;
+		return houer;
 	}
+
 	// Create the scatterplotframe
 	public ScatterPlotFrame(final Project project) {
 
@@ -142,416 +136,371 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 		nuweChart = new ScatterPlot(project);
 
 		String[] kolom = project.getHead().getNumberHeaders();
-		if(kolom.length >=2)
-		{
+		//Check if there are two columns to compare
+		if (kolom.length >= 2) {
 			project.incscattercount();
-		String xas = kolom[project.getscattercount()];
-		String yas = kolom[project.getscattercount()+1];
+			String xas = kolom[project.getscattercount()];
+			String yas = kolom[project.getscattercount() + 1];
 
-		// get the first headers value
-		for (int s = 0; s < headers.length; s++) {
-			if (headers[s].equals(kolom[project.getscattercount()])) {
-				houerx = s;
-
-			}
-
-		}
-		// get the second headers value
-		for (int s = 0; s < headers.length; s++) {
-			if (headers[s].equals(kolom[project.getscattercount()+1])) {
-				houery = s;
-
-			}
-
-		}
-		
-		XYSeries series = new XYSeries("Scatter");
-		// Add to series
-
-		for (int q = 0; q < diedata.size(); q++) {
-			try {
-				series.add(diedata.get(q).get(houerx).getMark(), diedata.get(q).get(houery).getMark());
-			} catch (AbsentException e1) {
-				series.add(0,0);
-			}
-
-		}
-		
-
-		
-		
-	
-
-		dataset.addSeries(series);
-		nuweChart.setScatterArray(doensorteer(houerx, houery));
-		
-		//Check if there is any border cases
-		XYLineAnnotation a2;
-	
-		if(diedata.get(0).get(houerx).getType().getBorderCasing().size()>0 && diedata.get(0).get(houery).getType().getBorderCasing().size()>0)
-		{
-			a2 = new XYLineAnnotation(diedata.get(0).get(houerx).getType().getBorderCasing().get(0).getLowVal(),diedata.get(0).get(houery).getType().getBorderCasing().get(0).getHighVal(),diedata.get(0).get(houerx).getType().getBorderCasing().get(0).getHighVal(),diedata.get(0).get(houery).getType().getBorderCasing().get(0).getHighVal());
-			nuweChart.setAnnons(a2);
-			
-			a2 = new XYLineAnnotation(diedata.get(0).get(houerx).getType().getBorderCasing().get(0).getHighVal(),diedata.get(0).get(houery).getType().getBorderCasing().get(0).getHighVal(),diedata.get(0).get(houerx).getType().getBorderCasing().get(0).getHighVal(),diedata.get(0).get(houery).getType().getBorderCasing().get(0).getLowVal());
-			nuweChart.setAnnons(a2);
-			
-			a2 = new XYLineAnnotation(diedata.get(0).get(houerx).getType().getBorderCasing().get(0).getHighVal(),diedata.get(0).get(houery).getType().getBorderCasing().get(0).getLowVal(),diedata.get(0).get(houerx).getType().getBorderCasing().get(0).getLowVal(),diedata.get(0).get(houery).getType().getBorderCasing().get(0).getLowVal());
-			nuweChart.setAnnons(a2);
-			
-			a2 = new XYLineAnnotation(diedata.get(0).get(houerx).getType().getBorderCasing().get(0).getLowVal(),diedata.get(0).get(houery).getType().getBorderCasing().get(0).getLowVal(),diedata.get(0).get(houerx).getType().getBorderCasing().get(0).getLowVal(),diedata.get(0).get(houery).getType().getBorderCasing().get(0).getHighVal());
-			nuweChart.setAnnons(a2);
-			
-		}
-		else if(diedata.get(0).get(houerx).getType().getBorderCasing().size()>0)
-		{
-			a2 = new XYLineAnnotation(diedata.get(0).get(houerx).getType().getBorderCasing().get(0).getLowVal(),0.0,diedata.get(0).get(houerx).getType().getBorderCasing().get(0).getLowVal(),100.0);
-			nuweChart.setAnnons(a2);
-			a2 = new XYLineAnnotation(diedata.get(0).get(houerx).getType().getBorderCasing().get(0).getHighVal(),0.0,diedata.get(0).get(houerx).getType().getBorderCasing().get(0).getHighVal(),100.0);
-			nuweChart.setAnnons(a2);
-		}
-		else if(diedata.get(0).get(houery).getType().getBorderCasing().size()>0)
-		{
-			a2 = new XYLineAnnotation(0.0,diedata.get(0).get(houery).getType().getBorderCasing().get(0).getLowVal(),100.0,diedata.get(0).get(houerx).getType().getBorderCasing().get(0).getLowVal());
-			nuweChart.setAnnons(a2);
-			a2 = new XYLineAnnotation(0.0,diedata.get(0).get(houery).getType().getBorderCasing().get(0).getHighVal(),100.0,diedata.get(0).get(houery).getType().getBorderCasing().get(0).getHighVal());
-			nuweChart.setAnnons(a2);
-		}
-		 chart = nuweChart.createScatter("asd", dataset, xas, yas);
-		
-		
-		chartpanel = nuweChart.createPanel();
-		
-		 
-		
-		
-		
-		
-		
-		JLabel lblNewLabel = new JLabel("X-axis");
-		final JComboBox xascb = new JComboBox();
-		// Combobox of X-axis
-		xascb.setModel(new DefaultComboBoxModel(kolom));
-		xascb.setSelectedIndex(project.getscattercount());
-		xascb.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JComboBox cb = (JComboBox) e.getSource();
-				String axis = (String) cb.getSelectedItem();
-				chartpanel.getChart().getXYPlot().getDomainAxis().setLabel(axis);
-				chartpanel.getChart().getXYPlot().clearAnnotations();
-
-				for (int s = 0; s < headers.length; s++) {
-					if (headers[s].equals(cb.getSelectedItem().toString())) {
-						houerx = s;
-
-					}
+			// get the first headers value
+			for (int s = 0; s < headers.length; s++) {
+				if (headers[s].equals(kolom[project.getscattercount()])) {
+					houerx = s;
 
 				}
 
-				XYSeriesCollection nuwedataset = new XYSeriesCollection();
-				XYSeries series = new XYSeries("Scatter");
-
-				for (int q = 0; q < diedata.size(); q++) {
-					try {
-						series.add(diedata.get(q).get(houerx).getMark(), diedata.get(q).get(houery).getMark());
-					} catch (AbsentException e1) {
-						series.add(0,0);
-					}
+			}
+			// get the second headers value
+			for (int s = 0; s < headers.length; s++) {
+				if (headers[s].equals(kolom[project.getscattercount() + 1])) {
+					houery = s;
 
 				}
-			
-				nuwedataset.addSeries(series);
-				chartpanel.getChart().getXYPlot().setDataset(nuwedataset);
-				nuweChart.setDatasetmain(nuwedataset);
-				project.updatecharts();
-			}
-
-		});
-		// Cycle of X-axis combobox left
-		JButton switchlinksx = new JButton("<");
-		switchlinksx.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
 
 			}
 
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
+			XYSeries series = new XYSeries("Scatter");
+			// Add to series
 
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if (xascb.getSelectedIndex() >= 1)
-				{
-					xascb.setSelectedIndex(xascb.getSelectedIndex() - 1);
-				
-					project.updatecharts();
-				}
-			}
-		});
-		// Cycle of X-axis combobox right
-		JButton switchregsx = new JButton(">");
-		switchregsx.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if (xascb.getSelectedIndex() < xascb.getItemCount())
-				{
-					xascb.setSelectedIndex(xascb.getSelectedIndex() + 1);
-					project.updatecharts();
-				}
-			}
-		});
-
-		JLabel lblNewLabel_1 = new JLabel("Y-axis");
-
-		final JComboBox yascb = new JComboBox();
-		yascb.setModel(new DefaultComboBoxModel(kolom));
-		yascb.setSelectedIndex(project.getscattercount() +1);
-		// Combobox of Y-axis
-		yascb.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JComboBox cb = (JComboBox) e.getSource();
-				String axis = (String) cb.getSelectedItem();
-				chartpanel.getChart().getXYPlot().getRangeAxis().setLabel(axis);
-
-				chartpanel.getChart().getXYPlot().clearAnnotations();
-
-				for (int s = 0; s < headers.length; s++) {
-					if (headers[s].equals(cb.getSelectedItem().toString())) {
-						houery = s;
-					}
-
-				}
-				XYSeriesCollection nuwedataset = new XYSeriesCollection();
-				XYSeries series = new XYSeries("Scatter");
-
-				for (int q = 0; q < diedata.size() ; q++) {
-					try {
-						series.add(diedata.get(q).get(houerx).getMark(), diedata.get(q).get(houery).getMark());
-					} catch (AbsentException e1) {
-
-						series.add(0,0);
-					}
-
-				}
-				
-				nuwedataset.addSeries(series);
-				chartpanel.getChart().getXYPlot().setDataset(nuwedataset);
-				nuweChart.setDatasetmain(nuwedataset);
-				project.updatecharts();
-			}
-
-		});
-		// Cycle of Y-axis combobox left
-		JButton switchlinksy = new JButton("<");
-		switchlinksy.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if (yascb.getSelectedIndex() >= 1)
-				{
-					yascb.setSelectedIndex(yascb.getSelectedIndex() - 1);
-					project.updatecharts();
-				}
-			}
-		});
-		// Cycle of Y-axis combobox right
-		JButton switchregsy = new JButton(">");
-		switchregsy.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-
-				if (yascb.getSelectedIndex() < yascb.getItemCount())
-				{
-					yascb.setSelectedIndex(yascb.getSelectedIndex() + 1);
-					project.updatecharts();
-				}
-			}
-		});
-
-		JButton rotate = new JButton("Rotate");
-
-		rotate.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-		});
-		// Extract Jfreechart as a jpg
-		JButton extractPic = new JButton("Extract chart");
-		extractPic.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseReleased(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseExited(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
+			for (int q = 0; q < diedata.size(); q++) {
 				try {
+					series.add(diedata.get(q).get(houerx).getMark(), diedata.get(q).get(houery).getMark());
+				} catch (AbsentException e1) {
+					series.add(0, 0);
+				}
 
-					saveFileAs();
+			}
 
-				} catch (Exception e1) {
+			dataset.addSeries(series);
+			nuweChart.setScatterArray(doensorteer(houerx, houery));
 
-					e1.printStackTrace();
+			// Check if there is any border cases
+			XYLineAnnotation a2;
+
+			if (diedata.get(0).get(houerx).getType().getBorderCasing().size() > 0
+					&& diedata.get(0).get(houery).getType().getBorderCasing().size() > 0) {
+				a2 = new XYLineAnnotation(diedata.get(0).get(houerx).getType().getBorderCasing().get(0).getLowVal(), diedata.get(0)
+						.get(houery).getType().getBorderCasing().get(0).getHighVal(), diedata.get(0).get(houerx).getType()
+						.getBorderCasing().get(0).getHighVal(), diedata.get(0).get(houery).getType().getBorderCasing().get(0).getHighVal());
+				nuweChart.setAnnons(a2);
+
+				a2 = new XYLineAnnotation(diedata.get(0).get(houerx).getType().getBorderCasing().get(0).getHighVal(), diedata.get(0)
+						.get(houery).getType().getBorderCasing().get(0).getHighVal(), diedata.get(0).get(houerx).getType()
+						.getBorderCasing().get(0).getHighVal(), diedata.get(0).get(houery).getType().getBorderCasing().get(0).getLowVal());
+				nuweChart.setAnnons(a2);
+
+				a2 = new XYLineAnnotation(diedata.get(0).get(houerx).getType().getBorderCasing().get(0).getHighVal(), diedata.get(0)
+						.get(houery).getType().getBorderCasing().get(0).getLowVal(), diedata.get(0).get(houerx).getType().getBorderCasing()
+						.get(0).getLowVal(), diedata.get(0).get(houery).getType().getBorderCasing().get(0).getLowVal());
+				nuweChart.setAnnons(a2);
+
+				a2 = new XYLineAnnotation(diedata.get(0).get(houerx).getType().getBorderCasing().get(0).getLowVal(), diedata.get(0)
+						.get(houery).getType().getBorderCasing().get(0).getLowVal(), diedata.get(0).get(houerx).getType().getBorderCasing()
+						.get(0).getLowVal(), diedata.get(0).get(houery).getType().getBorderCasing().get(0).getHighVal());
+				nuweChart.setAnnons(a2);
+
+			} else if (diedata.get(0).get(houerx).getType().getBorderCasing().size() > 0) {
+				a2 = new XYLineAnnotation(diedata.get(0).get(houerx).getType().getBorderCasing().get(0).getLowVal(), 0.0, diedata.get(0)
+						.get(houerx).getType().getBorderCasing().get(0).getLowVal(), 100.0);
+				nuweChart.setAnnons(a2);
+				a2 = new XYLineAnnotation(diedata.get(0).get(houerx).getType().getBorderCasing().get(0).getHighVal(), 0.0, diedata.get(0)
+						.get(houerx).getType().getBorderCasing().get(0).getHighVal(), 100.0);
+				nuweChart.setAnnons(a2);
+			} else if (diedata.get(0).get(houery).getType().getBorderCasing().size() > 0) {
+				a2 = new XYLineAnnotation(0.0, diedata.get(0).get(houery).getType().getBorderCasing().get(0).getLowVal(), 100.0, diedata
+						.get(0).get(houerx).getType().getBorderCasing().get(0).getLowVal());
+				nuweChart.setAnnons(a2);
+				a2 = new XYLineAnnotation(0.0, diedata.get(0).get(houery).getType().getBorderCasing().get(0).getHighVal(), 100.0, diedata
+						.get(0).get(houery).getType().getBorderCasing().get(0).getHighVal());
+				nuweChart.setAnnons(a2);
+			}
+			chart = nuweChart.createScatter("asd", dataset, xas, yas);
+
+			chartpanel = nuweChart.createPanel();
+
+			JLabel lblNewLabel = new JLabel("X-axis");
+			final JComboBox xascb = new JComboBox();
+			// Combobox of X-axis
+			xascb.setModel(new DefaultComboBoxModel(kolom));
+			xascb.setSelectedIndex(project.getscattercount());
+			xascb.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					JComboBox cb = (JComboBox) e.getSource();
+					String axis = (String) cb.getSelectedItem();
+					chartpanel.getChart().getXYPlot().getDomainAxis().setLabel(axis);
+					chartpanel.getChart().getXYPlot().clearAnnotations();
+
+					for (int s = 0; s < headers.length; s++) {
+						if (headers[s].equals(cb.getSelectedItem().toString())) {
+							houerx = s;
+
+						}
+
+					}
+
+					XYSeriesCollection nuwedataset = new XYSeriesCollection();
+					XYSeries series = new XYSeries("Scatter");
+
+					for (int q = 0; q < diedata.size(); q++) {
+						try {
+							series.add(diedata.get(q).get(houerx).getMark(), diedata.get(q).get(houery).getMark());
+						} catch (AbsentException e1) {
+							series.add(0, 0);
+						}
+
+					}
+
+					nuwedataset.addSeries(series);
+					chartpanel.getChart().getXYPlot().setDataset(nuwedataset);
+					nuweChart.setDatasetmain(nuwedataset);
+					project.updatecharts();
+				}
+
+			});
+			// Cycle of X-axis combobox left
+			JButton switchlinksx = new JButton("<");
+			switchlinksx.addMouseListener(new MouseListener() {
+
+				@Override
+				public void mouseReleased(MouseEvent e) {
+				
 
 				}
-			}
-		});
 
-		
-		content.setLayout(new FlowLayout());
-		content.add(chartpanel);
-		content.add(lblNewLabel);
-		content.add(xascb);
-		content.add(switchlinksx);
-		content.add(switchregsx);
-		content.add(lblNewLabel_1);
-		content.add(yascb);
-		content.add(switchlinksy);
-		content.add(switchregsy);
-		content.add(rotate);
-		content.add(extractPic);
+				@Override
+				public void mousePressed(MouseEvent e) {
+					
+
+				}
+
+				@Override
+				public void mouseExited(MouseEvent e) {
+					
+
+				}
+
+				@Override
+				public void mouseEntered(MouseEvent e) {
+				
+
+				}
+
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					if (xascb.getSelectedIndex() >= 1) {
+						xascb.setSelectedIndex(xascb.getSelectedIndex() - 1);
+
+						project.updatecharts();
+					}
+				}
+			});
+			// Cycle of X-axis combobox right
+			JButton switchregsx = new JButton(">");
+			switchregsx.addMouseListener(new MouseListener() {
+
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					
+
+				}
+
+				@Override
+				public void mousePressed(MouseEvent e) {
+					
+
+				}
+
+				@Override
+				public void mouseExited(MouseEvent e) {
+					
+
+				}
+
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					
+
+				}
+
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					if (xascb.getSelectedIndex() < xascb.getItemCount()) {
+						xascb.setSelectedIndex(xascb.getSelectedIndex() + 1);
+						project.updatecharts();
+					}
+				}
+			});
+
+			JLabel lblNewLabel_1 = new JLabel("Y-axis");
+
+			final JComboBox yascb = new JComboBox();
+			yascb.setModel(new DefaultComboBoxModel(kolom));
+			yascb.setSelectedIndex(project.getscattercount() + 1);
+			// Combobox of Y-axis
+			yascb.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					JComboBox cb = (JComboBox) e.getSource();
+					String axis = (String) cb.getSelectedItem();
+					chartpanel.getChart().getXYPlot().getRangeAxis().setLabel(axis);
+
+					chartpanel.getChart().getXYPlot().clearAnnotations();
+
+					for (int s = 0; s < headers.length; s++) {
+						if (headers[s].equals(cb.getSelectedItem().toString())) {
+							houery = s;
+						}
+
+					}
+					XYSeriesCollection nuwedataset = new XYSeriesCollection();
+					XYSeries series = new XYSeries("Scatter");
+
+					for (int q = 0; q < diedata.size(); q++) {
+						try {
+							series.add(diedata.get(q).get(houerx).getMark(), diedata.get(q).get(houery).getMark());
+						} catch (AbsentException e1) {
+
+							series.add(0, 0);
+						}
+
+					}
+
+					nuwedataset.addSeries(series);
+					chartpanel.getChart().getXYPlot().setDataset(nuwedataset);
+					nuweChart.setDatasetmain(nuwedataset);
+					project.updatecharts();
+				}
+
+			});
+			// Cycle of Y-axis combobox left
+			JButton switchlinksy = new JButton("<");
+			switchlinksy.addMouseListener(new MouseListener() {
+
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					
+
+				}
+
+				@Override
+				public void mousePressed(MouseEvent e) {
+					
+
+				}
+
+				@Override
+				public void mouseExited(MouseEvent e) {
+					
+
+				}
+
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					
+
+				}
+
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					if (yascb.getSelectedIndex() >= 1) {
+						yascb.setSelectedIndex(yascb.getSelectedIndex() - 1);
+						project.updatecharts();
+					}
+				}
+			});
+			// Cycle of Y-axis combobox right
+			JButton switchregsy = new JButton(">");
+			switchregsy.addMouseListener(new MouseListener() {
+
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					
+
+				}
+
+				@Override
+				public void mousePressed(MouseEvent e) {
+					
+
+				}
+
+				@Override
+				public void mouseExited(MouseEvent e) {
+					
+
+				}
+
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					
+
+				}
+
+				@Override
+				public void mouseClicked(MouseEvent e) {
+
+					if (yascb.getSelectedIndex() < yascb.getItemCount()) {
+						yascb.setSelectedIndex(yascb.getSelectedIndex() + 1);
+						project.updatecharts();
+					}
+				}
+			});
+
+			// Extract Jfreechart as a jpg
+			JButton extractPic = new JButton("Extract chart");
+			extractPic.addMouseListener(new MouseListener() {
+
+				@Override
+				public void mouseReleased(MouseEvent arg0) {
+					
+
+				}
+
+				@Override
+				public void mousePressed(MouseEvent arg0) {
+					
+
+				}
+
+				@Override
+				public void mouseExited(MouseEvent arg0) {
+					
+
+				}
+
+				@Override
+				public void mouseEntered(MouseEvent arg0) {
+					
+
+				}
+
+				@Override
+				public void mouseClicked(MouseEvent arg0) {
+					try {
+
+						saveFileAs();
+
+					} catch (Exception e1) {
+
+						e1.printStackTrace();
+
+					}
+				}
+			});
+
+			content.setLayout(new FlowLayout());
+			content.add(chartpanel);
+			content.add(lblNewLabel);
+			content.add(xascb);
+			content.add(switchlinksx);
+			content.add(switchregsx);
+			content.add(lblNewLabel_1);
+			content.add(yascb);
+			content.add(switchlinksy);
+			content.add(switchregsy);
+			content.add(extractPic);
 		}
 
 		f.setVisible(true);
@@ -559,11 +508,11 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
-	// ----------------------------------------------------------------------------------------------
+	
 	public void saveFileAs() throws IOException {
 
 		File file;
@@ -581,7 +530,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 
 				saveToFile(chart, file.getAbsolutePath() + ".png", 500, 300, 100);
 			} catch (UnknownTypeException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 		} else {
@@ -589,7 +538,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 		}
 	}
 
-	// ----------------------------------------------------------------------------------------------
+	
 	public static void saveToFile(JFreeChart chart, String aFileName, int width, int height, double quality) throws FileNotFoundException,
 			IOException {
 		BufferedImage img = draw(chart, width, height);
@@ -612,7 +561,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 
 	}
 
-	// ----------------------------------------------------------------------------------------------
+	
 	protected static BufferedImage draw(JFreeChart chart, int width, int height)
 
 	{

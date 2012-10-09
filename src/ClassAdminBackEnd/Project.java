@@ -68,6 +68,7 @@ public class Project {
 	{
 		return histogramdatacount;
 	}
+	//Increase the count of number of histogramcharts opened
 	public void incHistogramcount()
 	{
 		int modgetal = this.getHead().getNumberHeaders().length;
@@ -83,6 +84,7 @@ public class Project {
 	{
 		return scatterdatacount;
 	}
+	//Increase the number of scattercharts open in project
 	public void incscattercount()
 	{
 		int modgetal = this.getHead().getNumberHeaders().length;
@@ -92,6 +94,7 @@ public class Project {
 		scatterdatacount = scatterdatacount % (modgetal-1);
 		
 	}
+	//Clear all selected values in the active project
 	public void clearselected() {
 	
 		this.getSelectedIndexes().clear();
@@ -109,24 +112,25 @@ public class Project {
 		
 		cleared = x;
 	}
+	//Add scatterchart to arraylist
 	public void addscattercharts(ScatterPlotFrame x) {
 
 		scattercharts.add(x);
 		
 	}
-
+	//Add boxplot to arraylist
 	public void addboxplotcharts(BoxPlotFrame x) {
 
 		boxplotcharts.add(x);
 
 	}
-
+	//Add histogram to arraylist
 	public void addhistogramcharts(HistogramFrame x) {
 
 		histogramcharts.add(x);
 
 	}
-
+	//Update the charts selected values
 	public void updatecharts() {
 		for (int i = 0; i < scattercharts.size(); i++)
 			((ScatterPlotFrame) scattercharts.get(i)).update();
@@ -134,12 +138,12 @@ public class Project {
 			((HistogramFrame) histogramcharts.get(i)).update();
 		}
 	}
-
-	public void setSelected(int x,boolean toetso) {
+	//Set the selected of the project
+	public void setSelected(int x,boolean selectedgroup) {
 	
 		boolean duplicate = false;
 		for (int i = 0; i < selectedIndexes.size(); i++) {
-		
+			//Check if the values is already selected
 			if ((Integer) selectedIndexes.get(i) == x)
 				duplicate = true;
 		}
@@ -150,13 +154,14 @@ public class Project {
 			for(int w=0;w< this.getHead().getDataLinkedList().get(0).size();w++ )
 				this.getSelected().add(this.getHead().getDataLinkedList().get(x).get(w));
 			if (scatterIndexes != null) {
+				//add the scatterplots indexes
 				scatterArrayListIndexes.add(scatterIndexes[x]);
 
 			}
 			
-		
+			//Update the values
 			updatecharts();
-			if(toetso ==true)
+			if(selectedgroup ==true)
 			for(int y=0;y<tables.size();y++){
 			
 					tables.get(y).getTable().clearSelection();
@@ -171,7 +176,7 @@ public class Project {
 	public ArrayList getSelectedIndexes() {
 		return selectedIndexes;
 	}
-
+	//Set the scattercharts indexes
 	public void setScatterSelect(int[] x) {
 		scatterIndexes = x;
 

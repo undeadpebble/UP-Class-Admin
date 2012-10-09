@@ -99,10 +99,11 @@ public class ScatterPlot {
 		chart.getXYPlot().clearAnnotations();
 
 		ArrayList u = project.getSelectedIndexes();
+		//Setup bordercase on charts
 		if (annons.size() > 0)
 			for (int w = 0; w < annons.size(); w++)
 				chart.getXYPlot().addAnnotation((XYAnnotation) annons.get(w));
-		
+
 		final CircleDrawer cd = new CircleDrawer(Color.red, new BasicStroke(1.0f), null);
 
 		for (int x = 0; x < u.size(); x++) {

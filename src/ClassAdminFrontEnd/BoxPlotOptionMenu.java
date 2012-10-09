@@ -15,89 +15,86 @@ import javax.swing.JFrame;
 import ClassAdminBackEnd.Global;
 
 public class BoxPlotOptionMenu extends JFrame implements ActionListener {
-	final String[] headers = Global.getGlobal().getActiveProject()
-			.getHead().getHeaders();
+	private final String[] headers = Global.getGlobal().getActiveProject().getHead().getHeaders();
 	protected final static JComboBox choosecombo = new JComboBox();
-	protected String comboSelect="";
-	
-	
-	public void createFrame()
-	{
+	protected String comboSelect = "";
+
+	public void createFrame() {
 		JFrame f = new JFrame("BoxPlot");
 		final Container content = f.getContentPane();
-		f.setSize(200,120);
-		
-		final String[] kolom = Global.getGlobal().getActiveProject().getHead()
-				.getNumberHeaders();
-		System.out.println(kolom);
-	
+		f.setSize(200, 120);
+		// Get the fields that contain numbers
+		final String[] kolom = Global.getGlobal().getActiveProject().getHead().getNumberHeaders();
+
 		choosecombo.setModel(new DefaultComboBoxModel(kolom));
 		choosecombo.addActionListener(this);
 
 		JButton choose = new JButton("Add");
 		choose.addMouseListener(new MouseListener() {
-			
+
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
-				// TODO Auto-generated method stub
 				
+
 			}
-			
+
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				// TODO Auto-generated method stub
 				
+
 			}
-			
+
 			@Override
 			public void mouseExited(MouseEvent arg0) {
-				// TODO Auto-generated method stub
 				
+
 			}
-			
+
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
-				// TODO Auto-generated method stub
 				
+
 			}
-			
+
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				BoxPlotFrame x = new BoxPlotFrame();
 				x.addBoxSeries();
-			
-				
+
 			}
 		});
 		content.setLayout(new FlowLayout());
 		f.add(choosecombo);
 		f.add(choose);
 		f.setVisible(true);
-		
-	}
-	public BoxPlotOptionMenu(){
-		
-	}
-	public int getIndexOfHeader()
-	{
 
+	}
+
+	// Constructor
+	public BoxPlotOptionMenu() {
+
+	}
+
+	// Get the index of the selected field in the combobox
+	public int getIndexOfHeader() {
 
 		for (int s = 0; s < headers.length; s++) {
 
-			if (headers[s].equals((String)choosecombo.getSelectedItem())) {
-				
+			if (headers[s].equals((String) choosecombo.getSelectedItem())) {
+
 				return s;
-				
+
 			}
 
 		}
 		return 0;
 	}
+
 	@Override
-	 public void actionPerformed(ActionEvent e) {
-        JComboBox cb = (JComboBox)e.getSource();
-        comboSelect = (String)cb.getSelectedItem();
-      
-    }
+	public void actionPerformed(ActionEvent e) {
+		JComboBox cb = (JComboBox) e.getSource();
+		comboSelect = (String) cb.getSelectedItem();
+
+	}
 
 }

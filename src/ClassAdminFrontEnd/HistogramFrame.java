@@ -73,25 +73,25 @@ public class HistogramFrame extends JFrame implements ActionListener {
 	private Histogram nuweChart;
 	private Project project;
 	private Stats stats;
-	//Update the values of the histogram
+
+	// Update the values of the histogram
 	public void update() {
 		nuweChart.updateSelectedValues();
 	}
 
-	//Create the frame of the histogram
+	// Create the frame of the histogram
 	public HistogramFrame(final Project project) {
 		JFrame f = new JFrame("Histogram");
 		final Container content = f.getContentPane();
 		f.setSize(550, 630);
 		stats = new Stats(project);
 		this.project = project;
-		final LinkedList<LinkedList<SuperEntity>> diedata = project.getHead()
-				.getDataLinkedList();
-		
+		final LinkedList<LinkedList<SuperEntity>> diedata = project.getHead().getDataLinkedList();
+
 		final String[] headers = project.getHead().getHeaders();
-		
+
 		String[] kolom = project.getHead().getNumberHeaders();
-		
+
 		project.incHistogramcount();
 		String plotTitle = "Histogram";
 		String xaxis = kolom[project.getHistogramcount()];
@@ -100,9 +100,9 @@ public class HistogramFrame extends JFrame implements ActionListener {
 		nuweChart = new Histogram(project);
 
 		final HistogramDataset dataset = new HistogramDataset();
-	
+
 		String xas = kolom[project.getHistogramcount()];
-		
+
 		for (int s = 0; s < headers.length; s++) {
 			if (headers[s].equals(kolom[project.getHistogramcount()])) {
 				houerx = s;
@@ -110,20 +110,19 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			}
 
 		}
-		
-		chart = nuweChart.createHistogram(plotTitle, xaxis, yaxis,nuweChart.createDataset(houerx));
+
+		chart = nuweChart.createHistogram(plotTitle, xaxis, yaxis, nuweChart.createDataset(houerx));
 
 		chartpanel = nuweChart.createPanel();
 
-		final JLabel classaverage = new JLabel("Class average:"+stats.roundTwoDecimals(stats.gemidpunt(houerx))+"                     ");
-		final JLabel failures = new JLabel("Number of failures:"+stats.fails(houerx)+"                ");
-		final JLabel passes = new JLabel("Number of passes:"+stats.slaag(houerx)+"                    ");
-		
-		
+		final JLabel classaverage = new JLabel("Class average:" + stats.roundTwoDecimals(stats.gemidpunt(houerx)) + "                     ");
+		final JLabel failures = new JLabel("Number of failures:" + stats.fails(houerx) + "                ");
+		final JLabel passes = new JLabel("Number of passes:" + stats.slaag(houerx) + "                    ");
+
 		JLabel lblNewLabel = new JLabel("X-axis");
 
 		final JComboBox xascb = new JComboBox();
-		//Combobox van X-axis
+		// Combobox van X-axis
 		xascb.setModel(new DefaultComboBoxModel(kolom));
 		xascb.setSelectedIndex(project.getHistogramcount());
 		xascb.addActionListener(new ActionListener() {
@@ -132,8 +131,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			public void actionPerformed(ActionEvent e) {
 				JComboBox cb = (JComboBox) e.getSource();
 				String axis = (String) cb.getSelectedItem();
-				chartpanel.getChart().getXYPlot().getDomainAxis()
-						.setLabel(axis);
+				chartpanel.getChart().getXYPlot().getDomainAxis().setLabel(axis);
 
 				chartpanel.getChart().getXYPlot().clearAnnotations();
 				for (int s = 0; s < headers.length; s++) {
@@ -144,157 +142,120 @@ public class HistogramFrame extends JFrame implements ActionListener {
 
 				}
 
-			
-				chartpanel.getChart().getXYPlot()
-						.setDataset(nuweChart.changeDataset(houerx));
+				chartpanel.getChart().getXYPlot().setDataset(nuweChart.changeDataset(houerx));
 				project.updatecharts();
-				classaverage.setText("Class average: "+ stats.roundTwoDecimals(stats.gemidpunt(houerx)) +"                            ");
-				passes.setText("Number of failures:"+stats.fails(houerx)+"                     ");
-				failures.setText("Number of passes:"+stats.slaag(houerx)+"                       ");
+				classaverage.setText("Class average: " + stats.roundTwoDecimals(stats.gemidpunt(houerx)) + "                            ");
+				passes.setText("Number of failures:" + stats.fails(houerx) + "                     ");
+				failures.setText("Number of passes:" + stats.slaag(houerx) + "                       ");
 			}
 
 		});
-		//Cycle through the data left
+		// Cycle through the data left
 		JButton switchlinksx = new JButton("<");
 		switchlinksx.addMouseListener(new MouseListener() {
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
+			
 
 			}
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
+				
 
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
+				
 
 			}
 
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
+				
 
 			}
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (xascb.getSelectedIndex() >= 1)
-				{
+				if (xascb.getSelectedIndex() >= 1) {
 					xascb.setSelectedIndex(xascb.getSelectedIndex() - 1);
 					project.updatecharts();
-					classaverage.setText("Class average: "+stats.roundTwoDecimals(stats.gemidpunt(houerx))+"                            ");
-					passes.setText("Number of failures:"+stats.fails(houerx)+"                     ");
-					failures.setText("Number of passes:"+stats.slaag(houerx)+"                       ");
-					}
+					classaverage.setText("Class average: " + stats.roundTwoDecimals(stats.gemidpunt(houerx))
+							+ "                            ");
+					passes.setText("Number of failures:" + stats.fails(houerx) + "                     ");
+					failures.setText("Number of passes:" + stats.slaag(houerx) + "                       ");
+				}
 			}
 		});
-		//Cycle through data right
+		// Cycle through data right
 		JButton switchregsx = new JButton(">");
 		switchregsx.addMouseListener(new MouseListener() {
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
+				
 
 			}
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
+				
 
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
+				
 
 			}
 
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
+				
 
 			}
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (xascb.getSelectedIndex() < xascb.getItemCount() - 1)
-				{
+				if (xascb.getSelectedIndex() < xascb.getItemCount() - 1) {
 					xascb.setSelectedIndex(xascb.getSelectedIndex() + 1);
 					project.updatecharts();
-					classaverage.setText("Class average: "+stats.roundTwoDecimals(stats.gemidpunt(houerx))+"                            ");
-					passes.setText("Number of failures:"+stats.fails(houerx)+"                     ");
-					failures.setText("Number of passes:"+stats.slaag(houerx)+"                       ");
+					classaverage.setText("Class average: " + stats.roundTwoDecimals(stats.gemidpunt(houerx))
+							+ "                            ");
+					passes.setText("Number of failures:" + stats.fails(houerx) + "                     ");
+					failures.setText("Number of passes:" + stats.slaag(houerx) + "                       ");
 				}
 			}
 		});
 
-		JButton rotate = new JButton("Rotate");
-
-		rotate.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-		});
-		//Extract the chart  as a jpg
+		// Extract the chart as a jpg
 		JButton extractPic = new JButton("Extract chart");
 		extractPic.addMouseListener(new MouseListener() {
 
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
-				// TODO Auto-generated method stub
+				
 
 			}
 
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				// TODO Auto-generated method stub
+				
 
 			}
 
 			@Override
 			public void mouseExited(MouseEvent arg0) {
-				// TODO Auto-generated method stub
+				
 
 			}
 
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
-				// TODO Auto-generated method stub
+				
 
 			}
 
@@ -302,7 +263,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			public void mouseClicked(MouseEvent arg0) {
 				try {
 					saveFileAs();
-					
+
 				} catch (Exception e1) {
 
 					e1.printStackTrace();
@@ -313,97 +274,91 @@ public class HistogramFrame extends JFrame implements ActionListener {
 		});
 		final JLabel width = new JLabel("Width");
 		JButton widthsmall = new JButton("<");
-		//Change the width of the bars smaller
+		// Change the width of the bars smaller
 		widthsmall.addMouseListener(new MouseListener() {
 
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
-				// TODO Auto-generated method stub
+		
 
 			}
 
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void mouseExited(MouseEvent arg0) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				if (nuweChart.getWidthBar() % 10 == 0)
-					nuweChart.setWidthBar(nuweChart.getWidthBar() +10);
-					//widthbar += 10;
-				else
-					nuweChart.setWidthBar(nuweChart.getWidthBar() +9);
+					nuweChart.setWidthBar(nuweChart.getWidthBar() + 10);
 				
-			
-				chartpanel.getChart().getXYPlot()
-						.setDataset(nuweChart.changebarWidth(nuweChart.getWidthBar()));
+				else
+					nuweChart.setWidthBar(nuweChart.getWidthBar() + 9);
+
+				chartpanel.getChart().getXYPlot().setDataset(nuweChart.changebarWidth(nuweChart.getWidthBar()));
 				project.updatecharts();
 			}
 		});
-		
+
 		JButton widthlarge = new JButton(">");
-		//Change the width of the bars bigger
+		// Change the width of the bars bigger
 		widthlarge.addMouseListener(new MouseListener() {
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
+			
 
 			}
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
+				
 
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
+				
 
 			}
 
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
+				
 
 			}
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (nuweChart.getWidthBar() >10)
-					nuweChart.setWidthBar(nuweChart.getWidthBar() -10);
-					
-				else if(nuweChart.getWidthBar()>1)
-					nuweChart.setWidthBar(nuweChart.getWidthBar() -1);
-				
-				chartpanel.getChart().getXYPlot()
-						.setDataset(nuweChart.changebarWidth(nuweChart.getWidthBar()));
+				if (nuweChart.getWidthBar() > 10)
+					nuweChart.setWidthBar(nuweChart.getWidthBar() - 10);
+
+				else if (nuweChart.getWidthBar() > 1)
+					nuweChart.setWidthBar(nuweChart.getWidthBar() - 1);
+
+				chartpanel.getChart().getXYPlot().setDataset(nuweChart.changebarWidth(nuweChart.getWidthBar()));
 
 				project.updatecharts();
-				
+
 			}
 		});
-		
+
 		final JLabel histogramtypelabel = new JLabel("Histogram Type");
-		
+
 		String[] HistogramTypeString = { "Normal Histogram", "Cummulative Plot" };
 		final JComboBox histogramType = new JComboBox();
-		//Combobox van X-axis
+		// Combobox van X-axis
 		histogramType.setModel(new DefaultComboBoxModel(HistogramTypeString));
 		histogramType.addActionListener(new ActionListener() {
 
@@ -411,18 +366,15 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			public void actionPerformed(ActionEvent e) {
 				JComboBox cb = (JComboBox) e.getSource();
 				String axis = (String) cb.getSelectedItem();
-				if(axis.compareTo("Cummulative Plot")==0)
-					chartpanel.getChart().getXYPlot()
-					.setDataset(nuweChart.changeHistogramType());
+				if (axis.compareTo("Cummulative Plot") == 0)
+					chartpanel.getChart().getXYPlot().setDataset(nuweChart.changeHistogramType());
 				else
-					chartpanel.getChart().getXYPlot()
-					.setDataset(nuweChart.changeToNormalHistogramType());
+					chartpanel.getChart().getXYPlot().setDataset(nuweChart.changeToNormalHistogramType());
 
 			}
 
 		});
-		
-		
+
 		content.setLayout(new FlowLayout());
 		content.add(chartpanel);
 		content.add(classaverage);
@@ -432,23 +384,24 @@ public class HistogramFrame extends JFrame implements ActionListener {
 		content.add(xascb);
 		content.add(switchlinksx);
 		content.add(switchregsx);
-		content.add(rotate);
+
 		content.add(extractPic);
 		content.add(width);
 		content.add(widthsmall);
 		content.add(widthlarge);
 		content.add(histogramtypelabel);
 		content.add(histogramType);
-		
+
 		f.setVisible(true);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		
 
 	}
-	//SaveFileAs for extract
+
+	// SaveFileAs for extract
 	public void saveFileAs() throws IOException {
 
 		File file;
@@ -464,10 +417,9 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			file = filechooser.getSelectedFile();
 			try {
 
-				saveToFile(chart, file.getAbsolutePath() + ".png", 500, 300,
-						100);
+				saveToFile(chart, file.getAbsolutePath() + ".png", 500, 300, 100);
 			} catch (UnknownTypeException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 		} else {
@@ -475,36 +427,28 @@ public class HistogramFrame extends JFrame implements ActionListener {
 		}
 	}
 
-	//Save the Jfreechart in a directory as a jpg
-	public static void saveToFile(JFreeChart chart, String aFileName,
-			int width, int height, double quality)
-			throws FileNotFoundException, IOException {
+	// Save the Jfreechart in a directory as a jpg
+	public static void saveToFile(JFreeChart chart, String aFileName, int width, int height, double quality) throws FileNotFoundException,
+			IOException {
 		BufferedImage img = draw(chart, width, height);
-	
-		 byte[] pngbytes;
-		 PngEncoder png = new PngEncoder(img);
-		
-		 
-		  try
-	        {
-	            FileOutputStream outfile = new FileOutputStream( aFileName );
-	            pngbytes = png.pngEncode();
-	            if (pngbytes == null)
-	            {
-	                System.out.println("Null image");
-	            }
-	            else
-	            {
-	                outfile.write( pngbytes );
-	            }
-	            outfile.flush();
-	            outfile.close();
-	        }
-	        catch (IOException e)
-	        {
-	            e.printStackTrace();
-	        }
-		
+
+		byte[] pngbytes;
+		PngEncoder png = new PngEncoder(img);
+
+		try {
+			FileOutputStream outfile = new FileOutputStream(aFileName);
+			pngbytes = png.pngEncode();
+			if (pngbytes == null) {
+				System.out.println("Null image");
+			} else {
+				outfile.write(pngbytes);
+			}
+			outfile.flush();
+			outfile.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	// Create jpg image
@@ -512,8 +456,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 
 	{
 
-		BufferedImage img = new BufferedImage(width, height,
-				BufferedImage.TYPE_INT_RGB);
+		BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g2 = img.createGraphics();
 
 		chart.draw(g2, new Rectangle2D.Double(0, 0, width, height));
@@ -522,5 +465,5 @@ public class HistogramFrame extends JFrame implements ActionListener {
 		return img;
 
 	}
-	
+
 }
