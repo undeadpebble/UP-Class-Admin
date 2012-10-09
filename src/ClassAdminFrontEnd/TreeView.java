@@ -108,8 +108,6 @@ public class TreeView extends Display {
 	static JButton btnHelp = new JButton("?");
 	static JTextArea txtChange = new JTextArea();
 	static FrmNewNode newNode;
-	static StudentViewKeyListenser svk;
-	static StudentViewActionListener sva;
 
 	static private boolean bParent = false;
 	static private boolean bChild = false;
