@@ -3,11 +3,14 @@
  */
 package ClassAdminBackEnd;
 
+import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
+
+import javax.imageio.ImageIO;
 
 import org.jfree.chart.JFreeChart;
 import org.tmatesoft.sqljet.core.SqlJetException;
@@ -304,11 +307,13 @@ public class Project {
 								SuperEntity temp = data.get(x).get(y);
 								if (temp.getType().getIsTextField()) {
 									if (temp.getValue().equals(files)) {
-										data.get(x)
-												.get(where)
-												.setPicture(
-														dir + "\\" + filesFull);
+										try{
+										((IMGEntity)data.get(x).get(where))
+												.setImage(ImageIO.read(new File(dir + "\\" + filesFull)));
 										data.get(x).get(where).setField(filesFull);
+										}
+										catch (Exception e) {
+										}
 										if(this.tables.size() > 0)
 											this.tables.get(0).redraw();
 									}

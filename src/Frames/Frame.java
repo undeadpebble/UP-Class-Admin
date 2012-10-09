@@ -1923,12 +1923,23 @@ public class Frame extends JFrame implements ActionListener {
 		 * table.getTable().getValueAt(row, i).toString();
 		 * System.out.println(info[i]); }
 		 */
-		int i = table.getTable().getSelectedRow();
+		
+		System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+		int i = -1;
+		try{
+		 i = Integer.parseInt(Global.getGlobal().getActiveProject().getSelectedIndexes().get(0).toString());
+		}
+		catch (Exception e) {
+		}
+		
+		System.out.println(i);
 		if (i != -1) {
 		IMGEntity imageEntity = Global.getGlobal().getActiveProject().getHead()
 				.getDataLinkedList().get(i).get(0)
 				.IterativeDeepeningfindPortrait();
 		BufferedImage photo = imageEntity.getImage();
+		
+		System.out.println(photo);
 
 		photo = Scalr.resize(photo, 150);
 		studentPhoto = new ImagePanel(photo);
