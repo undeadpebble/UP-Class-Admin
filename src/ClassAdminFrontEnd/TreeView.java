@@ -529,7 +529,7 @@ public class TreeView extends Display {
 			public void actionPerformed(ActionEvent arg0) {
 
 				if (myProject.getStudentLinkedList().get(selectedEntity).getDetails().getType().getIsTextField()) {
-					myProject.getAudit().updateStudent(myProject.getTreeLinkedList().get(0).getName(),
+					myProject.getAudit().updateStudent(myProject.getStudentLinkedList().get(0).getValue(),
 							myProject.getStudentLinkedList().get(selectedEntity).getValue(), txtChange.getText(), false);
 					myProject.getStudentLinkedList().get(selectedEntity).setValue(txtChange.getText());
 					String nodeName = myTree.getNode(selectedEntity).getString("name");
@@ -540,7 +540,7 @@ public class TreeView extends Display {
 						if (Double.parseDouble(txtChange.getText()) >= 0
 								&& myProject.getStudentLinkedList().get(selectedEntity).getType().getMaxValue() >= Double
 										.parseDouble(txtChange.getText())) {
-							myProject.getAudit().updateStudent(myProject.getTreeLinkedList().get(0).getName(),
+							myProject.getAudit().updateStudent(myProject.getStudentLinkedList().get(0).getValue(),
 									Double.toString(myProject.getStudentLinkedList().get(selectedEntity).getMark()), txtChange.getText(),
 									true);
 							myProject.getStudentLinkedList().get(selectedEntity).setMark(Double.parseDouble(txtChange.getText()));
@@ -574,7 +574,7 @@ public class TreeView extends Display {
 				if (id == KeyEvent.VK_ENTER) {
 
 					if (myProject.getStudentLinkedList().get(selectedEntity).getDetails().getType().getIsTextField()) {
-						myProject.getAudit().updateStudent(myProject.getTreeLinkedList().get(0).getName(),
+						myProject.getAudit().updateStudent(myProject.getStudentLinkedList().get(0).getValue(),
 								myProject.getStudentLinkedList().get(selectedEntity).getValue(), txtChange.getText(), false);
 						myProject.getStudentLinkedList().get(selectedEntity).setValue(txtChange.getText());
 						String nodeName = myTree.getNode(selectedEntity).getString("name");
@@ -585,7 +585,7 @@ public class TreeView extends Display {
 							if (Double.parseDouble(txtChange.getText()) >= 0
 									&& myProject.getStudentLinkedList().get(selectedEntity).getType().getMaxValue() >= Double
 											.parseDouble(txtChange.getText())) {
-								myProject.getAudit().updateStudent(myProject.getTreeLinkedList().get(0).getName(),
+								myProject.getAudit().updateStudent(myProject.getStudentLinkedList().get(0).getValue(),
 										Double.toString(myProject.getStudentLinkedList().get(selectedEntity).getMark()), txtChange.getText(),
 										true);
 								myProject.getStudentLinkedList().get(selectedEntity).setMark(Double.parseDouble(txtChange.getText()));
