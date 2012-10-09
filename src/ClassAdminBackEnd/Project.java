@@ -311,6 +311,7 @@ public class Project {
 										((IMGEntity)data.get(x).get(where))
 												.setImage(ImageIO.read(new File(dir + "\\" + filesFull)));
 										data.get(x).get(where).setField(filesFull);
+										data.get(x).get(where).setPicture(dir + "\\" + filesFull);
 										}
 										catch (Exception e) {
 										}
