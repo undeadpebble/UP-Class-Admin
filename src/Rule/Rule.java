@@ -1,5 +1,7 @@
 package Rule;
 
+import java.util.LinkedList;
+
 import ClassAdminBackEnd.EntityType;
 import ClassAdminBackEnd.Project;
 import ClassAdminBackEnd.SuperEntity;
@@ -35,6 +37,14 @@ public class Rule extends EntityType{
 	
 	public int getType(){
 		return 0;
+	}
+	
+	@Override
+	public void findEntities(LinkedList<EntityType> list){
+		for (int x = 0; x < this.getSubEntityType().size(); ++x) {
+			this.getSubEntityType().get(x).findEntities(list);
+		}
+		
 	}
 	
 	//TreeView.createpanelentitytypeTreeview("name",head);

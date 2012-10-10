@@ -57,7 +57,8 @@ public class RapidAssessmentCanvas extends JFrame {
 	private String backgroundFileName;
 
 	private Project project;
-	JComboBox loadCombo;
+	private JComboBox loadCombo;
+	private JComboBox selectCombo;
 
 	private BufferedImage backGround;
 	private BufferedImage resizedBackGround = null;
@@ -666,14 +667,14 @@ public class RapidAssessmentCanvas extends JFrame {
 		else
 			this.setTitle("Create Assessment - no entity selected");
 
-		parentRect = new MyRectangle(0, 0, (int) screen.getWidth() - 100,
+		parentRect = new MyRectangle(0, 0, (int) screen.getWidth() - 150,
 				(int) screen.getHeight() - 50);
 		parentRect.setVisible(true);
 		this.setLayout(null);
 		canvas.add(parentRect);
 
 		JButton btnNewButton = new JButton("Image");
-		btnNewButton.setBounds(parentRect.getWidth() + 5, 115, 89, 23);
+		btnNewButton.setBounds(parentRect.getWidth() + 5, 150, 130, 23);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				JFileChooser fc = new JFileChooser();
@@ -699,7 +700,7 @@ public class RapidAssessmentCanvas extends JFrame {
 		parentPanel.add(btnNewButton);
 
 		JButton btnSave = new JButton("Save");
-		btnSave.setBounds(parentRect.getWidth() + 5, 80, 89, 23);
+		btnSave.setBounds(parentRect.getWidth() + 5, 120, 130, 23);
 		parentPanel.add(btnSave);
 		btnSave.setFocusable(false);
 		btnSave.addActionListener(new ActionListener() {
@@ -711,13 +712,37 @@ public class RapidAssessmentCanvas extends JFrame {
 
 			}
 		});
+		
+		selectCombo = new JComboBox();
+		selectCombo.setBounds(parentRect.getWidth() + 5, 10, 130, 23);
+		parentPanel.add(selectCombo);
+		JButton btnSelect = new JButton("Select");
+		btnSelect.setBounds(parentRect.getWidth() + 5, 35, 130, 23);
+		parentPanel.add(btnSelect);
+		btnSelect.setFocusable(false);
+		btnSelect.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if (selectCombo.getSelectedItem() != null)
+					try{
+						RapidAssessmentCanvas.this.assessedEntity = (EntityType) selectCombo
+								.getSelectedItem();
+						setTitle("Create Assessment - " +RapidAssessmentCanvas.this.assessedEntity.getName());
+					} catch (ClassCastException e) {
+
+					}
+				
+			}
+		});
+		
 
 		loadCombo = new JComboBox();
-		loadCombo.setBounds(parentRect.getWidth() + 5, 10, 89, 23);
+		loadCombo.setBounds(parentRect.getWidth() + 5, 60, 130, 23);
 
 		parentPanel.add(loadCombo);
 		JButton btnLoad = new JButton("Load");
-		btnLoad.setBounds(parentRect.getWidth() + 5, 35, 89, 23);
+		btnLoad.setBounds(parentRect.getWidth() + 5, 85, 130, 23);
 		parentPanel.add(btnLoad);
 		btnLoad.setFocusable(false);
 		btnLoad.addActionListener(new ActionListener() {
@@ -728,12 +753,14 @@ public class RapidAssessmentCanvas extends JFrame {
 					try {
 						RapidAssessmentCanvas.this.assessedEntity = (EntityType) loadCombo
 								.getSelectedItem();
+						setTitle("Create Assessment - " +RapidAssessmentCanvas.this.assessedEntity.getName());
+						load();
 					} catch (ClassCastException e) {
 
 					}
 			}
 		});
-
+		refreshLoad();
 		this.addKeyListener(new KeyListener() {
 
 			@Override
@@ -843,7 +870,7 @@ public class RapidAssessmentCanvas extends JFrame {
 				parentPanel.repaint();
 			}
 		});
-
+		
 	}
 
 	public class ContainerPanel extends JPanel {
@@ -942,30 +969,38 @@ public class RapidAssessmentCanvas extends JFrame {
 
 	}
 
-	public void load(RapidAssessmentContainerType container) {
+	public void load() {
+		RapidAssessmentContainerType container = (RapidAssessmentContainerType) assessedEntity;
 		this.removeAll();
-		this.parentPanel = null;
+
 		this.lastcreated = null;
 		this.resizedBackGround = null;
+		parentPanel.remove(parentRect);
 		this.parentRect = null;
 
-		parentPanel = new ContainerPanel();
+
+
 		parentPanel.setBounds((int) container.getX(), (int) container.getY(),
 				(int) container.getW(), (int) container.getH());
 		this.backGround = container.getImage();
-		this.setContentPane(parentPanel);
+		
+		
+		
 
 		for (int x = 0; x < container.getSubEntityType().size(); ++x) {
+			System.out.println("tick");
 			try {
 				createCanvasComponent(
 						(RapidAssessmentComponentType) (container
 								.getSubEntityType().get(x)),
 						parentPanel);
 			} catch (ClassCastException e) {
-
+				System.out.println("exp");
 			}
+			
 		}
-
+		System.out.println("done");
+		repaint();
 	}
 
 	private void createCanvasComponent(RapidAssessmentComponentType component,
@@ -976,6 +1011,7 @@ public class RapidAssessmentCanvas extends JFrame {
 		parentPanel2.add(parentRect);
 
 		for (int x = 0; x < component.getSubEntityType().size(); ++x) {
+			System.out.println("tick");
 			try {
 				createCanvasComponent(
 						(RapidAssessmentComponentType) (component
@@ -996,6 +1032,7 @@ public class RapidAssessmentCanvas extends JFrame {
 					(int) comp.getY(), (int) comp.getW(), (int) comp.getH());
 			parent.add(rect);
 			for (int x = 0; x < component.getSubEntityType().size(); ++x) {
+				System.out.println("tick");
 				try {
 					createCanvasComponent(
 							(RapidAssessmentComponentType) (component
@@ -1017,6 +1054,15 @@ public class RapidAssessmentCanvas extends JFrame {
 
 		}
 	}
+	
+	public void refreshSelect(){
+		System.out.println("refresh");
+		LinkedList<EntityType> containers = new LinkedList<EntityType>();
+		this.project.getHeadEntityType().findEntities(containers);
+		selectCombo.removeAllItems();
+		for (int x = 0; x < containers.size(); ++x)
+			selectCombo.addItem(containers.get(x));
+	}
 
 	public void refreshLoad() {
 		LinkedList<RapidAssessmentContainerType> containers = new LinkedList<RapidAssessmentContainerType>();
@@ -1024,6 +1070,7 @@ public class RapidAssessmentCanvas extends JFrame {
 		loadCombo.removeAllItems();
 		for (int x = 0; x < containers.size(); ++x)
 			loadCombo.addItem(containers.get(x));
+		refreshSelect();
 	}
 
 }

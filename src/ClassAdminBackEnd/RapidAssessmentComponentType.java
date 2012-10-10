@@ -1,5 +1,7 @@
 package ClassAdminBackEnd;
 
+import java.util.LinkedList;
+
 public class RapidAssessmentComponentType extends EntityType{
 	private double x;
 	private double y;
@@ -78,5 +80,13 @@ public class RapidAssessmentComponentType extends EntityType{
 			new SumMarkEntity(this, parent);
 
 		}
+	}
+	
+	@Override
+	public void findEntities(LinkedList<EntityType> list){
+		for (int x = 0; x < this.getSubEntityType().size(); ++x) {
+			this.getSubEntityType().get(x).findEntities(list);
+		}
+		
 	}
 }

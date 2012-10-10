@@ -67,6 +67,8 @@ import ClassAdminFrontEnd.GradientMenuBar;
 import ClassAdminFrontEnd.HistogramFrame;
 import ClassAdminFrontEnd.ImagePanel;
 import ClassAdminFrontEnd.MenuImagePanel;
+import ClassAdminFrontEnd.RapidAssessmentCanvas;
+import ClassAdminFrontEnd.RapidAssessmentMarkingCanvas;
 import ClassAdminFrontEnd.RecentDocsMenuItem;
 import ClassAdminFrontEnd.ReflectionButton;
 import ClassAdminFrontEnd.ReflectionButtonWithLabel;
@@ -1475,8 +1477,10 @@ public class Frame extends JFrame implements ActionListener {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (rapidAssessmentButton.isEnabled()) {
-
+					new RapidAssessmentCanvas(Global.getGlobal().getActiveProject(),null).setVisible(true);
+					
 				}
+				
 			}
 
 			public void mouseEntered(MouseEvent arg0) {
@@ -1492,8 +1496,9 @@ public class Frame extends JFrame implements ActionListener {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (markingButton.isEnabled()) {
-
+					new RapidAssessmentMarkingCanvas(null);
 				}
+				System.out.println("marking");
 			}
 
 			public void mouseEntered(MouseEvent arg0) {
@@ -2039,9 +2044,9 @@ public class Frame extends JFrame implements ActionListener {
 		rulesButton.setEnabled();
 		structureModuleButton.setEnabled();
 		statisticsButton.setEnabled();
-		rapidAssessmentButton.setEnabled(false);
-		markingButton.setEnabled(false);
-		importPicturesButton.setEnabled(false);
+		rapidAssessmentButton.setEnabled();
+		markingButton.setEnabled();
+		importPicturesButton.setEnabled();
 		searchPanel.fadeIn();
 	}
 
@@ -2063,9 +2068,9 @@ public class Frame extends JFrame implements ActionListener {
 		rulesButton.setDisabled();
 		structureModuleButton.setDisabled();
 		statisticsButton.setDisabled();
-		rapidAssessmentButton.setEnabled(true);
-		markingButton.setEnabled(true);
-		importPicturesButton.setEnabled(true);
+		rapidAssessmentButton.setDisabled();
+		markingButton.setDisabled();
+		importPicturesButton.setDisabled();
 		searchPanel.fadeOut();
 		studentPanel.setVisible(false);
 	}
