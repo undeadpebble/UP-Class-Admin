@@ -343,10 +343,10 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			public void mouseClicked(MouseEvent e) {
 				if (nuweChart.getWidthBar() > 10)
 					nuweChart.setWidthBar(nuweChart.getWidthBar() - 10);
-
+				
 				else if (nuweChart.getWidthBar() > 1)
 					nuweChart.setWidthBar(nuweChart.getWidthBar() - 1);
-
+				
 				chartpanel.getChart().getXYPlot().setDataset(nuweChart.changebarWidth(nuweChart.getWidthBar()));
 
 				project.updatecharts();
@@ -370,6 +370,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 					chartpanel.getChart().getXYPlot().setDataset(nuweChart.changeHistogramType());
 				else
 					chartpanel.getChart().getXYPlot().setDataset(nuweChart.changeToNormalHistogramType());
+				project.updatecharts();
 
 			}
 
