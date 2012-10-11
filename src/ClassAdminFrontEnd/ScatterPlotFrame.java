@@ -325,7 +325,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					if (xascb.getSelectedIndex() < xascb.getItemCount()) {
+					if (xascb.getSelectedIndex() < xascb.getItemCount()-1) {
 						xascb.setSelectedIndex(xascb.getSelectedIndex() + 1);
 						project.updatecharts();
 					}
@@ -441,7 +441,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 
-					if (yascb.getSelectedIndex() < yascb.getItemCount()) {
+					if (yascb.getSelectedIndex() < yascb.getItemCount()-1) {
 						yascb.setSelectedIndex(yascb.getSelectedIndex() + 1);
 						project.updatecharts();
 					}

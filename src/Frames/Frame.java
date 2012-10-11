@@ -1689,6 +1689,7 @@ public class Frame extends JFrame implements ActionListener {
 			Global.getGlobal().addProject(p);
 			fileHandler.openFile(file.getAbsolutePath(), Global.getGlobal()
 					.getActiveProject());
+			
 			p.setFileName(file.getName());
 			p.createAudit();
 			p.getAudit().openedProject();
