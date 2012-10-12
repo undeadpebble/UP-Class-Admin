@@ -1,6 +1,7 @@
 package ClassAdminBackEnd;
 
 import java.awt.image.BufferedImage;
+import java.util.LinkedList;
 
 import ClassAdminBackEnd.RapidAssessmentTree.TreeContainerNode;
 
@@ -57,6 +58,20 @@ public class RapidAssessmentContainerType extends RapidAssessmentRectangleType {
 		for (int z = 0; z < this.getEntityList().size(); ++z) {
 			this.getEntityList().get(z).setType(this);
 		}
+	}
+
+	@Override
+	public void findRapidAssessment(
+			LinkedList<RapidAssessmentContainerType> list) {
+		// TODO Auto-generated method stub
+		super.findRapidAssessment(list);
+		list.add(this);
+	}
+
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return this.getName();
 	}
 
 }

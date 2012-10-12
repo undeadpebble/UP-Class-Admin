@@ -24,6 +24,7 @@ public class EntityType {
 	private Double defaultWeight;
 	private long ID;
 	private double maxValue = 100;
+	private Boolean isImg = false;
 
 	public static int WEIGHTED_AVERAGE_TYPE = 0;
 	public static int SUM_TYPE = 1;
@@ -295,12 +296,21 @@ public class EntityType {
 		}
 	}
 
+	public Boolean getIsImg() {
+		return isImg;
+	}
+
+	public void setIsImg(Boolean isImg) {
+		this.isImg = isImg;
+	}
+
 	public void populateTreeWithEntities() {
 		for (int x = this.getParentEntitytype().getEntityList().size() - 1; x >= 0; --x) {
 			SuperEntity parent = this.getParentEntitytype().getEntityList()
 					.get(x);
 			if (this.getIsRule()) {
 				if (this.getIsTextField()) {
+					
 					new StringRuleEntity(this, parent, "");
 
 				} else {
@@ -308,12 +318,20 @@ public class EntityType {
 				}
 			} else {
 				if (this.getIsTextField()) {
-					new LeafStringEntity(this, parent, "#" + this.getName()
-							+ "#");
+					if(isImg){
+						new IMGEntity(this, parent, "");
+					}
+					else
+
+					new LeafStringEntity(this, parent, "#" + this.getName() + "#");
 				} else {
+					
 					new LeafMarkEntity(this, parent, 0);
 				}
+				
 			}
+			
+			
 
 		}
 	}
@@ -361,6 +379,13 @@ public class EntityType {
 		isTextField = pIsTextField;
 		date = pDate;
 		defaultWeight = weight;
+	}
+	
+public void findRapidAssessment(LinkedList<RapidAssessmentContainerType> list){
+		
+		for(int x = 0;x<this.getSubEntityType().size();++x){
+			this.getSubEntityType().get(x).findRapidAssessment(list);
+		}
 	}
 
 	public int getEntityTypeClass() {
