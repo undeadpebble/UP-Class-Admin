@@ -121,7 +121,7 @@ public class TreeView extends Display {
 		myTree = newTree;
 	}
 
-	public TreeView(Tree t, String label) {
+	public TreeView(Tree t, String label, boolean isStructure) {
 		super(new Visualization());
 
 		myTree = t;
@@ -215,8 +215,12 @@ public class TreeView extends Display {
 		addControlListener(new WheelZoomControl());
 		addControlListener(new PanControl());
 		addControlListener(new FocusControl(1, "filter"));
-		addControlListener(new TreeViewControl());
-		addControlListener(new StudentViewControl());
+		
+		if(isStructure)
+			addControlListener(new TreeViewControl());
+		else
+			addControlListener(new StudentViewControl());
+		
 		registerKeyboardAction(new OrientAction(Constants.ORIENT_LEFT_RIGHT), "left-to-right", KeyStroke.getKeyStroke("ctrl 1"), WHEN_FOCUSED);
 		registerKeyboardAction(new OrientAction(Constants.ORIENT_TOP_BOTTOM), "top-to-bottom", KeyStroke.getKeyStroke("ctrl 2"), WHEN_FOCUSED);
 		registerKeyboardAction(new OrientAction(Constants.ORIENT_RIGHT_LEFT), "right-to-left", KeyStroke.getKeyStroke("ctrl 3"), WHEN_FOCUSED);
@@ -390,7 +394,7 @@ public class TreeView extends Display {
 		}
 
 		// create a new treemap
-		tview = new TreeView(t, label);
+		tview = new TreeView(t, label,true);
 		PopUpMenu p = new PopUpMenu();
 		p.setTreeView(tview, myTree, myProject, parentFrame);
 		tview.setBackground(BACKGROUND);
@@ -512,16 +516,18 @@ public class TreeView extends Display {
 		}
 
 		// create a new treemap
-		tview = new TreeView(t, label);
+		tview = new TreeView(t, label,false);
 
 		tview.setBackground(BACKGROUND);
 		tview.setForeground(FOREGROUND);
 
+		title.setPreferredSize(new Dimension(200, 25));
 		title.setVerticalAlignment(SwingConstants.BOTTOM);
 		title.setBorder(BorderFactory.createEmptyBorder(3, 0, 0, 0));
 		title.setFont(FontLib.getFont("Tahoma", Font.PLAIN, 16));
 		title.setBackground(BACKGROUND);
 		title.setForeground(FOREGROUND);
+
 
 		Box box = new Box(BoxLayout.X_AXIS);
 		box.add(Box.createHorizontalStrut(10));
