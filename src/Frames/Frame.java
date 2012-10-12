@@ -1,6 +1,7 @@
 package Frames;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -1540,7 +1541,18 @@ public class Frame extends JFrame implements ActionListener {
 		importPicturesButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
+				JFileChooser fileChoose = new JFileChooser();
+				int returnVal = fileChoose.showOpenDialog(new Component() {});
+				if (returnVal == fileChoose.APPROVE_OPTION) {
+					String dir = fileChoose.getSelectedFile().toString();
+					dir = dir.substring(0, dir.lastIndexOf('\\'));
+					
+					Global.getGlobal().getActiveProject().setPictures(dir);
+				}
 				if (importPicturesButton.isEnabled()) {
+					//TODO 
+					
+					
 				}
 			}
 
