@@ -1496,7 +1496,7 @@ public class Frame extends JFrame implements ActionListener {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (markingButton.isEnabled()) {
-					new RapidAssessmentMarkingCanvas(null);
+					new RapidAssessmentMarkingCanvas(null,Global.getGlobal().getActiveProject());
 				}
 				System.out.println("marking");
 			}

@@ -609,6 +609,7 @@ public class RapidAssessmentCanvas extends JFrame {
 						} else {
 							if (tmp.contains(component)) {
 								contained.add(component);
+								
 							}
 						}
 					} catch (ClassCastException e) {
@@ -616,8 +617,7 @@ public class RapidAssessmentCanvas extends JFrame {
 					}
 				}
 				if (!collision) {
-					tmp.setName(source.getName() + "."
-							+ source.getAndIncrementCount());
+					
 					source.add(tmp);
 					for (int x = 0; x < contained.size(); ++x) {
 
@@ -630,9 +630,12 @@ public class RapidAssessmentCanvas extends JFrame {
 						source.remove(contained.get(x));
 						tmp.add(contained.get(x));
 					}
+					tmp.updateMark();
 				}
 
+				
 			}
+			
 			parentPanel.repaint();
 		}
 	}
@@ -755,6 +758,7 @@ public class RapidAssessmentCanvas extends JFrame {
 								.getSelectedItem();
 						setTitle("Create Assessment - " +RapidAssessmentCanvas.this.assessedEntity.getName());
 						load();
+						System.out.println("done  even more");
 					} catch (ClassCastException e) {
 
 					}
@@ -952,7 +956,7 @@ public class RapidAssessmentCanvas extends JFrame {
 				list.get(x).createTreeNode("Assessment", parent);
 			}
 
-			JFrame frame = new RapidAssessmentMarkingCanvas(parent);
+			JFrame frame = new RapidAssessmentMarkingCanvas(parent,project);
 
 			frame.setVisible(true);
 
@@ -971,7 +975,7 @@ public class RapidAssessmentCanvas extends JFrame {
 
 	public void load() {
 		RapidAssessmentContainerType container = (RapidAssessmentContainerType) assessedEntity;
-		this.removeAll();
+		//this.removeAll();
 
 		this.lastcreated = null;
 		this.resizedBackGround = null;
@@ -999,6 +1003,8 @@ public class RapidAssessmentCanvas extends JFrame {
 			}
 			
 		}
+		
+		this.validate();
 		System.out.println("done");
 		repaint();
 	}
