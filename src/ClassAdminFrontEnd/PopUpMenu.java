@@ -45,8 +45,9 @@ public class PopUpMenu {
 			public void actionPerformed(ActionEvent e) {
 				VisualItem item = activeItem;
 				if (item.toString().contains("ode")) {
-					int p = item.getRow(); //get parent id
-					newNode.showFrmNewNode(p); //show new node form with parent in place
+					int p = item.getRow(); // get parent id
+					newNode.showFrmNewNode(p); // show new node form with parent
+												// in place
 				}
 			}
 		});
@@ -54,7 +55,8 @@ public class PopUpMenu {
 		miEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (activeItem.canSetString("name")) {
-					updateNode.showFrmUpdateNode(0); // show update node form with information
+					updateNode.showFrmUpdateNode(0); // show update node form
+														// with information
 				}
 			}
 		});
@@ -64,47 +66,68 @@ public class PopUpMenu {
 				VisualItem item = activeItem;
 
 				int i = item.getRow();
-				activeProject.getAudit().RemoveNode(item.getString("name"), true); //create audit entry
-				activeTree.removeNode(i); //remove node from front end
+				if (i == 1 || i == 0) {
+					JOptionPane.showMessageDialog(frame, "Cannot remove node", "Error", JOptionPane.ERROR_MESSAGE);
+				} else {
+					activeProject.getAudit().RemoveNode(item.getString("name"), true); // create
+																						// audit
+																						// entry
+					activeTree.removeNode(i); // remove node from front end
 
-				activeTreeLinkedList.get(i).removeDeletingChildren(); //remove node in back end
-				activeProject.updateTables(); //update front end
+					activeTreeLinkedList.get(i).removeDeletingChildren(); // remove
+																			// node
+																			// in
+																			// back
+																			// end
+					activeProject.updateTables(); // update front end
 
-				parentFrame.dispose(); //recreate form
-				TreeView.createEntityTypeFrm("name", activeProject);
+					parentFrame.dispose(); // recreate form
+					TreeView.createEntityTypeFrm("name", activeProject);
+				}
 			}
 		});
 
 		miRemoveWOC.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				VisualItem item = activeItem;
-				int i = item.getRow(); 
-				int source = -1, target = -1;
-				Table edgeTable = activeTree.getEdgeTable();
-				
-				//get node's parent
-				for (int r = 0; r < edgeTable.getRowCount(); r++) {
-					if (edgeTable.getInt(r, 1) == i) {
-						source = edgeTable.getInt(r, 0);
-					}
-				}
-				
-				//update edges between node's children and node's parent
-				for (int r = 0; r < edgeTable.getRowCount(); r++) {
-					if (edgeTable.getInt(r, 0) == i) {
-						target = edgeTable.getInt(r, 1);
-						activeTree.removeEdge(activeTree.getEdge(edgeTable.getInt(r, 0), edgeTable.getInt(r, 1)));
-						activeTree.addEdge(source, target);
-					}
-				}
-				activeProject.getAudit().RemoveNode(item.getString("name"), false); //create audit entry
-				activeTree.removeNode(i); //remove node from front end
+				int i = item.getRow();
 
-				activeTreeLinkedList.get(i).removeSavingChildren(); //remove node from back end
-				activeProject.updateTables(); //update front end information
-				parentFrame.dispose(); //recreate form
-				TreeView.createEntityTypeFrm("name", activeProject);
+				if (i == 1 || i == 0) {
+					JOptionPane.showMessageDialog(frame, "Cannot remove node", "Error", JOptionPane.ERROR_MESSAGE);
+				} else {
+					int source = -1, target = -1;
+					Table edgeTable = activeTree.getEdgeTable();
 
+					// get node's parent
+					for (int r = 0; r < edgeTable.getRowCount(); r++) {
+						if (edgeTable.getInt(r, 1) == i) {
+							source = edgeTable.getInt(r, 0);
+						}
+					}
+
+					// update edges between node's children and node's parent
+					for (int r = 0; r < edgeTable.getRowCount(); r++) {
+						if (edgeTable.getInt(r, 0) == i) {
+							target = edgeTable.getInt(r, 1);
+							activeTree.removeEdge(activeTree.getEdge(edgeTable.getInt(r, 0), edgeTable.getInt(r, 1)));
+							activeTree.addEdge(source, target);
+						}
+					}
+					activeProject.getAudit().RemoveNode(item.getString("name"), false); // create
+																						// audit
+																						// entry
+					activeTree.removeNode(i); // remove node from front end
+
+					activeTreeLinkedList.get(i).removeSavingChildren(); // remove
+																		// node
+																		// from
+																		// back
+																		// end
+					activeProject.updateTables(); // update front end
+													// information
+					parentFrame.dispose(); // recreate form
+					TreeView.createEntityTypeFrm("name", activeProject);
+				}
 			}
 		});
 
@@ -116,7 +139,7 @@ public class PopUpMenu {
 		activeTree = tree;
 		tview = treeView;
 		parentFrame = pFrame;
-		//add control listener for nodes on front end treeview
+		// add control listener for nodes on front end treeview
 		tview.addControlListener(new ControlAdapter() {
 			public void itemReleased(VisualItem item, MouseEvent e) {
 				activeItem = null;
