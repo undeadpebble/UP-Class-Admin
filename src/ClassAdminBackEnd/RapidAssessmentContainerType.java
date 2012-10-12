@@ -3,8 +3,6 @@ package ClassAdminBackEnd;
 import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 
-import ClassAdminBackEnd.RapidAssessmentTree.TreeContainerNode;
-
 public class RapidAssessmentContainerType extends RapidAssessmentRectangleType {
 	private BufferedImage Image;
 
