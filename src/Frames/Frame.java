@@ -2211,6 +2211,7 @@ public class Frame extends JFrame implements ActionListener {
 	public void showHistogram() {
 		HistogramFrame x = new HistogramFrame(Global.getGlobal()
 				.getActiveProject());
+		x.display();
 		Global.getGlobal().getActiveProject().addhistogramcharts(x);
 	}
 
@@ -2224,6 +2225,7 @@ public class Frame extends JFrame implements ActionListener {
 	public void showScatterPlot() {
 		ScatterPlotFrame x = new ScatterPlotFrame(Global.getGlobal()
 				.getActiveProject());// project);
+		x.display();
 		Global.getGlobal().getActiveProject().addscattercharts(x);
 	}
 

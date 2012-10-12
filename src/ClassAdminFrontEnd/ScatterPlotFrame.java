@@ -49,7 +49,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 	private ScatterPlot nuweChart;
 	private Project project;
 	private LinkedList<LinkedList<SuperEntity>> diedata;
-
+	private	JFrame f;
 	// Update all the values of the scatterplot
 	public void update() {
 
@@ -124,7 +124,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 	// Create the scatterplotframe
 	public ScatterPlotFrame(final Project project) {
 
-		JFrame f = new JFrame("ScatterPlot");
+		 f = new JFrame("ScatterPlot");
 		this.project = project;
 		final Container content = f.getContentPane();
 		f.setSize(550, 380);
@@ -504,7 +504,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 			content.add(extractPic);
 		}
 
-		f.setVisible(true);
+	
 	}
 
 	@Override
@@ -513,7 +513,10 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 
 	}
 
-	
+	public void display()
+	{
+		f.setVisible(true);
+	}
 	public void saveFileAs() throws IOException {
 
 		File file;

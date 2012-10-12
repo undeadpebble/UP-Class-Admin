@@ -73,7 +73,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 	private Histogram nuweChart;
 	private Project project;
 	private Stats stats;
-
+	private JFrame f;
 	// Update the values of the histogram
 	public void update() {
 		nuweChart.updateSelectedValues();
@@ -81,7 +81,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 
 	// Create the frame of the histogram
 	public HistogramFrame(final Project project) {
-		JFrame f = new JFrame("Histogram");
+		f = new JFrame("Histogram");
 		final Container content = f.getContentPane();
 		f.setSize(550, 630);
 		stats = new Stats(project);
@@ -393,7 +393,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 		content.add(histogramtypelabel);
 		content.add(histogramType);
 
-		f.setVisible(true);
+		
 	}
 
 	@Override
@@ -401,7 +401,10 @@ public class HistogramFrame extends JFrame implements ActionListener {
 		
 
 	}
-
+	public void display()
+	{
+		f.setVisible(true);
+	}
 	// SaveFileAs for extract
 	public void saveFileAs() throws IOException {
 
