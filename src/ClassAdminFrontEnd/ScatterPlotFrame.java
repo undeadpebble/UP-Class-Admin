@@ -172,6 +172,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 			}
 
 			dataset.addSeries(series);
+		
 			nuweChart.setScatterArray(doensorteer(houerx, houery));
 
 			// Check if there is any border cases
