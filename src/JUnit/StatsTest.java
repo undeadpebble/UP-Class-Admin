@@ -22,7 +22,7 @@ public class StatsTest {
 		File file = null;
 		Project p = new Project();
 		Global.getGlobal().addProject(p);
-		fileHandler.openFile("C:\\Users\\suzette\\Documents\\test.csv", Global.getGlobal().getActiveProject());
+		fileHandler.openFile("test.csv", Global.getGlobal().getActiveProject());
 		p.setFileName("test.csv");
 		Stats testdummy = new Stats(Global.getGlobal().getActiveProject());
 		assertEquals(10.0, testdummy.hoogstepunt(2), 0);
