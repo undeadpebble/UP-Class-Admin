@@ -158,6 +158,7 @@ public class Frame extends JFrame implements ActionListener {
 					table.getTable().clearSelection();
 					Global.getGlobal().getActiveProject().getSelected().clear();
 					Global.getGlobal().getActiveProject().getSelectedIndexes().clear();
+					Global.getGlobal().getProjects().remove(Global.getGlobal().getActiveProject());
 					if (tabCount == -1) {
 						setNavButtonsDisabled();
 						setMenuItemsDisabled();
@@ -183,25 +184,6 @@ public class Frame extends JFrame implements ActionListener {
 		}
 	}
 
-	class SelectionListener implements ListSelectionListener {
-		JTable table;
-
-		SelectionListener(JTable table) {
-			this.table = table;
-		}
-
-		public void valueChanged(ListSelectionEvent e) {
-			if (e.getSource() == table.getSelectionModel() && table.getRowSelectionAllowed()) {
-				System.out.println("listen");
-			} else if (e.getSource() == table.getColumnModel().getSelectionModel() && table.getColumnSelectionAllowed()) {
-				System.out.println("listen2");
-			}
-			if (e.getValueIsAdjusting()) {
-				System.out.println("The mouse button has not yet been released");
-			}
-		}
-
-	}
 
 	/*
 	 * Method to create all frame contents
@@ -1491,6 +1473,8 @@ public class Frame extends JFrame implements ActionListener {
 			p.setFileName(file.getName());
 			p.createAudit();
 			p.getAudit().openedProject();
+			
+			
 
 		} catch (UnsupportedFileTypeException e) {
 			e.printStackTrace();
@@ -1498,7 +1482,6 @@ public class Frame extends JFrame implements ActionListener {
 		// create table on panel
 
 		table = new FrmTable(Global.getGlobal().getActiveProject().getHead().getHeaders(), Global.getGlobal().getActiveProject().getHead().getDataLinkedList(), Global.getGlobal().getActiveProject());
-
 		// listener for changes of selection in table
 		table.getTable().getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
@@ -1930,7 +1913,6 @@ public class Frame extends JFrame implements ActionListener {
 	}
 
 	public void showViewStudent() {
-		table.getTable().getSelectedRow();
 		if (table.getTable().getSelectedRow() == -1) {
 			JOptionPane.showMessageDialog(frame, "Please select a student to view information", "Student Not Selected", JOptionPane.ERROR_MESSAGE);
 		} else
