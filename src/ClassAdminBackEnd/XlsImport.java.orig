@@ -176,7 +176,9 @@ public class XlsImport extends FileImport {
 		Image icon = Toolkit.getDefaultToolkit().getImage("Logo.png");
 		dialog.setTitle("Specify Header");
 
-		
+		// set frame icon
+		Image icon = Toolkit.getDefaultToolkit().getImage("Logo.png");
+		dialog.setIconImage(icon);
 		dialog.setIconImage(icon);
 
 		// create background panel
@@ -304,8 +306,12 @@ public class XlsImport extends FileImport {
 		backgroundPanel.add(pnlHeaders);
 
 		dialog.setVisible(true);
-		
+<<<<<<< HEAD
+
 		dialog.setVisible(true);
+=======
+		
+>>>>>>> conditional formatting frame changed
 	}
 
 	public void printAllSheets() {

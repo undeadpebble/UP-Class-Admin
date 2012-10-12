@@ -648,6 +648,7 @@ public class RapidAssessmentCanvas extends JFrame {
 		btnNewButton.setBounds(parentRect.getWidth()+5, 79, 89, 23);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+<<<<<<< HEAD
 				JFileChooser fc = new JFileChooser();
 				FileNameExtensionFilter ff = new FileNameExtensionFilter("Image Files", "jpeg","png");
 				int returnVal = fc.showOpenDialog(parentPanel);
@@ -656,6 +657,8 @@ public class RapidAssessmentCanvas extends JFrame {
 					file = fc.getSelectedFile();
 				}
 				
+=======
+>>>>>>> fixes
 			}
 		});
 		setLayout(null);

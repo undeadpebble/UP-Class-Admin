@@ -25,7 +25,6 @@ import javax.swing.JPanel;
 
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.annotations.XYLineAnnotation;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
@@ -44,8 +43,8 @@ import ClassAdminBackEnd.SuperEntity;
 public class ScatterPlotFrame extends JFrame implements ActionListener {
 	private ChartPanel chartpanel;
 	private JFreeChart chart;
-	public int houerx = 0;
-	public int houery = 0;
+	private int houerx = 0;
+	private int houery = 0;
 	private ScatterPlot nuweChart;
 	private Project project;
 	private LinkedList<LinkedList<SuperEntity>> diedata ;
@@ -184,46 +183,11 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 
 		dataset.addSeries(series);
 		nuweChart.setScatterArray(doensorteer(houerx, houery));
-		
-		//Check if there is any border cases
-		XYLineAnnotation a2;
-	
-		if(diedata.get(0).get(houerx).getType().getBorderCasing().size()>0 && diedata.get(0).get(houery).getType().getBorderCasing().size()>0)
-		{
-			a2 = new XYLineAnnotation(diedata.get(0).get(houerx).getType().getBorderCasing().get(0).getLowVal(),diedata.get(0).get(houery).getType().getBorderCasing().get(0).getHighVal(),diedata.get(0).get(houerx).getType().getBorderCasing().get(0).getHighVal(),diedata.get(0).get(houery).getType().getBorderCasing().get(0).getHighVal());
-			nuweChart.setAnnons(a2);
-			
-			a2 = new XYLineAnnotation(diedata.get(0).get(houerx).getType().getBorderCasing().get(0).getHighVal(),diedata.get(0).get(houery).getType().getBorderCasing().get(0).getHighVal(),diedata.get(0).get(houerx).getType().getBorderCasing().get(0).getHighVal(),diedata.get(0).get(houery).getType().getBorderCasing().get(0).getLowVal());
-			nuweChart.setAnnons(a2);
-			
-			a2 = new XYLineAnnotation(diedata.get(0).get(houerx).getType().getBorderCasing().get(0).getHighVal(),diedata.get(0).get(houery).getType().getBorderCasing().get(0).getLowVal(),diedata.get(0).get(houerx).getType().getBorderCasing().get(0).getLowVal(),diedata.get(0).get(houery).getType().getBorderCasing().get(0).getLowVal());
-			nuweChart.setAnnons(a2);
-			
-			a2 = new XYLineAnnotation(diedata.get(0).get(houerx).getType().getBorderCasing().get(0).getLowVal(),diedata.get(0).get(houery).getType().getBorderCasing().get(0).getLowVal(),diedata.get(0).get(houerx).getType().getBorderCasing().get(0).getLowVal(),diedata.get(0).get(houery).getType().getBorderCasing().get(0).getHighVal());
-			nuweChart.setAnnons(a2);
-			
-		}
-		else if(diedata.get(0).get(houerx).getType().getBorderCasing().size()>0)
-		{
-			a2 = new XYLineAnnotation(diedata.get(0).get(houerx).getType().getBorderCasing().get(0).getLowVal(),0.0,diedata.get(0).get(houerx).getType().getBorderCasing().get(0).getLowVal(),100.0);
-			nuweChart.setAnnons(a2);
-			a2 = new XYLineAnnotation(diedata.get(0).get(houerx).getType().getBorderCasing().get(0).getHighVal(),0.0,diedata.get(0).get(houerx).getType().getBorderCasing().get(0).getHighVal(),100.0);
-			nuweChart.setAnnons(a2);
-		}
-		else if(diedata.get(0).get(houery).getType().getBorderCasing().size()>0)
-		{
-			a2 = new XYLineAnnotation(0.0,diedata.get(0).get(houery).getType().getBorderCasing().get(0).getLowVal(),100.0,diedata.get(0).get(houerx).getType().getBorderCasing().get(0).getLowVal());
-			nuweChart.setAnnons(a2);
-			a2 = new XYLineAnnotation(0.0,diedata.get(0).get(houery).getType().getBorderCasing().get(0).getHighVal(),100.0,diedata.get(0).get(houery).getType().getBorderCasing().get(0).getHighVal());
-			nuweChart.setAnnons(a2);
-		}
-		 chart = nuweChart.createScatter("asd", dataset, xas, yas);
-		
+		chart = nuweChart.createScatter("asd", dataset, xas, yas);
 		
 		chartpanel = nuweChart.createPanel();
 		
-		 
-		
+	
 		
 		
 		
