@@ -6,6 +6,7 @@ import java.util.LinkedList;
 
 import org.junit.Test;
 
+import ClassAdminBackEnd.AbsentException;
 import ClassAdminBackEnd.FileHandler;
 import ClassAdminBackEnd.Global;
 import ClassAdminBackEnd.Project;
@@ -16,7 +17,7 @@ import ClassAdminFrontEnd.HistogramFrame;
 public class ProjectTest {
 
 	@Test
-	public void test() throws UnsupportedFileTypeException {
+	public void test() throws UnsupportedFileTypeException, AbsentException {
 		FileHandler fileHandler;
 		fileHandler = FileHandler.get();
 		Project p = new Project();
@@ -29,6 +30,8 @@ public class ProjectTest {
 		assertEquals(1, Global.getGlobal().getActiveProject().getHistogramcount());
 		p.setFileName("test.csv");
 		assertEquals("test.csv", Global.getGlobal().getActiveProject().getFileName());
+		
+		assertEquals(26.375, Global.getGlobal().getActiveProject().getHead().doMarkMath(),0);
 		
 	}
 
