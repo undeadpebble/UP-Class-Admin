@@ -111,7 +111,7 @@ public class Frame extends JFrame implements ActionListener {
 			studentsInfoPanel, histogramInfoPanel, boxplotInfoPanel,
 			conditionalFormattingInfoPanel, bordercaseInfoPanel,
 			addRowInfoPanel, filterInfoPanel, maxValInfoPanel, rulesInfoPanel,
-			buildInfoPanel, statisticsInfoPanel;
+			buildInfoPanel, statisticsInfoPanel, markingFormInfoPanel, markingInfoPanel, importPhotosInfoPanel;
 
 	private ShadowPanel studentPanel;
 	private JMenu mProject, mGraph, mView, mRecent;
@@ -230,7 +230,7 @@ public class Frame extends JFrame implements ActionListener {
 
 		// frame setup
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1200, 700);
+		setBounds(100, 100, 1220, 700);
 
 		Image icon = Toolkit.getDefaultToolkit().getImage("icons/Logo.png");
 		this.setIconImage(icon);
@@ -987,11 +987,11 @@ public class Frame extends JFrame implements ActionListener {
 		statisticsButton = new ReflectionButton(ImageIO.read(getClass()
 				.getResource("/ClassAdminFrontEnd/resources/Statistics.png")));
 		rapidAssessmentButton = new ReflectionButton(ImageIO.read(getClass()
-				.getResource("/ClassAdminFrontEnd/resources/question.png")));
+				.getResource("/ClassAdminFrontEnd/resources/RapidAssessment.png")));
 		markingButton = new ReflectionButton(ImageIO.read(getClass()
-				.getResource("/ClassAdminFrontEnd/resources/question.png")));
+				.getResource("/ClassAdminFrontEnd/resources/Marking.png")));
 		importPicturesButton = new ReflectionButton(ImageIO.read(getClass()
-				.getResource("/ClassAdminFrontEnd/resources/question.png")));
+				.getResource("/ClassAdminFrontEnd/resources/ImportPictures.png")));
 
 		homeButton.setBounds(8, 8, 68, 80);
 		importButton.setBounds(75, 8, 68, 80);
@@ -1008,9 +1008,9 @@ public class Frame extends JFrame implements ActionListener {
 		maxValButton.setBounds(782, 11, 68, 80);
 		rulesButton.setBounds(837, 10, 68, 80);
 		statisticsButton.setBounds(903, 11, 68, 80);
-		rapidAssessmentButton.setBounds(960, 11, 68, 80);
-		markingButton.setBounds(1020, 11, 68, 80);
-		importPicturesButton.setBounds(1080, 11, 68, 80);
+		rapidAssessmentButton.setBounds(968, 9, 68, 80);
+		markingButton.setBounds(1032, 9, 68, 80);
+		importPicturesButton.setBounds(1097, 7, 68, 80);
 
 		navBar.add(homeButton);
 		navBar.add(importButton);
@@ -1049,7 +1049,10 @@ public class Frame extends JFrame implements ActionListener {
 		maxValInfoPanel = new FadePanel(false, 200, 200);
 		rulesInfoPanel = new FadePanel(false, 200, 200);
 		statisticsInfoPanel = new FadePanel(false, 200, 200);
-
+		markingFormInfoPanel = new FadePanel(false, 200, 200);
+		markingInfoPanel = new FadePanel(false, 200, 200);
+		importPhotosInfoPanel = new FadePanel(false, 200, 200);
+		
 		homeInfoPanel.setBounds(8, 0, 62, infoPanel.getHeight());
 		importInfoPanel.setBounds(67, 0, 62, infoPanel.getHeight());
 		exportInfoPanel.setBounds(135, 0, 62, infoPanel.getHeight());
@@ -1066,6 +1069,9 @@ public class Frame extends JFrame implements ActionListener {
 		maxValInfoPanel.setBounds(749, 0, 129, infoPanel.getHeight());
 		rulesInfoPanel.setBounds(830, 0, 129, infoPanel.getHeight());
 		statisticsInfoPanel.setBounds(885, 0, 129, infoPanel.getHeight());
+		markingFormInfoPanel.setBounds(932, 0, 129, infoPanel.getHeight());
+		markingInfoPanel.setBounds(1024, 0, 129, infoPanel.getHeight());
+		importPhotosInfoPanel.setBounds(1070, 0, 129, infoPanel.getHeight());
 
 		homeInfoPanel.setLayout(null);
 		importInfoPanel.setLayout(null);
@@ -1082,6 +1088,9 @@ public class Frame extends JFrame implements ActionListener {
 		maxValInfoPanel.setLayout(null);
 		rulesInfoPanel.setLayout(null);
 		statisticsInfoPanel.setLayout(null);
+		markingFormInfoPanel.setLayout(null);
+		markingInfoPanel.setLayout(null);
+		importPhotosInfoPanel.setLayout(null);
 
 		infoPanel.add(homeInfoPanel);
 		infoPanel.add(importInfoPanel);
@@ -1098,7 +1107,10 @@ public class Frame extends JFrame implements ActionListener {
 		infoPanel.add(maxValInfoPanel);
 		infoPanel.add(rulesInfoPanel);
 		infoPanel.add(statisticsInfoPanel);
-
+		infoPanel.add(markingFormInfoPanel);
+		infoPanel.add(markingInfoPanel);
+		infoPanel.add(importPhotosInfoPanel);
+		
 		// create info bubble image
 		ImagePanel infoBubble = new ImagePanel(ImageIO.read(getClass()
 				.getResource("/ClassAdminFrontEnd/resources/HomeInfo.png")));
@@ -1140,6 +1152,15 @@ public class Frame extends JFrame implements ActionListener {
 		ImagePanel statisticsBubble = new ImagePanel(
 				ImageIO.read(getClass().getResource(
 						"/ClassAdminFrontEnd/resources/InfoStatistics.png")));
+		ImagePanel markingFormBubble = new ImagePanel(
+				ImageIO.read(getClass().getResource(
+						"/ClassAdminFrontEnd/resources/InfoMarkingForm.png")));
+		ImagePanel markingBubble = new ImagePanel(
+				ImageIO.read(getClass().getResource(
+						"/ClassAdminFrontEnd/resources/InfoMarking.png")));
+		ImagePanel importPhotosBubble = new ImagePanel(
+				ImageIO.read(getClass().getResource(
+						"/ClassAdminFrontEnd/resources/InfoImportPhotos.png")));
 
 		infoBubble.setBounds(0, 0, infoPanel.getWidth(), infoPanel.getHeight());
 		importBubble.setBounds(0, 0, infoPanel.getWidth(),
@@ -1168,9 +1189,15 @@ public class Frame extends JFrame implements ActionListener {
 				infoPanel.getHeight());
 		rulesBubble
 				.setBounds(0, 0, infoPanel.getWidth(), infoPanel.getHeight());
-		statisticsBubble.setBounds(0, 0, infoPanel.getWidth(),
+		statisticsBubble
+		.setBounds(0, 0, infoPanel.getWidth(), infoPanel.getHeight());
+		markingFormBubble.setBounds(0, 0, infoPanel.getWidth(),
 				infoPanel.getHeight());
-
+		markingBubble.setBounds(0, 0, infoPanel.getWidth(),
+				infoPanel.getHeight());
+		importPhotosBubble
+				.setBounds(0, 0, infoPanel.getWidth(), infoPanel.getHeight());
+		
 		infoBubble.setLayout(null);
 		importBubble.setLayout(null);
 		exportBubble.setLayout(null);
@@ -1186,6 +1213,9 @@ public class Frame extends JFrame implements ActionListener {
 		rulesBubble.setLayout(null);
 		maxValBubble.setLayout(null);
 		statisticsBubble.setLayout(null);
+		markingFormBubble.setLayout(null);
+		markingBubble.setLayout(null);
+		importPhotosBubble.setLayout(null);
 
 		homeInfoPanel.add(infoBubble);
 		importInfoPanel.add(importBubble);
@@ -1202,7 +1232,10 @@ public class Frame extends JFrame implements ActionListener {
 		maxValInfoPanel.add(maxValBubble);
 		rulesInfoPanel.add(rulesBubble);
 		statisticsInfoPanel.add(statisticsBubble);
-
+		markingFormInfoPanel.add(markingFormBubble);
+		markingInfoPanel.add(markingBubble);
+		importPhotosInfoPanel.add(importPhotosBubble);
+		
 		homeButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
@@ -1474,16 +1507,16 @@ public class Frame extends JFrame implements ActionListener {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (rapidAssessmentButton.isEnabled()) {
-
+					
 				}
 			}
 
 			public void mouseEntered(MouseEvent arg0) {
-
+				markingFormInfoPanel.fadeIn();
 			}
 
 			public void mouseExited(MouseEvent arg0) {
-
+				markingFormInfoPanel.fadeOut();
 			}
 		});
 
@@ -1496,9 +1529,11 @@ public class Frame extends JFrame implements ActionListener {
 			}
 
 			public void mouseEntered(MouseEvent arg0) {
+				markingInfoPanel.fadeIn();
 			}
 
 			public void mouseExited(MouseEvent arg0) {
+				markingInfoPanel.fadeOut();
 			}
 		});
 
@@ -1510,9 +1545,11 @@ public class Frame extends JFrame implements ActionListener {
 			}
 
 			public void mouseEntered(MouseEvent arg0) {
+				importPhotosInfoPanel.fadeIn();
 			}
 
 			public void mouseExited(MouseEvent arg0) {
+				importPhotosInfoPanel.fadeOut();
 			}
 		});
 	}
