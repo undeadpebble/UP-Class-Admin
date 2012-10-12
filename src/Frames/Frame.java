@@ -344,9 +344,6 @@ public class Frame extends JFrame implements ActionListener {
 		// create menu
 		// FILE
 		JMenu mFile = new JMenu("File");
-		JMenu mNew = new JMenu("New");
-		JMenuItem miSpreadsheet = new JMenuItem("Spreadsheet");
-		JMenuItem miRapidAssessment = new JMenuItem("Rapid Assessment");
 		mRecent = new JMenu("Recent");
 		JMenuItem miClose = new JMenuItem("Close");
 		JMenuItem miCloseAll = new JMenuItem("Close All");
@@ -359,9 +356,6 @@ public class Frame extends JFrame implements ActionListener {
 		mFile.setForeground(Color.white);
 
 		menuBarWindows.add(mFile);
-		mFile.add(mNew);
-		mNew.add(miSpreadsheet);
-		mNew.add(miRapidAssessment);
 		mFile.add(mRecent);
 		mFile.add(miClose);
 		mFile.add(miCloseAll);
@@ -456,9 +450,6 @@ public class Frame extends JFrame implements ActionListener {
 		// create menu
 		// FILE
 		JMenu mFile = new JMenu("File");
-		JMenu mNew = new JMenu("New");
-		JMenuItem miSpreadsheet = new JMenuItem("Spreadsheet");
-		JMenuItem miRapidAssessment = new JMenuItem("Rapid Assessment");
 		mRecent = new JMenu("Recent");
 		JMenuItem miClose = new JMenuItem("Close");
 		JMenuItem miCloseAll = new JMenuItem("Close All");
@@ -471,9 +462,6 @@ public class Frame extends JFrame implements ActionListener {
 		mFile.setForeground(Color.white);
 
 		menuBarMAC.add(mFile);
-		mFile.add(mNew);
-		mNew.add(miSpreadsheet);
-		mNew.add(miRapidAssessment);
 		mFile.add(mRecent);
 		mFile.add(miClose);
 		mFile.add(miCloseAll);
