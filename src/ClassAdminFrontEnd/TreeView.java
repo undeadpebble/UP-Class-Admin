@@ -59,6 +59,7 @@ import prefuse.controls.ControlAdapter;
 import prefuse.controls.FocusControl;
 import prefuse.controls.PanControl;
 import prefuse.controls.WheelZoomControl;
+import prefuse.data.Node;
 import prefuse.data.Table;
 import prefuse.data.Tree;
 import prefuse.data.Tuple;
@@ -293,6 +294,20 @@ public class TreeView extends Display {
 	public int getOrientation() {
 		return m_orientation;
 	}
+	
+	public void setSelectedEntity(int s)
+	{
+		selectedEntity =  s;
+	}
+	
+	public SuperEntity getSuperEntity(int s)
+	{
+		return myProject.getStudentLinkedList().get(s);
+	}
+	
+	public void setSuperEntity(int index,SuperEntity newE){
+		myProject.getStudentLinkedList().set(index,newE);
+	}
 
 	// ------------------------------------------------------------------------
 
@@ -330,7 +345,7 @@ public class TreeView extends Display {
 		myProject = project;
 		JFrame frame = new JFrame();
 
-		JComponent treeview = createPanelTreeView(label, treeHead);
+		JComponent treeview = createPanelTreeView(label, treeHead,frame);
 
 		frame.setContentPane(treeview);
 		frame.setSize(850, 600);
@@ -478,7 +493,7 @@ public class TreeView extends Display {
 		return panel;
 	}
 
-	public static JComponent createPanelTreeView(final String label, SuperEntity th) {
+	public static JComponent createPanelTreeView(final String label, SuperEntity th, JFrame parentFrame) {
 		Color BACKGROUND = new Color(0x171717);
 		Color FOREGROUND = Color.white;
 
@@ -516,6 +531,9 @@ public class TreeView extends Display {
 		}
 
 		// create a new treemap
+		
+
+		
 		tview = new TreeView(t, label,false);
 
 		tview.setBackground(BACKGROUND);
@@ -528,6 +546,8 @@ public class TreeView extends Display {
 		title.setBackground(BACKGROUND);
 		title.setForeground(FOREGROUND);
 
+		StudentPopUp p = new StudentPopUp();
+		p.setTreeView(tview, myTree, myProject, parentFrame,txtChange, btnChange);
 
 		Box box = new Box(BoxLayout.X_AXIS);
 		box.add(Box.createHorizontalStrut(10));
@@ -782,6 +802,15 @@ public class TreeView extends Display {
 		}// itemDragged
 	}
 
+	public void updateNode(int index)
+	{
+		String nodeName = myTree.getNode(index).getString("name");
+		nodeName = nodeName.substring(0, nodeName.indexOf(":") + 2) + myProject.getStudentLinkedList().get(index).getValue();
+		myTree.getNode(index).set("name",nodeName);
+		if(index != 0)
+			updateNode(myTree.getParent(index));
+	}
+	
 	public class StudentViewActionListener implements ActionListener {
 
 		@Override
@@ -805,6 +834,7 @@ public class TreeView extends Display {
 				} catch (Exception ex) {
 				}
 			}
+			updateNode(selectedEntity);
 			myProject.updateTables();
 			txtChange.setText("");
 			txtChange.setPreferredSize(new Dimension(txtChange.getWidth(), txtChange.getHeight()));
@@ -840,6 +870,7 @@ public class TreeView extends Display {
 					} catch (Exception ex) {
 					}
 				}
+				updateNode(selectedEntity);
 				myProject.updateTables();
 				txtChange.setText("");
 				txtChange.setPreferredSize(new Dimension(txtChange.getWidth(), txtChange.getHeight()));
