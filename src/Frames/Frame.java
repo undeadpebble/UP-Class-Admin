@@ -1742,27 +1742,35 @@ public class Frame extends JFrame implements ActionListener {
 		 * System.out.println(info[i]); }
 		 */
 
-		try {
-			BufferedImage photo = (ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/StudentPhotos/10092120.JPG")));
-			photo = Scalr.resize(photo, 150);
-			studentPhoto = new ImagePanel(photo);
-			studentPanel.add(studentPhoto);
-			studentPhoto.setBounds(57, 50, photo.getWidth(), photo.getHeight());
-		} catch (IOException e) {
-			e.printStackTrace();
+		
+		
+		int i = -1;
+		try{
+		 i = Integer.parseInt(Global.getGlobal().getActiveProject().getSelectedIndexes().get(0).toString());
+		}
+		catch (Exception e) {
+		}
+		
+		if (i != -1) {
+		IMGEntity imageEntity = Global.getGlobal().getActiveProject().getHead()
+				.getDataLinkedList().get(i).get(0)
+				.IterativeDeepeningfindPortrait();
+		
+		//TODO
+		BufferedImage photo = new BufferedImage(1, 1,1);
+		try{
+		 photo = imageEntity.getImage();
+		}
+		catch(NullPointerException e){
+			//TODO
+			//photo = //default image
+		}
+		
+		photo = Scalr.resize(photo, 150);
+		studentPhoto = new ImagePanel(photo);
+		studentPanel.add(studentPhoto);
+		studentPhoto.setBounds(57, 50, photo.getWidth(), photo.getHeight());
 
-			int i = table.getTable().getSelectedRow();
-			if (i != -1) {
-				IMGEntity imageEntity = Global.getGlobal().getActiveProject().getHead().getDataLinkedList().get(i).get(0)
-						.IterativeDeepeningfindPortrait();
-				BufferedImage photo = imageEntity.getImage();
-
-				photo = Scalr.resize(photo, 150);
-				studentPhoto = new ImagePanel(photo);
-				studentPanel.add(studentPhoto);
-				studentPhoto.setBounds(57, 50, photo.getWidth(), photo.getHeight());
-
-			}
 		}
 	}
 

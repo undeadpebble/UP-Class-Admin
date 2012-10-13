@@ -1,3 +1,4 @@
+
 package ClassAdminBackEnd;
 
 import java.text.DecimalFormat;
@@ -113,7 +114,7 @@ public class Stats {
 				if(diedata.get(x).get(hou).getMark()>=50.0)
 					nrVanSlaag++;
 			} catch (AbsentException e) {
-				
+				nrVanSlaag = nrVanSlaag;
 			}
 		}
 		return nrVanSlaag;
@@ -129,8 +130,7 @@ public class Stats {
 			try {
 				sort[x] =diedata.get(x).get(hou).getMark();
 			} catch (AbsentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				sort[x] =0;
 			}
 			
 		}
