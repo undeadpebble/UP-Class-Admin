@@ -204,4 +204,3 @@ public class Stats {
 	    return Double.valueOf(twoDForm.format(d));
 	}
 }
-

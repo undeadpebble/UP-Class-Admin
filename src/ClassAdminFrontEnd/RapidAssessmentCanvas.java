@@ -25,7 +25,6 @@ import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -41,8 +40,6 @@ import com.sun.media.sound.Toolkit;
 import sun.java2d.pipe.BufferedBufImgOps;
 
 import ClassAdminBackEnd.EntityType;
-import ClassAdminBackEnd.Global;
-import ClassAdminBackEnd.Project;
 import ClassAdminBackEnd.RapidAssessmentComponentType;
 import ClassAdminBackEnd.RapidAssessmentContainerType;
 import ClassAdminBackEnd.RapidAssessmentMarkType;
@@ -55,10 +52,6 @@ public class RapidAssessmentCanvas extends JFrame {
 	private static final long serialVersionUID = 1L;
 	public static final int MARK_SIZE = 15;
 	private String backgroundFileName;
-
-	private Project project;
-	JComboBox loadCombo;
-
 	private BufferedImage backGround;
 	private BufferedImage resizedBackGround = null;
 	// private LinkedList<MyRectangle> rectangles = new
@@ -68,30 +61,6 @@ public class RapidAssessmentCanvas extends JFrame {
 	// private LinkedList<MyMarkPoint> marks = new LinkedList<MyMarkPoint>();
 	private ContainerPanel parentPanel;
 	private MyRectangle parentRect;
-
-	public String getBackgroundFileName() {
-		return backgroundFileName;
-	}
-
-	public void setBackgroundFileName(String backgroundFileName) {
-		this.backgroundFileName = backgroundFileName;
-	}
-
-	public BufferedImage getBackGround() {
-		return backGround;
-	}
-
-	public void setBackGround(BufferedImage backGround) {
-		this.backGround = backGround;
-	}
-
-	public BufferedImage getResizedBackGround() {
-		return resizedBackGround;
-	}
-
-	public void setResizedBackGround(BufferedImage resizedBackGround) {
-		this.resizedBackGround = resizedBackGround;
-	}
 
 	public class MyMarkTotalComponent extends JComponent {
 
@@ -415,7 +384,7 @@ public class RapidAssessmentCanvas extends JFrame {
 		@Override
 		public RapidAssessmentComponentType createTreeNode(String name,
 				RapidAssessmentComponentType parent) throws ClassCastException {
-
+			
 			RapidAssessmentRectangleType tmp = new RapidAssessmentRectangleType(
 					name, this.getX(), this.getY(), this.getWidth(),
 					this.getHeight(), parent);
@@ -652,54 +621,49 @@ public class RapidAssessmentCanvas extends JFrame {
 		}
 	}
 
-	public RapidAssessmentCanvas(Project project, EntityType assessedEntity) {
+	public RapidAssessmentCanvas(String backGroundFilename,
+			EntityType assessedEntity) {
 		Dimension screen = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		this.setLayout(null);
-		this.project = project;
 		ContainerPanel canvas = new ContainerPanel();
 		parentPanel = canvas;
 		this.setContentPane(canvas);
 		this.setSize(screen.width, screen.height);
+		this.backgroundFileName = backGroundFilename;
+		try {
+			this.backGround = ImageIO.read(getClass().getResource(
+					this.backgroundFileName));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 		this.assessedEntity = assessedEntity;
-		if (assessedEntity != null)
-			this.setTitle("Create Assessment - " + assessedEntity.getName());
-		else
-			this.setTitle("Create Assessment - no entity selected");
-
-		parentRect = new MyRectangle(0, 0, (int) screen.getWidth() - 100,
-				(int) screen.getHeight() - 50);
+		
+		parentRect = new MyRectangle(0, 0,(int) screen.getWidth()-100,(int) screen.getHeight()-50);
 		parentRect.setVisible(true);
 		this.setLayout(null);
 		canvas.add(parentRect);
 
+		
 		JButton btnNewButton = new JButton("Image");
-		btnNewButton.setBounds(parentRect.getWidth() + 5, 115, 89, 23);
+		btnNewButton.setBounds(parentRect.getWidth()+5, 79, 89, 23);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				JFileChooser fc = new JFileChooser();
-				FileNameExtensionFilter ff = new FileNameExtensionFilter(
-						"Image Files", "jpeg", "png");
+				FileNameExtensionFilter ff = new FileNameExtensionFilter("Image Files", "jpeg","png");
 				int returnVal = fc.showOpenDialog(parentPanel);
 				File file;
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
+				if(returnVal == JFileChooser.APPROVE_OPTION){
 					file = fc.getSelectedFile();
-					setBackgroundFileName(file.getAbsolutePath());
-					try {
-						setBackGround(ImageIO.read(file));
-						setResizedBackGround(null);
-					} catch (IOException e) {
-
-					}
 				}
-
+				
 			}
 		});
 		setLayout(null);
 		btnNewButton.setFocusable(false);
 		parentPanel.add(btnNewButton);
-
+		
 		JButton btnSave = new JButton("Save");
-		btnSave.setBounds(parentRect.getWidth() + 5, 80, 89, 23);
+		btnSave.setBounds(parentRect.getWidth()+5, 45, 89, 23);
 		parentPanel.add(btnSave);
 		btnSave.setFocusable(false);
 		btnSave.addActionListener(new ActionListener() {
@@ -707,32 +671,24 @@ public class RapidAssessmentCanvas extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				parentPanel.save();
-				refreshLoad();
 
 			}
 		});
-
-		loadCombo = new JComboBox();
-		loadCombo.setBounds(parentRect.getWidth() + 5, 10, 89, 23);
-
-		parentPanel.add(loadCombo);
+		
 		JButton btnLoad = new JButton("Load");
-		btnLoad.setBounds(parentRect.getWidth() + 5, 35, 89, 23);
+		btnLoad.setBounds(parentRect.getWidth()+5, 11, 89, 23);
 		parentPanel.add(btnLoad);
 		btnLoad.setFocusable(false);
 		btnLoad.addActionListener(new ActionListener() {
-
+			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (loadCombo.getSelectedItem() != null)
-					try {
-						RapidAssessmentCanvas.this.assessedEntity = (EntityType) loadCombo
-								.getSelectedItem();
-					} catch (ClassCastException e) {
-
-					}
+				// TODO Auto-generated method stub
+				
 			}
 		});
+	
+		
 
 		this.addKeyListener(new KeyListener() {
 
@@ -862,10 +818,9 @@ public class RapidAssessmentCanvas extends JFrame {
 
 			super.paintComponent(g);
 			Graphics g2 = g.create();
-			if (resizedBackGround == null && backGround != null) {
-				resizedBackGround = Scalr.resize(backGround, Method.QUALITY,
-						Mode.FIT_EXACT, parentRect.getWidth(),
-						parentRect.getHeight(), Scalr.OP_ANTIALIAS);
+			if (resizedBackGround == null) {
+				resizedBackGround = Scalr.resize(backGround,Method.QUALITY,Mode.FIT_EXACT, parentRect.getWidth(),
+						parentRect.getHeight(),Scalr.OP_ANTIALIAS);
 			}
 
 			g2.drawImage(resizedBackGround, 0, 0, null);
@@ -890,13 +845,12 @@ public class RapidAssessmentCanvas extends JFrame {
 		 */
 
 		public void save() {
-			if (assessedEntity == null)
+			if(assessedEntity == null)
 				return;
 			RapidAssessmentContainerType parent = new RapidAssessmentContainerType(
 					assessedEntity, this.getX(), this.getY(), this.getWidth(),
 					this.getHeight());
 
-			assessedEntity = parent;
 			parent.setImage(backGround);
 
 			LinkedList<MyComponent> list = new LinkedList<RapidAssessmentCanvas.MyComponent>();
@@ -929,101 +883,92 @@ public class RapidAssessmentCanvas extends JFrame {
 
 			frame.setVisible(true);
 
-			/*
-			 * LinkedList<LinkedList<SuperEntity>> data = parent
-			 * .getParentEntitytype().getEntityList().get(0)
-			 * .getDataLinkedList(); System.out.println(); for (int x = 0; x <
-			 * data.size(); ++x) { for (int y = 0; y < data.get(x).size(); ++y)
-			 * { String g = ""; SuperEntity s = data.get(x).get(y); while (s !=
-			 * null) { g += " "; s = s.getParentEntity(); } System.out.println(g
-			 * + data.get(x).get(y).getType().getName()); } }
-			 */
+			/*LinkedList<LinkedList<SuperEntity>> data = parent
+					.getParentEntitytype().getEntityList().get(0)
+					.getDataLinkedList();
+			System.out.println();
+			for (int x = 0; x < data.size(); ++x) {
+				for (int y = 0; y < data.get(x).size(); ++y) {
+					String g = "";
+					SuperEntity s = data.get(x).get(y);
+					while (s != null) {
+						g += " ";
+						s = s.getParentEntity();
+					}
+					System.out.println(g
+							+ data.get(x).get(y).getType().getName());
+				}
+			}*/
 		}
+		
+		
 
 	}
-
-	public void load(RapidAssessmentContainerType container) {
+	public void load(RapidAssessmentContainerType container){
 		this.removeAll();
 		this.parentPanel = null;
 		this.lastcreated = null;
 		this.resizedBackGround = null;
 		this.parentRect = null;
-
+		
 		parentPanel = new ContainerPanel();
-		parentPanel.setBounds((int) container.getX(), (int) container.getY(),
-				(int) container.getW(), (int) container.getH());
+		parentPanel.setBounds((int)container.getX(), (int)container.getY(), (int)container.getW(),(int) container.getH());
 		this.backGround = container.getImage();
 		this.setContentPane(parentPanel);
-
-		for (int x = 0; x < container.getSubEntityType().size(); ++x) {
-			try {
-				createCanvasComponent(
-						(RapidAssessmentComponentType) (container
-								.getSubEntityType().get(x)),
-						parentPanel);
-			} catch (ClassCastException e) {
-
+		
+		for(int x = 0;x<container.getSubEntityType().size();++x){
+			try{
+				createCanvasComponent((RapidAssessmentComponentType)(container.getSubEntityType().get(x)),parentPanel);
+			}
+			catch(ClassCastException e){
+				
 			}
 		}
-
+		
 	}
-
+	
 	private void createCanvasComponent(RapidAssessmentComponentType component,
 			ContainerPanel parentPanel2) {
-		this.parentRect = new MyRectangle((int) component.getX(),
-				(int) component.getY(), (int) component.getW(),
-				(int) component.getH());
+		this.parentRect = new MyRectangle((int)component.getX(), (int)component.getY(),(int) component.getW(), (int)component.getH());
 		parentPanel2.add(parentRect);
-
-		for (int x = 0; x < component.getSubEntityType().size(); ++x) {
-			try {
-				createCanvasComponent(
-						(RapidAssessmentComponentType) (component
-								.getSubEntityType().get(x)),
-						parentRect);
-			} catch (ClassCastException e) {
-
+		
+		for(int x = 0;x<component.getSubEntityType().size();++x){
+			try{
+				createCanvasComponent((RapidAssessmentComponentType)(component.getSubEntityType().get(x)),parentRect);
+			}
+			catch(ClassCastException e){
+				
 			}
 		}
 	}
 
-	public void createCanvasComponent(RapidAssessmentComponentType component,
-			MyComponent parent) {
+	public void createCanvasComponent(RapidAssessmentComponentType component, MyComponent parent){
 
-		try {
-			RapidAssessmentRectangleType comp = ((RapidAssessmentRectangleType) component);
-			MyRectangle rect = new MyRectangle((int) comp.getX(),
-					(int) comp.getY(), (int) comp.getW(), (int) comp.getH());
+		
+		try{
+			RapidAssessmentRectangleType comp = ((RapidAssessmentRectangleType)component);
+			MyRectangle rect = new MyRectangle((int)comp.getX(), (int)comp.getY(), (int)comp.getW(), (int)comp.getH());
 			parent.add(rect);
-			for (int x = 0; x < component.getSubEntityType().size(); ++x) {
-				try {
-					createCanvasComponent(
-							(RapidAssessmentComponentType) (component
-									.getSubEntityType().get(x)),
-							rect);
-				} catch (ClassCastException e) {
-
+			for(int x = 0;x<component.getSubEntityType().size();++x){
+				try{
+					createCanvasComponent((RapidAssessmentComponentType)(component.getSubEntityType().get(x)),rect);
+				}
+				catch(ClassCastException e){
+					
 				}
 			}
-		} catch (ClassCastException e) {
-
 		}
-		try {
-			RapidAssessmentMarkType comp = ((RapidAssessmentMarkType) component);
-			MyMarkPoint mark = new MyMarkPoint((int) comp.getX(),
-					(int) comp.getY(), parent);
+		catch(ClassCastException e){
+			
+		}
+		try{
+			RapidAssessmentMarkType comp = ((RapidAssessmentMarkType)component);
+			MyMarkPoint mark = new MyMarkPoint((int)comp.getX(), (int)comp.getY(), parent);
 			mark.setMark(comp.getMaxValue());
-		} catch (ClassCastException e) {
-
 		}
-	}
-
-	public void refreshLoad() {
-		LinkedList<RapidAssessmentContainerType> containers = new LinkedList<RapidAssessmentContainerType>();
-		this.project.getHeadEntityType().findRapidAssessment(containers);
-		loadCombo.removeAllItems();
-		for (int x = 0; x < containers.size(); ++x)
-			loadCombo.addItem(containers.get(x));
+		catch(ClassCastException e){
+			
+		}
 	}
 
 }

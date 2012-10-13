@@ -129,6 +129,12 @@ public class FrmNewNode {
 				String assDate = "";
 				double weight = 1.0;
 
+				//reset formatting
+				lblParent.setForeground(new Color(0xEDEDED));
+				lblName.setForeground(new Color(0xEDEDED));
+				lblDate.setForeground(new Color(0xEDEDED));
+
+				
 				// validation of entered values
 				int selectedIndex = cmbParent.getSelectedIndex();
 				if (selectedIndex == 0) {
@@ -146,12 +152,8 @@ public class FrmNewNode {
 				try {
 					d = dateFormat.parse(txtDate.getText());
 				} catch (Exception e) {
-					e.printStackTrace();
-				}
-
-				if (d == null) {
 					b = false;
-					lblDate.setForeground(Color.RED);
+					lblDate.setForeground(Color.RED);					
 				}
 
 				if (b) {
@@ -181,10 +183,7 @@ public class FrmNewNode {
 
 					// update front end information
 					activeProject.updateTables();
-
-			
-					
-					
+					activeTreeView.getVisualization().run("filter");
 					
 					// refresh cmbParent content
 					cmbParent.removeAllItems();
@@ -200,11 +199,7 @@ public class FrmNewNode {
 					txtWeight.setValue(new Double(1.0));
 					txtName.setText(null);
 					txtDate.setText(dateFormat.format(new Date()));
-					lblParent.setForeground(Color.BLACK);
-					lblName.setForeground(Color.BLACK);
-					lblDate.setForeground(Color.BLACK);
 					isText = false;
-					activeTreeView.getVisualization().run("filter");
 					txtName.requestFocus(true);
 					}// if b
 			}// actionListener
@@ -214,44 +209,11 @@ public class FrmNewNode {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				activeProject.updateTables();
 				frame.dispose();
 			}
 		});
 
 
-		frame.addWindowListener(new WindowListener() {
-
-			@Override
-			public void windowOpened(WindowEvent e) {
-			}
-
-			@Override
-			public void windowIconified(WindowEvent e) {
-			}
-
-			@Override
-			public void windowDeiconified(WindowEvent e) {
-			}
-
-			@Override
-			public void windowDeactivated(WindowEvent e) {
-			}
-
-			@Override
-			public void windowClosing(WindowEvent e) {
-				activeProject.updateTables();
-			}
-
-			@Override
-			public void windowClosed(WindowEvent e) {
-			}
-
-			@Override
-			public void windowActivated(WindowEvent e) {
-				txtName.requestFocus(true);
-			}
-		});
 		JPanel pnlDate = new JPanel(new GridLayout(1, 2));
 		pnlDate.setOpaque(false);
 		pnlDate.add(txtDate);

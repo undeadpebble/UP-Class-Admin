@@ -126,6 +126,10 @@ public class FrmUpdateNode {
 				String assDate = "";
 				double weight = 1.0;
 
+				//reset formatting
+				lblName.setForeground(new Color(0xEDEDED));
+				lblDate.setForeground(new Color(0xEDEDED));
+			
 				// validation of values
 				if (txtName.getText() == null || txtName.getText().equals("")) {
 					b = false;
@@ -136,13 +140,10 @@ public class FrmUpdateNode {
 				try {
 					d = dateFormat.parse(txtDate.getText());
 				} catch (Exception e) {
-					e.printStackTrace();
-				}
-
-				if (d == null) {
 					b = false;
 					lblDate.setForeground(Color.RED);
 				}
+
 
 				if (b) {
 
@@ -165,13 +166,12 @@ public class FrmUpdateNode {
 					//update front end information
 					activeProject.updateTables();
 					activeItem.setString("name", txtName.getText());
+					activeItem.getVisualization().run("filter");
 
 					// reset all values
 					txtWeight.setValue(new Double(1.0));
 					txtName.setText(null);
 					txtDate.setText(dateFormat.format(new Date()));
-					lblName.setForeground(Color.BLACK);
-					lblDate.setForeground(Color.BLACK);
 					isText = false;
 
 					txtName.requestFocus(true);
@@ -184,41 +184,7 @@ public class FrmUpdateNode {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				activeProject.updateTables();
 				frame.dispose();
-			}
-		});
-
-		frame.addWindowListener(new WindowListener() {
-
-			@Override
-			public void windowOpened(WindowEvent e) {
-			}
-
-			@Override
-			public void windowIconified(WindowEvent e) {
-			}
-
-			@Override
-			public void windowDeiconified(WindowEvent e) {
-			}
-
-			@Override
-			public void windowDeactivated(WindowEvent e) {
-			}
-
-			@Override
-			public void windowClosing(WindowEvent e) {
-				activeProject.updateTables();
-			}
-
-			@Override
-			public void windowClosed(WindowEvent e) {
-			}
-
-			@Override
-			public void windowActivated(WindowEvent e) {
-				txtName.requestFocus(true);
 			}
 		});
 
