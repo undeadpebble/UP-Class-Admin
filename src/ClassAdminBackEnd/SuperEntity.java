@@ -559,21 +559,24 @@ public class SuperEntity {
 		}
 		return result;
 	}
-	
-	public void search(String str,LinkedList<SuperEntity> list){
-		String rest = this.getValue();
+
+	public void search(String str, LinkedList<SuperEntity> list) {
+		String rest = this.getValue().toLowerCase();
 
 		boolean fail = false;
-		for(int x = 0;x<str.length() && !fail;++x){
-			int index = rest.indexOf(str.charAt(x));
-			if(index < 0)
+		for (int x = 0; x < str.length() && !fail; ++x) {
+			int index = rest.indexOf(""+str.charAt(x));
+			if (index < 0) {
 				fail = true;
-			rest = rest.substring(index+1);
+			} else
+				rest = rest.substring(index + 1);
 		}
-		if(!fail)
+		if (!fail) {
 			list.add(this);
-		
-		for(int x = 0;x<subEntity.size();++x){
+			System.out.println(this.getValue());
+		}
+
+		for (int x = 0; x < subEntity.size(); ++x) {
 			subEntity.get(x).search(str, list);
 		}
 	}

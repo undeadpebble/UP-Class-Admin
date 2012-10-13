@@ -191,18 +191,18 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 	}
 
 	public void search(String str) {
+		System.out.println();
 		studentChooser.removeAllItems();
 		LinkedList<SuperEntity> list = new LinkedList<SuperEntity>();
-		project.getHead().search(str, list);
+		project.getHead().search(str.toLowerCase(), list);
 
 		for (int x = 0; x < list.size(); ++x) {
 			SuperEntity tmp = list.get(x);
 			while (tmp != project.getHead()
 					&& tmp.getParentEntity() != project.getHead()) {
-				System.out.println(tmp);
 				tmp = tmp.getParentEntity();
 			}
-			System.out.println("stop");
+
 			if (tmp != project.getHead())
 				studentChooser.addItem(tmp);
 		}
