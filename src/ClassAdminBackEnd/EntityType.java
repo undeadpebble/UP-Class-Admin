@@ -24,6 +24,7 @@ public class EntityType {
 	private Double defaultWeight;
 	private long ID;
 	private double maxValue = 100;
+	private boolean isImg = false;
 
 	public static int WEIGHTED_AVERAGE_TYPE = 0;
 	public static int SUM_TYPE = 1;
@@ -98,12 +99,15 @@ public class EntityType {
 	 * @param isVisible
 	 * @param defaultWeight
 	 */
-	public EntityType(String name, LinkedList<Format> formatting, LinkedList<BorderCase> borderCasing, LinkedList<SuperEntity> entityList, Boolean isTextField, Date date, Double defaultWeight) {
+	public EntityType(String name, LinkedList<Format> formatting,
+			LinkedList<BorderCase> borderCasing,
+			LinkedList<SuperEntity> entityList, Boolean isTextField, Date date,
+			Double defaultWeight) {
 		this.name = name;
 		this.formatting = formatting;
 		this.borderCasing = borderCasing;
 		this.entityList = entityList;
-		this.isTextField = isTextField;
+		this.setIsTextField(isTextField);
 		this.date = date;
 		this.defaultWeight = defaultWeight;
 	}
@@ -115,12 +119,13 @@ public class EntityType {
 	 * @param date
 	 * @param defaultWeight
 	 */
-	public EntityType(String name, EntityType parentEntitytype, Boolean isTextField, Date date, Double defaultWeight) {
+	public EntityType(String name, EntityType parentEntitytype,
+			Boolean isTextField, Date date, Double defaultWeight) {
 		this.name = name;
 		this.parentEntitytype = parentEntitytype;
 		if (parentEntitytype != null)
 			parentEntitytype.getSubEntityType().add(this);
-		this.isTextField = isTextField;
+		this.setIsTextField(isTextField);
 		this.date = date;
 		this.defaultWeight = defaultWeight;
 	}
@@ -140,8 +145,8 @@ public class EntityType {
 	public void setFormatting(LinkedList<Format> formatting) {
 		this.formatting = formatting;
 	}
-	
-	public void clearFormatting(){
+
+	public void clearFormatting() {
 		this.formatting = null;
 	}
 
@@ -215,14 +220,16 @@ public class EntityType {
 		this.defaultWeight = defaultWeight;
 	}
 
-	public void saveToDB(SqlJetDb db, Long parentID, PDatIDGenerator idgen) throws SqlJetException {
+	public void saveToDB(SqlJetDb db, Long parentID, PDatIDGenerator idgen)
+			throws SqlJetException {
 		db.beginTransaction(SqlJetTransactionMode.WRITE);
 
 		// TODO
 		ISqlJetTable table = db.getTable(PDatExport.ENTITY_TYPE_TABLE);
 		// insert statements
 		this.ID = idgen.getID();
-		table.insert(this.ID, this.name, parentID, this.isTextField, this.date, this.defaultWeight);
+		table.insert(this.ID, this.name, parentID, this.isTextField, this.date,
+				this.defaultWeight);
 
 		for (int x = 0; x < this.getBorderCasing().size(); ++x) {
 			this.getBorderCasing().get(x).saveToDB(db, this.ID, idgen);
@@ -272,23 +279,27 @@ public class EntityType {
 
 		if (this.getSubEntityType().size() > 0) {
 			String str = "";
-			str += "<branch>" + "<attribute name = \"name\" value= \"" + this.getName() + "\" />";
+			str += "<branch>" + "<attribute name = \"name\" value= \""
+					+ this.getName() + "\" />";
 			for (int i = 0; i < this.getSubEntityType().size(); i++) {
-				str += this.getSubEntityType().get(i).createTreeFromHead(treeLinkedList);
+				str += this.getSubEntityType().get(i)
+						.createTreeFromHead(treeLinkedList);
 			}
 			str += "</branch>";
 			return str;
 		} else {
 			String str = "";
-			str += "<leaf>" + "<attribute name = \"name\" value= \"" + this.getName() + "\" />";
+			str += "<leaf>" + "<attribute name = \"name\" value= \""
+					+ this.getName() + "\" />";
 			str += "</leaf>";
 			return str;
 		}
 	}
 
 	public void populateTreeWithEntities() {
-		for (int x = this.getParentEntitytype().getEntityList().size()-1; x >=0; --x) {
-			SuperEntity parent = this.getParentEntitytype().getEntityList().get(x);
+		for (int x = this.getParentEntitytype().getEntityList().size() - 1; x >= 0; --x) {
+			SuperEntity parent = this.getParentEntitytype().getEntityList()
+					.get(x);
 			if (this.getIsRule()) {
 				if (this.getIsTextField()) {
 					new StringRuleEntity(this, parent, "");
@@ -298,7 +309,8 @@ public class EntityType {
 				}
 			} else {
 				if (this.getIsTextField()) {
-					new LeafStringEntity(this, parent, "#" + this.getName() + "#");
+					new LeafStringEntity(this, parent, "#" + this.getName()
+							+ "#");
 				} else {
 					new LeafMarkEntity(this, parent, 0);
 				}
@@ -309,7 +321,8 @@ public class EntityType {
 
 	public void removeDeletingChildren() {
 		for (int x = 0; x < this.getEntityList().size(); ++x) {
-			this.getEntityList().get(x).getParentEntity().getSubEntity().remove(this.getEntityList().get(x));
+			this.getEntityList().get(x).getParentEntity().getSubEntity()
+					.remove(this.getEntityList().get(x));
 		}
 		this.getEntityList().clear();
 		this.getParentEntitytype().getSubEntityType().remove(this);
@@ -318,14 +331,23 @@ public class EntityType {
 
 	public void removeSavingChildren() {
 		for (int x = 0; x < this.getEntityList().size(); ++x) {
-			for (int y = 0; y < this.getEntityList().get(x).getSubEntity().size(); ++y) {
-				this.getEntityList().get(x).getParentEntity().getSubEntity().add(this.getEntityList().get(x).getSubEntity().get(y));
-				this.getEntityList().get(x).getSubEntity().get(y).setParentEntity(this.getEntityList().get(x).getParentEntity());
+			for (int y = 0; y < this.getEntityList().get(x).getSubEntity()
+					.size(); ++y) {
+				this.getEntityList().get(x).getParentEntity().getSubEntity()
+						.add(this.getEntityList().get(x).getSubEntity().get(y));
+				this.getEntityList()
+						.get(x)
+						.getSubEntity()
+						.get(y)
+						.setParentEntity(
+								this.getEntityList().get(x).getParentEntity());
 			}
 		}
 		for (int x = 0; x < this.getSubEntityType().size(); ++x) {
-			this.getSubEntityType().get(x).setParentEntitytype(this.getParentEntitytype());
-			this.getParentEntitytype().getSubEntityType().add(this.getSubEntityType().get(x));
+			this.getSubEntityType().get(x)
+					.setParentEntitytype(this.getParentEntitytype());
+			this.getParentEntitytype().getSubEntityType()
+					.add(this.getSubEntityType().get(x));
 		}
 		removeDeletingChildren();
 	}
@@ -334,7 +356,8 @@ public class EntityType {
 		return defaultWeight;
 	}
 
-	public void updateEntity(String pName, Boolean pIsTextField, Date pDate, Double weight) {
+	public void updateEntity(String pName, Boolean pIsTextField, Date pDate,
+			Double weight) {
 		name = pName;
 		isTextField = pIsTextField;
 		date = pDate;
@@ -360,7 +383,8 @@ public class EntityType {
 					classtype = this.BEST_N_TYPE;
 				else
 					classtype = this.MIXED;
-			} else if (o.equals(StringEntity.class) || o.equals(LeafStringEntity.class)) {
+			} else if (o.equals(StringEntity.class)
+					|| o.equals(LeafStringEntity.class)) {
 				if (classtype < 0 || classtype == this.TEXT_TYPE)
 					classtype = this.TEXT_TYPE;
 				else
@@ -373,10 +397,11 @@ public class EntityType {
 	public void setEntityTypeClass(int classType) {
 		Object o = null;
 		boolean text = this.getIsTextField();
-		
+		System.out.println(text);
+
 		this.setIsTextField(false);
 		switch (classType) {
-		
+
 		case 0:
 			o = MarkEntity.class;
 			break;
@@ -397,31 +422,51 @@ public class EntityType {
 		for (int x = 0; x < this.getEntityList().size(); ++x) {
 			SuperEntity newE = null;
 			if (!this.getEntityList().get(x).getClass().equals(o)) {
-				if (o.equals(MarkEntity.class) || o.equals(LeafMarkEntity.class)) {
+				if (o.equals(MarkEntity.class)
+						|| o.equals(LeafMarkEntity.class)) {
 					newE = new MarkEntity(this.getEntityList().get(x));
 				} else if (o.equals(SumMarkEntity.class)) {
 					newE = new SumMarkEntity(this.getEntityList().get(x));
 				} else if (o.equals(BestNMarkEntity.class)) {
 					newE = new BestNMarkEntity(this.getEntityList().get(x), 1);
-				} else if (o.equals(StringEntity.class) || o.equals(LeafStringEntity.class)) {
-					newE = new StringEntity(this.getEntityList().get(x), this.getEntityList().get(x).getField());
+				} else if (o.equals(StringEntity.class)
+						|| o.equals(LeafStringEntity.class)) {
+					newE = new StringEntity(this.getEntityList().get(x), this
+							.getEntityList().get(x).getField());
 				}
 				--x;
-				if(text){
-					try{
-					newE.setMark(Double.parseDouble(newE.getField()));
-					}
-					catch(NumberFormatException e){
-						newE.clearMark();
+				if (text) {
+					if (this.getIsTextField()) {
+
+					} else {
+						try {
+							newE.setMark(Double.parseDouble(newE.getField()));
+						} catch (NumberFormatException e) {
+							newE.clearMark();
+						}
 					}
 				} else {
-					try {
-						newE.setField(String.valueOf(newE.getMark()));
-					} catch (AbsentException e) {
-						newE.setField("-");
+					if (this.getIsTextField()) {
+						/*try {
+							newE.setField(String.valueOf(newE.getMark()));
+						} catch (AbsentException e) {
+							newE.setField("-");
+						}*/
+					} else {
+
 					}
 				}
 			}
 		}
 	}
+
+	public boolean getIsImg() {
+		return isImg;
+	}
+
+	public void setIsImg(boolean isImg) {
+		this.isImg = isImg;
+	}
+
+
 }

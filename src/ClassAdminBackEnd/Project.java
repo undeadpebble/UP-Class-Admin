@@ -3,9 +3,13 @@
  */
 package ClassAdminBackEnd;
 
+import java.awt.Image;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
+
+import javax.imageio.ImageIO;
 
 import org.jfree.chart.JFreeChart;
 import org.tmatesoft.sqljet.core.SqlJetException;
@@ -140,34 +144,33 @@ public class Project {
 	}
 	//Set the selected of the project
 	public void setSelected(int x,boolean selectedgroup) {
-	
 		boolean duplicate = false;
 		for (int i = 0; i < selectedIndexes.size(); i++) {
-			//Check if the values is already selected
-			if ((Integer) selectedIndexes.get(i) == x)
-				duplicate = true;
+		//Check if the values is already selected
+		if ((Integer) selectedIndexes.get(i) == x)
+		duplicate = true;
 		}
 		if (duplicate == false ) {
-			selectedIndexes.add(x);
-			
-			
-			for(int w=0;w< this.getHead().getDataLinkedList().get(0).size();w++ )
-				this.getSelected().add(this.getHead().getDataLinkedList().get(x).get(w));
-			if (scatterIndexes != null) {
-				//add the scatterplots indexes
-				scatterArrayListIndexes.add(scatterIndexes[x]);
+		selectedIndexes.add(x);
 
-			}
-			
-			//Update the values
-			updatecharts();
-			if(selectedgroup ==true)
-			for(int y=0;y<tables.size();y++){
-			
-					tables.get(y).getTable().clearSelection();
-					
-					tables.get(y).getTable().repaint();
-			}
+
+		for(int w=0;w< this.getHead().getDataLinkedList().get(0).size();w++ )
+		this.getSelected().add(this.getHead().getDataLinkedList().get(x).get(w));
+		if (scatterIndexes != null) {
+		//add the scatterplots indexes
+		scatterArrayListIndexes.add(scatterIndexes[x]);
+
+		}
+
+		//Update the values
+		updatecharts();
+		if(selectedgroup ==true)
+		for(int y=0;y<tables.size();y++){
+
+		tables.get(y).getTable().clearSelection();
+
+		tables.get(y).getTable().repaint();
+		}
 		}
 		
 		
@@ -270,5 +273,66 @@ public class Project {
 	public Audit getAudit()
 	{
 		return audit;
+
+	}
+
+	public void setPictures(String dir) {
+		String files;
+		File folder = new File(dir);
+		File[] listOfFiles = folder.listFiles();
+
+		EntityType images = new EntityType("Pictures", this.getHeadEntityType()
+				.getSubEntityType().get(0), true, null, 0.0);
+		images.setIsImg(true);
+		images.setIsTextField(true);
+		images.populateTreeWithEntities();
+
+		LinkedList<LinkedList<SuperEntity>> data = getHead()
+				.getDataLinkedList();
+
+		int where = -1;
+
+		for (int y = 0; y < data.get(0).size(); y++) {
+			if (data.get(0).get(y).getType().getIsImg()) {
+				where = y;
+				break;
+			}
+		}
+
+
+
+		for (int i = 0; i < listOfFiles.length; i++) {
+
+			if (listOfFiles[i].isFile()) {
+				files = listOfFiles[i].getName();
+				String filesFull = listOfFiles[i].getName();
+				if (files.endsWith(".png") || files.endsWith(".PNG")
+						|| files.endsWith(".jpg") || files.endsWith(".JPG")) {
+					files = files.substring(0, files.lastIndexOf('.'));
+
+					if (where != -1)
+						for (int x = 0; x < data.size(); x++) {
+							for (int y = 0; y < data.get(0).size(); y++) {
+								SuperEntity temp = data.get(x).get(y);
+								if (temp.getType().getIsTextField()) {
+									if (temp.getValue().equals(files)) {
+										try{
+										((IMGEntity)data.get(x).get(where))
+												.setImage(ImageIO.read(new File(dir + "\\" + filesFull)));
+										data.get(x).get(where).setField(filesFull);
+										data.get(x).get(where).setPicture(dir + "\\" + filesFull);
+										}
+										catch (Exception e) {
+										}
+										if(this.tables.size() > 0)
+											this.tables.get(0).redraw();
+									}
+								}
+							}
+						}
+				}
+			}
+		}
+
 	}
 }
