@@ -26,6 +26,7 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.annotations.XYAnnotation;
 import org.jfree.chart.annotations.XYDrawableAnnotation;
+import org.jfree.chart.annotations.XYLineAnnotation;
 
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.entity.ChartEntity;
@@ -53,6 +54,7 @@ public class ScatterPlot {
 	private XYDataset datasetMain;
 	private int[] scatterarray;
 	private Project project;
+	private ArrayList annons;
 	//Constructor
 	public ScatterPlot(Project project)
 	{
@@ -86,27 +88,26 @@ public class ScatterPlot {
 	}	
 	
 	//Update all the selected values of the scatterplot
-	public void updateSelectedvalues()
-	{
-		chart.getXYPlot().clearAnnotations();
-		System.out.println("Ek update scatterchart");
-		ArrayList u= project.getSelectedIndexes();
-		System.out.println("Size van "+ u.size());
-	
-		final CircleDrawer cd = new CircleDrawer(Color.red,
-				new BasicStroke(1.0f), null);
-		
-		for(int x=0;x<u.size();x++)
-		{
-			final XYAnnotation selectPlots = new XYDrawableAnnotation(datasetMain
-					.getXValue(0, scatterarray[(Integer)u.get(x)]), datasetMain.getYValue(0,
-							scatterarray[(Integer)u.get(x)]), 11, 11, cd);
-		
-		
-		chart.getXYPlot().addAnnotation(selectPlots);
-		
-		}
-	}
+	public void updateSelectedvalues() {
+
+chart.getXYPlot().clearAnnotations();
+
+ArrayList u = project.getSelectedIndexes();
+//Setup bordercase on charts
+if (annons.size() > 0)
+for (int w = 0; w < annons.size(); w++)
+chart.getXYPlot().addAnnotation((XYAnnotation) annons.get(w));
+
+final CircleDrawer cd = new CircleDrawer(Color.red, new BasicStroke(1.0f), null);
+
+for (int x = 0; x < u.size(); x++) {
+final XYAnnotation selectPlots = new XYDrawableAnnotation(datasetMain.getXValue(0, scatterarray[(Integer) u.get(x)]),
+datasetMain.getYValue(0, scatterarray[(Integer) u.get(x)]), 11, 11, cd);
+
+chart.getXYPlot().addAnnotation(selectPlots);
+
+}
+}
 	//Put the chart on the chartpanel
 	public ChartPanel createPanel()
 	{
@@ -169,4 +170,9 @@ public class ScatterPlot {
 		scatterarray = x;
 	}
 	    
+	public void setAnnons(XYLineAnnotation x) {
+annons.add(x);
+}
+
+
 }

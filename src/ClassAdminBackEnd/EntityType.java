@@ -24,6 +24,7 @@ public class EntityType {
 	private Double defaultWeight;
 	private long ID;
 	private double maxValue = 100;
+	private boolean isImg = false;
 
 	public static int WEIGHTED_AVERAGE_TYPE = 0;
 	public static int SUM_TYPE = 1;
@@ -458,4 +459,14 @@ public class EntityType {
 			}
 		}
 	}
+
+	public boolean getIsImg() {
+		return isImg;
+	}
+
+	public void setIsImg(boolean isImg) {
+		this.isImg = isImg;
+	}
+
+
 }

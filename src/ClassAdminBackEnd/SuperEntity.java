@@ -139,7 +139,8 @@ public class SuperEntity {
 		for (int x = 0; x < subEntity.size(); ++x) {
 			this.subEntity.get(x).setParentEntity(this);
 		}
-		int index = replacedEntity.getParentEntity().getSubEntity().indexOf(replacedEntity);
+		int index = replacedEntity.getParentEntity().getSubEntity()
+				.indexOf(replacedEntity);
 
 		replacedEntity.getParentEntity().getSubEntity().set(index, this);
 	}
@@ -254,7 +255,8 @@ public class SuperEntity {
 	 */
 
 	public Boolean isAbsent() {
-		return this.getType().getDate() != null && this.getType().getDate().after(new Date());
+		return this.getType().getDate() != null
+				&& this.getType().getDate().after(new Date());
 	}
 
 	public SuperEntity unLeaf() {
@@ -267,8 +269,10 @@ public class SuperEntity {
 		Boolean hasval = false;
 		for (int i = 0; i < subEntity.size(); ++i) {
 			try {
-				mTotal += subEntity.get(i).getMark() * subEntity.get(i).getWeight();
-				wTotal += subEntity.get(i).getWeight() * subEntity.get(i).getType().getMaxValue();
+				mTotal += subEntity.get(i).getMark()
+						* subEntity.get(i).getWeight();
+				wTotal += subEntity.get(i).getWeight()
+						* subEntity.get(i).getType().getMaxValue();
 
 				hasval = true;
 			} catch (Exception e) {
@@ -288,8 +292,8 @@ public class SuperEntity {
 		else
 			return 0.0;
 	}
-	
-	public void clearMark(){
+
+	public void clearMark() {
 		this.hasMark = false;
 	}
 
@@ -310,7 +314,8 @@ public class SuperEntity {
 	public String[] getHeaders() {
 		String heads = subEntity.get(0).getHeadersString();
 
-		String[] s = heads.split("bn f3hjjm3734n  5f6 34h 35g635 346n34f f g46345f");
+		String[] s = heads
+				.split("bn f3hjjm3734n  5f6 34h 35g635 346n34f f g46345f");
 		return s;
 
 	}
@@ -319,7 +324,8 @@ public class SuperEntity {
 		String str = this.getDetails().getType().getName();
 
 		for (int x = 0; x < this.subEntity.size(); x++) {
-			str = str + "bn f3hjjm3734n  5f6 34h 35g635 346n34f f g46345f" + this.subEntity.get(x).getHeadersString();
+			str = str + "bn f3hjjm3734n  5f6 34h 35g635 346n34f f g46345f"
+					+ this.subEntity.get(x).getHeadersString();
 		}
 
 		return str;
@@ -342,7 +348,8 @@ public class SuperEntity {
 
 		for (int x = 0; x < this.getSubEntity().size(); x++) {
 			linkLinkEntity.add(new LinkedList<SuperEntity>());
-			this.getSubEntity().get(x).addDataToLinkedList(linkLinkEntity.get(x));
+			this.getSubEntity().get(x)
+					.addDataToLinkedList(linkLinkEntity.get(x));
 		}
 
 		return linkLinkEntity;
@@ -392,7 +399,8 @@ public class SuperEntity {
 		return str;
 	}
 
-	public long saveToDB(SqlJetDb db, long parentID, PDatIDGenerator idgen) throws SqlJetException {
+	public long saveToDB(SqlJetDb db, long parentID, PDatIDGenerator idgen)
+			throws SqlJetException {
 		db.beginTransaction(SqlJetTransactionMode.WRITE);
 		long id = idgen.getID();
 
@@ -407,7 +415,8 @@ public class SuperEntity {
 		return id;
 	}
 
-	public LinkedList<SuperEntity> getColumn(LinkedList<LinkedList<SuperEntity>> data, int kolumn) {
+	public LinkedList<SuperEntity> getColumn(
+			LinkedList<LinkedList<SuperEntity>> data, int kolumn) {
 		return (data.get(kolumn));
 	}
 
@@ -435,9 +444,12 @@ public class SuperEntity {
 		studentLinkedList.add(this);
 
 		String str = "";
+
 		str += "<branch>" + "<attribute name = \"name\" value= \"" + this.getType().getName() + ": " + this.getValue() + "\" />";
+
 		for (int i = 0; i < this.getSubEntity().size(); i++) {
-			str += this.getSubEntity().get(i).createTreeFromHead(studentLinkedList);
+			str += this.getSubEntity().get(i)
+					.createTreeFromHead(studentLinkedList);
 		}
 		str += "</branch>";
 		return str;
@@ -451,7 +463,8 @@ public class SuperEntity {
 		else {
 			for (int x = 0; x < this.getSubEntity().size(); ++x) {
 
-				SuperEntity temp = this.getSubEntity().get(x).findEntityOfType_Down(type);
+				SuperEntity temp = this.getSubEntity().get(x)
+						.findEntityOfType_Down(type);
 				if (temp != null)
 					return temp;
 			}
@@ -468,7 +481,8 @@ public class SuperEntity {
 		return temp;
 	}
 
-	public SuperEntity findEntityOfType_Up(EntityType type, SuperEntity originator) {
+	public SuperEntity findEntityOfType_Up(EntityType type,
+			SuperEntity originator) {
 		if (type.getEntityList().contains(this))
 			return this;
 
@@ -477,19 +491,22 @@ public class SuperEntity {
 
 			for (int x = 0; x < this.getSubEntity().size(); ++x) {
 				if (this.getSubEntity().get(x) != originator)
-					newParent = this.getSubEntity().get(x).findEntityOfType_Down(type);
+					newParent = this.getSubEntity().get(x)
+							.findEntityOfType_Down(type);
 				if (newParent != null)
 					break;
 			}
 
 			if (newParent == null)
-				newParent = this.getParentEntity().findEntityOfType_Up(type, this);
+				newParent = this.getParentEntity().findEntityOfType_Up(type,
+						this);
 
 			return newParent;
 		}
 	}
 
-	public void changeParentTotype(EntityType newParentType) throws InvalidActivityException {
+	public void changeParentTotype(EntityType newParentType)
+			throws InvalidActivityException {
 		SuperEntity oldParent = this.getParentEntity();
 		SuperEntity newParent = null;
 
@@ -499,7 +516,8 @@ public class SuperEntity {
 			throw new InvalidActivityException();
 
 		SuperEntityPointer sPointer = new SuperEntityPointer(newParent);
-		LeafMarkEntity temp2 = new LeafMarkEntity(this.getType(), sPointer.getTarget(), 0);
+		LeafMarkEntity temp2 = new LeafMarkEntity(this.getType(),
+				sPointer.getTarget(), 0);
 		newParentType.getEntityList().remove(temp2);
 		sPointer.getTarget().getSubEntity().remove(temp2);
 		temp2.getType().getEntityList().remove(temp2);
@@ -524,22 +542,25 @@ public class SuperEntity {
 
 	public IMGEntity IterativeDeepeningfindPortrait() {
 		int depth = 1;
+
 		int maxDepth = this.getDepth() - 1;
+
 		IMGEntity result = null;
 		while (result == null && depth <= maxDepth) {
 			result = findPortrait(depth++);
 		}
+
 		return result;
 	}
 
 	public IMGEntity findPortrait(int i) {
-		if (i == 0)
+		if (i <= 0)
 			return null;
 
 		IMGEntity result = null;
-		while (result == null) {
-			result = findPortrait(i - 1);
-		}
+		for (int x = 0; x < subEntity.size(); ++x)
+			result = subEntity.get(x).findPortrait(i - 1);
+
 		return result;
 	}
 }

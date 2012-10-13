@@ -531,9 +531,6 @@ public class TreeView extends Display {
 		}
 
 		// create a new treemap
-		
-
-		
 		tview = new TreeView(t, label,false);
 
 		tview.setBackground(BACKGROUND);
