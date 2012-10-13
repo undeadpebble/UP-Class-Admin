@@ -7,6 +7,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.HeadlessException;
 import java.awt.RenderingHints;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -56,6 +58,8 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 	JTextArea searchBox;
 	JLabel searchLabel;
 	JComboBox studentChooser;
+	JComboBox assessmentChooser;
+	private JLabel[] infoLabels;
 
 	public void refreshButtons() {
 		contentPanel.add(searchBox);
@@ -64,6 +68,10 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 		searchLabel.setBounds(parentFrame.getWidth() - 145, 20, 130, 30);
 		searchBox.setBounds(parentFrame.getWidth() - 145, 50, 130, 30);
 		studentChooser.setBounds(parentFrame.getWidth() - 145, 80, 130, 30);
+		
+		for(int x = 0;x<infoLabels.length;++x){
+			infoLabels[x].setBounds(parentFrame.getWidth() - 145, 110+x*35, 130, 30);
+		}
 	}
 
 	public RapidAssessmentMarkingCanvas(RapidAssessmentContainerType head,
@@ -137,6 +145,18 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 			this.setLayout(null);
 			searchLabel = new JLabel("Search");
 			studentChooser = new JComboBox();
+			infoLabels = new JLabel[3];
+			for(int x = 0;x<infoLabels.length;++x){
+				infoLabels[x] = new JLabel();
+			}
+			studentChooser.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					assess((SuperEntity) studentChooser.getSelectedItem());
+					
+				}
+			});
 			studentChooser.setVisible(true);
 
 			searchLabel.setVisible(true);
@@ -576,7 +596,13 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 	}
 
 	public void assess(SuperEntity entity) {
-		load(entity, (MyComponent) (contentPanel.getComponent(0)));
+		load(entity, (MyComponent) (parentRect));
+		LinkedList<String> list = new LinkedList<String>();
+		entity.findThreeStrings(list);
+		
+		for(int x = 0;x<3 && x<list.size();++x){
+			infoLabels[x].setText(list.get(x));
+		}
 	}
 
 	public void load(SuperEntity entity, MyComponent comp) {

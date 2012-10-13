@@ -1,5 +1,7 @@
 package ClassAdminBackEnd;
 
+import java.util.LinkedList;
+
 import org.tmatesoft.sqljet.core.SqlJetException;
 import org.tmatesoft.sqljet.core.SqlJetTransactionMode;
 import org.tmatesoft.sqljet.core.table.ISqlJetTable;
@@ -41,6 +43,13 @@ public class StringEntity extends SuperEntity{
 
         return id;
 	}
+
+	@Override
+	public void findStrings(LinkedList<String> list, int depth) {
+		list.add(getField());
+		super.findStrings(list, depth);
+	}
+	
 
 	
 }
