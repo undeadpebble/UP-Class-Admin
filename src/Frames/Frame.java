@@ -893,9 +893,10 @@ public class Frame extends JFrame implements ActionListener {
 		scatterButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Scatter.png")));
 		conditionalFormatButton = new ReflectionButton(ImageIO.read(getClass().getResource(
 				"/ClassAdminFrontEnd/resources/ConditionalFormatting.png")));
+		filterButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Filter.png")));
 		bordercaseButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Bordercase.png")));
 		addRowButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/AddRow.png")));
-		filterButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Filter.png")));
+		
 		maxValButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/maxValue.png")));
 		rulesButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Rules2.png")));
 		statisticsButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Statistics.png")));
@@ -914,15 +915,15 @@ public class Frame extends JFrame implements ActionListener {
 		boxButton.setBounds(405, 12, 68, 80);
 		scatterButton.setBounds(473, 12, 68, 80);
 		conditionalFormatButton.setBounds(535, 2, 68, 80);
-		bordercaseButton.setBounds(600, 11, 68, 80);
-		filterButton.setBounds(657, 13, 68, 80);
-		addRowButton.setBounds(720, 12, 68, 80);
-		maxValButton.setBounds(782, 11, 68, 80);
-		rulesButton.setBounds(837, 10, 68, 80);
-		statisticsButton.setBounds(903, 11, 68, 80);
-		rapidAssessmentButton.setBounds(968, 9, 68, 80);
-		markingButton.setBounds(1032, 9, 68, 80);
-		importPicturesButton.setBounds(1097, 7, 68, 80);
+		filterButton.setBounds(598, 13, 68, 80);
+		addRowButton.setBounds(657, 12, 68, 80);
+		bordercaseButton.setBounds(720, 11, 68, 80);
+		maxValButton.setBounds(785, 11, 68, 80);
+		rulesButton.setBounds(850, 10, 68, 80);
+		statisticsButton.setBounds(915, 11, 68, 80);
+		rapidAssessmentButton.setBounds(979, 9, 68, 80);
+		markingButton.setBounds(1045, 9, 68, 80);
+		importPicturesButton.setBounds(1110, 7, 68, 80);
 
 		navBar.add(homeButton);
 		navBar.add(importButton);
@@ -974,15 +975,15 @@ public class Frame extends JFrame implements ActionListener {
 		boxplotInfoPanel.setBounds(400, 0, 125, infoPanel.getHeight());
 		scatterplotInfoPanel.setBounds(457, 0, 125, infoPanel.getHeight());
 		conditionalFormattingInfoPanel.setBounds(503, 0, 129, infoPanel.getHeight());
-		bordercaseInfoPanel.setBounds(566, 0, 129, infoPanel.getHeight());
-		filterInfoPanel.setBounds(637, 0, 129, infoPanel.getHeight());
-		addRowInfoPanel.setBounds(715, 0, 129, infoPanel.getHeight());
-		maxValInfoPanel.setBounds(749, 0, 129, infoPanel.getHeight());
-		rulesInfoPanel.setBounds(830, 0, 129, infoPanel.getHeight());
-		statisticsInfoPanel.setBounds(885, 0, 129, infoPanel.getHeight());
-		markingFormInfoPanel.setBounds(932, 0, 129, infoPanel.getHeight());
-		markingInfoPanel.setBounds(1024, 0, 129, infoPanel.getHeight());
-		importPhotosInfoPanel.setBounds(1070, 0, 129, infoPanel.getHeight());
+		filterInfoPanel.setBounds(580, 0, 129, infoPanel.getHeight());
+		addRowInfoPanel.setBounds(650, 0, 129, infoPanel.getHeight());
+		bordercaseInfoPanel.setBounds(687, 0, 129, infoPanel.getHeight());
+		maxValInfoPanel.setBounds(752, 0, 129, infoPanel.getHeight());
+		rulesInfoPanel.setBounds(844, 0, 129, infoPanel.getHeight());
+		statisticsInfoPanel.setBounds(897, 0, 129, infoPanel.getHeight());
+		markingFormInfoPanel.setBounds(945, 0, 129, infoPanel.getHeight());
+		markingInfoPanel.setBounds(1036, 0, 129, infoPanel.getHeight());
+		importPhotosInfoPanel.setBounds(1080, 0, 129, infoPanel.getHeight());
 
 		homeInfoPanel.setLayout(null);
 		importInfoPanel.setLayout(null);
@@ -1410,19 +1411,19 @@ public class Frame extends JFrame implements ActionListener {
 		importPicturesButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				JFileChooser fileChoose = new JFileChooser();
-				int returnVal = fileChoose.showOpenDialog(new Component() {
-				});
-				if (returnVal == fileChoose.APPROVE_OPTION) {
-					String dir = fileChoose.getSelectedFile().toString();
-					dir = dir.substring(0, dir.lastIndexOf('\\'));
-
-					Global.getGlobal().getActiveProject().setPictures(dir);
-				}
 				if (importPicturesButton.isEnabled()) {
-					// TODO
+					JFileChooser fileChoose = new JFileChooser();
+					blur.fadeIn();
+					int returnVal = fileChoose.showOpenDialog(new Component() {
+					});
+					if (returnVal == fileChoose.APPROVE_OPTION) {
+						String dir = fileChoose.getSelectedFile().toString();
+						dir = dir.substring(0, dir.lastIndexOf('\\'));
 
+						Global.getGlobal().getActiveProject().setPictures(dir);
+					}
 				}
+				blur.fadeOut();
 			}
 
 			public void mouseEntered(MouseEvent arg0) {
@@ -1892,9 +1893,9 @@ public class Frame extends JFrame implements ActionListener {
 		rulesButton.setEnabled();
 		structureModuleButton.setEnabled();
 		statisticsButton.setEnabled();
-		rapidAssessmentButton.setEnabled(false);
-		markingButton.setEnabled(false);
-		importPicturesButton.setEnabled(false);
+		rapidAssessmentButton.setEnabled();
+		markingButton.setEnabled();
+		importPicturesButton.setEnabled();
 		searchPanel.fadeIn();
 	}
 
@@ -1916,9 +1917,9 @@ public class Frame extends JFrame implements ActionListener {
 		rulesButton.setDisabled();
 		structureModuleButton.setDisabled();
 		statisticsButton.setDisabled();
-		rapidAssessmentButton.setEnabled(true);
-		markingButton.setEnabled(true);
-		importPicturesButton.setEnabled(true);
+		rapidAssessmentButton.setDisabled();
+		markingButton.setDisabled();
+		importPicturesButton.setDisabled();
 		searchPanel.fadeOut();
 		studentPanel.setVisible(false);
 	}
