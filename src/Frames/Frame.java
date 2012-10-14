@@ -1918,6 +1918,9 @@ public class Frame extends JFrame implements ActionListener {
 		rulesButton.setDisabled();
 		structureModuleButton.setDisabled();
 		statisticsButton.setDisabled();
+		rapidAssessmentButton.setDisabled();
+		markingButton.setDisabled();
+		importPicturesButton.setDisabled();
 		searchPanel.fadeOut();
 		studentPanel.setVisible(false);
 	}
