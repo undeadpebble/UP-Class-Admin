@@ -796,9 +796,10 @@ public class frmRule extends JFrame {
 							((StringRule) ruleList.get(whichToEdit))
 									.populateTreeWithEntities();
 
-							if (project.getTables().size() > 0)
-								project.getTables().get(0).redraw();
+							
 						}
+						if (project.getTables().size() > 0)
+							project.getTables().get(0).redraw();
 
 						exitFrame();
 					} else {
