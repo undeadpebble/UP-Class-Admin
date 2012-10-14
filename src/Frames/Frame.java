@@ -121,6 +121,9 @@ public class Frame extends JFrame implements ActionListener {
 	private static String MAC_OS = "MAC";
 	private static String WIN_OS = "WINDOWS";
 
+	/*
+	 * Class for tabbedPane labels, creates 'x' buttons on tabs
+	 */
 	public class TabButton extends JPanel {
 
 		private String text;
@@ -145,18 +148,26 @@ public class Frame extends JFrame implements ActionListener {
 			this.setOpaque(false);
 			this.setBorder(null);
 
-			// close tab action
+			// close tab button clicked
 			button.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mousePressed(MouseEvent e) {
+					// close the project
 					Global.getGlobal().getActiveProject().getAudit().closedProject();
+
+					// remove the component from the tabbedPane
 					tabbedPane.remove(tabbedPane.indexOfTabComponent(tabbutton));
+
+					// decrease tabcount
 					tabCount--;
+
+					// deselect selected row
 					table.getTable().clearSelection();
 					Global.getGlobal().getActiveProject().getSelected().clear();
 					Global.getGlobal().getActiveProject().getSelectedIndexes().clear();
 					Global.getGlobal().getProjects().remove(Global.getGlobal().getActiveProject());
 
+					// if there is no tabs, disabled some buttons
 					if (tabCount == -1) {
 						setNavButtonsDisabled();
 						setMenuItemsDisabled();
@@ -168,6 +179,7 @@ public class Frame extends JFrame implements ActionListener {
 
 				}
 
+				// select hover text colours
 				@Override
 				public void mouseEntered(MouseEvent e) {
 					button.setForeground(Color.darkGray);
@@ -233,18 +245,22 @@ public class Frame extends JFrame implements ActionListener {
 		bottomPanel.setBounds(HOME_SPACE_LEFT_X, getHeight() - HOME_BOTTOM_SPACE_Y, bottomPanel.getWidth(), bottomPanel.getHeight());
 		contentPane.add(bottomPanel);
 
+		// create database to save recent documents and recent maths
 		createRecentDocsDB();
 		setRecentPath();
 
+		// setup screens
 		setupHomeScreen();
 		setupWorkspaceScreen();
 
+		// close database on program close
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent we) {
 				if (db != null)
 					db.closeDatabase();
 			}
 		});
+
 		// frame resize listener adjust components accordingly
 		this.addComponentListener(new ComponentListener() {
 
@@ -419,10 +435,12 @@ public class Frame extends JFrame implements ActionListener {
 		mView.setForeground(Color.white);
 		mSettings.setForeground(Color.white);
 
+		// if there is no tabs, disable some buttons
 		if (tabCount < 0) {
 			setMenuItemsDisabled();
 		}
 
+		// add mouselisteners on button clicks
 		addMenuMouseListeners();
 
 		// setup space constants
@@ -527,6 +545,7 @@ public class Frame extends JFrame implements ActionListener {
 		mView.setForeground(Color.white);
 		mSettings.setForeground(Color.white);
 
+		// if there is no tabs, disable some buttons
 		if (tabCount < 0) {
 			setMenuItemsDisabled();
 		}
@@ -692,7 +711,6 @@ public class Frame extends JFrame implements ActionListener {
 		blur.setBounds(0, 0, getWidth(), getHeight());
 
 		// add title bars and recent docs container
-
 		containerSelectTask = new ReflectionImagePanel(ImageIO.read(getClass().getResource(
 				"/ClassAdminFrontEnd/resources/UPAdminHomeSelectTask.png")));
 		containerRecentDocs = new ReflectionImagePanel(ImageIO.read(getClass().getResource(
@@ -753,15 +771,17 @@ public class Frame extends JFrame implements ActionListener {
 		homeRapidAssessment.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				JOptionPane.showMessageDialog(frame, "Please import a document or select a document in workspace first", "No Document Selected", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(frame, "Please import a document or select a document in workspace first",
+						"No Document Selected", JOptionPane.INFORMATION_MESSAGE);
 				homeToWorkspaceTransition();
 			}
 		});
-		
+
 		homeStudents.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				JOptionPane.showMessageDialog(frame, "Please import a document or select a document in workspace first", "No Document Selected", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(frame, "Please import a document or select a document in workspace first",
+						"No Document Selected", JOptionPane.INFORMATION_MESSAGE);
 				homeToWorkspaceTransition();
 			}
 		});
@@ -770,6 +790,7 @@ public class Frame extends JFrame implements ActionListener {
 		recentDocsPanel.fadeIn();
 		homePanel.fadeIn();
 
+		// get recents docs from database and put it in the menu items
 		populateRecentDocsInMenu();
 	}
 
@@ -802,6 +823,7 @@ public class Frame extends JFrame implements ActionListener {
 		searchPanel.setLayout(null);
 		workspacePanel.add(searchPanel);
 
+		// create search bar in workspace view
 		final JTextField searchBox = new JTextField();
 		searchBox.setBounds(25, 5, 124, 25);
 		searchPanel.add(searchBox);
@@ -825,6 +847,7 @@ public class Frame extends JFrame implements ActionListener {
 			}
 		});
 
+		// add search icon
 		searchImage = new ImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Search.png")));
 		searchImage.setBounds(0, 8, 30, 30);
 		searchPanel.add(searchImage);
@@ -836,7 +859,6 @@ public class Frame extends JFrame implements ActionListener {
 
 		// create buttons on navigation bar and add their respective mouse
 		// listeners
-
 		homeButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Home.png")));
 		importButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Import.png")));
 		exportButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Export.png")));
@@ -1061,6 +1083,7 @@ public class Frame extends JFrame implements ActionListener {
 		markingInfoPanel.add(markingBubble);
 		importPhotosInfoPanel.add(importPhotosBubble);
 
+		// add mouse listeners for workspace buttons
 		homeButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
@@ -1384,6 +1407,7 @@ public class Frame extends JFrame implements ActionListener {
 				importPhotosInfoPanel.fadeOut();
 			}
 		});
+
 	}
 
 	/*
@@ -1413,26 +1437,38 @@ public class Frame extends JFrame implements ActionListener {
 		// if the chosen file is valid
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 
-				file = filechooser.getSelectedFile();
-				currentFilePath = filechooser.getSelectedFile();
-				DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-				Date date = new Date();
-
-				db.addRecentPath(currentFilePath.getAbsolutePath(), dateFormat.format(date));
-				blur.fadeOut();
-				createTab(file);
-				homeToWorkspaceTransition();
-				tabBar.fadeIn();
-
-				if (db != null) {
-					if (db.alreadyContains(file.getName(), file.getAbsolutePath())) {
-						db.updateRecentDocument(file.getName(), file.getAbsolutePath(), dateFormat.format(date));
-					} else {
-						db.addRecentDoc(file.getName(), file.getAbsolutePath(), dateFormat.format(date));
-					}
-				}
+			//get the file
+			file = filechooser.getSelectedFile();
+			currentFilePath = filechooser.getSelectedFile();
 			
+			//get time of import
+			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+			Date date = new Date();
+
+			//add doc to recent docs database
+			db.addRecentPath(currentFilePath.getAbsolutePath(), dateFormat.format(date));
+			
+			//blur out when filechooser is closed
+			blur.fadeOut();
+			
+			//create a tab in the tabbedPane with document
+			createTab(file);
+			
+			//go from home view to workspace
+			homeToWorkspaceTransition();
+			tabBar.fadeIn();
+
+			//add recent doc to database
+			if (db != null) {
+				if (db.alreadyContains(file.getName(), file.getAbsolutePath())) {
+					db.updateRecentDocument(file.getName(), file.getAbsolutePath(), dateFormat.format(date));
+				} else {
+					db.addRecentDoc(file.getName(), file.getAbsolutePath(), dateFormat.format(date));
+				}
+			}
+
 		} else {
+			//if no file is chosen, just close and blur out
 			blur.fadeOut();
 		}
 	}
@@ -1444,8 +1480,11 @@ public class Frame extends JFrame implements ActionListener {
 
 		File file = _file;
 
+		//get time of import
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		Date date = new Date();
+		
+		//if there is a recent doc database, add the doc to it
 		if (db != null) {
 			if (db.alreadyContains(file.getName(), file.getAbsolutePath())) {
 				db.updateRecentDocument(file.getName(), file.getAbsolutePath(), dateFormat.format(date));
@@ -1454,10 +1493,14 @@ public class Frame extends JFrame implements ActionListener {
 			}
 		}
 
+		//create tab with document
 		createTab(file);
+		
+		//go from home to workspace view
 		homeToWorkspaceTransition();
+		
+		//fade tabbedPane in
 		tabBar.fadeIn();
-
 	}
 
 	/*
@@ -1482,10 +1525,13 @@ public class Frame extends JFrame implements ActionListener {
 
 		// if the chosen file is valid
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			
+			//get the file
 			file = filechooser.getSelectedFile();
-			try {
+			try { //try to import file
 				FileHandler.get().saveFile(file.getAbsolutePath(), Global.getGlobal().getActiveProject());
 
+				// add to recent docs database
 				if (db != null) {
 
 					DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -1497,13 +1543,17 @@ public class Frame extends JFrame implements ActionListener {
 						db.addRecentDoc(file.getName(), file.getAbsolutePath(), dateFormat.format(date));
 					}
 				}
-			} catch (UnsupportedFileTypeException e) {
+			} //if the file extension is unsupported, suggest .pdat extension 
+			catch (UnsupportedFileTypeException e) {
 				int n = JOptionPane.showConfirmDialog(frame, "Unsupported file type. Save as .pdat?", "Unsupported File Type",
 						JOptionPane.YES_NO_OPTION);
+				//if user says yes
 				if (n == 0) {
+					//get file path
 					String path = file.getAbsolutePath().toString().substring(0, file.getAbsolutePath().toString().lastIndexOf("."));
 					path = path + ".pdat";
 
+					//get file name
 					String name = file.getName().toString().substring(0, file.getName().toString().lastIndexOf("."));
 					name = name + ".pdat";
 					try {
@@ -1522,10 +1572,10 @@ public class Frame extends JFrame implements ActionListener {
 					} catch (UnsupportedFileTypeException e1) {
 						JOptionPane.showMessageDialog(frame, "Something broke again. *_*", "Error", JOptionPane.ERROR_MESSAGE);
 					}
+				//if user says no, do nothing
 				} else if (n == 1) {
 
 				}
-				// e.printStackTrace();
 			}
 			blur.fadeOut();
 		} else {
@@ -1578,7 +1628,7 @@ public class Frame extends JFrame implements ActionListener {
 			p.getAudit().openedProject();
 
 		} catch (UnsupportedFileTypeException e) {
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(frame, "The file type is unsupported.", "Unsupported File Type", JOptionPane.ERROR_MESSAGE);
 		}
 		// create table on panel
 
