@@ -249,8 +249,8 @@ public class FrmTable extends JPanel {
 		table = new JXTable() {
 			public Component prepareRenderer(TableCellRenderer renderer,
 					int Index_row, int Index_col) {
-				Component comp = super.prepareRenderer(renderer, Index_row,
-						Index_col);
+				Component comp = super.prepareRenderer(renderer, convertRowIndexToModel(Index_row),
+						convertColumnIndexToModel(Index_col));
 				// even index, selected or not selected
 				try {
 
@@ -295,7 +295,7 @@ public class FrmTable extends JPanel {
 						comp.setBackground(Color.white);
 					}
 
-					if (isCellSelected(Index_row, Index_col)) {
+					if (isCellSelected(convertRowIndexToModel(Index_row), Index_col)) {
 						backgroundColors.add(Color.orange);
 						comp.setBackground(Color.orange);
 						if (convertColumnIndexToModel(Index_col) == 0)
