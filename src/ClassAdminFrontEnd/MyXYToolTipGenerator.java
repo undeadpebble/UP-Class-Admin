@@ -28,10 +28,17 @@ public class MyXYToolTipGenerator extends CustomXYToolTipGenerator {
 	 */
 	@Override
 	public String generateToolTip(XYDataset data, int series, int item) {
-	
+		for (int q = 0; q < intarray.length; q++) {
+			if (intarray[q] == item) {
+				return "Student number: " + diedata.get(q).get(0).getValue() + "  ("
+						+ Double.toString(roundTwoDecimals(data.getXValue(series, item))) + ","
+						+ Double.toString(roundTwoDecimals(data.getYValue(series, item))) + ")";
+
+			}
+		}
 		return "Student number: " + diedata.get(intarray[intarray[item]]).get(0).getValue() + "  ("
-				+ Double.toString(roundTwoDecimals(data.getXValue(series, item))) + ","
-				+ Double.toString(roundTwoDecimals(data.getYValue(series, item))) + ")";
+		+ Double.toString(roundTwoDecimals(data.getXValue(series, item))) + ","
+		+ Double.toString(roundTwoDecimals(data.getYValue(series, item))) + ")";
 	}
 
 	/**
