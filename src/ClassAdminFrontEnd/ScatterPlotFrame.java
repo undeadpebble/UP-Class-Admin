@@ -50,14 +50,23 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 	private Project project;
 	private LinkedList<LinkedList<SuperEntity>> diedata;
 	private	JFrame f;
-	// Update all the values of the scatterplot
+	
+	/**
+	 * Update all the values of the scatterplot
+	 */
 	public void update() {
 
 		nuweChart.updateSelectedvalues();
 
 	}
 
-	// sort scatterchart
+	 
+	/**
+	 * @param xgetal
+	 * @param ygetal
+	 * @return
+	 * sort scatterchart
+	 */
 	public int[] doensorteer(int xgetal, int ygetal) {
 		// Sorting for scatterselection
 		double[] sorteermidq = new double[diedata.size()];
@@ -121,13 +130,19 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 		return houer;
 	}
 
-	// Create the scatterplotframe
+	
+	/**
+	 * @param project
+	 * Create the scatterplotframe
+	 */
 	public ScatterPlotFrame(final Project project) {
 
 		 f = new JFrame("ScatterPlot");
 		this.project = project;
 		final Container content = f.getContentPane();
-		f.setSize(550, 380);
+		f.setBounds(100,100,550, 380);
+		Image icon = Toolkit.getDefaultToolkit().getImage("icons/Scatter.png");
+		f.setIconImage(icon);
 		diedata = project.getHead().getDataLinkedList();
 
 		final XYSeriesCollection dataset = new XYSeriesCollection();
@@ -170,9 +185,9 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 				}
 
 			}
-
+			
 			dataset.addSeries(series);
-		
+			
 			nuweChart.setScatterArray(doensorteer(houerx, houery));
 
 			// Check if there is any border cases
@@ -251,7 +266,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 						}
 
 					}
-
+					nuweChart.setScatterArray(doensorteer(houerx, houery));
 					nuwedataset.addSeries(series);
 					chartpanel.getChart().getXYPlot().setDataset(nuwedataset);
 					nuweChart.setDatasetmain(nuwedataset);
@@ -367,7 +382,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 						}
 
 					}
-
+					nuweChart.setScatterArray(doensorteer(houerx, houery));
 					nuwedataset.addSeries(series);
 					chartpanel.getChart().getXYPlot().setDataset(nuwedataset);
 					nuweChart.setDatasetmain(nuwedataset);
@@ -513,10 +528,16 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 
 	}
 
+	/**
+	 * Displays frame
+	 */
 	public void display()
 	{
 		f.setVisible(true);
 	}
+	/**
+	 * @throws IOException
+	 */
 	public void saveFileAs() throws IOException {
 
 		File file;
@@ -543,6 +564,15 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 	}
 
 	
+	/**
+	 * @param chart
+	 * @param aFileName
+	 * @param width
+	 * @param height
+	 * @param quality
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
 	public static void saveToFile(JFreeChart chart, String aFileName, int width, int height, double quality) throws FileNotFoundException,
 			IOException {
 		BufferedImage img = draw(chart, width, height);
@@ -566,6 +596,12 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 	}
 
 	
+	/**
+	 * @param chart
+	 * @param width
+	 * @param height
+	 * @return
+	 */
 	protected static BufferedImage draw(JFreeChart chart, int width, int height)
 
 	{

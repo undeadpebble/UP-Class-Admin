@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -60,6 +61,9 @@ public class SetMaxValueFrame extends JFrame {
 		int y = (dim.height - h) / 2;
 		// Move the window
 		setLocation(x, y);
+		
+		Image icon = Toolkit.getDefaultToolkit().getImage("icons/MaxValueFrame.png");
+		this.setIconImage(icon);
 
 		backgroundPanel = new BackgroundGradientPanel(contentPane);
 		backgroundPanel.setBounds(0, 0, getWidth(), getHeight());

@@ -47,6 +47,11 @@ public class Project {
 	private int histogramdatacount = -1;
 	private int scatterdatacount = -1;
 
+
+	/**
+	 * @param p
+	 */
+
 	public void load(Project p) {
 		this.audit = p.audit;
 		this.boxplotcharts = p.boxplotcharts;
@@ -68,11 +73,20 @@ public class Project {
 		this.treeLinkedList = p.treeLinkedList;
 	}
 
+	/**
+	 * @return Get the number of histograms in the active project
+	 */
+
 	public int getHistogramcount() {
 		return histogramdatacount;
 	}
 
-	// Increase the count of number of histogramcharts opened
+
+	/**
+	 * 
+	 * Increase the count of number of histogramcharts opened
+	 */
+
 	public void incHistogramcount() {
 		int modgetal = this.getHead().getNumberHeaders().length;
 
@@ -82,11 +96,20 @@ public class Project {
 
 	}
 
+
+	/**
+	 * @return Get the number scatterplot in the active project
+	 */
+
 	public int getscattercount() {
 		return scatterdatacount;
 	}
 
-	// Increase the number of scattercharts open in project
+
+	/**
+	 * Increase the number of scattercharts open in project
+	 */
+
 	public void incscattercount() {
 		int modgetal = this.getHead().getNumberHeaders().length;
 
@@ -96,7 +119,11 @@ public class Project {
 
 	}
 
-	// Clear all selected values in the active project
+
+	/**
+	 * Clear all selected values in the active project
+	 */
+
 	public void clearselected() {
 
 		this.getSelectedIndexes().clear();
@@ -105,6 +132,11 @@ public class Project {
 		for (int y = 0; y < tables.size(); y++)
 			tables.get(y).repaint();
 	}
+
+	/**
+	 * @param x
+	 *            Add scatterchart to arraylist
+	 */
 
 	public boolean getCleared() {
 		return cleared;
@@ -116,27 +148,41 @@ public class Project {
 	}
 
 	// Add scatterchart to arraylist
+
 	public void addscattercharts(ScatterPlotFrame x) {
 
 		scattercharts.add(x);
 
 	}
 
-	// Add boxplot to arraylist
+
+	/**
+	 * @param x
+	 *            Add boxplot to arraylist
+	 */
+
 	public void addboxplotcharts(BoxPlotFrame x) {
 
 		boxplotcharts.add(x);
 
 	}
 
-	// Add histogram to arraylist
+	/**
+	 * @param x
+	 *            Add histogram to arraylist
+	 */
+
 	public void addhistogramcharts(HistogramFrame x) {
 
 		histogramcharts.add(x);
 
 	}
 
-	// Update the charts selected values
+
+	/**
+	 * Update the charts selected values
+	 */
+
 	public void updatecharts() {
 		for (int i = 0; i < scattercharts.size(); i++)
 			((ScatterPlotFrame) scattercharts.get(i)).update();
@@ -145,7 +191,13 @@ public class Project {
 		}
 	}
 
-	// Set the selected of the project
+
+	/**
+	 * @param x
+	 * @param selectedgroup
+	 *            Set the selected of the project
+	 */
+
 	public void setSelected(int x, boolean selectedgroup) {
 		boolean duplicate = false;
 		for (int i = 0; i < selectedIndexes.size(); i++) {
@@ -156,10 +208,10 @@ public class Project {
 		if (duplicate == false) {
 			selectedIndexes.add(x);
 
-			for (int w = 0; w < this.getHead().getDataLinkedList().get(0)
-					.size(); w++)
-				this.getSelected().add(
-						this.getHead().getDataLinkedList().get(x).get(w));
+
+			for (int w = 0; w < this.getHead().getDataLinkedList().get(0).size(); w++)
+				this.getSelected().add(this.getHead().getDataLinkedList().get(x).get(w));
+
 			if (scatterIndexes != null) {
 				// add the scatterplots indexes
 				scatterArrayListIndexes.add(scatterIndexes[x]);
@@ -179,20 +231,35 @@ public class Project {
 
 	}
 
+	/**
+	 * @return
+	 * Get the selected indexes of the project
+	 */
 	public ArrayList getSelectedIndexes() {
 		return selectedIndexes;
 	}
 
-	// Set the scattercharts indexes
+	/**
+	 * @param x
+	 * Set the scattercharts indexes
+	 */
+
 	public void setScatterSelect(int[] x) {
 		scatterIndexes = x;
 
 	}
 
+	/**
+	 * @return
+	 * Get the indexes of the scatterplot
+	 */
 	public int[] getScatterIndexes() {
 		return scatterIndexes;
 	}
 
+	/**
+	 * Update the tables values
+	 */
 	public void updateTables() {
 		for (int x = 0; x < tables.size(); x++) {
 			tables.get(x).redraw();
@@ -284,6 +351,7 @@ public class Project {
 		File[] listOfFiles = folder.listFiles();
 		EntityType images;
 
+
 		Boolean hasImg = false;
 
 		for (int x = 0; x < this.getHead().getHeadersLinkedList().size(); x++) {
@@ -302,8 +370,8 @@ public class Project {
 			images.populateTreeWithEntities();
 		}
 
-		LinkedList<LinkedList<SuperEntity>> data = getHead()
-				.getDataLinkedList();
+
+		LinkedList<LinkedList<SuperEntity>> data = getHead().getDataLinkedList();
 
 		int where = -1;
 
@@ -319,8 +387,7 @@ public class Project {
 			if (listOfFiles[i].isFile()) {
 				files = listOfFiles[i].getName();
 				String filesFull = listOfFiles[i].getName();
-				if (files.endsWith(".png") || files.endsWith(".PNG")
-						|| files.endsWith(".jpg") || files.endsWith(".JPG")) {
+				if (files.endsWith(".png") || files.endsWith(".PNG") || files.endsWith(".jpg") || files.endsWith(".JPG")) {
 					files = files.substring(0, files.lastIndexOf('.'));
 
 					if (where != -1)
@@ -329,6 +396,7 @@ public class Project {
 								SuperEntity temp = data.get(x).get(y);
 								if (temp.getType().getIsTextField()) {
 									if (temp.getValue().equals(files)) {
+
 										try {
 											((IMGEntity) data.get(x).get(where))
 													.setImage(ImageIO

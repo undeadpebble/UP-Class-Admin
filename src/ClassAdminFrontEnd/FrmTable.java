@@ -1,3 +1,4 @@
+
 package ClassAdminFrontEnd;
 
 import javax.swing.*;
@@ -618,4 +619,5 @@ public class FrmTable extends JPanel {
 			}
 		}
 	}
+
 }

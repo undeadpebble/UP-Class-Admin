@@ -311,12 +311,12 @@ public class EntityType {
 			} else {
 				if (this.getIsTextField()) {
 
-					if (isImg) {
-						new IMGEntity(this, parent, "");
-					} else
-
-						new LeafStringEntity(this, parent, "#" + this.getName()
-								+ "#");
+					if(this.getIsImg()){
+						new IMGEntity(this, parent, this.getName());
+					}	
+					else
+					new LeafStringEntity(this, parent, "#" + this.getName()
+							+ "#");
 
 				} else {
 

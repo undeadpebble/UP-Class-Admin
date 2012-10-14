@@ -1,3 +1,4 @@
+
 package ClassAdminFrontEnd;
 
 import javax.swing.*;
@@ -65,9 +66,10 @@ public class StudentPopUp {
 					tview.setSuperEntity(item.getRow(), new AbsentLeafMarkEntity(tview.getSuperEntity(item.getRow())));
 					activeProject.updateTables();
 					String nodeName = item.getString("name");
-					nodeName = nodeName.substring(0, nodeName.indexOf(":") + 2) + "*ABSENT*";
+					nodeName = nodeName.substring(0, nodeName.indexOf(":") + 2) + "*ABSENT";
 					item.set("name", nodeName);
 					item.getVisualization().run("filter");
+					activeProject.getAudit().updateStudent(activeProject.getStudentLinkedList().get(0).getValue(), activeProject.getStudentLinkedList().get(item.getRow()).getValue(), "*ABSENT", true);
 				}
 			}
 		});
@@ -82,6 +84,7 @@ public class StudentPopUp {
 					nodeName = nodeName.substring(0, nodeName.indexOf(":") + 2) + "N/A";
 					item.set("name", nodeName);
 					item.getVisualization().run("filter");
+					activeProject.getAudit().updateStudent(activeProject.getStudentLinkedList().get(0).getValue(), activeProject.getStudentLinkedList().get(item.getRow()).getValue(), "NOT ABSENT", true);
 				}
 			}
 		});
@@ -111,5 +114,5 @@ public class StudentPopUp {
 			}
 		});
 	}
-
 }
+

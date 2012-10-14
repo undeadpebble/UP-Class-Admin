@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -50,6 +51,8 @@ public class BordercaseFrame extends JFrame {
 		setContentPane(contentPane);
 
 		this.setTitle("Bordercase");
+		Image icon = Toolkit.getDefaultToolkit().getImage("icons/BordercaseFrame.png");
+		this.setIconImage(icon);
 
 		// Get the size of the screen
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -67,12 +70,12 @@ public class BordercaseFrame extends JFrame {
 		backgroundPanel.setLayout(null);
 
 		JLabel lblBottomBordercaseValue = new JLabel("Bottom bordercase Value");
-		lblBottomBordercaseValue.setBounds(54, 78, 160, 14);
+		lblBottomBordercaseValue.setBounds(54, 92, 160, 14);
 		lblBottomBordercaseValue.setForeground(new Color(0xEDEDED));
 		backgroundPanel.add(lblBottomBordercaseValue);
 		
 		JLabel lblUpperBordercaseValue = new JLabel("Upper bordercase Value");
-		lblUpperBordercaseValue.setBounds(54, 123, 160, 14);
+		lblUpperBordercaseValue.setBounds(54, 141, 160, 14);
 		lblUpperBordercaseValue.setForeground(new Color(0xEDEDED));
 		backgroundPanel.add(lblUpperBordercaseValue);
 		
@@ -83,7 +86,7 @@ public class BordercaseFrame extends JFrame {
 				new Integer(1) // step
 		);
 		final JSpinner maxVal = new JSpinner(SNMmax);
-		maxVal.setBounds(274, 116, 121, 28);
+		maxVal.setBounds(274, 134, 121, 28);
 
 		SpinnerNumberModel SNMmin = new SpinnerNumberModel(
 				new Integer(40), // value
@@ -92,22 +95,22 @@ public class BordercaseFrame extends JFrame {
 				new Integer(1) // step
 		);
 		final JSpinner minVal = new JSpinner(SNMmin);
-		minVal.setBounds(274, 71, 121, 28);
+		minVal.setBounds(274, 85, 121, 28);
 		
 		backgroundPanel.add(maxVal);
 		backgroundPanel.add(minVal);
 		
-		final ReflectionButton btnAddBordercase = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/BordercaseFrame.png")));
-		btnAddBordercase.setBounds(333, 187, 62, 86);
+		final ReflectionButton btnAddBordercase = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/BordercaseFrameLabel.png")));
+		btnAddBordercase.setBounds(308, 199, 87, 86);
 		backgroundPanel.add(btnAddBordercase);
 		
 		final JComboBox cbxHeaders = new JComboBox();
-		cbxHeaders.setBounds(274, 27, 121, 20);
+		cbxHeaders.setBounds(274, 35, 121, 28);
 		backgroundPanel.add(cbxHeaders);
 		
 		JLabel lblWhereToAdd = new JLabel("Where to add the bordercase");
 		lblWhereToAdd.setForeground(Color.WHITE);
-		lblWhereToAdd.setBounds(54, 27, 160, 14);
+		lblWhereToAdd.setBounds(54, 42, 160, 14);
 		backgroundPanel.add(lblWhereToAdd);
 
 		// frame resize listener adjust components accordingly
@@ -142,8 +145,9 @@ public class BordercaseFrame extends JFrame {
 		
 		cbxHeaders.setModel(new DefaultComboBoxModel(table.project.getHead().getNumberHeaders()));
 		
-		JButton btnRemoveBorderCase = new JButton("Remove bordercase");
-		btnRemoveBorderCase.setBounds(54, 198, 137, 23);
+		final ReflectionButton btnRemoveBorderCase = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/BordercaseFrameLabelRemove.png")));
+		//JButton btnRemoveBorderCase = new JButton("Remove bordercase");
+		btnRemoveBorderCase.setBounds(54, 198, 87, 87);
 		backgroundPanel.add(btnRemoveBorderCase);
 		
 		btnAddBordercase.addActionListener(new ActionListener() {

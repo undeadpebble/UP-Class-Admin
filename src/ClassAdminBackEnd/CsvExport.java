@@ -43,7 +43,7 @@ public class CsvExport {
 			out=out.substring(0, out.length()-1);
 			out+='\n';
 		}
-		System.out.println(out);
+		//System.out.println(out);
 		byte[] aInput = out.getBytes();
 		try {
 			OutputStream output = null;

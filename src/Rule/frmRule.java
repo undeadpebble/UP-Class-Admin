@@ -12,6 +12,7 @@ import javax.swing.JTextField;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -134,6 +135,11 @@ public class frmRule extends JFrame {
 		int _y = (dim.height - h) / 2;
 		// Move the window
 		setLocation(_x, _y);
+		
+		this.setTitle("Add Rule");
+		
+		Image icon = Toolkit.getDefaultToolkit().getImage("icons/Rules2.png");
+		this.setIconImage(icon);
 
 		contentPane = new JPanel();
 		contentPane.setForeground(Color.GRAY);
