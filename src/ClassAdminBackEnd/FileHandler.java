@@ -25,17 +25,16 @@ public class FileHandler {
 	}
 
 	private FileHandler() {
-		project = new Project();
 	}
 
 	public void openFile(String filename, Project project) throws UnsupportedFileTypeException {
 		this.project = project;
-		if (filename.substring(filename.indexOf('.')).contains("csv")) {
+		if (filename.substring(filename.indexOf('.')).toLowerCase().contains("csv")) {
 			openCSV(filename);
-		} else if (filename.substring(filename.indexOf('.')).contains("xls")) {
+		} else if (filename.substring(filename.indexOf('.')).toLowerCase().contains("xls")) {
 			openXls(filename);
 
-		} else if (filename.substring(filename.indexOf('.')).contains("pdat")) {
+		} else if (filename.substring(filename.indexOf('.')).toLowerCase().contains("pdat")) {
 			openPDat(filename);
 		}
 		else
@@ -173,6 +172,7 @@ public class FileHandler {
 	}
 
 	public void saveFile(String filename, Project project) throws UnsupportedFileTypeException {
+		this.project = project;
 		if (filename.substring(filename.indexOf('.')).contains("csv")) {
 			saveCSV(filename);
 		} else if (filename.substring(filename.indexOf('.')).contains("xls")) {

@@ -79,6 +79,7 @@ import prefuse.visual.VisualItem;
 import prefuse.visual.expression.InGroupPredicate;
 import prefuse.visual.sort.TreeDepthItemSorter;
 import ClassAdminBackEnd.EntityType;
+import ClassAdminBackEnd.Global;
 import ClassAdminBackEnd.Project;
 import ClassAdminBackEnd.SuperEntity;
 import Frames.FrmNewNode;
@@ -393,6 +394,7 @@ public class TreeView extends Display {
 		myProject.getTreeLinkedList().clear();
 
 		String str = "<tree>" + "<declarations>" + "<attributeDecl name=\"name\" type=\"String\" />" + "</declarations>";
+		
 
 		str += th.createTreeFromHead(myProject.getTreeLinkedList());
 

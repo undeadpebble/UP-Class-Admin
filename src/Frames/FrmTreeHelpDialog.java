@@ -75,7 +75,7 @@ public class FrmTreeHelpDialog {
 		backgroundPanel.add(cc2);
 
 		//backgroundPanel.pack();
-		frame.setVisible(true);
+		
 	}
 	
 	public void showFrmTreeHelpDialog()

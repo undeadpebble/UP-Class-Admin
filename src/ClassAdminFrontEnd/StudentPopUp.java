@@ -63,7 +63,10 @@ public class StudentPopUp {
 			public void actionPerformed(ActionEvent e) {
 				VisualItem item = activeItem;
 				if (item.canGetString("name")) {
-					tview.setSuperEntity(item.getRow(), new AbsentLeafMarkEntity(tview.getSuperEntity(item.getRow())));
+					AbsentLeafMarkEntity newM = new AbsentLeafMarkEntity(tview.getSuperEntity(item.getRow()));
+					newM.setMark(0.0);
+					tview.setSuperEntity(item.getRow(),newM);
+					activeProject.getSelected().add(newM);
 					activeProject.updateTables();
 					String nodeName = item.getString("name");
 					nodeName = nodeName.substring(0, nodeName.indexOf(":") + 2) + "*ABSENT";
@@ -78,7 +81,10 @@ public class StudentPopUp {
 			public void actionPerformed(ActionEvent e) {
 				VisualItem item = activeItem;
 				if (item.canGetString("name")) {
-					tview.setSuperEntity(item.getRow(),new MarkEntity(tview.getSuperEntity(item.getRow())));
+					MarkEntity newM = new MarkEntity(tview.getSuperEntity(item.getRow()));
+					tview.setSuperEntity(item.getRow(),newM);
+					activeProject.getSelected().add(newM);
+					newM.setMark(0.0);
 					activeProject.updateTables();
 					String nodeName = item.getString("name");
 					nodeName = nodeName.substring(0, nodeName.indexOf(":") + 2) + "N/A";

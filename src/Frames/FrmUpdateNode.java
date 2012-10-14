@@ -51,8 +51,10 @@ public class FrmUpdateNode {
 	private EntityType activeentity;
 	private VisualItem activeItem;
 	private BackgroundGradientPanel backgroundPanel;
+	final JSpinner Nspinner;
 
-	public FrmUpdateNode(Project project, JFrame parentFrame, EntityType entity, VisualItem visualItem) {
+	public FrmUpdateNode(Project project, JFrame parentFrame,
+			EntityType entity, VisualItem visualItem) {
 		activeProject = project;
 		parentF = parentFrame;
 		activeentity = entity;
@@ -60,7 +62,8 @@ public class FrmUpdateNode {
 
 		frame = new JDialog(parentFrame, true);
 		frame.setSize(356, 233);
-		frame.setLocation(parentF.getWidth()+parentF.getX()-250, parentF.getY()+40);
+		frame.setLocation(parentF.getWidth() + parentF.getX() - 250,
+				parentF.getY() + 40);
 		frame.getContentPane().setLayout(null);
 
 		frame.setTitle("Edit Node");
@@ -71,9 +74,14 @@ public class FrmUpdateNode {
 		contentPane.setLayout(null);
 
 		backgroundPanel = new BackgroundGradientPanel(contentPane);
-		backgroundPanel.setBounds(0, 0, contentPane.getWidth(), contentPane.getHeight());
+		backgroundPanel.setBounds(0, 0, contentPane.getWidth(),
+				contentPane.getHeight());
 		contentPane.add(backgroundPanel);
 		backgroundPanel.setLayout(null);
+
+		Nspinner = new JSpinner(new SpinnerNumberModel(activeentity.getN(),
+				1.0, 100.0, 1.0));
+		Nspinner.setVisible(false);
 
 		final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		Date date = new Date();
@@ -95,6 +103,18 @@ public class FrmUpdateNode {
 		cmbType.addItem("Text");
 		cmbType.addItem("Mixed");
 
+		cmbType.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if (cmbType.getSelectedIndex() == 2) {
+					Nspinner.setVisible(true);
+				} else {
+					Nspinner.setVisible(false);
+				}
+			}
+		});
+
 		cmbType.setSelectedIndex(activeentity.getEntityTypeClass());
 
 		SpinnerNumberModel snmWeight = new SpinnerNumberModel(new Double(1.00), // value
@@ -109,7 +129,8 @@ public class FrmUpdateNode {
 		if (activeentity.getDate() == null) {
 			txtDate.setText(dateFormat.format(new Date()));
 		} else {
-			txtDate.setText(dateFormat.format(activeentity.getDate()).toString());
+			txtDate.setText(dateFormat.format(activeentity.getDate())
+					.toString());
 		}
 		btnDate.addActionListener(new ActionListener() {
 			@Override
@@ -126,10 +147,10 @@ public class FrmUpdateNode {
 				String assDate = "";
 				double weight = 1.0;
 
-				//reset formatting
+				// reset formatting
 				lblName.setForeground(new Color(0xEDEDED));
 				lblDate.setForeground(new Color(0xEDEDED));
-			
+
 				// validation of values
 				if (txtName.getText() == null || txtName.getText().equals("")) {
 					b = false;
@@ -144,12 +165,11 @@ public class FrmUpdateNode {
 					lblDate.setForeground(Color.RED);
 				}
 
-
 				if (b) {
 
-
 					String oldName = activeentity.getName();
-					String oldIsTextField = activeentity.getIsTextField().toString();
+					String oldIsTextField = activeentity.getIsTextField()
+							.toString();
 					String oldDate;
 
 					if (activeentity.getDate() == null)
@@ -158,12 +178,20 @@ public class FrmUpdateNode {
 						oldDate = dateFormat.format(activeentity.getDate());
 					String oldWeight = Double.toString(activeentity.getWeight());
 
-					//create audit entry and update node information
-					activeProject.getAudit().updateNode(oldName, oldIsTextField, oldDate, oldWeight, txtName.getText(), Boolean.toString(isText), dateFormat.format(d), txtWeight.getValue().toString());
-					activeentity.updateEntity(txtName.getText(), isText, d, (Double) txtWeight.getValue());
+					// create audit entry and update node information
+					activeProject.getAudit().updateNode(oldName,
+							oldIsTextField, oldDate, oldWeight,
+							txtName.getText(), Boolean.toString(isText),
+							dateFormat.format(d),
+							txtWeight.getValue().toString());
+					activeentity.updateEntity(txtName.getText(), isText, d,
+							(Double) txtWeight.getValue());
 					activeentity.setEntityTypeClass(cmbType.getSelectedIndex());
-					
-					//update front end information
+					if (Nspinner.isVisible())
+						activeentity.setN((int) Double.parseDouble(Nspinner
+								.getValue().toString()));
+
+					// update front end information
 					activeProject.updateTables();
 					activeItem.setString("name", txtName.getText());
 					activeItem.getVisualization().run("filter");
@@ -188,11 +216,11 @@ public class FrmUpdateNode {
 			}
 		});
 
-		//create form
+		// create form
 		JPanel pnlDate = new JPanel(new GridLayout(1, 2));
 		pnlDate.add(txtDate);
 		pnlDate.add(btnDate);
-		
+
 		lblType.setBounds(10, 11, 60, 30);
 		cmbType.setBounds(175, 11, 150, 30);
 		lblName.setBounds(10, 46, 71, 30);
@@ -203,12 +231,13 @@ public class FrmUpdateNode {
 		txtWeight.setBounds(175, 114, 150, 30);
 		btnUpdate.setBounds(10, 158, 150, 30);
 		btnClose.setBounds(175, 155, 150, 30);
-		
+		Nspinner.setBounds(125, 11, 50, 30);
+
 		lblType.setForeground(new Color(0xEDEDED));
 		lblName.setForeground(new Color(0xEDEDED));
 		lblDate.setForeground(new Color(0xEDEDED));
 		lblWeight.setForeground(new Color(0xEDEDED));
-		
+
 		backgroundPanel.add(lblType);
 		backgroundPanel.add(cmbType);
 		backgroundPanel.add(lblName);
@@ -219,6 +248,7 @@ public class FrmUpdateNode {
 		backgroundPanel.add(txtWeight);
 		backgroundPanel.add(btnUpdate);
 		backgroundPanel.add(btnClose);
+		backgroundPanel.add(Nspinner);
 
 	}
 
