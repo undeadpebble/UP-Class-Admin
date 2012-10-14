@@ -85,7 +85,7 @@ public class Frame extends JFrame implements ActionListener {
 	private JMenuBar menuBarMAC;
 	private ReflectionImagePanel containerSelectTask, containerRecentDocs;
 	private MenuImagePanel studentsViewArrowOut, studentsViewArrowIn;
-	private ImagePanel boxChartImage, histogramChartImage, scatterplotChartImage, studentPhoto, searchImage;
+	private ImagePanel boxChartImage, histogramChartImage, scatterplotChartImage, studentPhoto, searchImage, maskingPanel, backgroundPhotoPanel;
 	private JFileChooser filechooser;
 	private JFrame frame = this;
 	private File currentFilePath;
@@ -856,7 +856,7 @@ public class Frame extends JFrame implements ActionListener {
 		filterButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Filter.png")));
 		bordercaseButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Bordercase.png")));
 		addRowButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/AddRow.png")));
-		
+
 		maxValButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/maxValue.png")));
 		rulesButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Rules2.png")));
 		statisticsButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Statistics.png")));
@@ -903,7 +903,7 @@ public class Frame extends JFrame implements ActionListener {
 		navBar.add(rapidAssessmentButton);
 		navBar.add(markingButton);
 		navBar.add(importPicturesButton);
-		
+
 		setNavButtonsDisabled();
 
 		// create info bubbles panel
@@ -1371,8 +1371,9 @@ public class Frame extends JFrame implements ActionListener {
 		importPicturesButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-
 				if (importPicturesButton.isEnabled()) {
+
+					// TODO
 					JFileChooser fileChoose = new JFileChooser();
 					blur.fadeIn();
 					int returnVal = fileChoose.showOpenDialog(new Component() {
@@ -1580,9 +1581,7 @@ public class Frame extends JFrame implements ActionListener {
 			Project p = new Project();
 			Global.getGlobal().addProject(p);
 
-			fileHandler.openFile(file.getAbsolutePath(), Global.getGlobal()
-					.getActiveProject());
-			
+			fileHandler.openFile(file.getAbsolutePath(), Global.getGlobal().getActiveProject());
 
 			p.setFileName(file.getName());
 			p.createAudit();
@@ -1747,35 +1746,73 @@ public class Frame extends JFrame implements ActionListener {
 		 * table.getTable().getValueAt(row, i).toString();
 		 * System.out.println(info[i]); }
 		 */
-
+		if (backgroundPhotoPanel != null) {
+			studentPanel.remove(backgroundPhotoPanel);
+			studentPanel.revalidate();
+			studentPanel.repaint();
+		}
 		
+		if (studentPhoto != null) {
+			studentPanel.remove(studentPhoto);
+			studentPanel.revalidate();
+			studentPanel.repaint();
+		}
+		
+		if (maskingPanel != null) {
+			studentPanel.remove(maskingPanel);
+			maskingPanel.revalidate();
+			maskingPanel.repaint();
+		}
 		
 		int i = -1;
-		try{
-		 i = Integer.parseInt(Global.getGlobal().getActiveProject().getSelectedIndexes().get(0).toString());
+		try {
+			i = Integer.parseInt(Global.getGlobal().getActiveProject().getSelectedIndexes().get(0).toString());
+		} catch (Exception e) {
 		}
-		catch (Exception e) {
-		}
-		
+
 		if (i != -1) {
-		IMGEntity imageEntity = Global.getGlobal().getActiveProject().getHead()
-				.getDataLinkedList().get(i).get(0)
-				.IterativeDeepeningfindPortrait();
-		
-		//TODO
-		BufferedImage photo = new BufferedImage(1, 1,1);
-		try{
-		 photo = imageEntity.getImage();
-		}
-		catch(NullPointerException e){
-			//TODO
-			//photo = //default image
-		}
-		
-		photo = Scalr.resize(photo, 150);
-		studentPhoto = new ImagePanel(photo);
-		studentPanel.add(studentPhoto);
-		studentPhoto.setBounds(57, 50, photo.getWidth(), photo.getHeight());
+			IMGEntity imageEntity = Global.getGlobal().getActiveProject().getHead().getDataLinkedList().get(i).get(0)
+					.IterativeDeepeningfindPortrait();
+
+			// TODO
+			BufferedImage photo = new BufferedImage(1, 1, 1);
+			try {
+				photo = imageEntity.getImage();
+				if ((photo.getWidth() > 0) && (photo.getHeight() > 0)) {
+					photo = Scalr.resize(photo, 150);
+					studentPhoto = new ImagePanel(photo);
+					studentPanel.add(studentPhoto);
+					studentPhoto.setBounds(57, 50, photo.getWidth(), photo.getHeight());
+				}
+
+			} catch (NullPointerException e) {
+				try {
+					
+					
+					
+				/*	BufferedImage maskingPhoto = ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/MaskingTape.png"));
+					maskingPhoto = Scalr.resize(maskingPhoto, 300);
+					maskingPanel = new ImagePanel(maskingPhoto);
+					studentPanel.add(maskingPanel);
+					maskingPanel.setBounds(50, 50, maskingPhoto.getWidth(), maskingPhoto.getHeight());
+				*/	
+					photo = ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/DefaultProfilePicture.png"));
+					photo = Scalr.resize(photo, 150);
+					studentPhoto = new ImagePanel(photo);
+					studentPanel.add(studentPhoto);
+					studentPanel.setAlpha(0.85f);
+					studentPhoto.setBounds(57, 50, photo.getWidth(), photo.getHeight());
+					
+					BufferedImage backgroundPhoto = ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/PhotoBackground.png"));
+					backgroundPhoto = Scalr.resize(backgroundPhoto, 200);
+					backgroundPhotoPanel = new ImagePanel(backgroundPhoto);
+					studentPanel.add(backgroundPhotoPanel);
+					backgroundPhotoPanel.setBounds(30, 30, backgroundPhoto.getWidth(), backgroundPhoto.getHeight());
+					
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
 
 		}
 	}
@@ -1951,8 +1988,8 @@ public class Frame extends JFrame implements ActionListener {
 				recentDocsPanel.remove(((ReflectionButtonWithLabel) e.getSource()));
 				db.deleteRecentDocuments(((ReflectionButtonWithLabel) e.getSource()).getPath());
 
-				JOptionPane.showMessageDialog(frame, "File seems to be missing from last directory location, removing shortcut.", "File Missing", JOptionPane.ERROR_MESSAGE);
-
+				JOptionPane.showMessageDialog(frame, "File seems to be missing from last directory location, removing shortcut.",
+						"File Missing", JOptionPane.ERROR_MESSAGE);
 
 				try {
 					createRecentDocsView();
@@ -2070,12 +2107,13 @@ public class Frame extends JFrame implements ActionListener {
 	public void showViewStudent() {
 		if (table.getTable().getSelectedRow() == -1) {
 
-			JOptionPane.showMessageDialog(frame, "Please select a student to view information", "Student Not Selected", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(frame, "Please select a student to view information", "Student Not Selected",
+					JOptionPane.ERROR_MESSAGE);
 
 		} else
 
-			TreeView.createStudentFrm("name", table.getData().get(table.getTable().getSelectedRow()).get(0), Global.getGlobal().getActiveProject());
-
+			TreeView.createStudentFrm("name", table.getData().get(table.getTable().getSelectedRow()).get(0), Global.getGlobal()
+					.getActiveProject());
 
 	}
 
@@ -2086,8 +2124,7 @@ public class Frame extends JFrame implements ActionListener {
 
 	public void showHistogram() {
 
-		HistogramFrame x = new HistogramFrame(Global.getGlobal()
-				.getActiveProject());
+		HistogramFrame x = new HistogramFrame(Global.getGlobal().getActiveProject());
 		x.display();
 
 		Global.getGlobal().getActiveProject().addhistogramcharts(x);
@@ -2102,8 +2139,7 @@ public class Frame extends JFrame implements ActionListener {
 
 	public void showScatterPlot() {
 
-		ScatterPlotFrame x = new ScatterPlotFrame(Global.getGlobal()
-				.getActiveProject());// project);
+		ScatterPlotFrame x = new ScatterPlotFrame(Global.getGlobal().getActiveProject());// project);
 		x.display();
 
 		Global.getGlobal().getActiveProject().addscattercharts(x);

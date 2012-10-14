@@ -309,6 +309,10 @@ public class EntityType {
 				}
 			} else {
 				if (this.getIsTextField()) {
+					if(this.getIsImg()){
+						new IMGEntity(this, parent, this.getName());
+					}	
+					else
 					new LeafStringEntity(this, parent, "#" + this.getName()
 							+ "#");
 				} else {

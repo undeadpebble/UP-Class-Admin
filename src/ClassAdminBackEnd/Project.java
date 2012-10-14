@@ -316,11 +316,14 @@ public class Project {
 								SuperEntity temp = data.get(x).get(y);
 								if (temp.getType().getIsTextField()) {
 									if (temp.getValue().equals(files)) {
+										
 										try{
-										((IMGEntity)data.get(x).get(where))
-												.setImage(ImageIO.read(new File(dir + "\\" + filesFull)));
+											System.out.println(((IMGEntity)data.get(x).get(where)).getType().getName());
+										((IMGEntity)data.get(x).get(where)).setImage(ImageIO.read(new File(dir + "\\" + filesFull)));
 										data.get(x).get(where).setField(filesFull);
 										data.get(x).get(where).setPicture(dir + "\\" + filesFull);
+										
+										
 										}
 										catch (Exception e) {
 										}
