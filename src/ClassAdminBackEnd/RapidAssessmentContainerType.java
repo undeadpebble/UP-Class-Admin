@@ -36,6 +36,8 @@ public class RapidAssessmentContainerType extends RapidAssessmentRectangleType {
 		this.setW(w);
 		this.setH(h);
 		
+		
+
 		this.setDate(replacedEntity.getDate());
 		this.setParentEntitytype(replacedEntity.getParentEntitytype());
 		this.setDefaultWeight(replacedEntity.getDefaultWeight());
@@ -51,9 +53,20 @@ public class RapidAssessmentContainerType extends RapidAssessmentRectangleType {
 		this.setBorderCasing(replacedEntity.getBorderCasing());
 		this.setFormatting(replacedEntity.getFormatting());
 		this.setSubEntityType(replacedEntity.getSubEntityType());
+		for(int q = 0;q<getSubEntityType().size();++q){
+			try{
+				(RapidAssessmentComponentType)(this.getSubEntityType().get(q));
+				this.getSubEntityType().remove(this.getSubEntityType().get(q));
+				--q;
+			}
+			catch(ClassCastException e){
+				this.getSubEntityType().get(q).setParentEntitytype(this);
+			}
+		}
 		this.setEntityList(replacedEntity.getEntityList());
 
 		for (int z = 0; z < this.getEntityList().size(); ++z) {
+			
 			this.getEntityList().get(z).setType(this);
 		}
 	}

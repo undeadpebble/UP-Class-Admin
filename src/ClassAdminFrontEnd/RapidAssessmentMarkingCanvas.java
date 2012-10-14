@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
@@ -55,11 +56,15 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 	private JComponent parentRect;
 	private int focusedMark = 0;
 	private LinkedList<MyMark> markList = new LinkedList<RapidAssessmentMarkingCanvas.MyMark>();
-	JTextArea searchBox;
-	JLabel searchLabel;
-	JComboBox studentChooser;
-	JComboBox assessmentChooser;
+
+	private JTextArea searchBox;
+	private JLabel searchLabel,loadAssessmentLabel;
+	private JComboBox studentChooser;
+	private JComboBox assessmentChooser;
 	private JLabel[] infoLabels;
+	private JComboBox loadCombo;
+	private JButton btnLoad;
+	
 
 	public void refreshButtons() {
 		contentPanel.add(searchBox);
@@ -68,15 +73,24 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 		searchLabel.setBounds(parentFrame.getWidth() - 145, 20, 130, 30);
 		searchBox.setBounds(parentFrame.getWidth() - 145, 50, 130, 30);
 		studentChooser.setBounds(parentFrame.getWidth() - 145, 80, 130, 30);
-		
-		for(int x = 0;x<infoLabels.length;++x){
-			infoLabels[x].setBounds(parentFrame.getWidth() - 145, 110+x*35, 130, 30);
+
+		loadAssessmentLabel.setBounds(parentFrame.getWidth() - 145, 120, 130, 30);
+		contentPanel.add(loadAssessmentLabel);
+		loadCombo.setBounds(parentFrame.getWidth() - 145, 150, 130, 30);
+		contentPanel.add(loadCombo);
+		btnLoad.setBounds(parentFrame.getWidth() - 145, 185, 130, 30);
+		contentPanel.add(btnLoad);
+
+		for (int x = 0; x < infoLabels.length; ++x) {
+			infoLabels[x].setBounds(parentFrame.getWidth() - 145, 110 + x * 35,
+					130, 30);
 		}
 	}
 
 	public RapidAssessmentMarkingCanvas(RapidAssessmentContainerType head,
 			Project project) {
 		super();
+		setTitle("Marking: no assessment selected");
 		this.project = project;
 		parentFrame = this;
 		new ContentPanel();
@@ -144,26 +158,28 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 			contentPanel = this;
 			this.setLayout(null);
 			searchLabel = new JLabel("Search");
+			loadAssessmentLabel = new JLabel("Load Assessment");
 			studentChooser = new JComboBox();
 			infoLabels = new JLabel[3];
-			for(int x = 0;x<infoLabels.length;++x){
+			for (int x = 0; x < infoLabels.length; ++x) {
 				infoLabels[x] = new JLabel();
 			}
 			studentChooser.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					assess((SuperEntity) studentChooser.getSelectedItem());
-					
+
 				}
 			});
 			studentChooser.setVisible(true);
 
 			searchLabel.setVisible(true);
+			loadAssessmentLabel.setVisible(true);
 
 			searchBox = new JTextArea();
 
-			refreshButtons();
+			
 			searchBox.setVisible(true);
 
 			searchBox.addKeyListener(new KeyListener() {
@@ -184,8 +200,27 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 
 				}
 			});
+			loadCombo = new JComboBox();
+			loadCombo.setVisible(true);
+			btnLoad = new JButton("Load");
+			btnLoad.setVisible(true);
+			btnLoad.addActionListener(new ActionListener() {
 
-			// (this.getWidth()-145, 20, 130, 23)
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					if (loadCombo.getSelectedItem() != null)
+						try {
+							createComponent((RapidAssessmentComponentType) loadCombo
+									.getSelectedItem());
+
+						} catch (ClassCastException e) {
+
+						}
+				}
+			});
+			refreshButtons();
+			refreshLoad();
+
 		}
 
 		/**
@@ -228,6 +263,15 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 		}
 	}
 
+	public void refreshLoad() {
+		LinkedList<RapidAssessmentContainerType> containers = new LinkedList<RapidAssessmentContainerType>();
+		this.project.getHeadEntityType().findRapidAssessment(containers);
+		loadCombo.removeAllItems();
+		for (int x = 0; x < containers.size(); ++x)
+			loadCombo.addItem(containers.get(x));
+
+	}
+
 	public JComponent createComponent(RapidAssessmentComponentType node) {
 		MyComponent comp = null;
 		try {
@@ -243,7 +287,7 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 			RapidAssessmentContainerType n = ((RapidAssessmentContainerType) node);
 			contentPanel.removeAll();
 			backGround = n.getImage();
-
+			parentFrame.setTitle("Marking: "+node.getName());
 			parentFrame.setSize((int) (n.getW() + 100), (int) (n.getH() + 50));
 			for (int x = 0; x < n.getSubEntityType().size(); ++x) {
 				try {
@@ -599,8 +643,8 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 		load(entity, (MyComponent) (parentRect));
 		LinkedList<String> list = new LinkedList<String>();
 		entity.findThreeStrings(list);
-		
-		for(int x = 0;x<3 && x<list.size();++x){
+
+		for (int x = 0; x < 3 && x < list.size(); ++x) {
 			infoLabels[x].setText(list.get(x));
 		}
 	}

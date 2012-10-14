@@ -1011,7 +1011,7 @@ public class RapidAssessmentCanvas extends JFrame {
 
 	private void createCanvasComponent(RapidAssessmentComponentType component,
 			ContainerPanel parentPanel2) {
-		this.parentRect = new MyRectangle((int) component.getX(),
+		this.parentRect = new MyRectangle((int)component.getX(),
 				(int) component.getY(), (int) component.getW(),
 				(int) component.getH());
 		parentPanel2.add(parentRect);
