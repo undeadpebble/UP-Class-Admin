@@ -15,8 +15,9 @@ import org.jfree.ui.Drawable;
  * An implementation of the {@link Drawable} interface, to illustrate the use of the 
  * {@link org.jfree.chart.annotations.XYDrawableAnnotation} class.
  * 
- * @author David Gilbert
+ * 
  */
+
 public class CircleDrawer implements Drawable {
 
     /** The outline paint. */

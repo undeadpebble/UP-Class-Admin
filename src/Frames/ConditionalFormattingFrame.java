@@ -42,6 +42,7 @@ public class ConditionalFormattingFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 * @throws IOException 
+	 * creates a new conditionalformattingframe
 	 */
 	public ConditionalFormattingFrame(final FrmTable table) throws IOException {
 		String[] formatTypesStr = new String[Format.formatTypes.length + 1];
@@ -71,7 +72,7 @@ public class ConditionalFormattingFrame extends JFrame {
 
 		this.setTitle("Conditional Formatting");
 
-		Image icon = Toolkit.getDefaultToolkit().getImage("Logo.png");
+		Image icon = Toolkit.getDefaultToolkit().getImage("icons/ConditionalFormattingFrame.png");
 		this.setIconImage(icon);
 
 		backgroundPanel = new BackgroundGradientPanel(contentPane);
@@ -135,9 +136,9 @@ public class ConditionalFormattingFrame extends JFrame {
 		lblAffectedArea.setForeground(new Color(0xEDEDED));
 		backgroundPanel.add(lblAffectedArea);
 
-		final ReflectionButton btnAddFormatting = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/ConditionalFormattingFrame.png")));
+		final ReflectionButton btnAddFormatting = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/ConditionalFormattingFrameLabel.png")));
 		//final JButton btnAddFormatting = new JButton("Add Formatting");
-		btnAddFormatting.setBounds(747, 437, 70, 100);
+		btnAddFormatting.setBounds(717, 435, 100, 100);
 		backgroundPanel.add(btnAddFormatting);
 		
 		final JLabel lblColour = new JLabel("Colour");
@@ -155,8 +156,9 @@ public class ConditionalFormattingFrame extends JFrame {
 		backgroundPanel.add(description);
 		description.setColumns(10);
 		
-		JButton btnRemoveFormat = new JButton("Remove a formatting");
-		btnRemoveFormat.setBounds(58, 437, 181, 39);
+		final ReflectionButton btnRemoveFormat = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/ConditionalFormattingFrameLabelRemove.png")));
+	//	JButton btnRemoveFormat = new JButton("Remove a formatting");
+		btnRemoveFormat.setBounds(58, 435, 100, 92);
 		backgroundPanel.add(btnRemoveFormat);
 		
 		JLabel lblAffectedCuolumn = new JLabel("Affected Cuolumn");
@@ -165,7 +167,7 @@ public class ConditionalFormattingFrame extends JFrame {
 		backgroundPanel.add(lblAffectedCuolumn);
 		
 		final JComboBox cbxColumns = new JComboBox(table.numberHeads);
-		cbxColumns.setBounds(237, 335, 113, 20);
+		cbxColumns.setBounds(237, 329, 113, 26);
 		backgroundPanel.add(cbxColumns);
 
 		// frame resize listener adjust components accordingly

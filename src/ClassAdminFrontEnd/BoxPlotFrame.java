@@ -62,18 +62,26 @@ public class BoxPlotFrame extends JFrame implements ActionListener {
 	private static DefaultBoxAndWhiskerCategoryDataset dataset = new DefaultBoxAndWhiskerCategoryDataset();
 	private Project project;
 
-	// Constructor
+	 
+	/**
+	 * Constructor
+	 */
 	public BoxPlotFrame() {
 
 	}
 
-	// Create the GUI with the chart and buttons
+	
+	/**
+	 * @param project
+	 * Create the GUI with the chart and buttons
+	 */
 	public void createBoxPlotFrame(final Project project) {
 
 		JFrame f = new JFrame("BoxPlot");
 		final Container content = f.getContentPane();
-		f.setSize(450, 500);
-
+		f.setBounds(100,100,450, 500);
+		Image icon = Toolkit.getDefaultToolkit().getImage("icons/Box.png");
+		f.setIconImage(icon);
 		this.project = project;
 
 		dataset = new DefaultBoxAndWhiskerCategoryDataset();
@@ -174,6 +182,9 @@ public class BoxPlotFrame extends JFrame implements ActionListener {
 		f.setVisible(true);
 	}
 
+	/**
+	 * Add new series data to the boxplot
+	 */
 	public void addBoxSeries() {
 
 		ArrayList nuwe = new ArrayList();
@@ -201,6 +212,10 @@ public class BoxPlotFrame extends JFrame implements ActionListener {
 
 	}
 
+	/**
+	 * @throws IOException
+	 * Save a file as 
+	 */
 	public void saveFileAs() throws IOException {
 
 		File file;
@@ -226,7 +241,17 @@ public class BoxPlotFrame extends JFrame implements ActionListener {
 		}
 	}
 
-	// Save the png to the file
+	
+	/**
+	 * @param chart
+	 * @param aFileName
+	 * @param width
+	 * @param height
+	 * @param quality
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 * Save the png to the file
+	 */
 	public static void saveToFile(JFreeChart chart, String aFileName, int width, int height, double quality) throws FileNotFoundException,
 			IOException {
 		BufferedImage img = draw(chart, width, height);
@@ -249,7 +274,14 @@ public class BoxPlotFrame extends JFrame implements ActionListener {
 
 	}
 
-	// Create a buffered image
+	 
+	/**
+	 * @param chart
+	 * @param width
+	 * @param height
+	 * @return
+	 * Create a buffered image
+	 */
 	protected static BufferedImage draw(JFreeChart chart, int width, int height)
 
 	{

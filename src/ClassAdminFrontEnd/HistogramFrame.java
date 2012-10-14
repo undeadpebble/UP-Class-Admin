@@ -6,6 +6,7 @@ import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -73,16 +74,26 @@ public class HistogramFrame extends JFrame implements ActionListener {
 	private Project project;
 	private Stats stats;
 	private JFrame f;
-	// Update the values of the histogram
+	
+	/**
+	 * Update the values of the histogram
+	 */
 	public void update() {
 		nuweChart.updateSelectedValues();
 	}
 
-	// Create the frame of the histogram
+	 
+	/**
+	 * @param project
+	 * Create the frame of the histogram
+	 */
 	public HistogramFrame(final Project project) {
+		
 		f = new JFrame("Histogram");
 		final Container content = f.getContentPane();
-		f.setSize(550, 630);
+		f.setBounds(100,100,550, 630);
+		Image icon = Toolkit.getDefaultToolkit().getImage("icons/histogram.png");
+		f.setIconImage(icon);
 		stats = new Stats(project);
 		this.project = project;
 		final LinkedList<LinkedList<SuperEntity>> diedata = project.getHead().getDataLinkedList();
@@ -101,7 +112,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 		final HistogramDataset dataset = new HistogramDataset();
 
 		String xas = kolom[project.getHistogramcount()];
-
+		//Get the selected index of the headers
 		for (int s = 0; s < headers.length; s++) {
 			if (headers[s].equals(kolom[project.getHistogramcount()])) {
 				houerx = s;
@@ -146,9 +157,9 @@ public class HistogramFrame extends JFrame implements ActionListener {
 				chartpanel.getChart().getXYPlot().setDataset(nuweChart.changeDataset(houerx));
 				project.updatecharts();
 
-				classaverage.setText("Class average: " + stats.roundTwoDecimals(stats.gemidpunt(houerx)) + "                            ");
-				passes.setText("Number of failures:" + stats.fails(houerx) + "                     ");
-				failures.setText("Number of passes:" + stats.slaag(houerx) + "                       ");
+				classaverage.setText("Class average:" + stats.roundTwoDecimals(stats.gemidpunt(houerx)) + "                     ");
+				passes.setText("Number of failures:" + stats.fails(houerx) + "                ");
+				failures.setText("Number of passes:" + stats.slaag(houerx) + "                    ");
 
 			}
 
@@ -186,10 +197,9 @@ public class HistogramFrame extends JFrame implements ActionListener {
 				if (xascb.getSelectedIndex() >= 1) {
 					xascb.setSelectedIndex(xascb.getSelectedIndex() - 1);
 					project.updatecharts();
-					classaverage.setText("Class average: " + stats.roundTwoDecimals(stats.gemidpunt(houerx))
-							+ "                            ");
-					passes.setText("Number of failures:" + stats.fails(houerx) + "                     ");
-					failures.setText("Number of passes:" + stats.slaag(houerx) + "                       ");
+					classaverage.setText("Class average:" + stats.roundTwoDecimals(stats.gemidpunt(houerx)) + "                     ");
+					passes.setText("Number of failures:" + stats.fails(houerx) + "                ");
+					failures.setText("Number of passes:" + stats.slaag(houerx) + "                    ");
 				}
 			}
 		});
@@ -226,10 +236,9 @@ public class HistogramFrame extends JFrame implements ActionListener {
 				if (xascb.getSelectedIndex() < xascb.getItemCount() - 1) {
 					xascb.setSelectedIndex(xascb.getSelectedIndex() + 1);
 					project.updatecharts();
-					classaverage.setText("Class average: " + stats.roundTwoDecimals(stats.gemidpunt(houerx))
-							+ "                            ");
-					passes.setText("Number of failures:" + stats.fails(houerx) + "                     ");
-					failures.setText("Number of passes:" + stats.slaag(houerx) + "                       ");
+					classaverage.setText("Class average:" + stats.roundTwoDecimals(stats.gemidpunt(houerx)) + "                     ");
+					passes.setText("Number of failures:" + stats.fails(houerx) + "                ");
+					failures.setText("Number of passes:" + stats.slaag(houerx) + "                    ");
 				}
 			}
 		});
@@ -404,11 +413,18 @@ public class HistogramFrame extends JFrame implements ActionListener {
 		
 
 	}
+	/**
+	 *  Displays frame
+	 */
 	public void display()
 	{
 		f.setVisible(true);
 	}
-	// SaveFileAs for extract
+	
+	/**
+	 * @throws IOException
+	 * SaveFileAs for extract
+	 */
 	public void saveFileAs() throws IOException {
 
 		File file;
@@ -434,7 +450,17 @@ public class HistogramFrame extends JFrame implements ActionListener {
 		}
 	}
 
-	// Save the Jfreechart in a directory as a jpg
+	
+	/**
+	 * @param chart
+	 * @param aFileName
+	 * @param width
+	 * @param height
+	 * @param quality
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 * Save the Jfreechart in a directory as a jpg
+	 */
 	public static void saveToFile(JFreeChart chart, String aFileName, int width, int height, double quality) throws FileNotFoundException,
 			IOException {
 		BufferedImage img = draw(chart, width, height);
@@ -458,7 +484,14 @@ public class HistogramFrame extends JFrame implements ActionListener {
 
 	}
 
-	// Create jpg image
+
+	/**
+	 * @param chart
+	 * @param width
+	 * @param height
+	 * @return
+	 * Create png image
+	 */
 	protected static BufferedImage draw(JFreeChart chart, int width, int height)
 
 	{

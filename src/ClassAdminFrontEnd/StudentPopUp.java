@@ -1,3 +1,4 @@
+
 package ClassAdminFrontEnd;
 
 import javax.swing.*;
@@ -113,5 +114,5 @@ public class StudentPopUp {
 			}
 		});
 	}
-
 }
+

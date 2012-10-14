@@ -19,6 +19,9 @@ public class BoxPlotOptionMenu extends JFrame implements ActionListener {
 	protected final static JComboBox choosecombo = new JComboBox();
 	protected String comboSelect = "";
 
+	/**
+	 * Create the boxplotframe where series could be added dynamically
+	 */
 	public void createFrame() {
 		JFrame f = new JFrame("BoxPlot");
 		final Container content = f.getContentPane();
@@ -70,12 +73,19 @@ public class BoxPlotOptionMenu extends JFrame implements ActionListener {
 
 	}
 
-	// Constructor
+	
+	/**
+	 * Constructor
+	 */
 	public BoxPlotOptionMenu() {
 
 	}
 
-	// Get the index of the selected field in the combobox
+	
+	/**
+	 * @return
+	 * Get the index of the selected field in the combobox
+	 */
 	public int getIndexOfHeader() {
 
 		for (int s = 0; s < headers.length; s++) {
