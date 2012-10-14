@@ -4,6 +4,7 @@ package Frames;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Image;
 import java.awt.Toolkit;
 
 import javax.swing.DefaultComboBoxModel;
@@ -78,6 +79,8 @@ public class FrmStats extends JFrame {
 		setLocation(x, y);
 		
 		setTitle("Statistics");
+		Image icon = Toolkit.getDefaultToolkit().getImage("icons/Statistics.png");
+		this.setIconImage(icon);
 		
 		backgroundPanel = new BackgroundGradientPanel(contentPane);
 		backgroundPanel.setBounds(0, 0, getWidth(), getHeight());

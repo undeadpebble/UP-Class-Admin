@@ -85,7 +85,8 @@ public class Frame extends JFrame implements ActionListener {
 	private JMenuBar menuBarMAC;
 	private ReflectionImagePanel containerSelectTask, containerRecentDocs;
 	private MenuImagePanel studentsViewArrowOut, studentsViewArrowIn;
-	private ImagePanel boxChartImage, histogramChartImage, scatterplotChartImage, studentPhoto, searchImage, maskingPanel, backgroundPhotoPanel;
+	private ImagePanel boxChartImage, histogramChartImage, scatterplotChartImage, studentPhoto, searchImage, maskingPanel,
+			backgroundPhotoPanel;
 	private JFileChooser filechooser;
 	private JFrame frame = this;
 	private File currentFilePath;
@@ -532,13 +533,7 @@ public class Frame extends JFrame implements ActionListener {
 
 		miImport.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				try {
-					openFile();
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (BadLocationException e) {
-					e.printStackTrace();
-				}
+				openFile();
 			}
 		});
 
@@ -751,13 +746,7 @@ public class Frame extends JFrame implements ActionListener {
 		homeImportButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				try {
-					openFile();
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (BadLocationException e) {
-					e.printStackTrace();
-				}
+				openFile();
 			}
 		});
 
@@ -1089,13 +1078,7 @@ public class Frame extends JFrame implements ActionListener {
 		importButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				try {
-					openFile();
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (BadLocationException e) {
-					e.printStackTrace();
-				}
+				openFile();
 			}
 
 			public void mouseEntered(MouseEvent arg0) {
@@ -1401,7 +1384,7 @@ public class Frame extends JFrame implements ActionListener {
 	/*
 	 * Method with handles file import actions, blur background
 	 */
-	public void openFile() throws IOException, BadLocationException {
+	public void openFile() {
 
 		File file;
 		// set the file extentions that may be chosen
@@ -1424,24 +1407,26 @@ public class Frame extends JFrame implements ActionListener {
 
 		// if the chosen file is valid
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			file = filechooser.getSelectedFile();
-			currentFilePath = filechooser.getSelectedFile();
-			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-			Date date = new Date();
 
-			db.addRecentPath(currentFilePath.getAbsolutePath(), dateFormat.format(date));
-			blur.fadeOut();
-			createTab(file);
-			homeToWorkspaceTransition();
-			tabBar.fadeIn();
+				file = filechooser.getSelectedFile();
+				currentFilePath = filechooser.getSelectedFile();
+				DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+				Date date = new Date();
 
-			if (db != null) {
-				if (db.alreadyContains(file.getName(), file.getAbsolutePath())) {
-					db.updateRecentDocument(file.getName(), file.getAbsolutePath(), dateFormat.format(date));
-				} else {
-					db.addRecentDoc(file.getName(), file.getAbsolutePath(), dateFormat.format(date));
+				db.addRecentPath(currentFilePath.getAbsolutePath(), dateFormat.format(date));
+				blur.fadeOut();
+				createTab(file);
+				homeToWorkspaceTransition();
+				tabBar.fadeIn();
+
+				if (db != null) {
+					if (db.alreadyContains(file.getName(), file.getAbsolutePath())) {
+						db.updateRecentDocument(file.getName(), file.getAbsolutePath(), dateFormat.format(date));
+					} else {
+						db.addRecentDoc(file.getName(), file.getAbsolutePath(), dateFormat.format(date));
+					}
 				}
-			}
+			
 		} else {
 			blur.fadeOut();
 		}
@@ -1751,19 +1736,19 @@ public class Frame extends JFrame implements ActionListener {
 			studentPanel.revalidate();
 			studentPanel.repaint();
 		}
-		
+
 		if (studentPhoto != null) {
 			studentPanel.remove(studentPhoto);
 			studentPanel.revalidate();
 			studentPanel.repaint();
 		}
-		
+
 		if (maskingPanel != null) {
 			studentPanel.remove(maskingPanel);
 			maskingPanel.revalidate();
 			maskingPanel.repaint();
 		}
-		
+
 		int i = -1;
 		try {
 			i = Integer.parseInt(Global.getGlobal().getActiveProject().getSelectedIndexes().get(0).toString());
@@ -1781,34 +1766,22 @@ public class Frame extends JFrame implements ActionListener {
 				if ((photo.getWidth() > 0) && (photo.getHeight() > 0)) {
 					photo = Scalr.resize(photo, 150);
 					studentPhoto = new ImagePanel(photo);
+					studentPanel.setAlpha(0.85f);
 					studentPanel.add(studentPhoto);
 					studentPhoto.setBounds(57, 50, photo.getWidth(), photo.getHeight());
+
 				}
 
 			} catch (NullPointerException e) {
 				try {
-					
-					
-					
-				/*	BufferedImage maskingPhoto = ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/MaskingTape.png"));
-					maskingPhoto = Scalr.resize(maskingPhoto, 300);
-					maskingPanel = new ImagePanel(maskingPhoto);
-					studentPanel.add(maskingPanel);
-					maskingPanel.setBounds(50, 50, maskingPhoto.getWidth(), maskingPhoto.getHeight());
-				*/	
+
 					photo = ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/DefaultProfilePicture.png"));
 					photo = Scalr.resize(photo, 150);
 					studentPhoto = new ImagePanel(photo);
 					studentPanel.add(studentPhoto);
 					studentPanel.setAlpha(0.85f);
-					studentPhoto.setBounds(57, 50, photo.getWidth(), photo.getHeight());
-					
-					BufferedImage backgroundPhoto = ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/PhotoBackground.png"));
-					backgroundPhoto = Scalr.resize(backgroundPhoto, 200);
-					backgroundPhotoPanel = new ImagePanel(backgroundPhoto);
-					studentPanel.add(backgroundPhotoPanel);
-					backgroundPhotoPanel.setBounds(30, 30, backgroundPhoto.getWidth(), backgroundPhoto.getHeight());
-					
+					studentPhoto.setBounds(55, 53, photo.getWidth(), photo.getHeight());
+
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -2156,13 +2129,7 @@ public class Frame extends JFrame implements ActionListener {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				MenuSelectionManager.defaultManager().clearSelectedPath();
-				try {
-					openFile();
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (BadLocationException e) {
-					e.printStackTrace();
-				}
+				openFile();
 			}
 		});
 

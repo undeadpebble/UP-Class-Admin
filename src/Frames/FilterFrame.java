@@ -5,13 +5,16 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.io.IOException;
 import java.util.LinkedList;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
@@ -21,6 +24,7 @@ import ClassAdminBackEnd.Format;
 import ClassAdminFrontEnd.BackgroundGradientPanel;
 import ClassAdminFrontEnd.FrmTable;
 import ClassAdminFrontEnd.JComboCheckBox;
+import ClassAdminFrontEnd.ReflectionButton;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.JCheckBox;
@@ -34,12 +38,15 @@ public class FilterFrame extends JFrame {
 	private JPanel contentPane;
 	private BackgroundGradientPanel backgroundPanel;
 	private JComboBox cbxFormatType;
+	private ReflectionButton btnCreateFilter;
+	private ReflectionButton btnRemoveAllFilters;
+	private ReflectionButton btnRemoveSpesificFilter;
 
 	private JComboCheckBox selectAllData;
 
 	public FilterFrame(final FrmTable table) {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 450, 324);
+		setBounds(100, 100, 450, 355);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(null);
@@ -63,9 +70,12 @@ public class FilterFrame extends JFrame {
 		setLocation(x, y);
 
 		this.setTitle("Filter");
+		
+		Image icon = Toolkit.getDefaultToolkit().getImage("icons/FilterFrame.png");
+		this.setIconImage(icon);
 
 		backgroundPanel = new BackgroundGradientPanel(contentPane);
-		backgroundPanel.setBounds(0, 0, 446, 286);
+		backgroundPanel.setBounds(0, 0, 446, 317);
 		contentPane.add(backgroundPanel);
 		backgroundPanel.setLayout(null);
 
@@ -111,19 +121,41 @@ public class FilterFrame extends JFrame {
 		maxVal.setBounds(261, 166, 102, 27);
 		backgroundPanel.add(maxVal);
 
-		final JButton btnCreateFilter = new JButton("Create Filter");
-		btnCreateFilter.setBounds(75, 223, 114, 23);
-		backgroundPanel.add(btnCreateFilter);
+		try {
+			btnCreateFilter = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/FilterFrameLabel.png")));
+			btnCreateFilter.setBounds(49, 225, 91, 92);
+			backgroundPanel.add(btnCreateFilter);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		//final JButton btnCreateFilter = new JButton("Create Filter");
+		
+		try {
+			btnRemoveAllFilters = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/FilterFrameLabelRemove.png")));
+			btnRemoveAllFilters.setBounds(167, 225, 91, 92);
+			backgroundPanel.add(btnRemoveAllFilters);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
-		final JButton btnRemoveAllFilters = new JButton("Remove All Filters");
-		btnRemoveAllFilters.setBounds(204, 223, 159, 23);
-		backgroundPanel.add(btnRemoveAllFilters);
+		//final JButton btnRemoveAllFilters = new JButton("Remove All Filters");
+		
+		try {
+			btnRemoveSpesificFilter = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/FilterFrameLabelRemoveSpesific.png")));
+			btnRemoveSpesificFilter.setBounds(283, 225, 91, 92);
+			backgroundPanel.add(btnRemoveSpesificFilter);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
 		btnCreateFilter.setEnabled(false);
+		btnCreateFilter.setDisabled();
 
-		JButton btnRemoveSpesificFilter = new JButton("Remove Spesific Filter");
-		btnRemoveSpesificFilter.setBounds(204, 257, 159, 23);
-		backgroundPanel.add(btnRemoveSpesificFilter);
+		//JButton btnRemoveSpesificFilter = new JButton("Remove Spesific Filter");
+		
 
 		if (table.data.get(0).get(cbxFilters.getSelectedIndex()).getType()
 				.getIsTextField()) {
@@ -184,19 +216,24 @@ public class FilterFrame extends JFrame {
 					if (cbxFormatType.getSelectedIndex() == 1) {
 						minVal.setEnabled(true);
 						maxVal.setEnabled(true);
-
+						
+						btnCreateFilter.setEnabled();
 						btnCreateFilter.setEnabled(true);
+						
 					} else {
 						minVal.setEnabled(true);
 						maxVal.setEnabled(false);
-
+						
+						btnCreateFilter.setEnabled();
 						btnCreateFilter.setEnabled(true);
+						
 					}
 				} else {
 					minVal.setEnabled(false);
 					maxVal.setEnabled(false);
 
 					btnCreateFilter.setEnabled(false);
+					btnCreateFilter.setDisabled();
 				}
 			}
 		});
@@ -293,6 +330,7 @@ public class FilterFrame extends JFrame {
 						public void actionPerformed(ActionEvent e) {
 
 							btnCreateFilter.setEnabled(true);
+							btnCreateFilter.setEnabled();
 
 						}
 					});

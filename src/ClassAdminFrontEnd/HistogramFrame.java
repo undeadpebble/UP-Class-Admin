@@ -6,6 +6,7 @@ import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -80,9 +81,12 @@ public class HistogramFrame extends JFrame implements ActionListener {
 
 	// Create the frame of the histogram
 	public HistogramFrame(final Project project) {
+		
 		f = new JFrame("Histogram");
 		final Container content = f.getContentPane();
-		f.setSize(550, 630);
+		f.setBounds(100,100,550, 630);
+		Image icon = Toolkit.getDefaultToolkit().getImage("icons/histogram.png");
+		f.setIconImage(icon);
 		stats = new Stats(project);
 		this.project = project;
 		final LinkedList<LinkedList<SuperEntity>> diedata = project.getHead().getDataLinkedList();
