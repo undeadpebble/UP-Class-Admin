@@ -375,7 +375,7 @@ public class frmRule extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				if (txtName.getText().trim().equals("") && txtName.getText().trim().equals(null)) {
+				if (!txtName.getText().trim().equals("") && !txtName.getText().trim().equals(null)) {
 					Boolean valid = true;
 
 					StringRule rule1 = null;
@@ -465,7 +465,7 @@ public class frmRule extends JFrame {
 		btnAddFloatBool.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (txtName.getText().trim().equals("") && txtName.getText().trim().equals(null)) {
+				if (!txtName.getText().trim().equals("") && !txtName.getText().trim().equals(null)) {
 					Boolean valid = true;
 
 					FloatRule rule1 = null;
@@ -581,7 +581,7 @@ public class frmRule extends JFrame {
 		btnAddFloatRule.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (txtName.getText().trim().equals("") && txtName.getText().trim().equals(null)) {
+				if (!txtName.getText().trim().equals("") && !txtName.getText().trim().equals(null)) {
 					Boolean valid = true;
 
 					FloatRule rule1 = null;
@@ -681,7 +681,7 @@ public class frmRule extends JFrame {
 		btnAddStringRule.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (txtName.getText().trim().equals("") && txtName.getText().trim().equals(null)) {
+				if (!txtName.getText().trim().equals("") && !txtName.getText().trim().equals(null)) {
 					Boolean valid = true;
 
 					StringRule rule1 = null;
