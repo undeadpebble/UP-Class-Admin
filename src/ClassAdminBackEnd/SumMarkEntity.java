@@ -21,7 +21,6 @@ public class SumMarkEntity extends MarkEntity {
 		for (int i = 0; i < this.getSubEntity().size(); ++i) {
 			try {
 				mTotal += this.getSubEntity().get(i).getMark();
-				mmax += this.getSubEntity().get(i).getType().getMaxValue();
 
 				hasval = true;
 			} catch (Exception e) {
@@ -33,6 +32,12 @@ public class SumMarkEntity extends MarkEntity {
 			throw new AbsentException();
 		}
 
-			return mTotal/mmax*100;
+			return mTotal;
+	}
+	
+	public void updateMark() {
+		super.updateMark();
+			this.getType().updateMaxValue();
+		
 	}
 }

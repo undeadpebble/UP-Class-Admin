@@ -27,7 +27,8 @@ public class PDatExport {
 		File f = new File(filename);
 		f.delete();
 		ObjectContainer db = Db4o.openFile(filename);
-
+		project.getSelected().clear();
+		project.clearCharts();
 		LinkedList<FrmTable> tmp = project.getTables();
 		project.getTables().clear();
 		db.store(project);

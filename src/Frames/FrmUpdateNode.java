@@ -79,8 +79,12 @@ public class FrmUpdateNode {
 		contentPane.add(backgroundPanel);
 		backgroundPanel.setLayout(null);
 
+		if(activeentity.getN()>=1)
 		Nspinner = new JSpinner(new SpinnerNumberModel(activeentity.getN(),
 				1.0, 100.0, 1.0));
+		else
+			Nspinner = new JSpinner(new SpinnerNumberModel(1.0,
+					1.0, 100.0, 1.0));
 		Nspinner.setVisible(false);
 
 		final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");

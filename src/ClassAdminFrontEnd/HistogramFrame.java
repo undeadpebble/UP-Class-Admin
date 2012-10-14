@@ -91,7 +91,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 		
 		f = new JFrame("Histogram");
 		final Container content = f.getContentPane();
-		f.setBounds(100,100,550, 630);
+		f.setBounds(100,100,600, 630);
 		Image icon = Toolkit.getDefaultToolkit().getImage("icons/histogram.png");
 		f.setIconImage(icon);
 		stats = new Stats(project);
