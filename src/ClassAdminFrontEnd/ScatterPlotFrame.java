@@ -183,9 +183,9 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 				}
 
 			}
-
+			
 			dataset.addSeries(series);
-		
+			
 			nuweChart.setScatterArray(doensorteer(houerx, houery));
 
 			// Check if there is any border cases
@@ -264,7 +264,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 						}
 
 					}
-
+					nuweChart.setScatterArray(doensorteer(houerx, houery));
 					nuwedataset.addSeries(series);
 					chartpanel.getChart().getXYPlot().setDataset(nuwedataset);
 					nuweChart.setDatasetmain(nuwedataset);
@@ -380,7 +380,7 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 						}
 
 					}
-
+					nuweChart.setScatterArray(doensorteer(houerx, houery));
 					nuwedataset.addSeries(series);
 					chartpanel.getChart().getXYPlot().setDataset(nuwedataset);
 					nuweChart.setDatasetmain(nuwedataset);

@@ -486,7 +486,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 	 * @param width
 	 * @param height
 	 * @return
-	 * Create jpg image
+	 * Create png image
 	 */
 	protected static BufferedImage draw(JFreeChart chart, int width, int height)
 

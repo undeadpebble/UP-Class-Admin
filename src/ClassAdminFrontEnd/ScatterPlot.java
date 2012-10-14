@@ -85,7 +85,7 @@ public class ScatterPlot {
 	 * Create the create the scatterplot
 	 */
 	public JFreeChart createScatter(String title, final XYDataset chartdata, String xas, String yas) {
-		chart = ChartFactory.createScatterPlot("Scatter Plot", xas, yas, chartdata, PlotOrientation.VERTICAL, false, false, false);
+		chart = ChartFactory.createScatterPlot("Scatter Plot", xas, yas, chartdata, PlotOrientation.VERTICAL, false, true, false);
 		datasetMain = chartdata;
 		NumberAxis domainAxis = (NumberAxis) chart.getXYPlot().getDomainAxis();
 		domainAxis.setAutoRangeIncludesZero(false);
@@ -93,6 +93,7 @@ public class ScatterPlot {
 
 		XYItemRenderer renderer = plot.getRenderer();
 		renderer.setSeriesPaint(0, new Color(0xFF8400));
+		renderer.setBaseToolTipGenerator(new MyXYToolTipGenerator());
 		return chart;
 	}
 
