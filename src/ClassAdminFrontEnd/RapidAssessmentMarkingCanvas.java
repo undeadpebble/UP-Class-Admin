@@ -82,19 +82,20 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 		searchBox.setBounds(parentFrame.getWidth() - 145, 50, 130, 30);
 		studentChooser.setBounds(parentFrame.getWidth() - 145, 80, 130, 30);
 
-		loadAssessmentLabel.setBounds(parentFrame.getWidth() - 145, 200, 130,
+		loadAssessmentLabel.setBounds(parentFrame.getWidth() - 145, 270, 130,
 				30);
 		contentPanel.add(loadAssessmentLabel);
-		loadCombo.setBounds(parentFrame.getWidth() - 145, 230, 130, 30);
+		loadCombo.setBounds(parentFrame.getWidth() - 145, 300, 130, 30);
 		contentPanel.add(loadCombo);
-		btnLoad.setBounds(parentFrame.getWidth() - 145, 260, 130, 30);
+		btnLoad.setBounds(parentFrame.getWidth() - 145, 330, 130, 30);
 		contentPanel.add(btnLoad);
 		contentPanel.add(timerLabel);
 		timerLabel.setBounds(parentFrame.getWidth() - 145, parentFrame.getHeight()-100, 130, 30);
 
 		for (int x = 0; x < infoLabels.length; ++x) {
-			infoLabels[x].setBounds(parentFrame.getWidth() - 145, 110 + x * 35,
-					130, 30);
+			infoLabels[x].setBounds(parentFrame.getWidth() - 145, 110 + x * 25,
+					130, 20);
+			contentPanel.add(infoLabels[x]);
 		}
 	}
 
@@ -234,7 +235,7 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 			loadAssessmentLabel.setFocusable(false);
 			studentChooser = new JComboBox();
 			timerLabel = new JLabel();
-			infoLabels = new JLabel[3];
+			infoLabels = new JLabel[6];
 			for (int x = 0; x < infoLabels.length; ++x) {
 				infoLabels[x] = new JLabel();
 				infoLabels[x].setVisible(true);
@@ -731,13 +732,13 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 	}
 
 	public void assess(SuperEntity entity) {
-		System.out.println("assess");
 		load(entity, (MyComponent) (parentRect));
 		LinkedList<String> list = new LinkedList<String>();
 		entity.findThreeStrings(list);
 
-		for (int x = 0; x < 3 && x < list.size(); ++x) {
-			infoLabels[x].setText(list.get(x));
+		for (int x = 0; x < 3 && x < list.size()-1; ++x) {
+			infoLabels[2*x].setText(list.get(x).split(": ")[0]);
+			infoLabels[2*x +1].setText(list.get(x).split(": ")[1]);
 		}
 		parentFrame.repaint();
 	}
