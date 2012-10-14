@@ -64,6 +64,7 @@ public class StudentPopUp {
 				VisualItem item = activeItem;
 				if (item.canGetString("name")) {
 					AbsentLeafMarkEntity newM = new AbsentLeafMarkEntity(tview.getSuperEntity(item.getRow()));
+					newM.setMark(0.0);
 					tview.setSuperEntity(item.getRow(),newM);
 					activeProject.getSelected().add(newM);
 					activeProject.updateTables();

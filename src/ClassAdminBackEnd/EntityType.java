@@ -59,7 +59,7 @@ public class EntityType {
 		for (int x = 0; x < this.getSubEntityType().size(); ++x) {
 			total += this.getSubEntityType().get(x).getMaxValue();
 		}
-		this.setMaxValue(total);
+		this.setMaxValue(100);
 	}
 
 	public EntityType getParentEntitytype() {

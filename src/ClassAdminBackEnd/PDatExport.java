@@ -23,12 +23,7 @@ public class PDatExport {
 	public static final String BORDERCASE_TABLE = "BorderCase";
 
 	public void exportFileDB4o(Project project, String filename) {
-		
-		System.out.println("index: "+Global.getGlobal().getActiveProjectIndex()+" , "+project.getHeadEntityType());
-		for(int x = 0;x<Global.getGlobal().getProjects().size();++x){
-			System.out.println("index: "+x+" , "+ Global.getGlobal().getProjects().get(x).getHeadEntityType());
-		}
-		
+
 		File f = new File(filename);
 		f.delete();
 		ObjectContainer db = Db4o.openFile(filename);
@@ -42,7 +37,5 @@ public class PDatExport {
 		db.close();
 
 	}
-
-	
 
 }

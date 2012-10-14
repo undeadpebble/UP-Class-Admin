@@ -236,6 +236,7 @@ public class SuperEntity {
 			this.hasMark = false;
 		}
 		try {
+			this.getType().updateMaxValue();
 			this.parentEntity.updateMark();
 		} catch (NullPointerException e) {
 

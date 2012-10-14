@@ -51,8 +51,7 @@ public class FrmUpdateNode {
 	private EntityType activeentity;
 	private VisualItem activeItem;
 	private BackgroundGradientPanel backgroundPanel;
-	final JSpinner Nspinner = new JSpinner(new SpinnerNumberModel(1.0, 1.0,
-			100.0, 1.0));
+	final JSpinner Nspinner;
 
 	public FrmUpdateNode(Project project, JFrame parentFrame,
 			EntityType entity, VisualItem visualItem) {
@@ -79,6 +78,9 @@ public class FrmUpdateNode {
 				contentPane.getHeight());
 		contentPane.add(backgroundPanel);
 		backgroundPanel.setLayout(null);
+
+		Nspinner = new JSpinner(new SpinnerNumberModel(activeentity.getN(),
+				1.0, 100.0, 1.0));
 		Nspinner.setVisible(false);
 
 		final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -186,8 +188,8 @@ public class FrmUpdateNode {
 							(Double) txtWeight.getValue());
 					activeentity.setEntityTypeClass(cmbType.getSelectedIndex());
 					if (Nspinner.isVisible())
-						activeentity.setN((int)Double.parseDouble(Nspinner.getValue()
-								.toString()));
+						activeentity.setN((int) Double.parseDouble(Nspinner
+								.getValue().toString()));
 
 					// update front end information
 					activeProject.updateTables();
@@ -246,6 +248,7 @@ public class FrmUpdateNode {
 		backgroundPanel.add(txtWeight);
 		backgroundPanel.add(btnUpdate);
 		backgroundPanel.add(btnClose);
+		backgroundPanel.add(Nspinner);
 
 	}
 
