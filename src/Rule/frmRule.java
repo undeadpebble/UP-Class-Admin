@@ -91,9 +91,9 @@ public class frmRule extends JFrame {
 	 * Create the frame.
 	 */
 	public frmRule(final Project project) {
-		txtStr2.setBounds(433, 156, 178, 20);
+		txtStr2.setBounds(433, 156, 178, 29);
 		txtStr2.setColumns(10);
-		txtStr1.setBounds(68, 156, 180, 20);
+		txtStr1.setBounds(68, 156, 180, 29);
 		txtStr1.setColumns(10);
 		this.project = project;
 
@@ -1058,6 +1058,9 @@ public class frmRule extends JFrame {
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------
+	/**
+	 * if you select a string rule it edits the frame to look correctly
+	 */
 	public void reactivateString() {
 		ruleList = project.getRules();
 		ruleReferences = new LinkedList<Integer>();
@@ -1203,6 +1206,9 @@ public class frmRule extends JFrame {
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------
+	/**
+	 * if you select a booleanfloat rule it edits the frame to look correctly
+	 */
 	public void reactivateBooleanFloat() {
 		ruleList = project.getRules();
 		ruleReferences = new LinkedList<Integer>();
@@ -1327,6 +1333,9 @@ public class frmRule extends JFrame {
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------
+	/**
+	 * if you select a stringBool rule it edits the frame to look correctly
+	 */
 	public void reactivateStringBool() {
 		ruleList = project.getRules();
 		ruleReferences = new LinkedList<Integer>();
@@ -1452,6 +1461,9 @@ public class frmRule extends JFrame {
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------
+	/**
+	 * if you select a float rule it edits the frame to look correctly
+	 */
 	public void reactivateFloat() {
 		ruleList = project.getRules();
 		ruleReferences = new LinkedList<Integer>();
@@ -1574,6 +1586,9 @@ public class frmRule extends JFrame {
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------
+	/**
+	 * disposes the frame
+	 */
 	public void exitFrame() {
 		this.dispose();
 	}

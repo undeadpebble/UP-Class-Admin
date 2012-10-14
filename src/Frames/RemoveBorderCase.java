@@ -56,7 +56,7 @@ public class RemoveBorderCase extends JFrame {
 		for(int x = 0; x < heads.size();x++){
 			if(heads.get(x).getType().getBorderCasing().size() > 0){
 				for(int y = 0; y < (heads.get(x).getType().getBorderCasing().size()); y++){
-					bordercases.add(y);//(heads.get(x).getType().getBorderCasing().get(y)));
+					bordercases.add(x);
 				}
 			}
 		}
