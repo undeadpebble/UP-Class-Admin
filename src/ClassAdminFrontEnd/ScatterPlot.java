@@ -93,7 +93,8 @@ public class ScatterPlot {
 
 		XYItemRenderer renderer = plot.getRenderer();
 		renderer.setSeriesPaint(0, new Color(0xFF8400));
-		renderer.setBaseToolTipGenerator(new MyXYToolTipGenerator());
+		renderer.setBaseToolTipGenerator(new MyXYToolTipGenerator(scatterarray));
+		
 		return chart;
 	}
 
