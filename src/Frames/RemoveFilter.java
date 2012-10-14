@@ -25,7 +25,7 @@ public class RemoveFilter extends JFrame {
 
 	/**
 	 * @param table
-	 * creates a new removefilterframe
+	 *            creates a new removefilterframe
 	 */
 	public RemoveFilter(final FrmTable table) {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -52,9 +52,28 @@ public class RemoveFilter extends JFrame {
 
 		heads = table.project.getHead().getHeadersLinkedList();
 
-		for (int x = 0; x < heads.size(); x++) {
-			filters.add(x);
+		for (int x = 0; x < table.filters.size(); x++) {
+			for (int y = 0; y < table.filters.get(0).size(); y++) {
+				if (!filters.contains(x)
+						&& table.filters.get(x).get(y) != false) {
+					boolean isIn = true;
+					for (int z = 0; z < filters.size(); z++) {
+						if (filters.get(z) == y) {
+							isIn = false;
+						}
+					}
+					if (isIn)
+						filters.add(y);
+				}
+			}
 		}
+
+		/*
+		 * for (int x = 0; x < table.filters.size(); x++) { for(int y = 0; y <
+		 * table.filters.get(0).size();y++){
+		 * System.out.print((table.filters.get(x).get(y) != false)); }
+		 * System.out.println(); }
+		 */
 
 		String[] bcases = new String[filters.size()];
 
@@ -71,26 +90,12 @@ public class RemoveFilter extends JFrame {
 
 				Object[][] temp = new Object[table.data.size()][table.data.get(
 						0).size()];
-
-				for (int x = 0; x < table.data.size(); x++) {
-					for (int y = 0; y < table.data.get(0).size(); y++) {
-						temp[x][y] = table.data.get(x).get(y).getValue();
-					}
+				
+				for(int x = 0; x < table.filters.size();x++){
+					table.filters.get(x).set(filters.get(cbxFilters.getSelectedIndex()),false);
 				}
+				table.filterTable();
 
-				//for (int x = 0; x < table.filters.size(); x++) {
-					for (int y = 0; y < table.filters.get(0).size(); y++) {
-						table.filters.get(cbxFilters.getSelectedIndex()).set(y, false);
-					}
-				//}
-
-				int y = table.tableModel.getRowCount();
-				for (int x = 0; x < y; x++) {
-					table.tableModel.removeRow(0);
-				}
-				for (int x = 0; x < table.data.size(); x++) {
-					table.tableModel.addRow(temp[x]);
-				}
 				closeFrame();
 			}
 
