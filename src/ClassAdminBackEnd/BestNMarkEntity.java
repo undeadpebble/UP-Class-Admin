@@ -38,6 +38,8 @@ public class BestNMarkEntity extends MarkEntity{
 						* this.getSubEntity().get(i).getWeight();
 				
 				if(ofN < getType().getN()){
+
+					ofN++;
 					mTotal += m;
 					wTotal += w;
 					if(m<nthLargest){

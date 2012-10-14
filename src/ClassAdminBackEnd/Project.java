@@ -190,6 +190,11 @@ public class Project {
 			((HistogramFrame) histogramcharts.get(i)).update();
 		}
 	}
+	public void clearCharts(){
+		histogramcharts.clear();
+		boxplotcharts.clear();
+		scattercharts.clear();
+	}
 
 
 	/**

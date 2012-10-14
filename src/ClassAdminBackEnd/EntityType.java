@@ -47,11 +47,6 @@ public class EntityType {
 
 	public void setMaxValue(double maxmark) {
 		this.maxValue = maxmark;
-		try {
-			this.parentEntitytype.updateMaxValue();
-		} catch (NullPointerException e) {
-
-		}
 	}
 
 	public void updateMaxValue() {
@@ -59,7 +54,7 @@ public class EntityType {
 		for (int x = 0; x < this.getSubEntityType().size(); ++x) {
 			total += this.getSubEntityType().get(x).getMaxValue();
 		}
-		this.setMaxValue(100);
+		this.setMaxValue(total);
 	}
 
 	public EntityType getParentEntitytype() {
