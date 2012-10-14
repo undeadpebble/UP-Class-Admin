@@ -84,6 +84,10 @@ import ClassAdminBackEnd.SuperEntity;
 import Frames.FrmNewNode;
 import Frames.FrmTreeHelpDialog;
 
+/**
+ * @author Marco
+ *
+ */
 public class TreeView extends Display {
 
 	private static final String tree = "tree";
@@ -122,6 +126,11 @@ public class TreeView extends Display {
 		myTree = newTree;
 	}
 
+	/**
+	 * @param t
+	 * @param label
+	 * @param isStructure
+	 */
 	public TreeView(Tree t, String label, boolean isStructure) {
 		super(new Visualization());
 
