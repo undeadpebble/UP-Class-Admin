@@ -27,6 +27,7 @@ import Rule.FloatRule;
 import Rule.StringBoolRule;
 import Rule.StringRule;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JSpinner;
 import javax.swing.JLabel;
@@ -79,6 +80,7 @@ public class SetMaxValueFrame extends JFrame {
 		final JComboBox MaxValEditing = new JComboBox(head);
 		MaxValEditing.setBounds(233, 72, 101, 23);
 		backgroundPanel.add(MaxValEditing);
+		MaxValEditing.setModel(new DefaultComboBoxModel(table.project.getHead().getNumberHeaders()));
 
 		final JSpinner spinner = new JSpinner();
 		spinner.setBounds(233, 123, 101, 23);
