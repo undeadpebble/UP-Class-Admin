@@ -455,6 +455,11 @@ public class SuperEntity {
 		return str;
 	}
 
+	@Override
+	public String toString() {
+		return getField();
+	}
+
 	public SuperEntity findEntityOfType_Down(EntityType type) {
 		if (type.getEntityList().contains(this)) {
 			return this;
@@ -528,6 +533,23 @@ public class SuperEntity {
 
 	}
 
+	public void findThreeStrings(LinkedList<String> list) {
+		int depth = 1;
+		int maxDepth = this.getDepth()-1;
+		while(list.size() < 3 && depth <= maxDepth)
+			findStrings(list, depth++);
+	}
+
+	public void findStrings(LinkedList<String> list, int depth) {
+		if (list.size() >= 3)
+			return;
+
+		if (depth > 0)
+			for (int x = 0; x < subEntity.size(); ++x) {
+				subEntity.get(x).findStrings(list, depth - 1);
+			}
+	}
+
 	public int getDepth() {
 
 		int max = 0;
@@ -563,4 +585,26 @@ public class SuperEntity {
 
 		return result;
 	}
+
+	public void search(String str, LinkedList<SuperEntity> list) {
+		String rest = this.getValue().toLowerCase();
+
+		boolean fail = false;
+		for (int x = 0; x < str.length() && !fail; ++x) {
+			int index = rest.indexOf("" + str.charAt(x));
+			if (index < 0) {
+				fail = true;
+			} else
+				rest = rest.substring(index + 1);
+		}
+		if (!fail) {
+			list.add(this);
+			System.out.println(this.getValue());
+		}
+
+		for (int x = 0; x < subEntity.size(); ++x) {
+			subEntity.get(x).search(str, list);
+		}
+	}
+
 }
