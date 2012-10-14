@@ -44,6 +44,10 @@ public class FilterFrame extends JFrame {
 
 	private JComboCheckBox selectAllData;
 
+	/**
+	 * @param table
+	 * creates a new filterframe
+	 */
 	public FilterFrame(final FrmTable table) {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 355);

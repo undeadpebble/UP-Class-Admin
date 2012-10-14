@@ -65,6 +65,8 @@ import ClassAdminFrontEnd.GradientMenuBar;
 import ClassAdminFrontEnd.HistogramFrame;
 import ClassAdminFrontEnd.ImagePanel;
 import ClassAdminFrontEnd.MenuImagePanel;
+import ClassAdminFrontEnd.RapidAssessmentCanvas;
+import ClassAdminFrontEnd.RapidAssessmentMarkingCanvas;
 import ClassAdminFrontEnd.RecentDocsMenuItem;
 import ClassAdminFrontEnd.ReflectionButton;
 import ClassAdminFrontEnd.ReflectionButtonWithLabel;
@@ -1349,8 +1351,10 @@ public class Frame extends JFrame implements ActionListener {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (rapidAssessmentButton.isEnabled()) {
-
+					new RapidAssessmentCanvas(Global.getGlobal().getActiveProject(),null).setVisible(true);
+					
 				}
+				
 			}
 
 			public void mouseEntered(MouseEvent arg0) {
@@ -1366,8 +1370,9 @@ public class Frame extends JFrame implements ActionListener {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if (markingButton.isEnabled()) {
-
+					new RapidAssessmentMarkingCanvas(null,Global.getGlobal().getActiveProject());
 				}
+				System.out.println("marking");
 			}
 
 			public void mouseEntered(MouseEvent arg0) {

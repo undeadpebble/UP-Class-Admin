@@ -302,6 +302,7 @@ public class EntityType {
 					.get(x);
 			if (this.getIsRule()) {
 				if (this.getIsTextField()) {
+
 					new StringRuleEntity(this, parent, "");
 
 				} else {
@@ -309,15 +310,19 @@ public class EntityType {
 				}
 			} else {
 				if (this.getIsTextField()) {
+
 					if(this.getIsImg()){
 						new IMGEntity(this, parent, this.getName());
 					}	
 					else
 					new LeafStringEntity(this, parent, "#" + this.getName()
 							+ "#");
+
 				} else {
+
 					new LeafMarkEntity(this, parent, 0);
 				}
+
 			}
 
 		}
@@ -366,6 +371,23 @@ public class EntityType {
 		isTextField = pIsTextField;
 		date = pDate;
 		defaultWeight = weight;
+
+	}
+
+	public void findRapidAssessment(
+			LinkedList<RapidAssessmentContainerType> list) {
+
+		for (int x = 0; x < this.getSubEntityType().size(); ++x) {
+			this.getSubEntityType().get(x).findRapidAssessment(list);
+		}
+	}
+	
+	public void findEntities(LinkedList<EntityType> list){
+		for (int x = 0; x < this.getSubEntityType().size(); ++x) {
+			this.getSubEntityType().get(x).findEntities(list);
+		}
+		list.add(this);
+
 	}
 
 	public int getEntityTypeClass() {
@@ -401,7 +423,6 @@ public class EntityType {
 	public void setEntityTypeClass(int classType) {
 		Object o = null;
 		boolean text = this.getIsTextField();
-		System.out.println(text);
 
 		this.setIsTextField(false);
 		switch (classType) {
@@ -440,6 +461,7 @@ public class EntityType {
 				}
 				--x;
 				if (text) {
+
 					if (this.getIsTextField()) {
 
 					} else {
@@ -448,6 +470,7 @@ public class EntityType {
 						} catch (NumberFormatException e) {
 							newE.clearMark();
 						}
+
 					}
 				} else {
 					if (this.getIsTextField()) {
@@ -464,6 +487,7 @@ public class EntityType {
 		}
 	}
 
+
 	public boolean getIsImg() {
 		return isImg;
 	}
@@ -472,5 +496,12 @@ public class EntityType {
 		this.isImg = isImg;
 	}
 
+
+
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return getName();
+	}
 
 }

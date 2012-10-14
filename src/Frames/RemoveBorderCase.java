@@ -31,6 +31,10 @@ public class RemoveBorderCase extends JFrame {
 	private BackgroundGradientPanel backgroundPanel;
 	private ReflectionButton btnNewButton;
 
+	/**
+	 * @param table
+	 * creates a new removebordercase frame
+	 */
 	public RemoveBorderCase(final FrmTable table) {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 376, 236);
@@ -82,7 +86,7 @@ public class RemoveBorderCase extends JFrame {
 		for(int x = 0; x < heads.size();x++){
 			if(heads.get(x).getType().getBorderCasing().size() > 0){
 				for(int y = 0; y < (heads.get(x).getType().getBorderCasing().size()); y++){
-					bordercases.add(y);//(heads.get(x).getType().getBorderCasing().get(y)));
+					bordercases.add(x);
 				}
 			}
 		}
@@ -106,6 +110,9 @@ public class RemoveBorderCase extends JFrame {
 		});
 	}
 	
+	/**
+	 * disposes the frame
+	 */
 	public void closeFrame(){
 		this.dispose();
 	}

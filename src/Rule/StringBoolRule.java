@@ -9,6 +9,14 @@ public class StringBoolRule extends BooleanRule{
 	private StringRule child1;
 	private StringRule child2;
 	
+	/**
+	 * @param child1
+	 * @param child2
+	 * @param opperator
+	 * @param name
+	 * @param project
+	 * creates a string bool rule with the parameters
+	 */
 	public StringBoolRule(StringRule child1, StringRule child2, char opperator,String name,Project project) {
 		super(name, project);
 		this.child1 = child1;
@@ -19,22 +27,41 @@ public class StringBoolRule extends BooleanRule{
 		this.setIsTextField(true);
 	}
 	
+	/**
+	 * @return
+	 * returns the first child of the rule
+	 */
 	public StringRule getChild1() {
 		return child1;
 	}
 
+	/**
+	 * @param child1
+	 * sets the first child of the rule
+	 */
 	public void setChild1(StringRule child1) {
 		this.child1 = child1;
 	}
 
+	/**
+	 * @return
+	 * returns the first second of the rule
+	 */
 	public StringRule getChild2() {
 		return child2;
 	}
 
+	/**
+	 * @param child2
+	 * sets the second child of the rule
+	 */
 	public void setChild2(StringRule child2) {
 		this.child2 = child2;
 	}
 
+	/* (non-Javadoc)
+	 * @see Rule.BooleanRule#evaluateBool(ClassAdminBackEnd.SuperEntity)
+	 */
 	@Override
 	public Boolean evaluateBool(SuperEntity sE){
 		switch (opperator) {
@@ -62,6 +89,9 @@ public class StringBoolRule extends BooleanRule{
 		return value;
 	}
 	
+	/* (non-Javadoc)
+	 * @see Rule.Rule#getType()
+	 */
 	@Override
 	public int getType(){
 		return 2;
