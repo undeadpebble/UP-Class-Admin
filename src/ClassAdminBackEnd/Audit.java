@@ -58,7 +58,6 @@ public class Audit {
 			out.newLine();
 			out.close();
 			out = null;
-			System.out.println("close");
 		} catch (IOException e) {
 		}
 	}

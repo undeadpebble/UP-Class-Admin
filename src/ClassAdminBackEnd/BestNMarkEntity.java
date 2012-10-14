@@ -7,20 +7,17 @@ import org.tmatesoft.sqljet.core.table.SqlJetDb;
 
 public class BestNMarkEntity extends MarkEntity{
 
-	int N;
-	public BestNMarkEntity(EntityType type, SuperEntity parentEntity, int N) {
+	public BestNMarkEntity(EntityType type, SuperEntity parentEntity) {
 		super(type, parentEntity);
-		this.N = N;
-		// TODO Auto-generated constructor stub
+
 	}
 	
 	/**
 	 * @param replacedEntity
 	 */
-	public BestNMarkEntity(SuperEntity replacedEntity, int N) {
+	public BestNMarkEntity(SuperEntity replacedEntity) {
 		super(replacedEntity);
-		this.N = N;
-		// TODO Auto-generated constructor stub
+
 	}
 
 	@Override
@@ -40,7 +37,9 @@ public class BestNMarkEntity extends MarkEntity{
 				m = this.getSubEntity().get(i).getMark()
 						* this.getSubEntity().get(i).getWeight();
 				
-				if(ofN < N){
+				if(ofN < getType().getN()){
+
+					ofN++;
 					mTotal += m;
 					wTotal += w;
 					if(m<nthLargest){
@@ -73,16 +72,6 @@ public class BestNMarkEntity extends MarkEntity{
 			return 0.0;
 	}
 	
-	public long saveToDB(SqlJetDb db, long parentID, PDatIDGenerator idgen) throws SqlJetException {
-		long id = super.saveToDB(db, parentID, idgen);
-		db.beginTransaction(SqlJetTransactionMode.WRITE);
-
-        	ISqlJetTable table = db.getTable(PDatExport.ENTITY_TABLE);
-        	//insert statements
-        	
-        	table.insert(id,this.N);
-
-        return id;
-	}
+	
 
 }

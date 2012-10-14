@@ -530,6 +530,8 @@ public class SuperEntity {
 		oldParent.getSubEntity().remove(this);
 		sPointer.getTarget().getSubEntity().add(this);
 		this.setParentEntity(sPointer.getTarget());
+		
+		this.updateMark();
 
 	}
 

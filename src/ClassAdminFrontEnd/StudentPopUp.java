@@ -63,13 +63,18 @@ public class StudentPopUp {
 			public void actionPerformed(ActionEvent e) {
 				VisualItem item = activeItem;
 				if (item.canGetString("name")) {
-					tview.setSuperEntity(item.getRow(), new AbsentLeafMarkEntity(tview.getSuperEntity(item.getRow())));
+					AbsentLeafMarkEntity newM = new AbsentLeafMarkEntity(tview.getSuperEntity(item.getRow()));
+					tview.setSuperEntity(item.getRow(),newM);
+					activeProject.getSelected().add(newM);
 					activeProject.updateTables();
+					newM.getParentEntity().updateMark();
+					tview.updateNode(item.getRow());
 					String nodeName = item.getString("name");
 					nodeName = nodeName.substring(0, nodeName.indexOf(":") + 2) + "*ABSENT";
 					item.set("name", nodeName);
 					item.getVisualization().run("filter");
 					activeProject.getAudit().updateStudent(activeProject.getStudentLinkedList().get(0).getValue(), activeProject.getStudentLinkedList().get(item.getRow()).getValue(), "*ABSENT", true);
+					
 				}
 			}
 		});
@@ -78,13 +83,17 @@ public class StudentPopUp {
 			public void actionPerformed(ActionEvent e) {
 				VisualItem item = activeItem;
 				if (item.canGetString("name")) {
-					tview.setSuperEntity(item.getRow(),new MarkEntity(tview.getSuperEntity(item.getRow())));
+					MarkEntity newM = new MarkEntity(tview.getSuperEntity(item.getRow()));
+					tview.setSuperEntity(item.getRow(),newM);
+					activeProject.getSelected().add(newM);
+					newM.setMark(0.0);
 					activeProject.updateTables();
 					String nodeName = item.getString("name");
 					nodeName = nodeName.substring(0, nodeName.indexOf(":") + 2) + "N/A";
 					item.set("name", nodeName);
 					item.getVisualization().run("filter");
 					activeProject.getAudit().updateStudent(activeProject.getStudentLinkedList().get(0).getValue(), activeProject.getStudentLinkedList().get(item.getRow()).getValue(), "NOT ABSENT", true);
+					tview.updateNode(item.getRow());
 				}
 			}
 		});

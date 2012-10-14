@@ -190,6 +190,11 @@ public class Project {
 			((HistogramFrame) histogramcharts.get(i)).update();
 		}
 	}
+	public void clearCharts(){
+		histogramcharts.clear();
+		boxplotcharts.clear();
+		scattercharts.clear();
+	}
 
 
 	/**
@@ -422,5 +427,9 @@ public class Project {
 			}
 		}
 
+	}
+
+	public void setTables(LinkedList<FrmTable> tables) {
+		this.tables = tables;
 	}
 }

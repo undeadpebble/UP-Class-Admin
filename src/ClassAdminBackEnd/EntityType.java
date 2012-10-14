@@ -25,6 +25,7 @@ public class EntityType {
 	private long ID;
 	private double maxValue = 100;
 	private boolean isImg = false;
+	private int N = 0;
 
 	public static int WEIGHTED_AVERAGE_TYPE = 0;
 	public static int SUM_TYPE = 1;
@@ -46,11 +47,6 @@ public class EntityType {
 
 	public void setMaxValue(double maxmark) {
 		this.maxValue = maxmark;
-		try {
-			this.parentEntitytype.updateMaxValue();
-		} catch (NullPointerException e) {
-
-		}
 	}
 
 	public void updateMaxValue() {
@@ -311,15 +307,15 @@ public class EntityType {
 			} else {
 				if (this.getIsTextField()) {
 
-					if(this.getIsImg()){
+					if (this.getIsImg()) {
 						new IMGEntity(this, parent, this.getName());
-					}	
-					else
-					new LeafStringEntity(this, parent, "#" + this.getName()
-							+ "#");
+					} else
+						new LeafStringEntity(this, parent, "#" + this.getName()
+								+ "#");
 
 				} else {
-
+					if (N > 0)
+						new BestNMarkEntity(this, parent);
 					new LeafMarkEntity(this, parent, 0);
 				}
 
@@ -381,12 +377,14 @@ public class EntityType {
 			this.getSubEntityType().get(x).findRapidAssessment(list);
 		}
 	}
-	
-	public void findEntities(LinkedList<EntityType> list){
+
+	public void findEntities(LinkedList<EntityType> list) {
 		for (int x = 0; x < this.getSubEntityType().size(); ++x) {
 			this.getSubEntityType().get(x).findEntities(list);
 		}
-		list.add(this);
+		if (this.getParentEntitytype() != null
+				&& this.getParentEntitytype().getParentEntitytype() != null)
+			list.add(this);
 
 	}
 
@@ -453,7 +451,7 @@ public class EntityType {
 				} else if (o.equals(SumMarkEntity.class)) {
 					newE = new SumMarkEntity(this.getEntityList().get(x));
 				} else if (o.equals(BestNMarkEntity.class)) {
-					newE = new BestNMarkEntity(this.getEntityList().get(x), 1);
+					newE = new BestNMarkEntity(this.getEntityList().get(x));
 				} else if (o.equals(StringEntity.class)
 						|| o.equals(LeafStringEntity.class)) {
 					newE = new StringEntity(this.getEntityList().get(x), this
@@ -474,11 +472,10 @@ public class EntityType {
 					}
 				} else {
 					if (this.getIsTextField()) {
-						/*try {
-							newE.setField(String.valueOf(newE.getMark()));
-						} catch (AbsentException e) {
-							newE.setField("-");
-						}*/
+						/*
+						 * try { newE.setField(String.valueOf(newE.getMark()));
+						 * } catch (AbsentException e) { newE.setField("-"); }
+						 */
 					} else {
 
 					}
@@ -486,7 +483,6 @@ public class EntityType {
 			}
 		}
 	}
-
 
 	public boolean getIsImg() {
 		return isImg;
@@ -496,12 +492,18 @@ public class EntityType {
 		this.isImg = isImg;
 	}
 
-
-
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
 		return getName();
+	}
+
+	public int getN() {
+		return N;
+	}
+
+	public void setN(int n) {
+		N = n;
 	}
 
 }

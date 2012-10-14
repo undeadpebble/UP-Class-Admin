@@ -718,6 +718,7 @@ public class RapidAssessmentCanvas extends JFrame {
 
 		selectCombo = new JComboBox();
 		selectCombo.setBounds(parentRect.getWidth() + 5, 10, 130, 23);
+		selectCombo.setFocusable(false);
 		parentPanel.add(selectCombo);
 		JButton btnSelect = new JButton("Select");
 		btnSelect.setBounds(parentRect.getWidth() + 5, 35, 130, 23);
@@ -743,6 +744,7 @@ public class RapidAssessmentCanvas extends JFrame {
 
 		loadCombo = new JComboBox();
 		loadCombo.setBounds(parentRect.getWidth() + 5, 60, 130, 23);
+		loadCombo.setFocusable(false);
 
 		parentPanel.add(loadCombo);
 		JButton btnLoad = new JButton("Load");
