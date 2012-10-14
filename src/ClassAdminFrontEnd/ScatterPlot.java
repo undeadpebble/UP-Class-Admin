@@ -54,20 +54,36 @@ public class ScatterPlot {
 	private Project project;
 	private ArrayList annons;
 
-	// Constructor
+	
+	/**
+	 * @param project
+	 * Constructor
+	 */
 	public ScatterPlot(Project project) {
 		this.project = project;
 		project.updatecharts();
 		annons = new ArrayList();
 	}
 
-	// Set the dataset of the chart
+	
+	/**
+	 * @param x
+	 * Set the dataset of the chart
+	 */
 	public void setDatasetmain(XYDataset x) {
 
 		datasetMain = x;
 	}
 
-	// Create the create the scatterplot
+	
+	/**
+	 * @param title
+	 * @param chartdata
+	 * @param xas
+	 * @param yas
+	 * @return
+	 * Create the create the scatterplot
+	 */
 	public JFreeChart createScatter(String title, final XYDataset chartdata, String xas, String yas) {
 		chart = ChartFactory.createScatterPlot("Scatter Plot", xas, yas, chartdata, PlotOrientation.VERTICAL, false, false, false);
 		datasetMain = chartdata;
@@ -80,7 +96,10 @@ public class ScatterPlot {
 		return chart;
 	}
 
-	// Update all the selected values of the scatterplot
+	 
+	/**
+	 * Update all the selected values of the scatterplot
+	 */
 	public void updateSelectedvalues() {
 
 		chart.getXYPlot().clearAnnotations();
@@ -102,7 +121,11 @@ public class ScatterPlot {
 		}
 	}
 
-	// Put the chart on the chartpanel
+	
+	/**
+	 * @return
+	 * Put the chart on the chartpanel
+	 */
 	public ChartPanel createPanel() {
 
 		chartPanel = new ChartPanel(chart);
@@ -153,10 +176,16 @@ public class ScatterPlot {
 		return chartPanel;
 	}
 
+	/**
+	 * @param x
+	 */
 	public void setScatterArray(int[] x) {
 		scatterarray = x;
 	}
 
+	/**
+	 * @param x
+	 */
 	public void setAnnons(XYLineAnnotation x) {
 		annons.add(x);
 	}

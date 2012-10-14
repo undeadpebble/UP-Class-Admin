@@ -6,11 +6,20 @@ import java.util.LinkedList;
 
 public class Stats {
 	private Project project;
+	/**
+	 * @param pproject
+	 * Constructor
+	 */
 	public Stats(Project pproject)
 	{
 		project = pproject;
 	}
 
+	/**
+	 * @param hou
+	 * @return
+	 * Return highest mark
+	 */
 	public double hoogstepunt(int hou)
 	{
 		final LinkedList<LinkedList<SuperEntity>> diedata = project.getHead()
@@ -38,6 +47,11 @@ public class Stats {
 		}
 		return hoogste;
 	}
+	/**
+	 * @param hou
+	 * @return
+	 * Returns lowest mark
+	 */
 	public double laagstepunt(int hou)
 	{
 		final LinkedList<LinkedList<SuperEntity>> diedata = project.getHead()
@@ -65,6 +79,11 @@ public class Stats {
 		}
 		return laagste;
 	}
+	/**
+	 * @param hou
+	 * @return
+	 * Return average mark
+	 */
 	public double gemidpunt(int hou)
 	{
 		double gemid=0;
@@ -87,6 +106,11 @@ public class Stats {
 		
 		return gemid;
 	}
+	/**
+	 * @param hou
+	 * @return
+	 * Return number of fails
+	 */
 	public int fails(int hou)
 	{
 		final LinkedList<LinkedList<SuperEntity>> diedata = project.getHead()
@@ -103,6 +127,11 @@ public class Stats {
 		}
 		return nrVanDruip;
 	}
+	/**
+	 * @param hou
+	 * @return
+	 * Return number of passes
+	 */
 	public int slaag(int hou)
 	{
 		final LinkedList<LinkedList<SuperEntity>> diedata = project.getHead()
@@ -119,6 +148,11 @@ public class Stats {
 		}
 		return nrVanSlaag;
 	}
+	/**
+	 * @param hou
+	 * @return
+	 * Return median value
+	 */
 	public double median(int hou)
 	{
 		double getal=0.0;
@@ -161,6 +195,11 @@ public class Stats {
 		
 		return sort[n/2];
 	}
+	/**
+	 * @param hou
+	 * @return
+	 * Return number of distinctions
+	 */
 	public int distinction(int hou)
 	{
 		final LinkedList<LinkedList<SuperEntity>> diedata = project.getHead()
@@ -177,6 +216,11 @@ public class Stats {
 		}
 		return nrVanDistinct;
 	}
+	/**
+	 * @param hou
+	 * @return
+	 * Return number of possible supplementary admissions
+	 */
 	public int her(int hou)
 	{
 		final LinkedList<LinkedList<SuperEntity>> diedata = project.getHead()
@@ -193,12 +237,21 @@ public class Stats {
 		}
 		return nrVanHer;
 	}
+	/**
+	 * @return
+	 * Return number of students
+	 */
 	public int totalnrstd()
 	{
 		final LinkedList<LinkedList<SuperEntity>> diedata = project.getHead()
 				.getDataLinkedList();
 		return diedata.size(); 
 	}
+	/**
+	 * @param d
+	 * @return
+	 * Round a value to two decimals
+	 */
 	public double roundTwoDecimals(double d) {
 	    DecimalFormat twoDForm = new DecimalFormat("#.##");
 	    return Double.valueOf(twoDForm.format(d));
