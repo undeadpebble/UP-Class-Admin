@@ -1,8 +1,7 @@
 package ClassAdminBackEnd;
 
 import java.awt.image.BufferedImage;
-
-import ClassAdminBackEnd.RapidAssessmentTree.TreeContainerNode;
+import java.util.LinkedList;
 
 public class RapidAssessmentContainerType extends RapidAssessmentRectangleType {
 	private BufferedImage Image;
@@ -36,27 +35,52 @@ public class RapidAssessmentContainerType extends RapidAssessmentRectangleType {
 		this.setY(y);
 		this.setW(w);
 		this.setH(h);
-		
+
 		this.setDate(replacedEntity.getDate());
 		this.setParentEntitytype(replacedEntity.getParentEntitytype());
 		this.setDefaultWeight(replacedEntity.getDefaultWeight());
 		this.setIsRule(false);
 		this.setIsTextField(false);
 
-		if(replacedEntity.getParentEntitytype() != null){
-		replacedEntity.getParentEntitytype().getSubEntityType()
-				.remove(replacedEntity);
-		replacedEntity.getParentEntitytype().getSubEntityType().add(this);
+		if (replacedEntity.getParentEntitytype() != null) {
+			replacedEntity.getParentEntitytype().getSubEntityType()
+					.remove(replacedEntity);
+			replacedEntity.getParentEntitytype().getSubEntityType().add(this);
 		}
 
 		this.setBorderCasing(replacedEntity.getBorderCasing());
 		this.setFormatting(replacedEntity.getFormatting());
 		this.setSubEntityType(replacedEntity.getSubEntityType());
+		for (int q = getSubEntityType().size()-1; q >= 0; --q) {
+			try {
+				RapidAssessmentComponentType temp = (RapidAssessmentComponentType) (this
+						.getSubEntityType().get(q));
+				temp.removeDeletingChildren();
+				
+			} catch (ClassCastException e) {
+				this.getSubEntityType().get(q).setParentEntitytype(this);
+			}
+		}
 		this.setEntityList(replacedEntity.getEntityList());
 
-		for (int z = 0; z < this.getEntityList().size(); ++z) {
+		for (int z = this.getEntityList().size()-1; z >=0 ; --z) {
+
 			this.getEntityList().get(z).setType(this);
 		}
+	}
+	
+	@Override
+	public void findRapidAssessment(
+			LinkedList<RapidAssessmentContainerType> list) {
+		// TODO Auto-generated method stub
+		super.findRapidAssessment(list);
+		list.add(this);
+	}
+
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return this.getName();
 	}
 
 }

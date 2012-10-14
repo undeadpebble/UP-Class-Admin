@@ -1,10 +1,10 @@
-
 package Frames;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,6 +22,10 @@ import ClassAdminBackEnd.AbsentException;
 import ClassAdminFrontEnd.BackgroundGradientPanel;
 import ClassAdminFrontEnd.FrmTable;
 import ClassAdminFrontEnd.ReflectionButton;
+import Rule.FloatBoolRule;
+import Rule.FloatRule;
+import Rule.StringBoolRule;
+import Rule.StringRule;
 
 import javax.swing.JComboBox;
 import javax.swing.JSpinner;
@@ -34,48 +38,9 @@ public class SetMaxValueFrame extends JFrame {
 	private BackgroundGradientPanel backgroundPanel;
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-				if ("Nimbus".equals(info.getName())) {
-					javax.swing.UIManager.setLookAndFeel(info.getClassName());
-					UIManager.put("nimbusBase", new Color(0x7A7A7A));
-					UIManager.put("nimbusSelectionBackground", new Color(0x171717));
-					UIManager.put("nimbusFocus", new Color(0x00C6E0));
-					UIManager.put("Menu.background", new Color(0x2B2B2B));
-					UIManager.put("background", new Color(0x171717));
-					UIManager.put("DesktopIcon.background", new Color(0x171717));
-					UIManager.put("nimbusLightBackground", new Color(0xE3E3E3));
-
-					break;
-				}
-			}
-		} catch (ClassNotFoundException ex) {
-			java.util.logging.Logger.getLogger(Frame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		} catch (InstantiationException ex) {
-			java.util.logging.Logger.getLogger(Frame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		} catch (IllegalAccessException ex) {
-			java.util.logging.Logger.getLogger(Frame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(Frame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		}
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					/*SetMaxValueFrame frame = new SetMaxValueFrame();
-					frame.setVisible(true);*/
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 * @throws IOException 
+	 * @param table
+	 * @throws IOException
+	 * creates a new setmaxvalue frame
 	 */
 	public SetMaxValueFrame(final FrmTable table) throws IOException {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -96,13 +61,22 @@ public class SetMaxValueFrame extends JFrame {
 		int y = (dim.height - h) / 2;
 		// Move the window
 		setLocation(x, y);
+		
+		Image icon = Toolkit.getDefaultToolkit().getImage("icons/MaxValueFrame.png");
+		this.setIconImage(icon);
 
 		backgroundPanel = new BackgroundGradientPanel(contentPane);
 		backgroundPanel.setBounds(0, 0, getWidth(), getHeight());
 		contentPane.add(backgroundPanel);
 		backgroundPanel.setLayout(null);
 
-		final JComboBox MaxValEditing = new JComboBox(table.project.getHead().getNumberHeaders());
+		String[] head = new String[table.headPoints.size()];
+
+		for (int z = 0; z < table.headPoints.size(); z++) {
+			head[z] = table.headers[table.headPoints.get(z)];
+		}
+
+		final JComboBox MaxValEditing = new JComboBox(head);
 		MaxValEditing.setBounds(233, 72, 101, 23);
 		backgroundPanel.add(MaxValEditing);
 
@@ -120,8 +94,10 @@ public class SetMaxValueFrame extends JFrame {
 		backgroundPanel.add(lblSelectMaximumValue);
 		lblSelectMaximumValue.setForeground(new Color(0xEDEDED));
 
-		final ReflectionButton btnSetMaxValues = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/MaxValueFrame.png")));
-		//JButton btnSetMaxValues = new JButton("Set Max Values");
+		final ReflectionButton btnSetMaxValues = new ReflectionButton(
+				ImageIO.read(getClass().getResource(
+						"/ClassAdminFrontEnd/resources/MaxValueFrame.png")));
+		// JButton btnSetMaxValues = new JButton("Set Max Values");
 		btnSetMaxValues.setBounds(275, 190, 59, 83);
 		backgroundPanel.add(btnSetMaxValues);
 
@@ -142,7 +118,8 @@ public class SetMaxValueFrame extends JFrame {
 
 			@Override
 			public void componentResized(ComponentEvent e) {
-				backgroundPanel.setBounds(0, 0, contentPane.getWidth(), contentPane.getHeight());
+				backgroundPanel.setBounds(0, 0, contentPane.getWidth(),
+						contentPane.getHeight());
 				backgroundPanel.rerenderBackground();
 
 			}
@@ -154,32 +131,133 @@ public class SetMaxValueFrame extends JFrame {
 			}
 
 		});
-		
+
 		btnSetMaxValues.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// public void actionPerformed(ActionEvent e) {
-				if (!table.data.get(0).get(MaxValEditing.getSelectedIndex())
-						.getType().getIsTextField()) {
-					table.data.get(0)
-							.get(MaxValEditing.getSelectedIndex())
+				if (!table.data
+						.get(0)
+						.get(table.headPoints.get(MaxValEditing
+								.getSelectedIndex())).getType()
+						.getIsTextField()) {
+					table.data
+							.get(0)
+							.get(table.headPoints.get(MaxValEditing
+									.getSelectedIndex()))
 							.getType()
 							.setMaxValue(
-									Integer.parseInt(spinner.getValue().toString()));
+									Integer.parseInt(spinner.getValue()
+											.toString()));
 
-					for(int x = 0; x < table.data.get(0).size(); x++){
+					for (int x = 0; x < table.data.size(); x++) {
 						try {
-							if ((table.data.get(0).get(MaxValEditing.getSelectedIndex()).getMark() > (table.data.get(0).get(MaxValEditing.getSelectedIndex()).getType().getMaxValue()))){
-								table.data.get(0).get(MaxValEditing.getSelectedIndex()).setMark(table.data.get(0).get(MaxValEditing.getSelectedIndex()).getType().getMaxValue());
+							if ((table.data
+									.get(x)
+									.get(table.headPoints.get(MaxValEditing
+											.getSelectedIndex())).getMark() > (table.data
+									.get(0)
+									.get(table.headPoints.get(MaxValEditing
+											.getSelectedIndex())).getType()
+									.getMaxValue()))) {
+								table.data
+										.get(x)
+										.get(table.headPoints.get(MaxValEditing
+												.getSelectedIndex()))
+										.setMark(
+												Integer.parseInt(spinner
+														.getValue().toString()));
 							}
+
 						} catch (AbsentException e1) {
-							
+
 						}
 					}
+
+					/*
+					 * for (int y = 0; y < table.data.size(); y++) {
+					 * table.getTable() .getModel() .setValueAt( table.data
+					 * .get(y) .get(table.headPoints.get(MaxValEditing
+					 * .getSelectedIndex())) .getValue(), y,
+					 * table.headPoints.get(MaxValEditing .getSelectedIndex()));
+					 * }
+					 */
+
+					for (int x = 0; x < table.project.getRules().size(); x++) {
+						try {
+							if (((StringRule) table.project.getRules().get(x))
+									.getReferences() == table.headersList.get(
+									table.headPoints.get(MaxValEditing
+											.getSelectedIndex())).getType()) {
+								for (int y = 0; y < table.data.size(); y++) {
+									((StringRule) table.project.getRules().get(
+											x)).setValue(table.data
+											.get(y)
+											.get(table.headPoints.get(MaxValEditing
+													.getSelectedIndex()))
+											.getValue());
+								}
+							}
+						} catch (Exception ex) {
+							try {
+								if (((FloatRule) table.project.getRules()
+										.get(x)).getReferences() == table.headersList
+										.get(table.headPoints.get(MaxValEditing
+												.getSelectedIndex())).getType()) {
+									for (int y = 0; y < table.data.size(); y++) {
+										((FloatRule) table.project.getRules()
+												.get(x)).setValue(Double.parseDouble(table.data
+												.get(y)
+												.get(table.headPoints.get(MaxValEditing
+														.getSelectedIndex()))
+												.getValue()));
+									}
+
+								}
+							} catch (Exception e2) {
+							}
+						}
+					}
+
+					for (int x = 0; x < table.project.getRules().size(); x++) {
+
+						try {
+							((StringRule)table.project.getRules().get(x)).evaluateString(null);
+						} catch (Exception e2) {
+							try {
+								((FloatRule)table.project.getRules().get(x)).evaluateDouble(null);
+							} catch (Exception e3) {
+								try {
+									((StringBoolRule)table.project.getRules().get(x)).evaluateBool(null);
+								} catch (Exception e4) {
+									try {
+										((FloatBoolRule)table.project.getRules().get(x)).evaluateBool(null);
+									} catch (Exception e5) {
+
+									}
+								}
+							}
+						}
+					}
+					/*
+					 * table.tableModel.fireTableDataChanged();
+					 * table.getTable().repaint();
+					 */
+					table.redraw();
 				}
+
+				closeFrame();
 			}
-				
+
 		});
+
+	}
+
+	/**
+	 * disposes the frame
+	 */
+	public void closeFrame() {
+		this.dispose();
 	}
 }

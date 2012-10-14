@@ -140,7 +140,9 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 		 f = new JFrame("ScatterPlot");
 		this.project = project;
 		final Container content = f.getContentPane();
-		f.setSize(550, 380);
+		f.setBounds(100,100,550, 380);
+		Image icon = Toolkit.getDefaultToolkit().getImage("icons/Scatter.png");
+		f.setIconImage(icon);
 		diedata = project.getHead().getDataLinkedList();
 
 		final XYSeriesCollection dataset = new XYSeriesCollection();

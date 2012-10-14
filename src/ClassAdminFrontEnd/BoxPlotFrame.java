@@ -79,8 +79,9 @@ public class BoxPlotFrame extends JFrame implements ActionListener {
 
 		JFrame f = new JFrame("BoxPlot");
 		final Container content = f.getContentPane();
-		f.setSize(450, 500);
-
+		f.setBounds(100,100,450, 500);
+		Image icon = Toolkit.getDefaultToolkit().getImage("icons/Box.png");
+		f.setIconImage(icon);
 		this.project = project;
 
 		dataset = new DefaultBoxAndWhiskerCategoryDataset();

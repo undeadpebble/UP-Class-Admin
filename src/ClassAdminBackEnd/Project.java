@@ -47,9 +47,11 @@ public class Project {
 	private int histogramdatacount = -1;
 	private int scatterdatacount = -1;
 
+
 	/**
 	 * @param p
 	 */
+
 	public void load(Project p) {
 		this.audit = p.audit;
 		this.boxplotcharts = p.boxplotcharts;
@@ -74,14 +76,17 @@ public class Project {
 	/**
 	 * @return Get the number of histograms in the active project
 	 */
+
 	public int getHistogramcount() {
 		return histogramdatacount;
 	}
+
 
 	/**
 	 * 
 	 * Increase the count of number of histogramcharts opened
 	 */
+
 	public void incHistogramcount() {
 		int modgetal = this.getHead().getNumberHeaders().length;
 
@@ -91,16 +96,20 @@ public class Project {
 
 	}
 
+
 	/**
 	 * @return Get the number scatterplot in the active project
 	 */
+
 	public int getscattercount() {
 		return scatterdatacount;
 	}
 
+
 	/**
 	 * Increase the number of scattercharts open in project
 	 */
+
 	public void incscattercount() {
 		int modgetal = this.getHead().getNumberHeaders().length;
 
@@ -110,9 +119,11 @@ public class Project {
 
 	}
 
+
 	/**
 	 * Clear all selected values in the active project
 	 */
+
 	public void clearselected() {
 
 		this.getSelectedIndexes().clear();
@@ -126,16 +137,30 @@ public class Project {
 	 * @param x
 	 *            Add scatterchart to arraylist
 	 */
+
+	public boolean getCleared() {
+		return cleared;
+	}
+
+	public void setCleared(boolean x) {
+
+		cleared = x;
+	}
+
+	// Add scatterchart to arraylist
+
 	public void addscattercharts(ScatterPlotFrame x) {
 
 		scattercharts.add(x);
 
 	}
 
+
 	/**
 	 * @param x
 	 *            Add boxplot to arraylist
 	 */
+
 	public void addboxplotcharts(BoxPlotFrame x) {
 
 		boxplotcharts.add(x);
@@ -146,15 +171,18 @@ public class Project {
 	 * @param x
 	 *            Add histogram to arraylist
 	 */
+
 	public void addhistogramcharts(HistogramFrame x) {
 
 		histogramcharts.add(x);
 
 	}
 
+
 	/**
 	 * Update the charts selected values
 	 */
+
 	public void updatecharts() {
 		for (int i = 0; i < scattercharts.size(); i++)
 			((ScatterPlotFrame) scattercharts.get(i)).update();
@@ -163,11 +191,13 @@ public class Project {
 		}
 	}
 
+
 	/**
 	 * @param x
 	 * @param selectedgroup
 	 *            Set the selected of the project
 	 */
+
 	public void setSelected(int x, boolean selectedgroup) {
 		boolean duplicate = false;
 		for (int i = 0; i < selectedIndexes.size(); i++) {
@@ -178,8 +208,10 @@ public class Project {
 		if (duplicate == false) {
 			selectedIndexes.add(x);
 
+
 			for (int w = 0; w < this.getHead().getDataLinkedList().get(0).size(); w++)
 				this.getSelected().add(this.getHead().getDataLinkedList().get(x).get(w));
+
 			if (scatterIndexes != null) {
 				// add the scatterplots indexes
 				scatterArrayListIndexes.add(scatterIndexes[x]);
@@ -207,11 +239,11 @@ public class Project {
 		return selectedIndexes;
 	}
 
-	
 	/**
 	 * @param x
 	 * Set the scattercharts indexes
 	 */
+
 	public void setScatterSelect(int[] x) {
 		scatterIndexes = x;
 
@@ -317,11 +349,27 @@ public class Project {
 		String files;
 		File folder = new File(dir);
 		File[] listOfFiles = folder.listFiles();
+		EntityType images;
 
-		EntityType images = new EntityType("Pictures", this.getHeadEntityType().getSubEntityType().get(0), true, null, 0.0);
-		images.setIsImg(true);
-		images.setIsTextField(true);
-		images.populateTreeWithEntities();
+
+		Boolean hasImg = false;
+
+		for (int x = 0; x < this.getHead().getHeadersLinkedList().size(); x++) {
+			if (this.getHead().getHeadersLinkedList().get(x).getType()
+					.getIsImg()) {
+				images = this.getHead().getHeadersLinkedList().get(x).getType();
+				hasImg = true;
+			}
+		}
+
+		if (!hasImg) {
+			images = new EntityType("Pictures", this.getHeadEntityType()
+					.getSubEntityType().get(0), true, null, 0.0);
+			images.setIsImg(true);
+			images.setIsTextField(true);
+			images.populateTreeWithEntities();
+		}
+
 
 		LinkedList<LinkedList<SuperEntity>> data = getHead().getDataLinkedList();
 
@@ -348,10 +396,20 @@ public class Project {
 								SuperEntity temp = data.get(x).get(y);
 								if (temp.getType().getIsTextField()) {
 									if (temp.getValue().equals(files)) {
+
 										try {
-											((IMGEntity) data.get(x).get(where)).setImage(ImageIO.read(new File(dir + "\\" + filesFull)));
-											data.get(x).get(where).setField(filesFull);
-											data.get(x).get(where).setPicture(dir + "\\" + filesFull);
+											((IMGEntity) data.get(x).get(where))
+													.setImage(ImageIO
+															.read(new File(dir
+																	+ "\\"
+																	+ filesFull)));
+											data.get(x).get(where)
+													.setField(filesFull);
+											data.get(x)
+													.get(where)
+													.setPicture(
+															dir + "\\"
+																	+ filesFull);
 										} catch (Exception e) {
 										}
 										if (this.tables.size() > 0)
