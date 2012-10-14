@@ -35,8 +35,6 @@ public class RapidAssessmentContainerType extends RapidAssessmentRectangleType {
 		this.setY(y);
 		this.setW(w);
 		this.setH(h);
-		
-		
 
 		this.setDate(replacedEntity.getDate());
 		this.setParentEntitytype(replacedEntity.getParentEntitytype());
@@ -44,29 +42,29 @@ public class RapidAssessmentContainerType extends RapidAssessmentRectangleType {
 		this.setIsRule(false);
 		this.setIsTextField(false);
 
-		if(replacedEntity.getParentEntitytype() != null){
-		replacedEntity.getParentEntitytype().getSubEntityType()
-				.remove(replacedEntity);
-		replacedEntity.getParentEntitytype().getSubEntityType().add(this);
+		if (replacedEntity.getParentEntitytype() != null) {
+			replacedEntity.getParentEntitytype().getSubEntityType()
+					.remove(replacedEntity);
+			replacedEntity.getParentEntitytype().getSubEntityType().add(this);
 		}
 
 		this.setBorderCasing(replacedEntity.getBorderCasing());
 		this.setFormatting(replacedEntity.getFormatting());
 		this.setSubEntityType(replacedEntity.getSubEntityType());
-		for(int q = 0;q<getSubEntityType().size();++q){
-			try{
-				(RapidAssessmentComponentType)(this.getSubEntityType().get(q));
-				this.getSubEntityType().remove(this.getSubEntityType().get(q));
-				--q;
-			}
-			catch(ClassCastException e){
+		for (int q = getSubEntityType().size()-1; q >= 0; --q) {
+			try {
+				RapidAssessmentComponentType temp = (RapidAssessmentComponentType) (this
+						.getSubEntityType().get(q));
+				temp.removeDeletingChildren();
+				
+			} catch (ClassCastException e) {
 				this.getSubEntityType().get(q).setParentEntitytype(this);
 			}
 		}
 		this.setEntityList(replacedEntity.getEntityList());
 
-		for (int z = 0; z < this.getEntityList().size(); ++z) {
-			
+		for (int z = this.getEntityList().size()-1; z >=0 ; --z) {
+
 			this.getEntityList().get(z).setType(this);
 		}
 	}

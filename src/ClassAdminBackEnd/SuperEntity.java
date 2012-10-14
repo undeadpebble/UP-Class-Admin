@@ -533,7 +533,10 @@ public class SuperEntity {
 	}
 
 	public void findThreeStrings(LinkedList<String> list) {
-
+		int depth = 1;
+		int maxDepth = this.getDepth()-1;
+		while(list.size() < 3 && depth <= maxDepth)
+			findStrings(list, depth++);
 	}
 
 	public void findStrings(LinkedList<String> list, int depth) {

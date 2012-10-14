@@ -13,9 +13,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
@@ -27,6 +31,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.Timer;
 
 import jxl.biff.drawing.ComboBox;
 
@@ -57,14 +63,16 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 	private int focusedMark = 0;
 	private LinkedList<MyMark> markList = new LinkedList<RapidAssessmentMarkingCanvas.MyMark>();
 
-	private JTextArea searchBox;
-	private JLabel searchLabel,loadAssessmentLabel;
+	private JTextField searchBox;
+	private JLabel searchLabel, loadAssessmentLabel;
 	private JComboBox studentChooser;
 	private JComboBox assessmentChooser;
 	private JLabel[] infoLabels;
 	private JComboBox loadCombo;
 	private JButton btnLoad;
-	
+	private JLabel timerLabel;
+	private Timer timer;
+	private Date time;
 
 	public void refreshButtons() {
 		contentPanel.add(searchBox);
@@ -74,12 +82,15 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 		searchBox.setBounds(parentFrame.getWidth() - 145, 50, 130, 30);
 		studentChooser.setBounds(parentFrame.getWidth() - 145, 80, 130, 30);
 
-		loadAssessmentLabel.setBounds(parentFrame.getWidth() - 145, 120, 130, 30);
+		loadAssessmentLabel.setBounds(parentFrame.getWidth() - 145, 200, 130,
+				30);
 		contentPanel.add(loadAssessmentLabel);
-		loadCombo.setBounds(parentFrame.getWidth() - 145, 150, 130, 30);
+		loadCombo.setBounds(parentFrame.getWidth() - 145, 230, 130, 30);
 		contentPanel.add(loadCombo);
-		btnLoad.setBounds(parentFrame.getWidth() - 145, 185, 130, 30);
+		btnLoad.setBounds(parentFrame.getWidth() - 145, 260, 130, 30);
 		contentPanel.add(btnLoad);
+		contentPanel.add(timerLabel);
+		timerLabel.setBounds(parentFrame.getWidth() - 145, parentFrame.getHeight()-100, 130, 30);
 
 		for (int x = 0; x < infoLabels.length; ++x) {
 			infoLabels[x].setBounds(parentFrame.getWidth() - 145, 110 + x * 35,
@@ -98,6 +109,62 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 		this.setSize(150, 400);
 		contentPanel.setVisible(true);
 		refreshButtons();
+		
+		this.addWindowListener(new WindowListener() {
+			
+			@Override
+			public void windowOpened(WindowEvent arg0) {
+				time = new Date(22*1000*60*60L);
+				timer = new Timer(1000, new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent arg0) {
+						time.setTime(time.getTime()+1000L);
+						timerLabel.setText(new SimpleDateFormat("HH:mm:ss").format(time));
+						
+					}
+				});
+				timer.start();
+				
+			}
+			
+			@Override
+			public void windowIconified(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowDeiconified(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowDeactivated(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+				timer.stop();
+				RapidAssessmentMarkingCanvas.this.project.updateTables();
+				
+			}
+			
+			@Override
+			public void windowClosed(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowActivated(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 
 		if (head != null) {
 			createComponent(head);
@@ -121,6 +188,11 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 				switch (arg0.getKeyCode()) {
 				case 192:
 					markList.get(focusedMark).addChar('0');
+					break;
+				case KeyEvent.VK_ESCAPE:
+					searchBox.setFocusable(true);
+					searchBox.requestFocus();
+					searchBox.selectAll();
 					break;
 				case KeyEvent.VK_ENTER:
 					markList.get(focusedMark).next();
@@ -159,27 +231,36 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 			this.setLayout(null);
 			searchLabel = new JLabel("Search");
 			loadAssessmentLabel = new JLabel("Load Assessment");
+			loadAssessmentLabel.setFocusable(false);
 			studentChooser = new JComboBox();
+			timerLabel = new JLabel();
 			infoLabels = new JLabel[3];
 			for (int x = 0; x < infoLabels.length; ++x) {
 				infoLabels[x] = new JLabel();
+				infoLabels[x].setVisible(true);
+				infoLabels[x].setFocusable(false);
 			}
 			studentChooser.addActionListener(new ActionListener() {
 
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					assess((SuperEntity) studentChooser.getSelectedItem());
+					if (studentChooser.getSelectedItem() != null && parentRect != null){
+						assess((SuperEntity) studentChooser.getSelectedItem());
+						
+					}
 
 				}
 			});
+			
+			
 			studentChooser.setVisible(true);
+			studentChooser.setFocusable(false);
 
 			searchLabel.setVisible(true);
 			loadAssessmentLabel.setVisible(true);
 
-			searchBox = new JTextArea();
+			searchBox = new JTextField();
 
-			
 			searchBox.setVisible(true);
 
 			searchBox.addKeyListener(new KeyListener() {
@@ -192,6 +273,10 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 				@Override
 				public void keyReleased(KeyEvent e) {
 					search(searchBox.getText());
+					if(e.getKeyCode() == KeyEvent.VK_ENTER && parentRect != null){
+						searchBox.setFocusable(false);
+						parentFrame.requestFocus();
+					}
 
 				}
 
@@ -201,8 +286,10 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 				}
 			});
 			loadCombo = new JComboBox();
+			loadCombo.setFocusable(false);
 			loadCombo.setVisible(true);
 			btnLoad = new JButton("Load");
+			btnLoad.setFocusable(false);
 			btnLoad.setVisible(true);
 			btnLoad.addActionListener(new ActionListener() {
 
@@ -246,7 +333,7 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 	}
 
 	public void search(String str) {
-		System.out.println();
+
 		studentChooser.removeAllItems();
 		LinkedList<SuperEntity> list = new LinkedList<SuperEntity>();
 		project.getHead().search(str.toLowerCase(), list);
@@ -287,7 +374,7 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 			RapidAssessmentContainerType n = ((RapidAssessmentContainerType) node);
 			contentPanel.removeAll();
 			backGround = n.getImage();
-			parentFrame.setTitle("Marking: "+node.getName());
+			parentFrame.setTitle("Marking: " + node.getName());
 			parentFrame.setSize((int) (n.getW() + 100), (int) (n.getH() + 50));
 			for (int x = 0; x < n.getSubEntityType().size(); ++x) {
 				try {
@@ -528,7 +615,6 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 
 		public boolean addChar(int charVal) {
 			String newStr = strValue + (char) charVal;
-			System.out.println(newStr);
 			try {
 				double newMark = Double.parseDouble(newStr);
 				if (newMark > this.getMaxMark())
@@ -562,6 +648,11 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 			strValue = "";
 			MyMark old = markList.get(focusedMark);
 			focusedMark = ++focusedMark % markList.size();
+			if(focusedMark == 0){
+				searchBox.setFocusable(true);
+				searchBox.requestFocus();
+				searchBox.selectAll();
+			}
 			markList.get(focusedMark).repaint();
 			old.repaint();
 
@@ -640,6 +731,7 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 	}
 
 	public void assess(SuperEntity entity) {
+		System.out.println("assess");
 		load(entity, (MyComponent) (parentRect));
 		LinkedList<String> list = new LinkedList<String>();
 		entity.findThreeStrings(list);
@@ -647,6 +739,7 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 		for (int x = 0; x < 3 && x < list.size(); ++x) {
 			infoLabels[x].setText(list.get(x));
 		}
+		parentFrame.repaint();
 	}
 
 	public void load(SuperEntity entity, MyComponent comp) {

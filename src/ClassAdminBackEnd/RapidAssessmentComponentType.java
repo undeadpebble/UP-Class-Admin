@@ -74,7 +74,7 @@ public class RapidAssessmentComponentType extends EntityType{
 	
 	@Override
 	public void populateTreeWithEntities() {
-		for (int x = 0; x < this.getParentEntitytype().getEntityList().size(); ++x) {
+		for (int x = this.getParentEntitytype().getEntityList().size() -1; x >= 0 ; --x) {
 			SuperEntity parent = this.getParentEntitytype().getEntityList()
 					.get(x);
 			new SumMarkEntity(this, parent);

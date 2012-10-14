@@ -46,7 +46,9 @@ public class StringEntity extends SuperEntity{
 
 	@Override
 	public void findStrings(LinkedList<String> list, int depth) {
-		list.add(getField());
+		if(list.size()>= 3)
+			return;
+		list.add(this.getType().getName()+": "+getField());
 		super.findStrings(list, depth);
 	}
 	
