@@ -138,7 +138,7 @@ public class ConditionalFormattingFrame extends JFrame {
 
 		final ReflectionButton btnAddFormatting = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/ConditionalFormattingFrameLabel.png")));
 		//final JButton btnAddFormatting = new JButton("Add Formatting");
-		btnAddFormatting.setBounds(717, 435, 100, 100);
+		btnAddFormatting.setBounds(728, 435, 100, 100);
 		backgroundPanel.add(btnAddFormatting);
 		
 		final JLabel lblColour = new JLabel("Colour");
@@ -158,7 +158,7 @@ public class ConditionalFormattingFrame extends JFrame {
 		
 		final ReflectionButton btnRemoveFormat = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/ConditionalFormattingFrameLabelRemove.png")));
 	//	JButton btnRemoveFormat = new JButton("Remove a formatting");
-		btnRemoveFormat.setBounds(58, 435, 100, 92);
+		btnRemoveFormat.setBounds(43, 435, 100, 92);
 		backgroundPanel.add(btnRemoveFormat);
 		
 		JLabel lblAffectedCuolumn = new JLabel("Affected Cuolumn");

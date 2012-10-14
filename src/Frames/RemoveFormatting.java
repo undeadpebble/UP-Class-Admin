@@ -54,33 +54,23 @@ public class RemoveFormatting extends JFrame {
 		backgroundPanel.setLayout(null);
 
 		JLabel lblRemove = new JLabel("Remove this Format");
-		lblRemove.setBounds(36, 46, 149, 14);
+		lblRemove.setBounds(24, 43, 149, 14);
 		lblRemove.setForeground(new Color(0xEDEDED));
 		backgroundPanel.add(lblRemove);
-				
-		lblRemove.setBounds(10, 11, 149, 14);
-		contentPane.add(lblRemove);
 
 		final JComboBox cbxFormatting = new JComboBox();
-		cbxFormatting.setBounds(181, 36, 155, 34);
+		cbxFormatting.setBounds(185, 33, 155, 34);
 		backgroundPanel.add(cbxFormatting);
 		
 		try {
 			btnNewButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/ConditionalFormattingFrameLabelRemove.png")));
-			btnNewButton.setBounds(256, 91, 85, 92);
+			btnNewButton.setBounds(255, 92, 85, 92);
 			backgroundPanel.add(btnNewButton);
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-				
-		cbxFormatting.setBounds(203, 8, 149, 20);
-		contentPane.add(cbxFormatting);
-
-		JButton btnNewButton = new JButton("Remove Format");
-		btnNewButton.setBounds(12, 133, 340, 61);
-		contentPane.add(btnNewButton);
 
 		final LinkedList<Integer> formats = new LinkedList<Integer>();
 		final LinkedList<SuperEntity> heads;
