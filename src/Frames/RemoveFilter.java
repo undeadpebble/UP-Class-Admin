@@ -23,6 +23,10 @@ public class RemoveFilter extends JFrame {
 
 	private JPanel contentPane;
 
+	/**
+	 * @param table
+	 * creates a new removefilterframe
+	 */
 	public RemoveFilter(final FrmTable table) {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 423, 255);
@@ -93,6 +97,9 @@ public class RemoveFilter extends JFrame {
 		});
 	}
 
+	/**
+	 * closes the frame
+	 */
 	public void closeFrame() {
 		this.dispose();
 	}

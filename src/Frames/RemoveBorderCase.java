@@ -22,6 +22,10 @@ public class RemoveBorderCase extends JFrame {
 
 	private JPanel contentPane;
 
+	/**
+	 * @param table
+	 * creates a new removebordercase frame
+	 */
 	public RemoveBorderCase(final FrmTable table) {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 376, 236);
@@ -80,6 +84,9 @@ public class RemoveBorderCase extends JFrame {
 		});
 	}
 	
+	/**
+	 * disposes the frame
+	 */
 	public void closeFrame(){
 		this.dispose();
 	}

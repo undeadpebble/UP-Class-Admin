@@ -36,6 +36,11 @@ public class SetMaxValueFrame extends JFrame {
 	private JPanel contentPane;
 	private BackgroundGradientPanel backgroundPanel;
 
+	/**
+	 * @param table
+	 * @throws IOException
+	 * creates a new setmaxvalue frame
+	 */
 	public SetMaxValueFrame(final FrmTable table) throws IOException {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 408, 317);
@@ -245,6 +250,9 @@ public class SetMaxValueFrame extends JFrame {
 
 	}
 
+	/**
+	 * disposes the frame
+	 */
 	public void closeFrame() {
 		this.dispose();
 	}

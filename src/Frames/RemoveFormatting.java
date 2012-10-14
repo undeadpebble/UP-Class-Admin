@@ -22,6 +22,10 @@ public class RemoveFormatting extends JFrame {
 
 	private JPanel contentPane;
 
+	/**
+	 * @param table
+	 * creates a new removeformatting frame
+	 */
 	public RemoveFormatting(final FrmTable table) {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 376, 236);
@@ -80,6 +84,9 @@ public class RemoveFormatting extends JFrame {
 		});
 	}
 	
+	/**
+	 * closes the frame
+	 */
 	public void closeFrame(){
 		this.dispose();
 	}

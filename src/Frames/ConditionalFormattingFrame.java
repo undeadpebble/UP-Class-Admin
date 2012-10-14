@@ -42,6 +42,7 @@ public class ConditionalFormattingFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 * @throws IOException 
+	 * creates a new conditionalformattingframe
 	 */
 	public ConditionalFormattingFrame(final FrmTable table) throws IOException {
 		String[] formatTypesStr = new String[Format.formatTypes.length + 1];
