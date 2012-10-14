@@ -54,14 +54,16 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
 	private Project project;
+
 	private BufferedImage backGround;
 	private BufferedImage resizedBackGround = null;
 	private ContentPanel contentPanel;
 	private JFrame parentFrame;
-	private JComponent parentRect;
 	private int focusedMark = 0;
 	private LinkedList<MyMark> markList = new LinkedList<RapidAssessmentMarkingCanvas.MyMark>();
+
 
 	private JTextField searchBox;
 	private JLabel searchLabel, loadAssessmentLabel;
@@ -73,6 +75,8 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 	private JLabel timerLabel;
 	private Timer timer;
 	private Date time;
+	private JComponent parentRect;
+
 
 	public void refreshButtons() {
 		contentPanel.add(searchBox);
@@ -168,6 +172,7 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 
 		if (head != null) {
 			createComponent(head);
+
 		}
 
 		this.addKeyListener(new KeyListener() {
@@ -179,6 +184,7 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 
 			@Override
 			public void keyReleased(KeyEvent arg0) {
+				// TODO Auto-generated method stub
 
 			}
 
@@ -241,6 +247,8 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 				infoLabels[x].setFocusable(false);
 			}
 			studentChooser.addActionListener(new ActionListener() {
+
+				
 
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
@@ -321,10 +329,12 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 			super.paintComponent(g);
 			Graphics g2 = g.create();
 
+
 			if (resizedBackGround == null && backGround != null) {
 				resizedBackGround = Scalr.resize(backGround, Method.QUALITY,
 						Mode.FIT_EXACT, parentRect.getWidth(),
 						parentRect.getHeight(), Scalr.OP_ANTIALIAS);
+
 			}
 
 			g2.drawImage(resizedBackGround, 0, 0, null);
@@ -372,16 +382,20 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 		}
 		try {
 			RapidAssessmentContainerType n = ((RapidAssessmentContainerType) node);
-			contentPanel.removeAll();
+			contentPanel = new ContentPanel();
 			backGround = n.getImage();
+
 			parentFrame.setTitle("Marking: " + node.getName());
 			parentFrame.setSize((int) (n.getW() + 100), (int) (n.getH() + 50));
+
 			for (int x = 0; x < n.getSubEntityType().size(); ++x) {
 				try {
+
 					JComponent j = createComponent((RapidAssessmentComponentType) n
 							.getSubEntityType().get(x));
 					contentPanel.add(j);
 					parentRect = j;
+
 
 				} catch (ClassCastException e) {
 				}
@@ -535,6 +549,7 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 		public MyRectangle(EntityType enType, int x, int y, int w, int h) {
 			super(enType, x, y, w, h);
 			new MyMarkTotalComponent(this);
+			// TODO Auto-generated constructor stub
 		}
 
 		/*
@@ -582,6 +597,7 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 
 				@Override
 				public void mouseReleased(MouseEvent arg0) {
+					// TODO Auto-generated method stub
 
 				}
 
@@ -597,16 +613,19 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 
 				@Override
 				public void mouseExited(MouseEvent arg0) {
+					// TODO Auto-generated method stub
 
 				}
 
 				@Override
 				public void mouseEntered(MouseEvent arg0) {
+					// TODO Auto-generated method stub
 
 				}
 
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
+					// TODO Auto-generated method stub
 
 				}
 			});

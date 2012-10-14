@@ -1,6 +1,8 @@
 
 package ClassAdminBackEnd;
 
+
+
 import java.text.DecimalFormat;
 import java.util.LinkedList;
 
@@ -204,4 +206,3 @@ public class Stats {
 	    return Double.valueOf(twoDForm.format(d));
 	}
 }
-

@@ -444,8 +444,11 @@ public class SuperEntity {
 		studentLinkedList.add(this);
 
 		String str = "";
-		str += "<branch>" + "<attribute name = \"name\" value= \""
-				+ this.getValue() + "\" />";
+
+
+		str += "<branch>" + "<attribute name = \"name\" value= \"" + this.getType().getName() + ": " + this.getValue() + "\" />";
+
+
 		for (int i = 0; i < this.getSubEntity().size(); i++) {
 			str += this.getSubEntity().get(i)
 					.createTreeFromHead(studentLinkedList);
@@ -563,24 +566,28 @@ public class SuperEntity {
 
 	public IMGEntity IterativeDeepeningfindPortrait() {
 		int depth = 1;
+
 		int maxDepth = this.getDepth() - 1;
+
 		IMGEntity result = null;
 		while (result == null && depth <= maxDepth) {
 			result = findPortrait(depth++);
 		}
+
 		return result;
 	}
 
 	public IMGEntity findPortrait(int i) {
-		if (i == 0)
+		if (i <= 0)
 			return null;
 
 		IMGEntity result = null;
-		while (result == null) {
-			result = findPortrait(i - 1);
-		}
+		for (int x = 0; x < subEntity.size(); ++x)
+			result = subEntity.get(x).findPortrait(i - 1);
+
 		return result;
 	}
+
 
 	public void search(String str, LinkedList<SuperEntity> list) {
 		String rest = this.getValue().toLowerCase();
@@ -602,5 +609,6 @@ public class SuperEntity {
 			subEntity.get(x).search(str, list);
 		}
 	}
+
 
 }

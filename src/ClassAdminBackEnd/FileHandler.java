@@ -15,7 +15,7 @@ public class FileHandler {
 	 */
 	static FileHandler fh;
 	Frame frame;
-
+	
 	Project project;
 
 	public static FileHandler get() {
@@ -28,17 +28,17 @@ public class FileHandler {
 		project = new Project();
 	}
 
-	public void openFile(String filename, Project project)
-			throws UnsupportedFileTypeException {
+	public void openFile(String filename, Project project) throws UnsupportedFileTypeException {
 		this.project = project;
-		if (filename.substring(filename.indexOf('.')).toLowerCase().contains("csv")) {
+		if (filename.substring(filename.indexOf('.')).contains("csv")) {
 			openCSV(filename);
-		} else if (filename.substring(filename.indexOf('.')).toLowerCase().contains("xls")) {
+		} else if (filename.substring(filename.indexOf('.')).contains("xls")) {
 			openXls(filename);
 
-		} else if (filename.substring(filename.indexOf('.')).toLowerCase().contains("pdat")) {
+		} else if (filename.substring(filename.indexOf('.')).contains("pdat")) {
 			openPDat(filename);
-		} else
+		}
+		else
 			throw new UnsupportedFileTypeException();
 
 	}
@@ -52,8 +52,7 @@ public class FileHandler {
 		if (fileReader.fileExists(filename)) {
 			ArrayList recordArray = fileReader.recordData();
 			headers = fileReader.getHeaders(recordArray);
-			int parentRow = createEntityTypes(headers, recordArray, fileReader,
-					filename);
+			int parentRow = createEntityTypes(headers, recordArray, fileReader, filename);
 			createMarkEntities(parentRow, headers, recordArray, fileReader);
 		}
 	}
@@ -63,14 +62,15 @@ public class FileHandler {
 		// header entity
 		int firstStringCol = -1;
 		// EntityTypeFactory eTFactory = new EntityTypeFactory();
-		EntityType headType = new EntityType("Project", null, true, null, 1.0);
+		EntityType headType = new EntityType(filename.substring(filename.lastIndexOf("\\")+1), null, true,null,1.0);
 		project.setHeadEntityType(headType);
 
-		SuperEntity mE = new HeadEntity(project.getHeadEntityType(), 0);
+		SuperEntity mE = new HeadEntity(project
+				.getHeadEntityType(), 0);
 
 		project.setHead(mE);
 		// create entity types
-
+		
 		EntityType parentType = null;
 
 		LinkedList<EntityType> types = new LinkedList<EntityType>();
@@ -79,51 +79,50 @@ public class FileHandler {
 			EntityType tmp;
 			try {
 				double dub = Double.parseDouble(record);
-
+				
 				if (dub > LARGEST_MARK_VALUE) {
-					tmp = new EntityType((String) headers.get(i), null, true,
-							null, 1.0);
-					if (firstStringCol < 0) {
+					tmp = new EntityType((String) headers.get(i), null, true,null,1.0);
+					if(firstStringCol < 0){
 						firstStringCol = i;
 						parentType = tmp;
-					} else {
+					}else{
 						types.add(tmp);
 					}
 				} else {
-					tmp = new EntityType((String) headers.get(i), null, false,
-							null, 1.0);
+					tmp = new EntityType((String) headers.get(i), null, false,null,1.0);
 					types.add(tmp);
 				}
 			} catch (NumberFormatException e) {
-				tmp = new EntityType((String) headers.get(i), null, true, null,
-						1.0);
-				if (firstStringCol < 0) {
+				tmp = new EntityType((String) headers.get(i), null, true,null,1.0);
+				if(firstStringCol < 0){
 					firstStringCol = i;
 					parentType = tmp;
-				} else {
+				}else{
 					types.add(tmp);
 				}
 			}
 
 		}
-
-		if (parentType == null) {
-			parentType = new EntityType("row", null, true, null, 1.0);
-		}
-		parentType.getSubEntityType().addAll(types);
-		parentType.setParentEntitytype(project.getHeadEntityType());
-		project.getHeadEntityType().getSubEntityType().add(parentType);
-
-		for (int x = 0; x < parentType.getSubEntityType().size(); ++x) {
-			parentType.getSubEntityType().get(x)
-					.setParentEntitytype(parentType);
-		}
-
+		
+		if(parentType == null){
+			parentType = new EntityType("row", null, true,null,1.0);
+		} 
+			parentType.getSubEntityType().addAll(types);
+			parentType.setParentEntitytype(project.getHeadEntityType());
+			project.getHeadEntityType().getSubEntityType().add(parentType);
+			
+			for(int x = 0;x<parentType.getSubEntityType().size();++x){
+				parentType.getSubEntityType().get(x).setParentEntitytype(parentType);
+			}
+		
+		
+		
 		return firstStringCol;
 	}
 
-	private void createMarkEntities(int parentRowIndex, ArrayList headers,
-			ArrayList recordArray, FileImport fileReader) {
+	private void createMarkEntities(int parentRowIndex, ArrayList headers, ArrayList recordArray,
+			FileImport fileReader) {
+
 
 		// create MarkEntities
 		int numRecords = fileReader.getRecords(recordArray).size();
@@ -131,38 +130,31 @@ public class FileHandler {
 		for (int r = 0; r < numRecords; ++r) {
 			int count = 0;
 			SuperEntityPointer parentEntity;
-			if (parentRowIndex < 0) {
-				parentEntity = new SuperEntityPointer(new LeafStringEntity(
-						project.getHeadEntityType().getSubEntityType().get(0),
-						project.getHead(), "Row" + r));
-			} else {
-				String record = fileReader.getRecordFieldValue(recordArray, r,
-						parentRowIndex);
-				parentEntity = new SuperEntityPointer(new LeafStringEntity(
-						project.getHeadEntityType().getSubEntityType().get(0),
-						project.getHead(), record));
+			if(parentRowIndex < 0){
+				parentEntity = new SuperEntityPointer(new LeafStringEntity(project.getHeadEntityType().getSubEntityType().get(0), project.getHead(), "Row"+r));
+			}
+			else{
+				String record = fileReader.getRecordFieldValue(recordArray, r, parentRowIndex);
+				parentEntity = new SuperEntityPointer(new LeafStringEntity(project.getHeadEntityType().getSubEntityType().get(0), project.getHead(), record));
 			}
 			for (int f = 0; f < headers.size(); ++f) {
-				if (f != parentRowIndex) {
-					String record = fileReader.getRecordFieldValue(recordArray,
-							r, f);
-					EntityType fieldType = parentEntity.getTarget().getType()
-							.getSubEntityType().get(count++);
+				if(f != parentRowIndex){
+				String record = fileReader.getRecordFieldValue(recordArray, r, f);
+				EntityType fieldType = parentEntity.getTarget().getType().getSubEntityType().get(count++);
 
-					SuperEntity mE = new SuperEntity(fieldType,
-							parentEntity.getTarget(), 0);
+					SuperEntity mE = new SuperEntity(fieldType, parentEntity.getTarget(), 0);
 
-					if (fieldType.getIsTextField() == true) {
-						mE = new LeafStringEntity(mE, record);
-					} else {
-						try {
-							mE = new LeafMarkEntity(mE, 0);
-							mE.setMark(Double.parseDouble(record));
-						} catch (NumberFormatException e) {
-							mE.setMark(0);
-						}
+				if (fieldType.getIsTextField() == true) {
+					mE = new LeafStringEntity(mE, record);
+				} else {
+					try {
+						mE = new LeafMarkEntity(mE,0);
+						mE.setMark(Double.parseDouble(record));
+					} catch (NumberFormatException e) {
+						mE.setMark(0);
 					}
 				}
+			}
 			}
 		}
 	}
@@ -175,23 +167,19 @@ public class FileHandler {
 		if (fileReader.fileExists(filename)) {
 			ArrayList recordArray = fileReader.recordData();
 			headers = fileReader.getHeaders(recordArray);
-			int parentRow = createEntityTypes(headers, recordArray, fileReader,
-					filename);
+			int parentRow = createEntityTypes(headers, recordArray, fileReader, filename);
 			createMarkEntities(parentRow, headers, recordArray, fileReader);
 		}
 	}
 
-	public void saveFile(String filename, Project project)
-			throws UnsupportedFileTypeException {
-		if (filename.indexOf('.') == -1) {
-			savePDat(filename + ".pdat");
-		} else if (filename.substring(filename.indexOf('.')).contains("csv")) {
+	public void saveFile(String filename, Project project) throws UnsupportedFileTypeException {
+		if (filename.substring(filename.indexOf('.')).contains("csv")) {
 			saveCSV(filename);
 		} else if (filename.substring(filename.indexOf('.')).contains("xls")) {
 			saveXls(filename);
 
 		} else if (filename.substring(filename.indexOf('.')).contains("pdat")) {
-			savePDat(filename);
+			 savePDat(filename);
 		} else
 			throw new UnsupportedFileTypeException();
 	}
@@ -209,22 +197,23 @@ public class FileHandler {
 
 	private void openPDat(String filename) {
 		PDatImport pImport = new PDatImport();
-
-		pImport.importFileDB4o(project, filename);
-
+		
+			pImport.importFileDB4o(project, filename);
+		
 	}
-
-	private void savePDat(String filename) {
+	
+	private void savePDat(String filename){
 		PDatExport pExport = new PDatExport();
-		pExport.exportFileDB4o(project, filename);
-
+			pExport.exportFileDB4o(project, filename);
+		
 	}
+	
 
 	public void setXLSImport(XlsImport i) {
-		// i.recordData();
-
+//		i.recordData();
+		
 	}
-
+	
 	public void setFrame(Frame frame_) {
 		frame = frame_;
 	}

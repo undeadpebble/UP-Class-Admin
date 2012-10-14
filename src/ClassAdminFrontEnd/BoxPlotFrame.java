@@ -47,10 +47,10 @@ import ClassAdminBackEnd.Project;
 import ClassAdminBackEnd.SuperEntity;
 
 public class BoxPlotFrame extends JFrame implements ActionListener {
-	static ChartPanel chartpanel;
-	static JFreeChart chart;
-	int houerx;
-	int headerindex = 0;
+	private static ChartPanel chartpanel;
+	private static JFreeChart chart;
+	private int houerx;
+	private int headerindex = 0;
 	private final String[] kolom = Global.getGlobal().getActiveProject().getHead().getNumberHeaders();
 	private final LinkedList<LinkedList<SuperEntity>> diedata = Global.getGlobal().getActiveProject().getHead().getDataLinkedList();
 	private final String[] headers = Global.getGlobal().getActiveProject().getHead().getHeaders();
@@ -61,11 +61,13 @@ public class BoxPlotFrame extends JFrame implements ActionListener {
 	private final BoxPlotOptionMenu box = new BoxPlotOptionMenu();
 	private static DefaultBoxAndWhiskerCategoryDataset dataset = new DefaultBoxAndWhiskerCategoryDataset();
 	private Project project;
-	
+
+	// Constructor
 	public BoxPlotFrame() {
 
 	}
 
+	// Create the GUI with the chart and buttons
 	public void createBoxPlotFrame(final Project project) {
 
 		JFrame f = new JFrame("BoxPlot");
@@ -73,45 +75,44 @@ public class BoxPlotFrame extends JFrame implements ActionListener {
 		f.setSize(450, 500);
 
 		this.project = project;
-        
-		dataset =  new DefaultBoxAndWhiskerCategoryDataset();
-		
+
+		dataset = new DefaultBoxAndWhiskerCategoryDataset();
+
 		final BoxPlot nuweChart = new BoxPlot();
 		chart = nuweChart.createBoxPlot("BoxPlot", "", "", dataset);
 		chartpanel = new ChartPanel(chart, 400, 400, 100, 100, 400, 400, true, true, true, true, true, true);
-		
+
 		final BoxAndWhiskerRenderer renderer = new BoxAndWhiskerRenderer();
 
-        renderer.setToolTipGenerator(new BoxAndWhiskerToolTipGenerator());
-        
-        chartpanel.getChart().getCategoryPlot().setRenderer(renderer);
-		
-		
+		renderer.setToolTipGenerator(new BoxAndWhiskerToolTipGenerator());
+
+		chartpanel.getChart().getCategoryPlot().setRenderer(renderer);
+
 		JButton addseries = new JButton("Add a series");
 		// Series can be added dynamically
 		addseries.addMouseListener(new MouseListener() {
 
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
-				// TODO Auto-generated method stub
+				
 
 			}
 
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				// TODO Auto-generated method stub
+				
 
 			}
 
 			@Override
 			public void mouseExited(MouseEvent arg0) {
-				// TODO Auto-generated method stub
+				
 
 			}
 
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
-				// TODO Auto-generated method stub
+				
 
 			}
 
@@ -123,66 +124,31 @@ public class BoxPlotFrame extends JFrame implements ActionListener {
 			}
 		});
 
-		JButton rotate = new JButton("Rotate");
-
-		rotate.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				
-
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-		});
 		// Extract chart to PNG
 		JButton extractPic = new JButton("Extract chart");
 		extractPic.addMouseListener(new MouseListener() {
 
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
-				// TODO Auto-generated method stub
+				
 
 			}
 
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				// TODO Auto-generated method stub
+				
 
 			}
 
 			@Override
 			public void mouseExited(MouseEvent arg0) {
-				// TODO Auto-generated method stub
+				
 
 			}
 
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
-				// TODO Auto-generated method stub
+				
 
 			}
 
@@ -202,7 +168,7 @@ public class BoxPlotFrame extends JFrame implements ActionListener {
 		content.setLayout(new FlowLayout());
 		content.add(chartpanel);
 		content.add(addseries);
-		content.add(rotate);
+
 		content.add(extractPic);
 
 		f.setVisible(true);
@@ -211,26 +177,27 @@ public class BoxPlotFrame extends JFrame implements ActionListener {
 	public void addBoxSeries() {
 
 		ArrayList nuwe = new ArrayList();
-		
+
 		for (int k = 0; k < diedata.size(); k++) {
-			
+
 			try {
 				nuwe.add(diedata.get(k).get(box.getIndexOfHeader()).getMark());
 			} catch (AbsentException e) {
 				nuwe.add(0);
 			}
-			
+
 		}
+		// Increase the series number
 		teller += 1;
-		
+
 		dataset.add(nuwe, "Series" + teller, headers[box.getIndexOfHeader()]);
-		
+
 		chartpanel.getChart().getCategoryPlot().setDataset(dataset);
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
@@ -251,7 +218,7 @@ public class BoxPlotFrame extends JFrame implements ActionListener {
 
 				saveToFile(chart, file.getAbsolutePath() + ".png", 500, 300, 100);
 			} catch (UnknownTypeException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 		} else {
@@ -259,6 +226,7 @@ public class BoxPlotFrame extends JFrame implements ActionListener {
 		}
 	}
 
+	// Save the png to the file
 	public static void saveToFile(JFreeChart chart, String aFileName, int width, int height, double quality) throws FileNotFoundException,
 			IOException {
 		BufferedImage img = draw(chart, width, height);
@@ -281,6 +249,7 @@ public class BoxPlotFrame extends JFrame implements ActionListener {
 
 	}
 
+	// Create a buffered image
 	protected static BufferedImage draw(JFreeChart chart, int width, int height)
 
 	{

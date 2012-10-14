@@ -1,5 +1,7 @@
 package ClassAdminBackEnd;
 
+import java.text.DecimalFormat;
+
 import org.tmatesoft.sqljet.core.SqlJetException;
 import org.tmatesoft.sqljet.core.SqlJetTransactionMode;
 import org.tmatesoft.sqljet.core.table.ISqlJetTable;
@@ -32,7 +34,8 @@ public class MarkEntity extends SuperEntity{
 		
 
 		try {
-			return Double.toString(this.getMark());
+		    DecimalFormat twoDForm = new DecimalFormat("#.##");
+		    return Double.toString(Double.valueOf(twoDForm.format(this.getMark())));
 		} catch (AbsentException e) {
 			return "N/A";
 		}

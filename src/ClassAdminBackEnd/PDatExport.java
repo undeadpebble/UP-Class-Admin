@@ -56,7 +56,6 @@ public class PDatExport {
 			throws SqlJetException {
 		File dbFile = new File(filename);
 		dbFile.delete();
-		
 
 		// create database, table and two indices:
 		SqlJetDb db = SqlJetDb.open(dbFile, true);

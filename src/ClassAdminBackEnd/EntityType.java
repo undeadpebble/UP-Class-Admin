@@ -24,7 +24,7 @@ public class EntityType {
 	private Double defaultWeight;
 	private long ID;
 	private double maxValue = 100;
-	private Boolean isImg = false;
+	private boolean isImg = false;
 
 	public static int WEIGHTED_AVERAGE_TYPE = 0;
 	public static int SUM_TYPE = 1;
@@ -107,7 +107,7 @@ public class EntityType {
 		this.formatting = formatting;
 		this.borderCasing = borderCasing;
 		this.entityList = entityList;
-		this.isTextField = isTextField;
+		this.setIsTextField(isTextField);
 		this.date = date;
 		this.defaultWeight = defaultWeight;
 	}
@@ -125,7 +125,7 @@ public class EntityType {
 		this.parentEntitytype = parentEntitytype;
 		if (parentEntitytype != null)
 			parentEntitytype.getSubEntityType().add(this);
-		this.isTextField = isTextField;
+		this.setIsTextField(isTextField);
 		this.date = date;
 		this.defaultWeight = defaultWeight;
 	}
@@ -296,21 +296,12 @@ public class EntityType {
 		}
 	}
 
-	public Boolean getIsImg() {
-		return isImg;
-	}
-
-	public void setIsImg(Boolean isImg) {
-		this.isImg = isImg;
-	}
-
 	public void populateTreeWithEntities() {
 		for (int x = this.getParentEntitytype().getEntityList().size() - 1; x >= 0; --x) {
 			SuperEntity parent = this.getParentEntitytype().getEntityList()
 					.get(x);
 			if (this.getIsRule()) {
 				if (this.getIsTextField()) {
-
 					new StringRuleEntity(this, parent, "");
 
 				} else {
@@ -318,12 +309,14 @@ public class EntityType {
 				}
 			} else {
 				if (this.getIsTextField()) {
+
 					if (isImg) {
 						new IMGEntity(this, parent, "");
 					} else
 
 						new LeafStringEntity(this, parent, "#" + this.getName()
 								+ "#");
+
 				} else {
 
 					new LeafMarkEntity(this, parent, 0);
@@ -377,6 +370,7 @@ public class EntityType {
 		isTextField = pIsTextField;
 		date = pDate;
 		defaultWeight = weight;
+
 	}
 
 	public void findRapidAssessment(
@@ -392,6 +386,7 @@ public class EntityType {
 			this.getSubEntityType().get(x).findEntities(list);
 		}
 		list.add(this);
+
 	}
 
 	public int getEntityTypeClass() {
@@ -465,25 +460,45 @@ public class EntityType {
 				}
 				--x;
 				if (text) {
-					try {
-						newE.setMark(Double.parseDouble(newE.getField()));
-					} catch (NumberFormatException e) {
-						newE.clearMark();
+					if (this.getIsTextField()) {
+
+					} else {
+						try {
+							newE.setMark(Double.parseDouble(newE.getField()));
+						} catch (NumberFormatException e) {
+							newE.clearMark();
+						}
 					}
 				} else {
-					try {
-						newE.setField(String.valueOf(newE.getMark()));
-					} catch (AbsentException e) {
-						newE.setField("-");
+					if (this.getIsTextField()) {
+						/*try {
+							newE.setField(String.valueOf(newE.getMark()));
+						} catch (AbsentException e) {
+							newE.setField("-");
+						}*/
+					} else {
+
 					}
 				}
 			}
 		}
 	}
 
+
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
 		return getName();
 	}
+
+	public boolean getIsImg() {
+		return isImg;
+	}
+
+	public void setIsImg(boolean isImg) {
+		this.isImg = isImg;
+	}
+
+
+
 }

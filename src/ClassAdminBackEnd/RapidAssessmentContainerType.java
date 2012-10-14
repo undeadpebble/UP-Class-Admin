@@ -1,7 +1,6 @@
 package ClassAdminBackEnd;
 
 import java.awt.image.BufferedImage;
-import java.util.LinkedList;
 
 public class RapidAssessmentContainerType extends RapidAssessmentRectangleType {
 	private BufferedImage Image;
@@ -67,20 +66,6 @@ public class RapidAssessmentContainerType extends RapidAssessmentRectangleType {
 
 			this.getEntityList().get(z).setType(this);
 		}
-	}
-
-	@Override
-	public void findRapidAssessment(
-			LinkedList<RapidAssessmentContainerType> list) {
-		// TODO Auto-generated method stub
-		super.findRapidAssessment(list);
-		list.add(this);
-	}
-
-	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return this.getName();
 	}
 
 }

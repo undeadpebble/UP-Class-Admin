@@ -28,10 +28,19 @@ public class LeafMarkEntity extends MarkEntity{
 	}
 	public String createTreeFromHead(LinkedList<SuperEntity> studentLinkedList)
 	{
+		String s;
+		if(this.getClass().toString().contains("Absent"))
+		{
+			s = "*ABSENT*";
+		}
+		else
+		{
+			s = this.getValue();
+		}
 		studentLinkedList.add((SuperEntity) this);
 		String str = "";
 		str += "<leaf>" +
-				"<attribute name = \"name\" value= \"" + this.getValue() + "\" />";
+				"<attribute name = \"name\" value= \"" + this.getType().getName() + ": " + s + "\" />";
 		str +="</leaf>";
 		return str;
 	}

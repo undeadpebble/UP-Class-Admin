@@ -234,6 +234,7 @@ public class XlsImport extends FileImport {
 				setHeaderLine((Integer) cmbHeaders.getSelectedItem() - 1);
 				arr = importData();
 				dialog.dispose();
+				// TODO Auto-generated method stub
 
 			}
 
@@ -303,8 +304,7 @@ public class XlsImport extends FileImport {
 		backgroundPanel.add(pnlHeaders);
 
 		dialog.setVisible(true);
-		
-		dialog.setVisible(true);
+	
 	}
 
 	public void printAllSheets() {
