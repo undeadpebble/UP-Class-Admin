@@ -112,7 +112,7 @@ public class FilterFrame extends JFrame {
 		backgroundPanel.add(cbxFormatType);
 
 		final JSpinner maxVal = new JSpinner();
-		maxVal.setBounds(261, 166, 102, 27);
+		maxVal.setBounds(261, 174, 102, 27);
 		backgroundPanel.add(maxVal);
 
 		final JButton btnCreateFilter = new JButton("Create Filter");
@@ -146,6 +146,7 @@ public class FilterFrame extends JFrame {
 			lblLowerValue.setVisible(true);
 			lblUpperValue.setVisible(true);
 			lblSelectValues.setVisible(false);
+			cbxFilters.setVisible(false);
 			cbxFormatType = new JComboBox(formatTypesStr);
 		}
 
@@ -223,7 +224,18 @@ public class FilterFrame extends JFrame {
 					lblUpperValue.setVisible(false);
 					cbxFormatType.setVisible(false);
 					lblSelectValues.setVisible(true);
+					try{
+					selectAllData.setVisible(true);
+					}catch (Exception e) {
+						// TODO: handle exception
+					}
 				} else {
+					try{
+						selectAllData.setVisible(false);
+						}
+						catch (Exception e) {
+							// TODO: handle exception
+						}
 					lblSelectField.setVisible(true);
 					lblConditionalRuleType.setVisible(true);
 					minVal.setVisible(true);
@@ -232,6 +244,7 @@ public class FilterFrame extends JFrame {
 					lblUpperValue.setVisible(true);
 					cbxFormatType.setVisible(true);
 					lblSelectValues.setVisible(false);
+					
 				}
 				
 				
