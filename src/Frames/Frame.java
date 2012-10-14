@@ -751,13 +751,18 @@ public class Frame extends JFrame implements ActionListener {
 		});
 
 		homeRapidAssessment.addMouseListener(new MouseAdapter() {
-
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				if (!homeRapidAssessment.isDisabled()) {
-
-				}
-
+				JOptionPane.showMessageDialog(frame, "Please import a document or select a document in workspace first", "No Document Selected", JOptionPane.INFORMATION_MESSAGE);
+				homeToWorkspaceTransition();
+			}
+		});
+		
+		homeStudents.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				JOptionPane.showMessageDialog(frame, "Please import a document or select a document in workspace first", "No Document Selected", JOptionPane.INFORMATION_MESSAGE);
+				homeToWorkspaceTransition();
 			}
 		});
 
