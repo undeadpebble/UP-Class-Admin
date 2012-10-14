@@ -1508,7 +1508,6 @@ public class Frame extends JFrame implements ActionListener {
 					new RapidAssessmentMarkingCanvas(null, Global.getGlobal()
 							.getActiveProject());
 				}
-				System.out.println("marking");
 			}
 
 			public void mouseEntered(MouseEvent arg0) {
@@ -1806,6 +1805,11 @@ public class Frame extends JFrame implements ActionListener {
 					JOptionPane.ERROR_MESSAGE);
 		}
 		// create table on panel
+		
+		System.out.println("index: "+Global.getGlobal().getActiveProjectIndex()+" , "+ Global.getGlobal().getActiveProject());
+		for(int x = 0;x<Global.getGlobal().getProjects().size();++x){
+			System.out.println("index: "+x+" , "+ Global.getGlobal().getProjects().get(x).getHead());
+		}
 
 		table = new FrmTable(Global.getGlobal().getActiveProject().getHead()
 				.getHeaders(), Global.getGlobal().getActiveProject().getHead()

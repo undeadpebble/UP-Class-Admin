@@ -47,17 +47,21 @@ public class FrmNewNode {
 	private JComboBox cmbParent;
 	private JFrame parentF = null;
 	private BackgroundGradientPanel backgroundPanel;
+	final JSpinner Nspinner = new JSpinner(new SpinnerNumberModel(1.0, 1.0,
+			100.0, 1.0));
 
-	public FrmNewNode(Tree tree, Project project, JFrame parentFrame, TreeView treeView) {
+	public FrmNewNode(Tree tree, Project project, JFrame parentFrame,
+			TreeView treeView) {
 		activeTree = tree;
 		activeProject = project;
 		activeTreeView = treeView;
 		nodes = activeTree.getNodeTable();
 		parentF = parentFrame;
-		
+
 		frame = new JDialog(parentFrame, true);
 		frame.setSize(356, 268);
-		frame.setLocation(parentF.getWidth()+parentF.getX()-250, parentF.getY()+40);
+		frame.setLocation(parentF.getWidth() + parentF.getX() - 250,
+				parentF.getY() + 40);
 		frame.getContentPane().setLayout(null);
 
 		frame.setTitle("Add New Node");
@@ -68,10 +72,10 @@ public class FrmNewNode {
 		contentPane.setLayout(null);
 
 		backgroundPanel = new BackgroundGradientPanel(contentPane);
-		backgroundPanel.setBounds(0, 0, contentPane.getWidth(), contentPane.getHeight());
+		backgroundPanel.setBounds(0, 0, contentPane.getWidth(),
+				contentPane.getHeight());
 		contentPane.add(backgroundPanel);
 		backgroundPanel.setLayout(null);
-
 
 		final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		Date date = new Date();
@@ -88,6 +92,7 @@ public class FrmNewNode {
 		JButton btnClose = new JButton("Close");
 		final JLabel lblType = new JLabel("Type:");
 		final JComboBox cmbType = new JComboBox();
+		Nspinner.setVisible(false);
 
 		SpinnerNumberModel snmWeight = new SpinnerNumberModel(new Double(1.00), // value
 				new Double(0.00), // min
@@ -97,7 +102,7 @@ public class FrmNewNode {
 
 		txtName.setSize(120, 30);
 		txtDate.setText(dateFormat.format(date));
-		
+
 		cmbType.addItem("Mark - Weighted Average");
 		cmbType.addItem("Mark - Sum ");
 		cmbType.addItem("Mark - Best N");
@@ -105,6 +110,17 @@ public class FrmNewNode {
 		cmbType.addItem("Mixed");
 
 		cmbType.setSelectedIndex(0);
+
+		cmbType.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if (cmbType.getSelectedIndex() == 2) {
+					Nspinner.setVisible(true);
+				} else
+					Nspinner.setVisible(false);
+			}
+		});
 
 		for (int r = 0; r < nodes.getRowCount(); r++) {
 			for (int c = 0; c < nodes.getColumnCount(); c++) {
@@ -115,7 +131,7 @@ public class FrmNewNode {
 		btnDate.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-					txtDate.setText(new DatePicker(frame).setPickedDate());
+				txtDate.setText(new DatePicker(frame).setPickedDate());
 			}
 		});
 
@@ -129,12 +145,11 @@ public class FrmNewNode {
 				String assDate = "";
 				double weight = 1.0;
 
-				//reset formatting
+				// reset formatting
 				lblParent.setForeground(new Color(0xEDEDED));
 				lblName.setForeground(new Color(0xEDEDED));
 				lblDate.setForeground(new Color(0xEDEDED));
 
-				
 				// validation of entered values
 				int selectedIndex = cmbParent.getSelectedIndex();
 				if (selectedIndex == 0) {
@@ -147,13 +162,12 @@ public class FrmNewNode {
 					lblName.setForeground(Color.red);
 				}
 
-
 				Date d = null;
 				try {
 					d = dateFormat.parse(txtDate.getText());
 				} catch (Exception e) {
 					b = false;
-					lblDate.setForeground(Color.RED);					
+					lblDate.setForeground(Color.RED);
 				}
 
 				if (b) {
@@ -173,10 +187,18 @@ public class FrmNewNode {
 														// and child
 
 					// add child to parent in back end
-					EntityType newE = new EntityType(txtName.getText(), activeProject.getTreeLinkedList().get(cmbParent.getSelectedIndex()), isText, d, (Double) txtWeight.getValue());
+					EntityType newE = new EntityType(txtName.getText(),
+							activeProject.getTreeLinkedList().get(
+									cmbParent.getSelectedIndex()), isText, d,
+							(Double) txtWeight.getValue());
+					if (Nspinner.isVisible())
+						newE.setN((int)Double.parseDouble(Nspinner.getValue()
+								.toString()));
 
 					// insert child into backend and create audit entry
-					activeProject.getAudit().AddNode((String) cmbParent.getSelectedItem(), txtName.getText());
+					activeProject.getAudit().AddNode(
+							(String) cmbParent.getSelectedItem(),
+							txtName.getText());
 					activeProject.getTreeLinkedList().add(newE);
 					newE.populateTreeWithEntities();
 					newE.setEntityTypeClass(cmbType.getSelectedIndex());
@@ -184,7 +206,7 @@ public class FrmNewNode {
 					// update front end information
 					activeProject.updateTables();
 					activeTreeView.getVisualization().run("filter");
-					
+
 					// refresh cmbParent content
 					cmbParent.removeAllItems();
 					for (int r = 0; r < nodes.getRowCount(); r++) {
@@ -201,7 +223,7 @@ public class FrmNewNode {
 					txtDate.setText(dateFormat.format(new Date()));
 					isText = false;
 					txtName.requestFocus(true);
-					}// if b
+				}// if b
 			}// actionListener
 		});
 
@@ -212,7 +234,6 @@ public class FrmNewNode {
 				frame.dispose();
 			}
 		});
-
 
 		JPanel pnlDate = new JPanel(new GridLayout(1, 2));
 		pnlDate.setOpaque(false);
@@ -225,12 +246,13 @@ public class FrmNewNode {
 		lblName.setBounds(10, 79, 72, 30);
 		lblDate.setBounds(10, 120, 120, 30);
 		lblWeight.setBounds(10, 147, 130, 30);
-		pnlDate.setBounds(180,113,150,30);
+		pnlDate.setBounds(180, 113, 150, 30);
 		txtWeight.setBounds(180, 147, 150, 30);
 		btnAdd.setBounds(10, 188, 150, 30);
 		btnClose.setBounds(180, 188, 150, 30);
 		lblType.setBounds(10, 11, 50, 30);
 		cmbType.setBounds(180, 11, 150, 30);
+		Nspinner.setBounds(125, 11, 50, 30);
 
 		lblParent.setForeground(new Color(0xEDEDED));
 		lblName.setForeground(new Color(0xEDEDED));
@@ -250,17 +272,15 @@ public class FrmNewNode {
 		backgroundPanel.add(btnClose);
 		backgroundPanel.add(lblType);
 		backgroundPanel.add(cmbType);
+		backgroundPanel.add(Nspinner);
 	}
 
-	public void showFrmNewNode(int p){
+	public void showFrmNewNode(int p) {
 		if (p != -1)
 			cmbParent.setSelectedIndex(p);
 		else
 			cmbParent.setSelectedIndex(0);
 		frame.setVisible(true);
 	}
-
-
-
 
 }

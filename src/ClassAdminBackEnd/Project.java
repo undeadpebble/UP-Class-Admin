@@ -423,4 +423,8 @@ public class Project {
 		}
 
 	}
+
+	public void setTables(LinkedList<FrmTable> tables) {
+		this.tables = tables;
+	}
 }
