@@ -31,7 +31,7 @@ public class LeafMarkEntity extends MarkEntity{
 		String s;
 		if(this.getClass().toString().contains("Absent"))
 		{
-			s = "*ABSENT*";
+			s = "*ABSENT";
 		}
 		else
 		{
