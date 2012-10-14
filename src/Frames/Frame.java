@@ -1840,14 +1840,14 @@ public class Frame extends JFrame implements ActionListener {
 
 			if (linkedList.size() > 1) {
 				studentViewLabel2 = new JLabel(linkedList.get(1));
-				studentViewLabel2.setBounds(40, 235, 200, 20);
+				studentViewLabel2.setBounds(40, 245, 200, 20);
 				studentViewLabel2.setForeground(Color.white);
 				studentPanel.add(studentViewLabel2);
 			}
 
 			if (linkedList.size() > 2) {
 				studentViewLabel3 = new JLabel(linkedList.get(2));
-				studentViewLabel3.setBounds(40, 250, 200, 20);
+				studentViewLabel3.setBounds(40, 260, 200, 20);
 				studentViewLabel3.setForeground(Color.white);
 				studentPanel.add(studentViewLabel3);
 			}
