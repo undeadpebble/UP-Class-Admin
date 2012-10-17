@@ -34,6 +34,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
 import org.jdesktop.swingx.JXTable;
+import org.tmatesoft.sqljet.core.internal.lang.SqlParser.table_conflict_clause_return;
 
 import ClassAdminBackEnd.BetweenFormat;
 import ClassAdminBackEnd.BorderCase;
@@ -58,6 +59,7 @@ public class FrmTable extends JPanel {
 	public LinkedList<LinkedList<Boolean>> filters = new LinkedList<LinkedList<Boolean>>();
 	public Boolean[] dataFilter;
 	public LinkedList<LinkedList<SuperEntity>> data;
+	public LinkedList<LinkedList<SuperEntity>> data2;
 	public LinkedList<SuperEntity> headersList;
 	public LinkedList<Integer> headPoints;
 	public JComboBox cbheaders;
@@ -73,10 +75,13 @@ public class FrmTable extends JPanel {
 	 */
 	public void redraw() {
 		this.data = project.getHead().getDataLinkedList();
+		this.data2 = data;
 		this.headers = project.getHead().getHeaders();
 
 		tableModel.setColumnCount(0);
 		tableModel.setRowCount(0);
+		
+		filters.clear();
 
 		for (int x = 0; x < data.size(); x++) {
 			LinkedList<Boolean> temp = new LinkedList<Boolean>();
@@ -128,6 +133,7 @@ public class FrmTable extends JPanel {
 		// boolean filtered = false;
 
 		LinkedList<Integer> removes = new LinkedList<Integer>();
+		
 
 		// --------------------------------------
 		// adds all the rows to tha table again
@@ -146,6 +152,8 @@ public class FrmTable extends JPanel {
 		for (int x = 0; x < data.size(); x++) {
 			tableModel.addRow(temp[x]);
 		}
+		
+		data = data2;
 		// --------------------------------------------------
 		for (int x = 0; x < filters.size(); x++) {
 			for (int y = 0; y < filters.get(0).size(); y++) {
@@ -157,13 +165,15 @@ public class FrmTable extends JPanel {
 		}
 		for (int x = removes.size() - 1; x >= 0; x--) {
 			tableModel.removeRow(removes.get(x));
+			data.remove(removes.get(x)-1+1);
+			
 		}
-
 	}
 
 	public FrmTable(String[] headers, LinkedList<LinkedList<SuperEntity>> data,
 			Project project) {
 		this.data = data;
+		this.data2 = data;
 		this.project = project;
 		this.headers = headers;
 
