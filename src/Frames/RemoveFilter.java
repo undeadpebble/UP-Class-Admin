@@ -99,13 +99,6 @@ public class RemoveFilter extends JFrame {
 			}
 		}
 
-		/*
-		 * for (int x = 0; x < table.filters.size(); x++) { for(int y = 0; y <
-		 * table.filters.get(0).size();y++){
-		 * System.out.print((table.filters.get(x).get(y) != false)); }
-		 * System.out.println(); }
-		 */
-
 		String[] bcases = new String[filters.size()];
 
 		for (int x = 0; x < filters.size(); x++) {
