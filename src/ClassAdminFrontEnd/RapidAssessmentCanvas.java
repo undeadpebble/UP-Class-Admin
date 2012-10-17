@@ -49,6 +49,10 @@ import ClassAdminBackEnd.RapidAssessmentMarkType;
 import ClassAdminBackEnd.RapidAssessmentRectangleType;
 import ClassAdminBackEnd.SuperEntity;
 
+/**
+ * @author undeadpebble this is the class that handles the creation of a rapid
+ *         assessment form
+ */
 public class RapidAssessmentCanvas extends JFrame {
 	/**
 	 * 
@@ -71,30 +75,52 @@ public class RapidAssessmentCanvas extends JFrame {
 	private ContainerPanel parentPanel;
 	private MyRectangle parentRect;
 
+	/**
+	 * @return
+	 */
 	public String getBackgroundFileName() {
 		return backgroundFileName;
 	}
 
+	/**
+	 * @param backgroundFileName
+	 */
 	public void setBackgroundFileName(String backgroundFileName) {
 		this.backgroundFileName = backgroundFileName;
 	}
 
+	/**
+	 * @return
+	 */
 	public BufferedImage getBackGround() {
 		return backGround;
 	}
 
+	/**
+	 * @param backGround
+	 */
 	public void setBackGround(BufferedImage backGround) {
 		this.backGround = backGround;
 	}
 
+	/**
+	 * @return
+	 */
 	public BufferedImage getResizedBackGround() {
 		return resizedBackGround;
 	}
 
+	/**
+	 * @param resizedBackGround
+	 */
 	public void setResizedBackGround(BufferedImage resizedBackGround) {
 		this.resizedBackGround = resizedBackGround;
 	}
 
+	/**
+	 * @author undeadpebble this component is the bottom right box that
+	 *         indicates the total mark
+	 */
 	public class MyMarkTotalComponent extends JComponent {
 
 		/**
@@ -104,6 +130,9 @@ public class RapidAssessmentCanvas extends JFrame {
 		private static final int WIDTH = MARK_SIZE * 6;
 		private static final int HEIGHT = (int) (MARK_SIZE * 1.5);
 
+		/**
+		 * @param parent
+		 */
 		public MyMarkTotalComponent(MyComponent parent) {
 			this.setSize(WIDTH, HEIGHT);
 			this.setLocation((int) parent.getWidth() - WIDTH,
@@ -137,6 +166,9 @@ public class RapidAssessmentCanvas extends JFrame {
 
 	}
 
+	/**
+	 * @author undeadpebble Marks and rectangles extend this class
+	 */
 	public class MyComponent extends JComponent {
 
 		/**
@@ -144,11 +176,21 @@ public class RapidAssessmentCanvas extends JFrame {
 		 */
 		private static final long serialVersionUID = 1L;
 
+		/**
+		 * 
+		 */
 		public MyComponent() {
 			super();
 
 		}
 
+		/**
+		 * @param name
+		 * @param parent
+		 * @return
+		 * @throws ClassCastException
+		 *             this method saves the assessment into the backend
+		 */
 		public RapidAssessmentComponentType createTreeNode(String name,
 				RapidAssessmentComponentType parent) throws ClassCastException {
 			throw new ClassCastException();
@@ -156,16 +198,25 @@ public class RapidAssessmentCanvas extends JFrame {
 
 		private double mark;
 
+		/**
+		 * @return
+		 */
 		public double getMark() {
 			return mark;
 		}
 
+		/**
+		 * @param mark
+		 */
 		public void setMark(double mark) {
 			this.mark = mark;
 			if (this.getParent() != parentPanel)
 				((MyComponent) this.getParent()).updateMark();
 		}
 
+		/**
+		 * updates the max marks propagating upwards
+		 */
 		public void updateMark() {
 			int total = 0;
 			for (int x = 0; x < this.getComponentCount(); ++x) {
@@ -178,6 +229,10 @@ public class RapidAssessmentCanvas extends JFrame {
 			this.setMark(total);
 		}
 
+		/**
+		 * @param rect
+		 * @return tests whether a rectangle lies within another
+		 */
 		public boolean contains(MyComponent rect) {
 			return (this.getX() < rect.getX()
 					&& this.getY() < rect.getY()
@@ -186,6 +241,10 @@ public class RapidAssessmentCanvas extends JFrame {
 					.getY() + rect.getHeight());
 		}
 
+		/**
+		 * @param rect
+		 * @return tests if a rectangle partially overlaps with another
+		 */
 		public boolean overlaps(MyComponent rect) {
 
 			Point[] myPoints = new Point[4];
@@ -249,6 +308,9 @@ public class RapidAssessmentCanvas extends JFrame {
 		}
 	}
 
+	/**
+	 * @author undeadpebble this class is the small red boxes
+	 */
 	public class MyMarkPoint extends MyComponent {
 
 		/**
@@ -264,16 +326,29 @@ public class RapidAssessmentCanvas extends JFrame {
 			return editingPosition;
 		}
 
+		/**
+		 * 
+		 */
 		public void incrementEditingPosition() {
 			editingPosition++;
 		}
 
+		/**
+		 * 
+		 */
 		public void decrementEditingPosition() {
 			editingPosition--;
 			if (editingPosition < 0)
 				editingPosition = 0;
 		}
 
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see
+		 * ClassAdminFrontEnd.RapidAssessmentCanvas.MyComponent#createTreeNode
+		 * (java.lang.String, ClassAdminBackEnd.RapidAssessmentComponentType)
+		 */
 		@Override
 		public RapidAssessmentComponentType createTreeNode(String name,
 				RapidAssessmentComponentType parent) throws ClassCastException {
@@ -293,6 +368,11 @@ public class RapidAssessmentCanvas extends JFrame {
 			this.editingPosition = editingPosition;
 		}
 
+		/**
+		 * @param x
+		 * @param y
+		 * @param parent
+		 */
 		public MyMarkPoint(int x, int y, MyComponent parent) {
 			super();
 			this.setLocation(x, y);
@@ -337,6 +417,11 @@ public class RapidAssessmentCanvas extends JFrame {
 			});
 		}
 
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
+		 */
 		@Override
 		protected void paintComponent(Graphics arg0) {
 
@@ -367,6 +452,9 @@ public class RapidAssessmentCanvas extends JFrame {
 
 	}
 
+	/**
+	 * @author undeadpebble this class is the large red boxes
+	 */
 	public class MyRectangle extends MyComponent {
 
 		private static final long serialVersionUID = 1L;
@@ -410,10 +498,20 @@ public class RapidAssessmentCanvas extends JFrame {
 			this.timePressed = timePressed;
 		}
 
+		/**
+		 * @return
+		 */
 		public boolean isPressing() {
 			return pressing;
 		}
 
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see
+		 * ClassAdminFrontEnd.RapidAssessmentCanvas.MyComponent#createTreeNode
+		 * (java.lang.String, ClassAdminBackEnd.RapidAssessmentComponentType)
+		 */
 		@Override
 		public RapidAssessmentComponentType createTreeNode(String name,
 				RapidAssessmentComponentType parent) throws ClassCastException {
@@ -441,6 +539,12 @@ public class RapidAssessmentCanvas extends JFrame {
 			return tmp;
 		}
 
+		/**
+		 * @param x
+		 * @param y
+		 * @param w
+		 * @param h
+		 */
 		public MyRectangle(int x, int y, int w, int h) {
 			super();
 			this.setLocation(x, y);
@@ -483,48 +587,86 @@ public class RapidAssessmentCanvas extends JFrame {
 
 		}
 
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.awt.Component#getName()
+		 */
 		public String getName() {
 			return name;
 		}
 
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.awt.Component#setName(java.lang.String)
+		 */
 		public void setName(String name) {
 			this.name = name;
 		}
 
+		/**
+		 * @return
+		 */
 		public int getAndIncrementCount() {
 			return count++;
 		}
 
+		/**
+		 * @return
+		 */
 		public int getCount() {
 			return count;
 		}
 
+		/**
+		 * @param pressing
+		 */
 		public void setPressing(boolean pressing) {
 			this.pressing = pressing;
 		}
 
+		/**
+		 * @return
+		 */
 		public boolean getPressing() {
 			return this.pressing;
 		}
 
+		/**
+		 * @return
+		 */
 		public Point getOrigin() {
 			return origin;
 		}
 
+		/**
+		 * @param origin
+		 */
 		public void setOrigin(Point origin) {
 			this.origin = origin;
 		}
 
+		/**
+		 * @return
+		 */
 		public Point getEnd() {
 			return end;
 		}
 
+		/**
+		 * @param end
+		 */
 		public void setEnd(Point end) {
 			this.end = end;
 		}
 
 	}
 
+	/**
+	 * @author undeadpebble this listener handles all clickevents to do with
+	 *         drawing
+	 */
 	public class canvasMouseListener implements MouseListener {
 
 		@Override
@@ -580,6 +722,13 @@ public class RapidAssessmentCanvas extends JFrame {
 			((MyRectangle) e.getSource()).setPressing(false);
 		}
 
+		/**
+		 * @param p1
+		 * @param p2
+		 * @param source
+		 *            creates a new component, of which the type is decided by
+		 *            what was drawn
+		 */
 		private void createComponent(Point p1, Point p2, MyRectangle source) {
 			if (p1.getX() > p2.getX() || p1.getY() > p2.getY())
 				return;
@@ -656,6 +805,10 @@ public class RapidAssessmentCanvas extends JFrame {
 		}
 	}
 
+	/**
+	 * @param project
+	 * @param assessedEntity
+	 */
 	public RapidAssessmentCanvas(Project project, EntityType assessedEntity) {
 		Dimension screen = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		this.setLayout(null);
@@ -763,7 +916,7 @@ public class RapidAssessmentCanvas extends JFrame {
 								+ RapidAssessmentCanvas.this.assessedEntity
 										.getName());
 						load();
-						
+
 					} catch (ClassCastException e) {
 
 					}
@@ -882,6 +1035,9 @@ public class RapidAssessmentCanvas extends JFrame {
 
 	}
 
+	/**
+	 * @author undeadpebble the panel that is the contentpane of the frame
+	 */
 	public class ContainerPanel extends JPanel {
 		/**
 		 * 
@@ -908,23 +1064,9 @@ public class RapidAssessmentCanvas extends JFrame {
 			g2.dispose();
 		}
 
-		/*
-		 * public RapidAssessmentTree createTree() { //RapidAssessmentTree tree
-		 * = new RapidAssessmentTree(null);
-		 * //tree.setHead(this.createRapidAssessmentTreeNode(tree)); //return
-		 * tree; return null; }
-		 * 
-		 * public TreeContainerNode createRapidAssessmentTreeNode(
-		 * RapidAssessmentTree tree) { TreeContainerNode tmp = tree.new
-		 * TreeContainerNode(this.getX(), this.getY(), this.getWidth(),
-		 * this.getHeight(), backgroundFileName); for (int x = 0; x <
-		 * this.getComponentCount(); ++x) { try { tmp.getChildNodes().add(
-		 * ((MyComponent) this.getComponent(x)) .createTreeNode(tree)); } catch
-		 * (ClassCastException e) {
-		 * 
-		 * } } return tmp; }
+		/**
+		 * saves the assessment into the backend
 		 */
-
 		public void save() {
 			if (assessedEntity == null)
 				return;
@@ -963,25 +1105,13 @@ public class RapidAssessmentCanvas extends JFrame {
 
 			project.updateTables();
 
-			/*LinkedList<LinkedList<SuperEntity>> data = project.getHead()
-					.getDataLinkedList();
-			for (int x = 0; x < data.size(); ++x) {
-				for (int y = 0; y < data.get(x).size(); ++y) {
-					String g = "";
-					SuperEntity s = data.get(x).get(y);
-					while (s != null) {
-						g += " ";
-						s = s.getParentEntity();
-					}
-					System.out.println(g
-							+ data.get(x).get(y).getType().getName());
-				}
-			}*/
-
 		}
 
 	}
 
+	/**
+	 * loads a rapidassessment from the backend for editing
+	 */
 	public void load() {
 		RapidAssessmentContainerType container = (RapidAssessmentContainerType) assessedEntity;
 		// this.removeAll();
@@ -996,23 +1126,28 @@ public class RapidAssessmentCanvas extends JFrame {
 		this.backGround = container.getImage();
 
 		for (int x = 0; x < container.getSubEntityType().size(); ++x) {
-	
+
 			try {
 				createCanvasComponent(
 						(RapidAssessmentComponentType) (container
 								.getSubEntityType().get(x)),
 						parentPanel);
 			} catch (ClassCastException e) {
-				
+
 			}
 
 		}
 
 		this.validate();
-	
+
 		repaint();
 	}
 
+	/**
+	 * @param component
+	 * @param parentPanel2
+	 * used in loading
+	 */
 	private void createCanvasComponent(RapidAssessmentComponentType component,
 			ContainerPanel parentPanel2) {
 		this.parentRect = new MyRectangle((int) component.getX(),
@@ -1021,7 +1156,7 @@ public class RapidAssessmentCanvas extends JFrame {
 		parentPanel2.add(parentRect);
 
 		for (int x = 0; x < component.getSubEntityType().size(); ++x) {
-		
+
 			try {
 				createCanvasComponent(
 						(RapidAssessmentComponentType) (component
@@ -1033,6 +1168,11 @@ public class RapidAssessmentCanvas extends JFrame {
 		}
 	}
 
+	/**
+	 * @param component
+	 * @param parent
+	 * used in loading
+	 */
 	public void createCanvasComponent(RapidAssessmentComponentType component,
 			MyComponent parent) {
 
@@ -1042,7 +1182,7 @@ public class RapidAssessmentCanvas extends JFrame {
 					(int) comp.getY(), (int) comp.getW(), (int) comp.getH());
 			parent.add(rect);
 			for (int x = 0; x < component.getSubEntityType().size(); ++x) {
-				
+
 				try {
 					createCanvasComponent(
 							(RapidAssessmentComponentType) (component
@@ -1065,6 +1205,9 @@ public class RapidAssessmentCanvas extends JFrame {
 		}
 	}
 
+	/**
+	 * repopulates the select combobox
+	 */
 	public void refreshSelect() {
 		LinkedList<EntityType> containers = new LinkedList<EntityType>();
 		this.project.getHeadEntityType().findEntities(containers);
@@ -1073,6 +1216,9 @@ public class RapidAssessmentCanvas extends JFrame {
 			selectCombo.addItem(containers.get(x));
 	}
 
+	/**
+	 *  repopulates the load combobox
+	 */
 	public void refreshLoad() {
 		LinkedList<RapidAssessmentContainerType> containers = new LinkedList<RapidAssessmentContainerType>();
 		this.project.getHeadEntityType().findRapidAssessment(containers);

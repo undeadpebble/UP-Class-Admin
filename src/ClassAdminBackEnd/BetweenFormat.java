@@ -25,6 +25,13 @@ public class BetweenFormat extends Format {
 		this.value2 = value2;
 	}
 
+	/**
+	 * @param value1
+	 * @param value2
+	 * @param textColor
+	 * @param highlightColor
+	 * @param description
+	 */
 	public BetweenFormat(/*int priority, */Double value1, Double value2, Color textColor,
 			Color highlightColor, String description) {
 		super(/*priority, */value1, textColor, highlightColor, description);
@@ -38,10 +45,18 @@ public class BetweenFormat extends Format {
 		// TODO Auto-generated constructor stub
 	}
 	
+	/* (non-Javadoc)
+	 * @see ClassAdminBackEnd.Format#evaluate(double)
+	 * Check to see if the condition holds
+	 */
 	public Boolean evaluate(double mark){
 		return (this.getValue1() <= mark && mark <= this.getValue2());
 	}	
 	
+	/* (non-Javadoc)
+	 * @see ClassAdminBackEnd.Format#saveToDB(org.tmatesoft.sqljet.core.table.SqlJetDb, long, ClassAdminBackEnd.PDatIDGenerator)
+	 * was used to save to an sql database, now deprecated
+	 */
 	public long saveToDB(SqlJetDb db, long parentID, PDatIDGenerator idgen) throws SqlJetException {
 
 		db.beginTransaction(SqlJetTransactionMode.WRITE);

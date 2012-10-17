@@ -72,6 +72,9 @@ public class RapidAssessmentComponentType extends EntityType{
 		this.h = h;
 	}
 	
+	/* (non-Javadoc)
+	 * @see ClassAdminBackEnd.EntityType#populateTreeWithEntities()
+	 */
 	@Override
 	public void populateTreeWithEntities() {
 		for (int x = this.getParentEntitytype().getEntityList().size() -1; x >= 0 ; --x) {
@@ -82,6 +85,9 @@ public class RapidAssessmentComponentType extends EntityType{
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see ClassAdminBackEnd.EntityType#findEntities(java.util.LinkedList)
+	 */
 	@Override
 	public void findEntities(LinkedList<EntityType> list){
 		for (int x = 0; x < this.getSubEntityType().size(); ++x) {

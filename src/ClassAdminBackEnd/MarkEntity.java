@@ -7,17 +7,16 @@ import org.tmatesoft.sqljet.core.SqlJetTransactionMode;
 import org.tmatesoft.sqljet.core.table.ISqlJetTable;
 import org.tmatesoft.sqljet.core.table.SqlJetDb;
 
+public class MarkEntity extends SuperEntity {
 
-public class MarkEntity extends SuperEntity{
-
-
+	/**
+	 * @param type
+	 * @param parentEntity
+	 */
 	public MarkEntity(EntityType type, SuperEntity parentEntity) {
 		super(type, parentEntity, 0);
 		// TODO Auto-generated constructor stub
 	}
-	
-	
-
 
 	/**
 	 * @param replacedEntity
@@ -27,41 +26,40 @@ public class MarkEntity extends SuperEntity{
 		// TODO Auto-generated constructor stub
 	}
 
-
-
-
-	public String getValue(){
-		
+	/* (non-Javadoc)
+	 * @see ClassAdminBackEnd.SuperEntity#getValue()
+	 */
+	public String getValue() {
 
 		try {
-		    DecimalFormat twoDForm = new DecimalFormat("#.##");
-		    return Double.toString(Double.valueOf(twoDForm.format(this.getMark())));
+			DecimalFormat twoDForm = new DecimalFormat("#.##");
+			return Double.toString(Double.valueOf(twoDForm.format(this
+					.getMark())));
 		} catch (AbsentException e) {
 			return "N/A";
 		}
 
 	}
-	
 
-
-	public long saveToDB(SqlJetDb db, long parentID, PDatIDGenerator idgen) throws SqlJetException {
+	/* (non-Javadoc)
+	 * @see ClassAdminBackEnd.SuperEntity#saveToDB(org.tmatesoft.sqljet.core.table.SqlJetDb, long, ClassAdminBackEnd.PDatIDGenerator)
+	 * was used to save to an sql database, now deprecated
+	 */
+	public long saveToDB(SqlJetDb db, long parentID, PDatIDGenerator idgen)
+			throws SqlJetException {
 		long id = super.saveToDB(db, parentID, idgen);
 		db.beginTransaction(SqlJetTransactionMode.WRITE);
 
-        	ISqlJetTable table = db.getTable(PDatExport.MARK_ENTITY_TABLE);
-        	//insert statements
-        	
-        	try {
-				table.insert(id,this.getMark());
-			} catch (AbsentException e) {
-				table.insert(id,0);
-			}
+		ISqlJetTable table = db.getTable(PDatExport.MARK_ENTITY_TABLE);
+		// insert statements
 
-        return id;
+		try {
+			table.insert(id, this.getMark());
+		} catch (AbsentException e) {
+			table.insert(id, 0);
+		}
+
+		return id;
 	}
-	
 
-
-	
 }
-

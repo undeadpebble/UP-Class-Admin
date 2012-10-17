@@ -22,6 +22,9 @@ public class Global {
 	
 	}
 	
+	/**
+	 * @return instance
+	 */
 	public static Global getGlobal(){
 		if (instance == null)
 			instance = new Global();
@@ -30,27 +33,45 @@ public class Global {
 	}
 	
 	
+	/**
+	 * @return
+	 */
 	public LinkedList<GraphType> getGraphTypes() {
 		return graphTypes;
 	}
 
+	/**
+	 * @return
+	 */
 	public LinkedList<Project> getProjects() {
 		return projects;
 	}
 
+	/**
+	 * @return
+	 */
 	public int getActiveProjectIndex() {
 		return activeProjectIndex;
 	}
 
+	/**
+	 * @param activeProjectIndex
+	 */
 	public void setActiveProjectIndex(int activeProjectIndex) {
 		this.activeProjectIndex = activeProjectIndex;
 	}
 	
+	/**
+	 * @return
+	 */
 	public Project getActiveProject(){
 		return projects.get(activeProjectIndex);
 		
 	}
 	
+	/**
+	 * @param newProject
+	 */
 	public void addProject(Project newProject){
 		this.projects.add(newProject);
 		this.setActiveProjectIndex(this.projects.size()-1);

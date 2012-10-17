@@ -6,6 +6,10 @@ import java.util.Iterator;
 import ClassAdminBackEnd.UpdateTableEventClassListener;
 
 
+/**
+ * @author undeadpebble
+ * this class tells all classes with the corresponding listener to handle the event
+ */
 public class UpdateTableEventSource{
 	private ArrayList listeners = new ArrayList();
 	private static UpdateTableEventSource instance;

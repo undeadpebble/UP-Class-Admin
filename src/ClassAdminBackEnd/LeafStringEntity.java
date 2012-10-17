@@ -1,12 +1,20 @@
 package ClassAdminBackEnd;
 
 public class LeafStringEntity extends StringEntity{
+	/**
+	 * @param type
+	 * @param parentEntity
+	 * @param text
+	 */
 	public LeafStringEntity(EntityType type, SuperEntity parentEntity,
 			String text) {
 		super(type, parentEntity, text);
-		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * @param replacedEntity
+	 * @param text
+	 */
 	public LeafStringEntity(SuperEntity replacedEntity, String text) {
 		super(replacedEntity, text);
 		if(this.getSubEntity().size() != 0){
@@ -14,13 +22,22 @@ public class LeafStringEntity extends StringEntity{
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see ClassAdminBackEnd.SuperEntity#isAbsent()
+	 */
 	public Boolean isAbsent(){
 		return true;
 	}
 	
+	/* (non-Javadoc)
+	 * @see ClassAdminBackEnd.SuperEntity#unLeaf()
+	 */
 	public SuperEntity unLeaf(){
 		return new StringEntity(this, this.getField());
 	}
+	/**
+	 * @return
+	 */
 	public String createTreeFromHead()
 	{
 		String str = "";

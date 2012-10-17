@@ -5,6 +5,10 @@ import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
 import com.db4o.ta.TransparentActivationSupport;
 
+/**
+ * @author undeadpebble
+ * load a db4o database
+ */
 public class PDatImport {
 
 	public void importFileDB4o(Project project,String filename){

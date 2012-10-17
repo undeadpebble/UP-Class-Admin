@@ -69,6 +69,9 @@ public class RapidAssessmentContainerType extends RapidAssessmentRectangleType {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see ClassAdminBackEnd.EntityType#findRapidAssessment(java.util.LinkedList)
+	 */
 	@Override
 	public void findRapidAssessment(
 			LinkedList<RapidAssessmentContainerType> list) {
@@ -77,6 +80,9 @@ public class RapidAssessmentContainerType extends RapidAssessmentRectangleType {
 		list.add(this);
 	}
 
+	/* (non-Javadoc)
+	 * @see ClassAdminBackEnd.EntityType#toString()
+	 */
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
