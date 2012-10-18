@@ -15,6 +15,10 @@ import java.util.LinkedList;
  *
  */
 public class CsvExport {
+	/**
+	 * @param aOutputFileName
+	 * Creates a file in csv format
+	 */
 	void write(String aOutputFileName) {
 		LinkedList<LinkedList<SuperEntity>> lListME = Global.getGlobal().getActiveProject().getHead().getDataLinkedList();
 		

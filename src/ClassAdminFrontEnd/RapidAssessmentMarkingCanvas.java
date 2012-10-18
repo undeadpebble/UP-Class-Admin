@@ -65,15 +65,17 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 
 	private JTextField searchBox;
 	private JLabel searchLabel, loadAssessmentLabel;
-	private JComboBox studentChooser;
-	private JComboBox assessmentChooser;
+	private JComboBox<SuperEntity> studentChooser;
 	private JLabel[] infoLabels;
-	private JComboBox loadCombo;
+	private JComboBox<RapidAssessmentContainerType> loadCombo;
 	private JButton btnLoad;
 	private JLabel timerLabel;
 	private Timer timer;
 	private Date time;
 
+	/**
+	 * re-add the buttons to the content panel and move them to the right place
+	 */
 	public void refreshButtons() {
 		contentPanel.add(searchBox);
 		contentPanel.add(searchLabel);
@@ -99,6 +101,10 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 		}
 	}
 
+	/**
+	 * @param head
+	 * @param project
+	 */
 	public RapidAssessmentMarkingCanvas(RapidAssessmentContainerType head,
 			Project project) {
 		super();
@@ -131,19 +137,16 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 			
 			@Override
 			public void windowIconified(WindowEvent arg0) {
-				// TODO Auto-generated method stub
 				
 			}
 			
 			@Override
 			public void windowDeiconified(WindowEvent arg0) {
-				// TODO Auto-generated method stub
 				
 			}
 			
 			@Override
 			public void windowDeactivated(WindowEvent arg0) {
-				// TODO Auto-generated method stub
 				
 			}
 			
@@ -156,13 +159,11 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 			
 			@Override
 			public void windowClosed(WindowEvent arg0) {
-				// TODO Auto-generated method stub
 				
 			}
 			
 			@Override
 			public void windowActivated(WindowEvent arg0) {
-				// TODO Auto-generated method stub
 				
 			}
 		});
@@ -222,6 +223,10 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 		this.repaint();
 	}
 
+	/**
+	 * @author undeadpebble
+	 * this class is the contentpane for the rapidassessment frame
+	 */
 	public class ContentPanel extends JPanel {
 		/**
 		 * 
@@ -233,7 +238,7 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 			searchLabel = new JLabel("Search");
 			loadAssessmentLabel = new JLabel("Load Assessment");
 			loadAssessmentLabel.setFocusable(false);
-			studentChooser = new JComboBox();
+			studentChooser = new JComboBox<SuperEntity>();
 			timerLabel = new JLabel();
 			infoLabels = new JLabel[6];
 			for (int x = 0; x < infoLabels.length; ++x) {
@@ -287,7 +292,7 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 
 				}
 			});
-			loadCombo = new JComboBox();
+			loadCombo = new JComboBox<RapidAssessmentContainerType>();
 			loadCombo.setFocusable(false);
 			loadCombo.setVisible(true);
 			btnLoad = new JButton("Load");
@@ -317,6 +322,9 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 		 */
 		private static final long serialVersionUID = 1L;
 
+		/* (non-Javadoc)
+		 * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
+		 */
 		@Override
 		protected void paintComponent(Graphics g) {
 
@@ -334,6 +342,10 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 		}
 	}
 
+	/**
+	 * @param str
+	 * searches the backend for an entity that contains str
+	 */
 	public void search(String str) {
 
 		studentChooser.removeAllItems();
@@ -347,11 +359,17 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 				tmp = tmp.getParentEntity();
 			}
 
-			if (tmp != project.getHead())
+			if (tmp != project.getHead()){
+				studentChooser.removeItem(tmp);
 				studentChooser.addItem(tmp);
+			
+			}
 		}
 	}
 
+	/**
+	 * refreshes the contents in the loadCombo combobox
+	 */
 	public void refreshLoad() {
 		LinkedList<RapidAssessmentContainerType> containers = new LinkedList<RapidAssessmentContainerType>();
 		this.project.getHeadEntityType().findRapidAssessment(containers);
@@ -361,6 +379,11 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 
 	}
 
+	/**
+	 * @param node
+	 * @return
+	 * creates components to match a rapidassessment from the backend
+	 */
 	public JComponent createComponent(RapidAssessmentComponentType node) {
 		MyComponent comp = null;
 		try {
@@ -417,6 +440,10 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 		return comp;
 	}
 
+	/**
+	 * @author undeadpebble
+	 * the class all components extend
+	 */
 	public class MyComponent extends JComponent {
 		/**
 		 * 
@@ -471,6 +498,9 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 			enType.setMaxValue(maxMark);
 		}
 
+		/**
+		 * updates the mark, propagating upwards to update all affected nodes
+		 */
 		public void updateMark() {
 			double total = 0;
 			for (int x = 0; x < this.getComponentCount(); ++x) {
@@ -615,6 +645,11 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 
 		}
 
+		/**
+		 * @param charVal
+		 * @return
+		 * handle keyboard events during marking
+		 */
 		public boolean addChar(int charVal) {
 			String newStr = strValue + (char) charVal;
 			try {
@@ -636,6 +671,10 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 
 		}
 
+		/**
+		 * @return
+		 * handle the backspace key
+		 */
 		public boolean backspace() {
 			if (strValue.length() > 0) {
 				strValue = strValue.substring(0, strValue.length() - 2);
@@ -646,6 +685,9 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 
 		}
 
+		/**
+		 * switch to the next point to be marked
+		 */
 		public void next() {
 			strValue = "";
 			MyMark old = markList.get(focusedMark);
@@ -688,6 +730,10 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 
 	}
 
+	/**
+	 * @author undeadpebble
+	 * bottom right box
+	 */
 	public class MyMarkTotalComponent extends JComponent {
 
 		/**
@@ -697,6 +743,9 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 		private static final int WIDTH = RapidAssessmentCanvas.MARK_SIZE * 6;
 		private static final int HEIGHT = (int) (RapidAssessmentCanvas.MARK_SIZE * 1.5);
 
+		/**
+		 * @param parent
+		 */
 		public MyMarkTotalComponent(MyComponent parent) {
 			this.setSize(WIDTH, HEIGHT);
 			this.setLocation((int) parent.getWidth() - WIDTH,
@@ -731,6 +780,10 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 
 	}
 
+	/**
+	 * @param entity
+	 * load a student to be assessed
+	 */
 	public void assess(SuperEntity entity) {
 		load(entity, (MyComponent) (parentRect));
 		LinkedList<String> list = new LinkedList<String>();
@@ -743,6 +796,11 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 		parentFrame.repaint();
 	}
 
+	/**
+	 * @param entity
+	 * @param comp
+	 * load a student to be assessed
+	 */
 	public void load(SuperEntity entity, MyComponent comp) {
 		comp.setEntity(entity.findEntityOfType_Down(comp.getEnType()));
 		for (int x = 0; x < comp.getComponentCount(); ++x) {

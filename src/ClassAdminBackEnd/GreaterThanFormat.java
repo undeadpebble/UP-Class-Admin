@@ -10,17 +10,30 @@ import org.tmatesoft.sqljet.core.table.SqlJetDb;
 public class GreaterThanFormat extends Format {
 	public static int numberOfValues = 1;
 
+	/**
+	 * @param value1
+	 * @param textColor
+	 * @param highlightColor
+	 * @param description
+	 */
 	public GreaterThanFormat(/*int condition, /*int priority,*/ Double value1, Color textColor, Color highlightColor,
 			String description) {
 		super(/* priority, */value1, textColor, highlightColor,
 				description);
-		// TODO Auto-generated constructor stub
 	}
 
+	/* (non-Javadoc)
+	 * @see ClassAdminBackEnd.Format#evaluate(double)
+	 * evaluate the mark to see if it should be formatted
+	 */
 	public Boolean evaluate(double mark){
 		return (this.getValue1() < mark);
 	}
 
+	/* (non-Javadoc)
+	 * @see ClassAdminBackEnd.Format#saveToDB(org.tmatesoft.sqljet.core.table.SqlJetDb, long, ClassAdminBackEnd.PDatIDGenerator)
+	 * was used to save to an sql database, now deprecated
+	 */
 	public long saveToDB(SqlJetDb db, long parentID, PDatIDGenerator idgen) throws SqlJetException {
 		db.beginTransaction(SqlJetTransactionMode.WRITE);
 

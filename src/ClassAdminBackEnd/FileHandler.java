@@ -24,9 +24,18 @@ public class FileHandler {
 		return fh;
 	}
 
+	/**
+	 * 
+	 */
 	private FileHandler() {
 	}
 
+	/**
+	 * @param filename
+	 * @param project
+	 * @throws UnsupportedFileTypeException
+	 * Opens and loads a file into 
+	 */
 	public void openFile(String filename, Project project) throws UnsupportedFileTypeException {
 		this.project = project;
 		if (filename.substring(filename.indexOf('.')).toLowerCase().contains("csv")) {
@@ -42,6 +51,10 @@ public class FileHandler {
 
 	}
 
+	/**
+	 * @param filename
+	 * load a csv file 
+	 */
 	private void openCSV(String filename) {
 
 		FileImport fileReader;
@@ -56,6 +69,14 @@ public class FileHandler {
 		}
 	}
 
+	/**
+	 * @param headers
+	 * @param recordArray
+	 * @param fileReader
+	 * @param filename
+	 * @return
+	 * creates the entityTypes during loading
+	 */
 	private int createEntityTypes(ArrayList headers, ArrayList recordArray,
 			FileImport fileReader, String filename) {
 		// header entity
@@ -119,6 +140,13 @@ public class FileHandler {
 		return firstStringCol;
 	}
 
+	/**
+	 * @param parentRowIndex
+	 * @param headers
+	 * @param recordArray
+	 * @param fileReader
+	 * Creates the entities during loading
+	 */
 	private void createMarkEntities(int parentRowIndex, ArrayList headers, ArrayList recordArray,
 			FileImport fileReader) {
 
@@ -158,6 +186,10 @@ public class FileHandler {
 		}
 	}
 
+	/**
+	 * @param filename
+	 * opens an xls file
+	 */
 	private void openXls(String filename) {
 		FileImport fileReader;
 		fileReader = new XlsImport(frame);
@@ -171,6 +203,12 @@ public class FileHandler {
 		}
 	}
 
+	/**
+	 * @param filename
+	 * @param project
+	 * @throws UnsupportedFileTypeException
+	 * Save File
+	 */
 	public void saveFile(String filename, Project project) throws UnsupportedFileTypeException {
 		this.project = project;
 		if (filename.substring(filename.indexOf('.')).contains("csv")) {
@@ -184,17 +222,29 @@ public class FileHandler {
 			throw new UnsupportedFileTypeException();
 	}
 
+	/**
+	 * @param filename
+	 * Save as Csv
+	 */
 	private void saveCSV(String filename) {
 		CsvExport exporter = new CsvExport();
 		exporter.write(filename);
 
 	}
 
+	/**
+	 * @param filename
+	 * save as xls
+	 */
 	private void saveXls(String filename) {
 		// TODO Auto-generated method stub
 
 	}
 
+	/**
+	 * @param filename
+	 * opens a pDat file
+	 */
 	private void openPDat(String filename) {
 		PDatImport pImport = new PDatImport();
 		
@@ -202,6 +252,10 @@ public class FileHandler {
 		
 	}
 	
+	/**
+	 * @param filename
+	 * save to pdat
+	 */
 	private void savePDat(String filename){
 		PDatExport pExport = new PDatExport();
 			pExport.exportFileDB4o(project, filename);
@@ -209,11 +263,17 @@ public class FileHandler {
 	}
 	
 
+	/**
+	 * @param i
+	 */
 	public void setXLSImport(XlsImport i) {
 //		i.recordData();
 		
 	}
 	
+	/**
+	 * @param frame_
+	 */
 	public void setFrame(Frame frame_) {
 		frame = frame_;
 	}

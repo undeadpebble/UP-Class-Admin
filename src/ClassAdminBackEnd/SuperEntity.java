@@ -48,6 +48,9 @@ public class SuperEntity {
 		return field;
 	}
 
+	/**
+	 * @param field
+	 */
 	public void setField(String field) {
 		this.field = field;
 	}
@@ -118,6 +121,9 @@ public class SuperEntity {
 
 	}
 
+	/**
+	 * @param replacedEntity
+	 */
 	public SuperEntity(SuperEntity replacedEntity) {
 
 		this.setType(replacedEntity.getType());
@@ -198,10 +204,16 @@ public class SuperEntity {
 		return this.getType().getDefaultWeight();
 	}
 
+	/**
+	 * @return
+	 */
 	public SuperEntityPointer getThisPointer() {
 		return thisPointer;
 	}
 
+	/**
+	 * @param thisPointer
+	 */
 	public void setThisPointer(SuperEntityPointer thisPointer) {
 		this.thisPointer = thisPointer;
 	}
@@ -227,6 +239,9 @@ public class SuperEntity {
 
 	}
 
+	/**
+	 * update the marks propagating upwards
+	 */
 	public void updateMark() {
 		try {
 			this.calcMark();
@@ -259,10 +274,17 @@ public class SuperEntity {
 				&& this.getType().getDate().after(new Date());
 	}
 
+	/**
+	 * @return
+	 */
 	public SuperEntity unLeaf() {
 		return this;
 	}
 
+	/**
+	 * @return
+	 * @throws AbsentException
+	 */
 	public Double doMarkMath() throws AbsentException {
 		double mTotal = 0;
 		double wTotal = 0;
@@ -311,6 +333,9 @@ public class SuperEntity {
 
 	}
 
+	/**
+	 * @return
+	 */
 	public String[] getHeaders() {
 		String heads = subEntity.get(0).getHeadersString();
 
@@ -320,6 +345,9 @@ public class SuperEntity {
 
 	}
 
+	/**
+	 * @return
+	 */
 	private String getHeadersString() {
 		String str = this.getDetails().getType().getName();
 
@@ -331,6 +359,9 @@ public class SuperEntity {
 		return str;
 	}
 
+	/**
+	 * @return
+	 */
 	public LinkedList<SuperEntity> getHeadersLinkedList() {
 		LinkedList<SuperEntity> lEntity = new LinkedList<SuperEntity>();
 
@@ -343,6 +374,9 @@ public class SuperEntity {
 		return lEntity;
 	}
 
+	/**
+	 * @return creates a linkedlist with all the entities in it
+	 */
 	public LinkedList<LinkedList<SuperEntity>> getDataLinkedList() {
 		LinkedList<LinkedList<SuperEntity>> linkLinkEntity = new LinkedList<LinkedList<SuperEntity>>();
 
@@ -355,6 +389,9 @@ public class SuperEntity {
 		return linkLinkEntity;
 	}
 
+	/**
+	 * @param linkLinkEntity
+	 */
 	private void addDataToLinkedList(LinkedList<SuperEntity> linkLinkEntity) {
 		linkLinkEntity.add(this);
 		for (int x = 0; x < this.getSubEntity().size(); x++) {
@@ -362,15 +399,25 @@ public class SuperEntity {
 		}
 	}
 
+	/**
+	 * @return
+	 */
 	public String getValue() {
 		// TODO
 		return "";
 	}
 
+	/**
+	 * @param str
+	 * @throws NumberFormatException
+	 */
 	public void setValue(String str) throws NumberFormatException {
 		this.setMark(Double.parseDouble(str));
 	}
 
+	/**
+	 * @return
+	 */
 	public String[][] getData() {
 		String[][] sData = new String[subEntity.size()][];
 
@@ -387,6 +434,9 @@ public class SuperEntity {
 
 	}
 
+	/**
+	 * @return Deprecated
+	 */
 	private String getDataString() {
 		String str;
 
@@ -399,6 +449,14 @@ public class SuperEntity {
 		return str;
 	}
 
+	/**
+	 * @param db
+	 * @param parentID
+	 * @param idgen
+	 * @return
+	 * @throws SqlJetException
+	 *             was used to save to an sql database, now deprecated
+	 */
 	public long saveToDB(SqlJetDb db, long parentID, PDatIDGenerator idgen)
 			throws SqlJetException {
 		db.beginTransaction(SqlJetTransactionMode.WRITE);
@@ -415,11 +473,19 @@ public class SuperEntity {
 		return id;
 	}
 
+	/**
+	 * @param data
+	 * @param kolumn
+	 * @return
+	 */
 	public LinkedList<SuperEntity> getColumn(
 			LinkedList<LinkedList<SuperEntity>> data, int kolumn) {
 		return (data.get(kolumn));
 	}
 
+	/**
+	 * @return Deprecated - not used anymore
+	 */
 	public String[] getNumberHeaders() {
 		LinkedList<SuperEntity> list = this.getHeadersLinkedList();
 		LinkedList<String> strlst = new LinkedList<String>();
@@ -439,6 +505,10 @@ public class SuperEntity {
 		return (str);
 	}
 
+	/**
+	 * @param studentLinkedList
+	 * @return creates the xml tree to draw the tree structure from
+	 */
 	public String createTreeFromHead(LinkedList<SuperEntity> studentLinkedList) {
 
 		studentLinkedList.add(this);
@@ -456,11 +526,21 @@ public class SuperEntity {
 		return str;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		return getField();
 	}
 
+	/**
+	 * @param type
+	 * @return finds the first entity with the correct type searching downwards
+	 *         in the tree
+	 */
 	public SuperEntity findEntityOfType_Down(EntityType type) {
 		if (type.getEntityList().contains(this)) {
 			return this;
@@ -479,6 +559,10 @@ public class SuperEntity {
 
 	}
 
+	/**
+	 * @param type
+	 * @return searches up and down for the type
+	 */
 	public SuperEntity findEntityOfTypeUpDown(EntityType type) {
 		SuperEntity temp = this.findEntityOfType_Down(type);
 		if (temp == null)
@@ -487,6 +571,12 @@ public class SuperEntity {
 		return temp;
 	}
 
+	/**
+	 * @param type
+	 * @param originator
+	 * @return finds the first entity with the correct type searching upwards in
+	 *         the tree
+	 */
 	public SuperEntity findEntityOfType_Up(EntityType type,
 			SuperEntity originator) {
 		if (type.getEntityList().contains(this))
@@ -511,6 +601,10 @@ public class SuperEntity {
 		}
 	}
 
+	/**
+	 * @param newParentType
+	 * @throws InvalidActivityException
+	 */
 	public void changeParentTotype(EntityType newParentType)
 			throws InvalidActivityException {
 		SuperEntity oldParent = this.getParentEntity();
@@ -536,6 +630,9 @@ public class SuperEntity {
 
 	}
 
+	/**
+	 * @param list
+	 */
 	public void findThreeStrings(LinkedList<String> list) {
 		int depth = 1;
 		int maxDepth = this.getDepth() - 1;
@@ -543,6 +640,10 @@ public class SuperEntity {
 			findStrings(list, depth++);
 	}
 
+	/**
+	 * @param list
+	 * @param depth
+	 */
 	public void findStrings(LinkedList<String> list, int depth) {
 		if (list.size() >= 3)
 			return;
@@ -553,6 +654,9 @@ public class SuperEntity {
 			}
 	}
 
+	/**
+	 * @return returns the depth of the tree
+	 */
 	public int getDepth() {
 
 		int max = 0;
@@ -565,6 +669,9 @@ public class SuperEntity {
 		return ++max;
 	}
 
+	/**
+	 * @return uses an iterative deepening search to find an IMGEntity
+	 */
 	public IMGEntity IterativeDeepeningfindPortrait() {
 		int depth = 1;
 
@@ -578,6 +685,10 @@ public class SuperEntity {
 		return result;
 	}
 
+	/**
+	 * @param i
+	 * @return used by IterativeDeepeningfindPortrait
+	 */
 	public IMGEntity findPortrait(int i) {
 		if (i <= 0)
 			return null;
@@ -589,6 +700,11 @@ public class SuperEntity {
 		return result;
 	}
 
+	/**
+	 * @param str
+	 * @param list
+	 *            uses smart matching to find an entity that contains str
+	 */
 	public void search(String str, LinkedList<SuperEntity> list) {
 		String rest = this.getValue().toLowerCase();
 
@@ -620,7 +736,14 @@ public class SuperEntity {
 				this.getSubEntity().get(x).deleteStudent();
 			}
 		}
-		
+	}
+
+	public boolean isHasMark() {
+		return hasMark;
+	}
+
+	public void setHasMark(boolean hasMark) {
+		this.hasMark = hasMark;
 	}
 
 }

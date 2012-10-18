@@ -33,22 +33,37 @@ public class EntityType {
 	public static int TEXT_TYPE = 3;
 	public static int MIXED = 4;
 
+	/**
+	 * @return
+	 */
 	public Boolean getIsRule() {
 		return isRule;
 	}
 
+	/**
+	 * @param isRule
+	 */
 	public void setIsRule(Boolean isRule) {
 		this.isRule = isRule;
 	}
 
+	/**
+	 * @return
+	 */
 	public double getMaxValue() {
 		return maxValue;
 	}
 
+	/**
+	 * @param maxmark
+	 */
 	public void setMaxValue(double maxmark) {
 		this.maxValue = maxmark;
 	}
 
+	/**
+	 * 
+	 */
 	public void updateMaxValue() {
 		double total = 0;
 		for (int x = 0; x < this.getSubEntityType().size(); ++x) {
@@ -57,14 +72,23 @@ public class EntityType {
 		this.setMaxValue(total);
 	}
 
+	/**
+	 * @return
+	 */
 	public EntityType getParentEntitytype() {
 		return parentEntitytype;
 	}
 
+	/**
+	 * @param parentEntitytype
+	 */
 	public void setParentEntitytype(EntityType parentEntitytype) {
 		this.parentEntitytype = parentEntitytype;
 	}
 
+	/**
+	 * @return
+	 */
 	public LinkedList<EntityType> getSubEntityType() {
 		if (this.subEntityType == null)
 			this.subEntityType = new LinkedList<EntityType>();
@@ -74,10 +98,16 @@ public class EntityType {
 	/**
 	 * @return the iD
 	 */
+	/**
+	 * @return
+	 */
 	public long getID() {
 		return ID;
 	}
 
+	/**
+	 * @param n
+	 */
 	public EntityType(String n) {
 		name = n;
 	}
@@ -126,10 +156,16 @@ public class EntityType {
 		this.defaultWeight = defaultWeight;
 	}
 
+	/**
+	 * 
+	 */
 	public EntityType() {
 		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * @return
+	 */
 	public String getName() {
 		return name;
 	}
@@ -142,6 +178,9 @@ public class EntityType {
 		this.formatting = formatting;
 	}
 
+	/**
+	 * 
+	 */
 	public void clearFormatting() {
 		this.formatting = null;
 	}
@@ -170,52 +209,89 @@ public class EntityType {
 		this.subEntityType = subEntityType;
 	}
 
+	/**
+	 * @param name
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	/**
+	 * @return
+	 */
 	public LinkedList<Format> getFormatting() {
 		if (formatting == null)
 			formatting = new LinkedList<Format>();
 		return formatting;
 	}
 
+	/**
+	 * @return
+	 */
 	public LinkedList<BorderCase> getBorderCasing() {
 		if (borderCasing == null)
 			borderCasing = new LinkedList<BorderCase>();
 		return borderCasing;
 	}
 
+	/**
+	 * @return
+	 */
 	public LinkedList<SuperEntity> getEntityList() {
 		if (entityList == null)
 			entityList = new LinkedList<SuperEntity>();
 		return entityList;
 	}
 
+	/**
+	 * @return
+	 */
 	public Boolean getIsTextField() {
 		return isTextField;
 	}
 
+	/**
+	 * @param isTextField
+	 */
 	public void setIsTextField(Boolean isTextField) {
 		this.isTextField = isTextField;
 	}
 
+	/**
+	 * @return
+	 */
 	public Date getDate() {
 		return date;
 	}
 
+	/**
+	 * @param date
+	 */
 	public void setDate(Date date) {
 		this.date = date;
 	}
 
+	/**
+	 * @return
+	 */
 	public Double getDefaultWeight() {
 		return defaultWeight;
 	}
 
+	/**
+	 * @param defaultWeight
+	 */
 	public void setDefaultWeight(Double defaultWeight) {
 		this.defaultWeight = defaultWeight;
 	}
 
+	/**
+	 * @param db
+	 * @param parentID
+	 * @param idgen
+	 * @throws SqlJetException
+	 * was used to save to an sql database, now deprecated
+	 */
 	public void saveToDB(SqlJetDb db, Long parentID, PDatIDGenerator idgen)
 			throws SqlJetException {
 		db.beginTransaction(SqlJetTransactionMode.WRITE);

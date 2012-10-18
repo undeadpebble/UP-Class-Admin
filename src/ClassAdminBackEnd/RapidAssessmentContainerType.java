@@ -1,16 +1,21 @@
 package ClassAdminBackEnd;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.LinkedList;
 
 public class RapidAssessmentContainerType extends RapidAssessmentRectangleType {
-	private BufferedImage Image;
+	private SaveableImage Image = new SaveableImage();
 
 	/**
 	 * @return the image
 	 */
 	public BufferedImage getImage() {
-		return Image;
+		try {
+			return Image.getImage();
+		} catch (IOException e) {
+			return null;
+		}
 	}
 
 	/**
@@ -18,7 +23,10 @@ public class RapidAssessmentContainerType extends RapidAssessmentRectangleType {
 	 *            the image to set
 	 */
 	public void setImage(BufferedImage image) {
-		Image = image;
+		try {
+			Image.setImage(image);
+		} catch (IOException e) {
+		}
 	}
 
 	/**
@@ -67,8 +75,14 @@ public class RapidAssessmentContainerType extends RapidAssessmentRectangleType {
 
 			this.getEntityList().get(z).setType(this);
 		}
+		this.setMaxValue(100);
+		
+		
 	}
 	
+	/* (non-Javadoc)
+	 * @see ClassAdminBackEnd.EntityType#findRapidAssessment(java.util.LinkedList)
+	 */
 	@Override
 	public void findRapidAssessment(
 			LinkedList<RapidAssessmentContainerType> list) {
@@ -77,9 +91,11 @@ public class RapidAssessmentContainerType extends RapidAssessmentRectangleType {
 		list.add(this);
 	}
 
+	/* (non-Javadoc)
+	 * @see ClassAdminBackEnd.EntityType#toString()
+	 */
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
 		return this.getName();
 	}
 

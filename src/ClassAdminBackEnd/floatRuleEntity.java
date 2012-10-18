@@ -1,5 +1,7 @@
 package ClassAdminBackEnd;
 
+import java.util.LinkedList;
+
 import Rule.FloatRule;
 import Rule.StringRule;
 
@@ -18,5 +20,8 @@ public class floatRuleEntity extends MarkEntity{
 		public void calcMark(){
 			this.setMark(((FloatRule)this.getType()).evaluateDouble(this));
 		}
-
+		
+		public String createTreeFromHead(LinkedList<SuperEntity> studentLinkedList) {
+			return "";
+		}
 }

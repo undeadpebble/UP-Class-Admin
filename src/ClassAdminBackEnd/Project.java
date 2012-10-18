@@ -142,6 +142,9 @@ public class Project {
 		return cleared;
 	}
 
+	/**
+	 * @param x
+	 */
 	public void setCleared(boolean x) {
 
 		cleared = x;
@@ -149,6 +152,9 @@ public class Project {
 
 	// Add scatterchart to arraylist
 
+	/**
+	 * @param x
+	 */
 	public void addscattercharts(ScatterPlotFrame x) {
 
 		scattercharts.add(x);
@@ -271,10 +277,16 @@ public class Project {
 		}
 	}
 
+	/**
+	 * @return
+	 */
 	public LinkedList<FrmTable> getTables() {
 		return tables;
 	}
 
+	/**
+	 * @return
+	 */
 	public LinkedList<Rule> getRules() {
 		return rules;
 	}
@@ -294,21 +306,35 @@ public class Project {
 		this.headEntityType = headEntityType;
 	}
 
+	/**
+	 * @return
+	 */
 	public SuperEntity getHead() {
 		return head;
 	}
 
+	/**
+	 * @param head
+	 */
 	public void setHead(SuperEntity head) {
 		this.head = head;
 
 	}
 
+	/**
+	 * @return
+	 */
 	public LinkedList<SuperEntity> getSelected() {
 		if (selected == null)
 			selected = new LinkedList<SuperEntity>();
 		return selected;
 	}
 
+	/**
+	 * @param db
+	 * @throws SqlJetException
+	 * was used to save to an sql database, now deprecated
+	 */
 	public void saveToDB(SqlJetDb db) throws SqlJetException {
 		PDatIDGenerator idgen = new PDatIDGenerator();
 		this.headEntityType.saveToDB(db, new Long(0), idgen);
@@ -317,26 +343,41 @@ public class Project {
 
 	}
 
+	/**
+	 * @return
+	 */
 	public LinkedList<EntityType> getTreeLinkedList() {
 		if (treeLinkedList == null)
 			treeLinkedList = new LinkedList<EntityType>();
 		return treeLinkedList;
 	}
 
+	/**
+	 * @return
+	 */
 	public LinkedList<SuperEntity> getStudentLinkedList() {
 		if (studentLinkedList == null)
 			studentLinkedList = new LinkedList<SuperEntity>();
 		return studentLinkedList;
 	}
 
+	/**
+	 * @return
+	 */
 	public String getFileName() {
 		return fileName;
 	}
 
+	/**
+	 * @param fname
+	 */
 	public void setFileName(String fname) {
 		fileName = fname;
 	}
 
+	/**
+	 * 
+	 */
 	public void createAudit() {
 		try {
 			audit = new Audit(this);
@@ -345,11 +386,18 @@ public class Project {
 		}
 	}
 
+	/**
+	 * @return
+	 */
 	public Audit getAudit() {
 		return audit;
 
 	}
 
+	/**
+	 * @param dir
+	 * import pictures into tree
+	 */
 	public void setPictures(String dir) {
 		String files;
 		File folder = new File(dir);
@@ -429,6 +477,9 @@ public class Project {
 
 	}
 
+	/**
+	 * @param tables
+	 */
 	public void setTables(LinkedList<FrmTable> tables) {
 		this.tables = tables;
 	}

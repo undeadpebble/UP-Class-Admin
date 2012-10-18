@@ -37,42 +37,78 @@ public class Format {
 
 	}
 
+	/**
+	 * @return
+	 */
 	public Double getValue1() {
 		return value1;
 	}
 
+	/**
+	 * @param value1
+	 */
 	public void setValue1(Double value1) {
 		this.value1 = value1;
 	}
 
+	/**
+	 * @return
+	 */
 	public Color getTextColor() {
 		return textColor;
 	}
 
+	/**
+	 * @param textColor
+	 */
 	public void setTextColor(Color textColor) {
 		this.textColor = textColor;
 	}
 
+	/**
+	 * @return
+	 */
 	public Color getHighlightColor() {
 		return highlightColor;
 	}
 
+	/**
+	 * @param highlightColor
+	 */
 	public void setHighlightColor(Color highlightColor) {
 		this.highlightColor = highlightColor;
 	}
 
+	/**
+	 * @return
+	 */
 	public String getDescription() {
 		return description;
 	}
 
+	/**
+	 * @param description
+	 */
 	public void setDescription(String description) {
 		this.description = description;
 	}
 
+	/**
+	 * @param mark
+	 * @return
+	 */
 	public Boolean evaluate(double mark) {
 		return false;
 	}
 
+	/**
+	 * @param db
+	 * @param parentID
+	 * @param idgen
+	 * @return
+	 * @throws SqlJetException
+	 * was used to save to an sql database, now deprecated
+	 */
 	public long saveToDB(SqlJetDb db, long parentID, PDatIDGenerator idgen)
 			throws SqlJetException {
 		long id = idgen.getID();

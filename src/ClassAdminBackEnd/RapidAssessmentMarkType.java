@@ -16,16 +16,17 @@ public class RapidAssessmentMarkType extends RapidAssessmentComponentType {
 			double h, double maxmark , EntityType parent) {
 		super(n, x, y, w, h, parent);
 		this.setMaxValue(maxmark);
-		// TODO Auto-generated constructor stub
 	}
 
+	/* (non-Javadoc)
+	 * @see ClassAdminBackEnd.RapidAssessmentComponentType#populateTreeWithEntities()
+	 */
 	@Override
 	public void populateTreeWithEntities() {
 		for (int x = 0; x < this.getParentEntitytype().getEntityList().size(); ++x) {
 			SuperEntity parent = this.getParentEntitytype().getEntityList()
 					.get(x);
 			new LeafMarkEntity(this, parent, 0);
-
 		}
 	}
 

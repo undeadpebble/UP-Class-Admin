@@ -22,6 +22,11 @@ public class PDatExport {
 	public static final String FORMAT_TABLE = "Format";
 	public static final String BORDERCASE_TABLE = "BorderCase";
 
+	/**
+	 * @param project
+	 * @param filename
+	 * Save to db4o file
+	 */
 	public void exportFileDB4o(Project project, String filename) {
 
 		File f = new File(filename);

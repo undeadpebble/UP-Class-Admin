@@ -7,6 +7,11 @@ import org.tmatesoft.sqljet.core.table.SqlJetDb;
 
 public class BestNMarkEntity extends MarkEntity{
 
+	/**
+	 * @param type
+	 * @param parentEntity
+	 * creates new BestNEntity
+	 */
 	public BestNMarkEntity(EntityType type, SuperEntity parentEntity) {
 		super(type, parentEntity);
 
@@ -14,12 +19,17 @@ public class BestNMarkEntity extends MarkEntity{
 	
 	/**
 	 * @param replacedEntity
+	 * create a new BestNEntity, replacing the replacedEntity
 	 */
 	public BestNMarkEntity(SuperEntity replacedEntity) {
 		super(replacedEntity);
 
 	}
 
+	/* (non-Javadoc)
+	 * @see ClassAdminBackEnd.SuperEntity#doMarkMath()
+	 * Calculate the mark using the Best N strategy
+	 */
 	@Override
 	public Double doMarkMath() throws AbsentException{
 		double mTotal = 0;
