@@ -91,7 +91,7 @@ public class Project {
 		int modgetal = this.getHead().getNumberHeaders().length;
 
 		histogramdatacount = histogramdatacount + 1;
-
+		if(modgetal >0)
 		histogramdatacount = histogramdatacount % modgetal;
 
 	}
@@ -114,7 +114,7 @@ public class Project {
 		int modgetal = this.getHead().getNumberHeaders().length;
 
 		scatterdatacount = scatterdatacount + 1;
-
+		if(modgetal >0)
 		scatterdatacount = scatterdatacount % (modgetal - 1);
 
 	}
