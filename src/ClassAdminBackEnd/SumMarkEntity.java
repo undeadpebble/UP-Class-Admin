@@ -16,7 +16,9 @@ public class SumMarkEntity extends MarkEntity {
 		super(replacedEntity);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see ClassAdminBackEnd.SuperEntity#doMarkMath()
 	 */
 	public Double doMarkMath() throws AbsentException {
@@ -36,15 +38,17 @@ public class SumMarkEntity extends MarkEntity {
 			throw new AbsentException();
 		}
 
-			return mTotal;
+		return mTotal;
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see ClassAdminBackEnd.SuperEntity#updateMark()
 	 */
 	public void updateMark() {
 		super.updateMark();
-			this.getType().updateMaxValue();
-		
+		this.getType().updateMaxValue();
+
 	}
 }

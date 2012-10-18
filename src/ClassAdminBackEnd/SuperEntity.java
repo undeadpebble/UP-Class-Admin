@@ -731,4 +731,12 @@ public class SuperEntity {
 		}
 	}
 
+	public boolean isHasMark() {
+		return hasMark;
+	}
+
+	public void setHasMark(boolean hasMark) {
+		this.hasMark = hasMark;
+	}
+
 }

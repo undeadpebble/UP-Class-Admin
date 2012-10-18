@@ -33,6 +33,8 @@ public class SaveableImage {
 	 * convert the stored byte[] to a bufferedImage and return it
 	 */
 	public BufferedImage getImage() throws IOException{
+		if(imageByteArray == null)
+			return null;
 		ImageReader reader = ImageIO.getImageReadersByFormatName("jpg").next();
 		reader.setInput(ImageIO.createImageInputStream(new ByteArrayInputStream(imageByteArray)));
 		Image image = reader.read(0, reader.getDefaultReadParam());

@@ -1075,7 +1075,10 @@ public class RapidAssessmentCanvas extends JFrame {
 					this.getHeight());
 
 			assessedEntity = parent;
-			parent.setImage(backGround);
+			if (backGround != null)
+				parent.setImage(backGround);
+			
+			
 
 			LinkedList<MyComponent> list = new LinkedList<RapidAssessmentCanvas.MyComponent>();
 			for (int x = 0; x < this.getComponentCount(); ++x) {
@@ -1146,7 +1149,7 @@ public class RapidAssessmentCanvas extends JFrame {
 	/**
 	 * @param component
 	 * @param parentPanel2
-	 * used in loading
+	 *            used in loading
 	 */
 	private void createCanvasComponent(RapidAssessmentComponentType component,
 			ContainerPanel parentPanel2) {
@@ -1171,7 +1174,7 @@ public class RapidAssessmentCanvas extends JFrame {
 	/**
 	 * @param component
 	 * @param parent
-	 * used in loading
+	 *            used in loading
 	 */
 	public void createCanvasComponent(RapidAssessmentComponentType component,
 			MyComponent parent) {
@@ -1217,7 +1220,7 @@ public class RapidAssessmentCanvas extends JFrame {
 	}
 
 	/**
-	 *  repopulates the load combobox
+	 * repopulates the load combobox
 	 */
 	public void refreshLoad() {
 		LinkedList<RapidAssessmentContainerType> containers = new LinkedList<RapidAssessmentContainerType>();
