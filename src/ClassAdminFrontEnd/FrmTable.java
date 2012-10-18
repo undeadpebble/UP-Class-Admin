@@ -229,7 +229,7 @@ public class FrmTable extends JPanel {
 								
 								tableModel.fireTableDataChanged();
 								table.repaint();
-								
+								project.updatecharts();
 								
 							} else {
 								table.getModel().setValueAt(tcl.getOldValue(),
