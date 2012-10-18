@@ -377,7 +377,7 @@ public class FilterFrame extends JFrame {
 																.toString())) {
 											table.filters
 													.get(x)
-													.set(cbxFormatType
+													.set(cbxFilters
 															.getSelectedIndex(),
 															true);
 										}
@@ -391,12 +391,12 @@ public class FilterFrame extends JFrame {
 												.get(x)
 												.get(cbxFilters
 														.getSelectedIndex())
-												.getMark() > Double
+												.getMark() < Double
 												.parseDouble(minVal.getValue()
 														.toString())) {
 											table.filters
 													.get(x)
-													.set(cbxFormatType
+													.set(cbxFilters
 															.getSelectedIndex(),
 															true);
 										}
@@ -411,14 +411,10 @@ public class FilterFrame extends JFrame {
 												.get(x)
 												.get(cbxFilters
 														.getSelectedIndex())
-												.getMark() < Double
+												.getMark() > Double
 												.parseDouble(minVal.getValue()
 														.toString())) {
-											table.filters
-													.get(x)
-													.set(cbxFormatType
-															.getSelectedIndex(),
-															true);
+											table.filters.get(x).set(cbxFilters.getSelectedIndex(),true);
 											
 										}
 									}
@@ -448,28 +444,13 @@ public class FilterFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				Object[][] temp = new Object[table.data.size()][table.data.get(
-						0).size()];
-
-				for (int x = 0; x < table.data.size(); x++) {
-					for (int y = 0; y < table.data.get(0).size(); y++) {
-						temp[x][y] = table.data.get(x).get(y).getValue();
-					}
-				}
-
-				for (int x = 0; x < table.filters.size(); x++) {
-					for (int y = 0; y < table.filters.get(0).size(); y++) {
+				for(int x = 0; x < table.filters.size();x++){
+					for(int y = 0; y < table.filters.get(0).size();y++){
 						table.filters.get(x).set(y, false);
 					}
 				}
-
-				int y = table.tableModel.getRowCount();
-				for (int x = 0; x < y; x++) {
-					table.tableModel.removeRow(0);
-				}
-				for (int x = 0; x < table.data.size(); x++) {
-					table.tableModel.addRow(temp[x]);
-				}
+				
+				table.filterTable();
 			}
 		});
 

@@ -56,6 +56,7 @@ public class FrmTable extends JPanel {
 
 	public String[] headers;
 	public LinkedList<LinkedList<Boolean>> filters = new LinkedList<LinkedList<Boolean>>();
+	public LinkedList<Integer> show = new LinkedList<Integer>();
 	public Boolean[] dataFilter;
 	public LinkedList<LinkedList<SuperEntity>> data;
 	public LinkedList<SuperEntity> headersList;
@@ -74,6 +75,12 @@ public class FrmTable extends JPanel {
 	public void redraw() {
 		this.data = project.getHead().getDataLinkedList();
 		this.headers = project.getHead().getHeaders();
+		
+		show.clear();
+		
+		for(int x = 0; x < data.size();x++){
+			show.add(x);
+		}
 
 		tableModel.setColumnCount(0);
 		tableModel.setRowCount(0);
@@ -103,31 +110,15 @@ public class FrmTable extends JPanel {
 			tableModel.addRow(temp);
 		}
 
-	}
-
-	public SuperEntity[] getFirstSelectedStudent() {
-		if (table.getSelectedRow() != -1) {
-			SuperEntity[] tempForReturn = new SuperEntity[data.get(0).size()];
-			int selected = table.getSelectedRow();
-
-			for (int x = 0; x < data.get(0).size(); x++) {
-				tempForReturn[x] = data.get(selected).get(x);
-			}
-
-			return tempForReturn;
-		} else {
-			return null;
-		}
-	}
-
-	public String getFirstSelectedStudentNr() {
-		return (data.get(table.getSelectedRow()).get(0).getValue());
+		
 	}
 
 	public void filterTable() {
 		// boolean filtered = false;
 
 		LinkedList<Integer> removes = new LinkedList<Integer>();
+		show.clear();
+
 
 		// --------------------------------------
 		// adds all the rows to tha table again
@@ -158,6 +149,12 @@ public class FrmTable extends JPanel {
 		for (int x = removes.size() - 1; x >= 0; x--) {
 			tableModel.removeRow(removes.get(x));
 		}
+		
+		for(int x = 0; x < data.size();x++){
+			if(!removes.contains(x)){
+				show.add(x);
+			}
+		}
 
 	}
 
@@ -166,6 +163,12 @@ public class FrmTable extends JPanel {
 		this.data = data;
 		this.project = project;
 		this.headers = headers;
+		show.clear();
+		
+		for(int x = 0; x < data.size();x++){
+			show.add(x);
+		}
+
 
 		project.getTables().add(this);
 
@@ -199,32 +202,35 @@ public class FrmTable extends JPanel {
 				TableCellListener tcl = (TableCellListener) e.getSource();
 
 				if (tcl.getOldValue() != tcl.getNewValue()) {
-					if (data.get(tcl.getRow()).get(tcl.getColumn())
+					if (data.get(show.get(tcl.getRow())).get(tcl.getColumn())
 							.getDetails().getType().getIsTextField()) {
-						data.get(tcl.getRow()).get(tcl.getColumn())
+						data.get(show.get(tcl.getRow())).get(tcl.getColumn())
 								.getDetails()
 								.setValue((String) tcl.getNewValue());
 					} else {
 						try {
 							if (Double.parseDouble((String) tcl.getNewValue()) >= 0
-									&& data.get(tcl.getRow())
+									&& data.get(show.get(tcl.getRow()))
 											.get(tcl.getColumn()).getType()
 											.getMaxValue() >= Double
 											.parseDouble((String) tcl
 													.getNewValue())) {
-								data.get(tcl.getRow())
+								data.get(show.get(tcl.getRow()))
 										.get(tcl.getColumn())
 										.setMark(
 												(Double.parseDouble((String) tcl
 														.getNewValue())));
 								for (int x = 0; x < data.get(0).size(); x++) {
 									table.getModel().setValueAt(
-											data.get(tcl.getRow()).get(x)
+											data.get(show.get(tcl.getRow())).get(x)
 													.getValue(), tcl.getRow(),
 											x);
 								}
+								
 								tableModel.fireTableDataChanged();
 								table.repaint();
+								
+								
 							} else {
 								table.getModel().setValueAt(tcl.getOldValue(),
 										tcl.getRow(), tcl.getColumn());
@@ -249,17 +255,15 @@ public class FrmTable extends JPanel {
 		table = new JXTable() {
 			public Component prepareRenderer(TableCellRenderer renderer,
 					int Index_row, int Index_col) {
-				Component comp = super.prepareRenderer(renderer, convertRowIndexToModel(Index_row),
-						convertColumnIndexToModel(Index_col));
+				Component comp = super.prepareRenderer(renderer, Index_row,
+						Index_col);
 				// even index, selected or not selected
 				try {
 
 					LinkedList<Color> backgroundColors = new LinkedList<Color>();
 					LinkedList<Color> textColors = new LinkedList<Color>();
 
-					LinkedList<Format> format = data
-							.get(table.getRowSorter().convertRowIndexToModel(
-									Index_row)).get(convertColumnIndexToModel(Index_col)).getType()
+					LinkedList<Format> format = data.get(show.get(table.getRowSorter().convertRowIndexToModel(Index_row))).get(convertColumnIndexToModel(Index_col)).getType()
 							.getFormatting();
 
 					if (project.getSelected().contains(
@@ -295,7 +299,7 @@ public class FrmTable extends JPanel {
 						comp.setBackground(Color.white);
 					}
 
-					if (isCellSelected(convertRowIndexToModel(Index_row), Index_col)) {
+					if (isCellSelected(Index_row, Index_col)) {
 						backgroundColors.add(Color.orange);
 						comp.setBackground(Color.orange);
 						if (convertColumnIndexToModel(Index_col) == 0)
@@ -317,8 +321,7 @@ public class FrmTable extends JPanel {
 								} else {
 									project.clearselected();
 
-									project.setSelected(table
-											.convertRowIndexToModel(Index_row),
+									project.setSelected(show.get(table.convertRowIndexToModel(Index_row)),
 											false);
 								}
 
@@ -329,7 +332,7 @@ public class FrmTable extends JPanel {
 					}
 
 					for (int x = 0; x < format.size(); x++) {
-						if (format.get(x).evaluate(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(convertColumnIndexToModel(Index_col)).getMark())) {
+						if (format.get(x).evaluate(data.get(show.get(table.getRowSorter().convertRowIndexToModel(Index_row))).get(convertColumnIndexToModel(Index_col)).getMark())) {
 							if (format.get(x).getHighlightColor() != null) {
 								backgroundColors.add(format.get(x)
 										.getHighlightColor());
@@ -379,10 +382,10 @@ public class FrmTable extends JPanel {
 						}
 					}
 
-					LinkedList<BorderCase> bordercases = data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(convertColumnIndexToModel(Index_col)).getType().getBorderCasing();
+					LinkedList<BorderCase> bordercases = data.get(show.get(table.getRowSorter().convertRowIndexToModel(Index_row))).get(convertColumnIndexToModel(Index_col)).getType().getBorderCasing();
 
 					for (int x = 0; x < bordercases.size(); x++) {
-						if (bordercases.get(x).isBorderCase(data.get(table.getRowSorter().convertRowIndexToModel(Index_row)).get(convertColumnIndexToModel(Index_col)))) {
+						if (bordercases.get(x).isBorderCase(data.get(show.get(table.getRowSorter().convertRowIndexToModel(Index_row))).get(convertColumnIndexToModel(Index_col)))) {
 							comp.setBackground(Color.cyan);
 						}
 					}

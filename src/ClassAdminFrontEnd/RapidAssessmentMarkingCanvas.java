@@ -282,6 +282,7 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 					if(e.getKeyCode() == KeyEvent.VK_ENTER && parentRect != null){
 						searchBox.setFocusable(false);
 						parentFrame.requestFocus();
+						parentFrame.repaint();
 					}
 
 				}
@@ -399,7 +400,7 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 			contentPanel.removeAll();
 			backGround = n.getImage();
 			parentFrame.setTitle("Marking: " + node.getName());
-			parentFrame.setSize((int) (n.getW() + 100), (int) (n.getH() + 50));
+			parentFrame.setSize((int) (n.getW()+10), (int) (n.getH() + 50));
 			for (int x = 0; x < n.getSubEntityType().size(); ++x) {
 				try {
 					JComponent j = createComponent((RapidAssessmentComponentType) n
@@ -696,8 +697,7 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 				searchBox.requestFocus();
 				searchBox.selectAll();
 			}
-			markList.get(focusedMark).repaint();
-			old.repaint();
+			parentFrame.repaint();
 
 		}
 
