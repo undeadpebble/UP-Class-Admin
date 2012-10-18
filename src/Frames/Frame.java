@@ -2153,7 +2153,7 @@ public class Frame extends JFrame implements ActionListener {
 		}
 
 		table.tableModel.addRow(temp);
-		table.repaint();
+		table.redraw();
 	}
 
 	public void setMaxValues() {

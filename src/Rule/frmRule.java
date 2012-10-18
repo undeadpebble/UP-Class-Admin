@@ -415,14 +415,14 @@ public class frmRule extends JFrame {
 					if (lblText1.isVisible()) {
 						rule1 = new StringRule(txtStr1.getText(), "reqwuiop",
 								project);
-						ruleList.add(rule1);
+						//ruleList.add(rule1);
 					} else {
 						if (lblEntityType1.isVisible()) {
 							rule1 = new StringRule(
 									"referencespsaiodfhnosaudhf", project,
 									headTypes.get(cbxReference1
 											.getSelectedIndex()));
-							ruleList.add(rule1);
+							//ruleList.add(rule1);
 						} else if (lblRule1.isVisible()) {
 							rule1 = (StringRule) StringBoolRuleList
 									.get(cbxFloat1.getSelectedIndex());
@@ -433,14 +433,14 @@ public class frmRule extends JFrame {
 					if (lblText2.isVisible()) {
 						rule2 = new StringRule(txtStr2.getText(), "reqwuiop",
 								project);
-						ruleList.add(rule2);
+						//ruleList.add(rule2);
 					} else {
 						if (lblEntityType2.isVisible()) {
 							rule2 = new StringRule(
 									"referencespsaiodfhnosaudhf", project,
 									headTypes.get(cbxReference1
 											.getSelectedIndex()));
-							ruleList.add(rule1);
+							//ruleList.add(rule1);
 						} else if (lblRule2.isVisible()) {
 							rule2 = (StringRule) StringBoolRuleList
 									.get(cbxFloat2.getSelectedIndex());
@@ -506,13 +506,13 @@ public class frmRule extends JFrame {
 						rule1 = new FloatRule('n', Double
 								.parseDouble(spinFloat1.getValue().toString()),
 								"reqwuiop", project);
-						ruleList.add(rule1);
+						//ruleList.add(rule1);
 					} else {
 						if (lblEntityType1.isVisible()) {
 							rule1 = new FloatRule("referencespsaiodfhnosaudhf",
 									project, headTypes.get(cbxReference1
 											.getSelectedIndex()));
-							ruleList.add(rule1);
+							//ruleList.add(rule1);
 						} else if (lblRule1.isVisible()) {
 							rule1 = (FloatRule) floatRuleList.get(cbxFloat1
 									.getSelectedIndex());
@@ -624,14 +624,14 @@ public class frmRule extends JFrame {
 						rule1 = new FloatRule('n', Double
 								.parseDouble(spinFloat1.getValue().toString()),
 								"reqwuiop", project);
-						ruleList.add(rule1);
+					//	ruleList.add(rule1);
 					} else {
 
 						if (lblEntityType1.isVisible()) {
 							rule1 = new FloatRule("referencespsaiodfhnosaudhf",
 									project, headTypes.get(cbxReference1
 											.getSelectedIndex()));
-							ruleList.add(rule1);
+					//		ruleList.add(rule1);
 						} else if (lblRule1.isVisible()) {
 							rule1 = (FloatRule) floatRuleList.get(cbxFloat1
 									.getSelectedIndex());
@@ -643,7 +643,7 @@ public class frmRule extends JFrame {
 						rule2 = new FloatRule('n', Double
 								.parseDouble(spinFloat2.getValue().toString()),
 								"reqwuiop", project);
-						ruleList.add(rule2);
+					//	ruleList.add(rule2);
 					} else {
 						if (lblEntityType2.isVisible()) {
 							rule2 = new FloatRule("referencespsaiodfhnosaudhf",
@@ -725,14 +725,14 @@ public class frmRule extends JFrame {
 					if (lblText1.isVisible()) {
 						rule1 = new StringRule(txtStr1.getText(), "reqwuiop",
 								project);
-						ruleList.add(rule1);
+					//	ruleList.add(rule1);
 					} else {
 						if (lblEntityType1.isVisible()) {
 							rule1 = new StringRule(
 									"referencespsaiodfhnosaudhf", project,
 									headTypes.get(cbxReference1
 											.getSelectedIndex()));
-							ruleList.add(rule1);
+					//		ruleList.add(rule1);
 						} else if (lblRule1.isVisible()) {
 							rule1 = (StringRule) StringBoolRuleList
 									.get(cbxFloat1.getSelectedIndex());
@@ -743,14 +743,14 @@ public class frmRule extends JFrame {
 					if (lblText2.isVisible()) {
 						rule2 = new StringRule(txtStr2.getText(), "reqwuiop",
 								project);
-						ruleList.add(rule2);
+					//	ruleList.add(rule2);
 					} else {
 						if (lblEntityType2.isVisible()) {
 							rule2 = new StringRule(
 									"referencespsaiodfhnosaudhf", project,
 									headTypes.get(cbxReference2
 											.getSelectedIndex()));
-							ruleList.add(rule2);
+						//	ruleList.add(rule2);
 						} else if (lblRule2.isVisible()) {
 							rule2 = (StringRule) StringBoolRuleList
 									.get(cbxFloat2.getSelectedIndex());
