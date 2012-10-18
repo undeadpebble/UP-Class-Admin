@@ -92,7 +92,10 @@ public class Project {
 
 		histogramdatacount = histogramdatacount + 1;
 
+		if(modgetal !=0)
 		histogramdatacount = histogramdatacount % modgetal;
+		
+
 
 	}
 

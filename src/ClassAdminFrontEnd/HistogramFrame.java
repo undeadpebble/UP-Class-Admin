@@ -155,6 +155,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 				}
 
 				chartpanel.getChart().getXYPlot().setDataset(nuweChart.changeDataset(houerx));
+				chartpanel.getChart().getXYPlot().setDataset(nuweChart.changebarWidth(nuweChart.getWidthBar()));
 				project.updatecharts();
 
 				classaverage.setText("Class average:" + stats.roundTwoDecimals(stats.gemidpunt(houerx)) + "                     ");
@@ -196,6 +197,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			public void mouseClicked(MouseEvent e) {
 				if (xascb.getSelectedIndex() >= 1) {
 					xascb.setSelectedIndex(xascb.getSelectedIndex() - 1);
+					chartpanel.getChart().getXYPlot().setDataset(nuweChart.changebarWidth(nuweChart.getWidthBar()));
 					project.updatecharts();
 					classaverage.setText("Class average:" + stats.roundTwoDecimals(stats.gemidpunt(houerx)) + "                     ");
 					passes.setText("Number of failures:" + stats.fails(houerx) + "                ");
@@ -235,6 +237,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 			public void mouseClicked(MouseEvent e) {
 				if (xascb.getSelectedIndex() < xascb.getItemCount() - 1) {
 					xascb.setSelectedIndex(xascb.getSelectedIndex() + 1);
+					chartpanel.getChart().getXYPlot().setDataset(nuweChart.changebarWidth(nuweChart.getWidthBar()));
 					project.updatecharts();
 					classaverage.setText("Class average:" + stats.roundTwoDecimals(stats.gemidpunt(houerx)) + "                     ");
 					passes.setText("Number of failures:" + stats.fails(houerx) + "                ");
