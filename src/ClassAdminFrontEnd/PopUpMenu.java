@@ -48,6 +48,7 @@ public class PopUpMenu {
 					int p = item.getRow(); // get parent id
 					newNode.showFrmNewNode(p); // show new node form with parent
 												// in place
+					activeProject.updateTables();
 				}
 			}
 		});
@@ -57,6 +58,8 @@ public class PopUpMenu {
 				if (activeItem.canSetString("name")) {
 					updateNode.showFrmUpdateNode(0); // show update node form
 														// with information
+					activeProject.updateTables();
+
 				}
 			}
 		});

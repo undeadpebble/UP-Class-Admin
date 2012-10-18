@@ -764,8 +764,8 @@ public class TreeView extends Display {
 										break;
 									}// if
 								}// for
+								myProject.updateTables();
 							}// if
-
 						}// if
 
 					} else {
