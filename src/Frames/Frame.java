@@ -2179,9 +2179,13 @@ public class Frame extends JFrame implements ActionListener {
 					JOptionPane.ERROR_MESSAGE);
 
 		} else
-
+			try{
 			TreeView.createStudentFrm("name", Global.getGlobal().getActiveProject().getSelected().get(0), Global.getGlobal()
 					.getActiveProject());
+			}
+		catch (Exception e) {
+			// TODO: handle exception
+		}
 
 	}
 

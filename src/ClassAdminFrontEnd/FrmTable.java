@@ -201,15 +201,15 @@ public class FrmTable extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				TableCellListener tcl = (TableCellListener) e.getSource();
 
-				if (tcl.getOldValue() != tcl.getNewValue()) {
+				if (tcl.getOldValue() != tcl.getNewValue() ) {
 					if (data.get(show.get(tcl.getRow())).get(tcl.getColumn())
-							.getDetails().getType().getIsTextField()) {
+							.getDetails().getType().getIsTextField()&& !data.get(show.get(tcl.getRow())).get(tcl.getColumn()).getType().getIsRule()) {
 						data.get(show.get(tcl.getRow())).get(tcl.getColumn())
 								.getDetails()
 								.setValue((String) tcl.getNewValue());
 					} else {
 						try {
-							if (Double.parseDouble((String) tcl.getNewValue()) >= 0
+							if ( !data.get(show.get(tcl.getRow())).get(tcl.getColumn()).getType().getIsRule() && Double.parseDouble((String) tcl.getNewValue()) >= 0
 									&& data.get(show.get(tcl.getRow()))
 											.get(tcl.getColumn()).getType()
 											.getMaxValue() >= Double
@@ -240,6 +240,10 @@ public class FrmTable extends JPanel {
 									tcl.getRow(), tcl.getColumn());
 						}
 					}
+				}
+				else{
+					table.getModel().setValueAt(tcl.getOldValue(),
+							tcl.getRow(), tcl.getColumn());
 				}
 			}
 		};
