@@ -14,14 +14,12 @@ public class HeadEntity extends SuperEntity{
 	 */
 	public HeadEntity(EntityType type, double mark) {
 		super(type, 0);
-		// TODO Auto-generated constructor stub
 	}
 
 	/* (non-Javadoc)
 	 * @see ClassAdminBackEnd.SuperEntity#getValue()
 	 */
 	public String getValue(){
-		//TODO
 		return "";
 	}
 	

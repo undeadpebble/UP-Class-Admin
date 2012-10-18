@@ -1,6 +1,7 @@
 package ClassAdminBackEnd;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 import org.tmatesoft.sqljet.core.SqlJetException;
 import org.tmatesoft.sqljet.core.SqlJetTransactionMode;
@@ -13,7 +14,7 @@ import org.tmatesoft.sqljet.core.table.SqlJetDb;
  */
 public class IMGEntity extends SuperEntity {
 	
-	private BufferedImage image;
+	private SaveableImage image = new SaveableImage();
 
 	/**
 	 * @param type
@@ -78,14 +79,22 @@ public class IMGEntity extends SuperEntity {
 	 * @return the image
 	 */
 	public BufferedImage getImage() {
-		return image;
+		try {
+			return image.getImage();
+		} catch (IOException e) {
+			return null;
+		}
 	}
 
 	/**
 	 * @param image the image to set
 	 */
 	public void setImage(BufferedImage image) {
-		this.image = image;
+		try {
+			this.image.setImage(image);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	

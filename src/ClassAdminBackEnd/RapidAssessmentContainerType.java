@@ -88,7 +88,6 @@ public class RapidAssessmentContainerType extends RapidAssessmentRectangleType {
 	 */
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
 		return this.getName();
 	}
 
