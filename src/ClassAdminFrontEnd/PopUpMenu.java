@@ -17,7 +17,6 @@ import java.awt.event.*;
 import java.util.LinkedList;
 
 public class PopUpMenu {
-
 	JPopupMenu pMenu;
 	TreeView tview;
 	VisualItem activeItem = null;
@@ -29,6 +28,7 @@ public class PopUpMenu {
 	FrmNewNode newNode;
 	FrmUpdateNode updateNode;
 	JFrame parentFrame;
+	BlurBackground mBlur;
 
 	public PopUpMenu() {
 		pMenu = new JPopupMenu();
@@ -48,7 +48,6 @@ public class PopUpMenu {
 					int p = item.getRow(); // get parent id
 					newNode.showFrmNewNode(p); // show new node form with parent
 												// in place
-					activeProject.updateTables();
 				}
 			}
 		});
@@ -58,7 +57,6 @@ public class PopUpMenu {
 				if (activeItem.canSetString("name")) {
 					updateNode.showFrmUpdateNode(0); // show update node form
 														// with information
-					activeProject.updateTables();
 
 				}
 			}
@@ -84,10 +82,9 @@ public class PopUpMenu {
 																				// in
 																				// back
 																				// end
-						activeProject.updateTables(); // update front end
 
 						parentFrame.dispose(); // recreate form
-						TreeView.createEntityTypeFrm("name", activeProject);
+						TreeView.createEntityTypeFrm("name", activeProject,mBlur);
 					}
 				}
 			}
@@ -132,10 +129,9 @@ public class PopUpMenu {
 																			// from
 																			// back
 																			// end
-						activeProject.updateTables(); // update front end
 														// information
 						parentFrame.dispose(); // recreate form
-						TreeView.createEntityTypeFrm("name", activeProject);
+						TreeView.createEntityTypeFrm("name", activeProject,mBlur);
 					}
 				}
 			}
@@ -143,7 +139,8 @@ public class PopUpMenu {
 
 	}
 
-	public void setTreeView(TreeView treeView, Tree tree, Project project, JFrame pFrame) {
+	public void setTreeView(TreeView treeView, Tree tree, Project project, JFrame pFrame,BlurBackground blur) {
+		mBlur = blur;
 		activeProject = project;
 		activeTreeLinkedList = activeProject.getTreeLinkedList();
 		activeTree = tree;

@@ -85,6 +85,7 @@ public class StudentPopUp {
 			public void actionPerformed(ActionEvent e) {
 				VisualItem item = activeItem;
 				if (item.canGetString("name")) {
+					System.out.println("**********************" + item.getRow());
 					MarkEntity newM = new MarkEntity(tview.getSuperEntity(item.getRow()));
 					tview.setSuperEntity(item.getRow(),newM);
 					activeProject.getSelected().add(newM);

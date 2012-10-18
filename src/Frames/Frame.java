@@ -2191,7 +2191,8 @@ public class Frame extends JFrame implements ActionListener {
 
 	public void showStructureModule() {
 		table.getTable().getSelectedRow();
-		TreeView.createEntityTypeFrm("name", Global.getGlobal().getActiveProject());
+		blur.fadeIn();
+		TreeView.createEntityTypeFrm("name", Global.getGlobal().getActiveProject(),blur);
 	}
 
 	public void showHistogram() {

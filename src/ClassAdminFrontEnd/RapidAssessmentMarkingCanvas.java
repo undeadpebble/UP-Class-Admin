@@ -278,11 +278,14 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 
 				@Override
 				public void keyReleased(KeyEvent e) {
-					search(searchBox.getText());
+					
 					if(e.getKeyCode() == KeyEvent.VK_ENTER && parentRect != null){
+						load((SuperEntity)studentChooser.getSelectedItem(), (MyComponent)parentRect);
 						searchBox.setFocusable(false);
 						parentFrame.requestFocus();
 						parentFrame.repaint();
+					} else{
+						search(searchBox.getText());
 					}
 
 				}
@@ -785,7 +788,6 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 	 * load a student to be assessed
 	 */
 	public void assess(SuperEntity entity) {
-		load(entity, (MyComponent) (parentRect));
 		LinkedList<String> list = new LinkedList<String>();
 		entity.findThreeStrings(list);
 

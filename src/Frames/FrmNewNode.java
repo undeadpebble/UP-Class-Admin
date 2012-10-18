@@ -204,7 +204,6 @@ public class FrmNewNode {
 					newE.setEntityTypeClass(cmbType.getSelectedIndex());
 
 					// update front end information
-					activeProject.updateTables();
 					activeTreeView.getVisualization().run("filter");
 
 					// refresh cmbParent content

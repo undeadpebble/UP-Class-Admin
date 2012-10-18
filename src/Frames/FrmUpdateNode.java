@@ -196,7 +196,6 @@ public class FrmUpdateNode {
 								.getValue().toString()));
 
 					// update front end information
-					activeProject.updateTables();
 					activeItem.setString("name", txtName.getText());
 					activeItem.getVisualization().run("filter");
 

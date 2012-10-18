@@ -19,6 +19,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.geom.Point2D;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -115,6 +118,7 @@ public class TreeView extends Display {
 	static JButton btnHelp = new JButton("?");
 	static JTextArea txtChange = new JTextArea();
 	static FrmNewNode newNode;
+	static BlurBackground myBlur;
 
 	static private boolean bParent = false;
 	static private boolean bChild = false;
@@ -140,7 +144,7 @@ public class TreeView extends Display {
 	 */
 	public TreeView(Tree t, String label, boolean isStructure) {
 		super(new Visualization());
-
+		
 		myTree = t;
 		m_label = label;
 		m_vis.add(tree, t);
@@ -327,11 +331,13 @@ public class TreeView extends Display {
 
 	// ------------------------------------------------------------------------
 
-	public static void createEntityTypeFrm(String label, Project project) {
+	public static void createEntityTypeFrm(String label, Project project,BlurBackground blur) {
+		myBlur = blur;
 		myProject = project;
 		JFrame frame = new JFrame();
+		
 
-		JComponent treeview = createPanelEntityTypeTreeView(label, myProject.getHeadEntityType(), frame);
+		JComponent treeview = createPanelEntityTypeTreeView(label, myProject.getHeadEntityType(), frame,myBlur);
 
 		frame.setContentPane(treeview);
 		frame.setSize(850, 600);
@@ -353,6 +359,54 @@ public class TreeView extends Display {
 		frame.setIconImage(icon);
 
 		newNode = new FrmNewNode(myTree, myProject, frame, tview);
+		
+		frame.addWindowListener(new WindowListener() {
+			
+			@Override
+			public void windowOpened(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowIconified(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowDeiconified(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowDeactivated(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowClosing(WindowEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println("closing");
+				myProject.updateTables();
+				myBlur.fadeOut();				
+				
+			}
+			
+			@Override
+			public void windowClosed(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowActivated(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 
 	}
 
@@ -385,7 +439,7 @@ public class TreeView extends Display {
 		frame.setVisible(true);
 	}
 
-	public static JComponent createPanelEntityTypeTreeView(final String label, EntityType th, JFrame parentFrame) {
+	public static JComponent createPanelEntityTypeTreeView(final String label, EntityType th, JFrame parentFrame, BlurBackground blur) {
 		Color BACKGROUND = new Color(0x171717);
 		Color FOREGROUND = Color.white;
 
@@ -428,7 +482,7 @@ public class TreeView extends Display {
 		// create a new treemap
 		tview = new TreeView(t, label,true);
 		PopUpMenu p = new PopUpMenu();
-		p.setTreeView(tview, myTree, myProject, parentFrame);
+		p.setTreeView(tview, myTree, myProject, parentFrame,blur);
 		tview.setBackground(BACKGROUND);
 		tview.setForeground(FOREGROUND);
 
@@ -764,7 +818,7 @@ public class TreeView extends Display {
 										break;
 									}// if
 								}// for
-								myProject.updateTables();
+//								myProject.updateTables();
 							}// if
 						}// if
 
