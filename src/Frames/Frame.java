@@ -867,6 +867,8 @@ public class Frame extends JFrame implements ActionListener {
 		exportButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Export.png")));
 		studentsButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Students.png")));
 		structureModuleButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Tree.png")));
+		
+		System.out.println("it works");
 		histogramButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Histogram.png")));
 		boxButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Box.png")));
 		scatterButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Scatter.png")));
@@ -876,7 +878,7 @@ public class Frame extends JFrame implements ActionListener {
 		bordercaseButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Bordercase.png")));
 		addRowButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/AddRow.png")));
 
-		maxValButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/maxValue.png")));
+		maxValButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/MaxValue.png")));
 		rulesButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Rules2.png")));
 		statisticsButton = new ReflectionButton(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/Statistics.png")));
 		rapidAssessmentButton = new ReflectionButton(ImageIO.read(getClass().getResource(
@@ -1014,7 +1016,7 @@ public class Frame extends JFrame implements ActionListener {
 		ImagePanel scatterplotBubble = new ImagePanel(ImageIO.read(getClass().getResource(
 				"/ClassAdminFrontEnd/resources/InfoScatterPlot.png")));
 		ImagePanel conditionalFormattingBubble = new ImagePanel(ImageIO.read(getClass().getResource(
-				"/ClassAdminFrontEnd/resources/InfoconditionalFormatting.png")));
+				"/ClassAdminFrontEnd/resources/InfoConditionalFormatting.png")));
 		ImagePanel bordercaseBubble = new ImagePanel(ImageIO.read(getClass()
 				.getResource("/ClassAdminFrontEnd/resources/InfoBordercase.png")));
 		ImagePanel addRowBubble = new ImagePanel(ImageIO.read(getClass().getResource("/ClassAdminFrontEnd/resources/InfoAddRow.png")));
