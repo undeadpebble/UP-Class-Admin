@@ -65,10 +65,9 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 
 	private JTextField searchBox;
 	private JLabel searchLabel, loadAssessmentLabel;
-	private JComboBox studentChooser;
-	private JComboBox assessmentChooser;
+	private JComboBox<SuperEntity> studentChooser;
 	private JLabel[] infoLabels;
-	private JComboBox loadCombo;
+	private JComboBox<RapidAssessmentContainerType> loadCombo;
 	private JButton btnLoad;
 	private JLabel timerLabel;
 	private Timer timer;
@@ -239,7 +238,7 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 			searchLabel = new JLabel("Search");
 			loadAssessmentLabel = new JLabel("Load Assessment");
 			loadAssessmentLabel.setFocusable(false);
-			studentChooser = new JComboBox();
+			studentChooser = new JComboBox<SuperEntity>();
 			timerLabel = new JLabel();
 			infoLabels = new JLabel[6];
 			for (int x = 0; x < infoLabels.length; ++x) {
@@ -292,7 +291,7 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 
 				}
 			});
-			loadCombo = new JComboBox();
+			loadCombo = new JComboBox<RapidAssessmentContainerType>();
 			loadCombo.setFocusable(false);
 			loadCombo.setVisible(true);
 			btnLoad = new JButton("Load");
@@ -359,8 +358,11 @@ public class RapidAssessmentMarkingCanvas extends JFrame {
 				tmp = tmp.getParentEntity();
 			}
 
-			if (tmp != project.getHead())
+			if (tmp != project.getHead()){
+				studentChooser.removeItem(tmp);
 				studentChooser.addItem(tmp);
+			
+			}
 		}
 	}
 

@@ -7,7 +7,6 @@ public class SumMarkEntity extends MarkEntity {
 	 */
 	public SumMarkEntity(EntityType type, SuperEntity parentEntity) {
 		super(type, parentEntity);
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -15,7 +14,6 @@ public class SumMarkEntity extends MarkEntity {
 	 */
 	public SumMarkEntity(SuperEntity replacedEntity) {
 		super(replacedEntity);
-		// TODO Auto-generated constructor stub
 	}
 
 	/* (non-Javadoc)
@@ -23,7 +21,6 @@ public class SumMarkEntity extends MarkEntity {
 	 */
 	public Double doMarkMath() throws AbsentException {
 		double mTotal = 0;
-		double mmax = 0;
 		Boolean hasval = false;
 		for (int i = 0; i < this.getSubEntity().size(); ++i) {
 			try {

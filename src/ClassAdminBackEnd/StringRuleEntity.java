@@ -1,5 +1,7 @@
 package ClassAdminBackEnd;
 
+import java.util.LinkedList;
+
 import Rule.StringRule;
 
 public class StringRuleEntity extends StringEntity {
@@ -13,5 +15,10 @@ public class StringRuleEntity extends StringEntity {
 	public String getValue() {
 		this.setField(((StringRule)this.getType()).evaluateString(this));
 		return(this.getField());
+	}
+	
+	@Override
+	public String createTreeFromHead(LinkedList<SuperEntity> studentLinkedList) {
+		return "";
 	}
 }

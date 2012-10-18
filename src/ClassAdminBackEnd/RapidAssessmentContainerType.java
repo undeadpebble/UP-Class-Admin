@@ -66,7 +66,10 @@ public class RapidAssessmentContainerType extends RapidAssessmentRectangleType {
 		for (int z = this.getEntityList().size()-1; z >=0 ; --z) {
 
 			this.getEntityList().get(z).setType(this);
+			//new MarkEntity(this.getEntityList().get(z));
 		}
+		
+		
 	}
 	
 	/* (non-Javadoc)

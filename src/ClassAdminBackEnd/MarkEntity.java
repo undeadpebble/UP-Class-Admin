@@ -15,7 +15,6 @@ public class MarkEntity extends SuperEntity {
 	 */
 	public MarkEntity(EntityType type, SuperEntity parentEntity) {
 		super(type, parentEntity, 0);
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -23,7 +22,6 @@ public class MarkEntity extends SuperEntity {
 	 */
 	public MarkEntity(SuperEntity replacedEntity) {
 		super(replacedEntity);
-		// TODO Auto-generated constructor stub
 	}
 
 	/* (non-Javadoc)

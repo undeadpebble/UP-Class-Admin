@@ -73,6 +73,11 @@ public class Rule extends EntityType{
 		}
 		
 	}
+	
+	@Override
+	public String createTreeFromHead(LinkedList<EntityType> studentLinkedList) {
+		return "";
+	}
 
 
 }
