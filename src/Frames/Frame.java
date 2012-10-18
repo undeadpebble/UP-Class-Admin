@@ -2180,7 +2180,7 @@ public class Frame extends JFrame implements ActionListener {
 
 		} else
 
-			TreeView.createStudentFrm("name", table.getData().get(table.getTable().getSelectedRow()).get(0), Global.getGlobal()
+			TreeView.createStudentFrm("name", Global.getGlobal().getActiveProject().getSelected().get(0), Global.getGlobal()
 					.getActiveProject());
 
 	}

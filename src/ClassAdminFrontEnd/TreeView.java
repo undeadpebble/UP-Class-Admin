@@ -972,5 +972,6 @@ public class TreeView extends Display {
 		public void itemDragged(VisualItem item, MouseEvent e) {
 		}// itemDragged
 	}
+	
 
 } // end of class TreeMap

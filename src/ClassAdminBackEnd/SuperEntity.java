@@ -445,7 +445,8 @@ public class SuperEntity {
 
 		String str = "";
 
-		str += "<branch>" + "<attribute name = \"name\" value= \"" + this.getType().getName() + ": " + this.getValue() + "\" />";
+		str += "<branch>" + "<attribute name = \"name\" value= \""
+				+ this.getType().getName() + ": " + this.getValue() + "\" />";
 
 		for (int i = 0; i < this.getSubEntity().size(); i++) {
 			str += this.getSubEntity().get(i)
@@ -530,15 +531,15 @@ public class SuperEntity {
 		oldParent.getSubEntity().remove(this);
 		sPointer.getTarget().getSubEntity().add(this);
 		this.setParentEntity(sPointer.getTarget());
-		
+
 		this.updateMark();
 
 	}
 
 	public void findThreeStrings(LinkedList<String> list) {
 		int depth = 1;
-		int maxDepth = this.getDepth()-1;
-		while(list.size() < 3 && depth <= maxDepth)
+		int maxDepth = this.getDepth() - 1;
+		while (list.size() < 3 && depth <= maxDepth)
 			findStrings(list, depth++);
 	}
 
@@ -607,6 +608,19 @@ public class SuperEntity {
 		for (int x = 0; x < subEntity.size(); ++x) {
 			subEntity.get(x).search(str, list);
 		}
+	}
+
+	public void deleteStudent() {
+		if (this.parentEntity.parentEntity == null) {
+			this.parentEntity.getSubEntity().remove(this);
+
+			this.getType().getEntityList().remove(this);
+			this.parentEntity=null;
+			for(int x = this.getSubEntity().size()-1; x >= 0;x--){
+				this.getSubEntity().get(x).deleteStudent();
+			}
+		}
+		
 	}
 
 }

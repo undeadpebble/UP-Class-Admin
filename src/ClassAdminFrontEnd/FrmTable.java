@@ -293,7 +293,6 @@ public class FrmTable extends JPanel {
 						} else {
 							backgroundColors.add(Color.orange);
 							comp.setBackground(Color.orange);
-
 						}
 					} else {
 						comp.setBackground(Color.white);

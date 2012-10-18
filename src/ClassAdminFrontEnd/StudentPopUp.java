@@ -42,6 +42,8 @@ public class StudentPopUp {
 		pMenu.add(miAbsent);
 		JMenuItem miNotAbsent = new JMenuItem("Mark not Absent");
 		pMenu.add(miNotAbsent);
+		JMenuItem miRemove = new JMenuItem("Remove Student");
+		pMenu.add(miRemove);
 
 		miEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -94,6 +96,24 @@ public class StudentPopUp {
 					item.getVisualization().run("filter");
 					activeProject.getAudit().updateStudent(activeProject.getStudentLinkedList().get(0).getValue(), activeProject.getStudentLinkedList().get(item.getRow()).getValue(), "NOT ABSENT", true);
 					tview.updateNode(item.getRow());
+				}
+			}
+		});
+		miRemove.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				VisualItem item = activeItem;
+				if (item.canGetString("name")) {
+					if(item.getRow() == 0)
+					{
+						int confirm = JOptionPane.showConfirmDialog(frame, "Are you sure you want to delete " + item.getString("name") + "?", "Remove node", JOptionPane.OK_CANCEL_OPTION);
+						if (confirm == 0) {
+							activeEntity.deleteStudent();
+							activeProject.updatecharts();
+							activeProject.updateTables();
+							parentFrame.dispose();
+						}						
+
+					}
 				}
 			}
 		});
