@@ -63,9 +63,7 @@ public class Histogram {
 	 * Updates the histogram values
 	 */
 	public void updateSelectedValues() {
-	/*	System.out.println("Update");
-		if(currentdata >-1)
-		changeDataset(currentdata);*/
+		
 		double klein = 99999;
 		double groot = -1;
 		final LinkedList<LinkedList<SuperEntity>> diedata = project.getHead().getDataLinkedList();

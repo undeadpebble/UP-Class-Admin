@@ -79,6 +79,8 @@ public class HistogramFrame extends JFrame implements ActionListener {
 	 * Update the values of the histogram
 	 */
 	public void update() {
+		chartpanel.getChart().getXYPlot().setDataset(nuweChart.changeDataset(houerx));
+		chartpanel.getChart().getXYPlot().setDataset(nuweChart.changebarWidth(nuweChart.getWidthBar()));
 		nuweChart.updateSelectedValues();
 	}
 
