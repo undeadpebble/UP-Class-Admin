@@ -31,6 +31,8 @@ import javax.swing.SpinnerNumberModel;
 import java.awt.Label;
 import javax.swing.JLabel;
 
+import org.tmatesoft.sqljet.core.internal.lang.SqlParser.table_conflict_clause_return;
+
 public class frmRule extends JFrame {
 
 	private JPanel contentPane;
@@ -257,6 +259,8 @@ public class frmRule extends JFrame {
 		lblselected1.setVisible(true);
 		lblselected2.setVisible(false);
 		btnRemoveRule.setVisible(false);
+		
+		
 
 		lblrule.setForeground(Color.WHITE);
 		lblrule.setBounds(62, 49, 165, 14);
@@ -373,6 +377,28 @@ public class frmRule extends JFrame {
 				lblRule2.setVisible(false);
 				lblText2.setVisible(true);
 				lblEntityType2.setVisible(false);
+			}
+		});
+		//--------------------------------------------------------------------------------------------------------------
+		btnRemoveRule.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				LinkedList<Rule> temp = new LinkedList<Rule>();
+				for (int x = 0; x < ruleList.size(); x++) {
+					if (!ruleList.get(x).getName().contains("reqwuiop")
+							&& !ruleList.get(x).getName()
+									.contains("referencespsaiodfhnosaudhf")) {
+						temp.add(ruleList.get(x));
+					}
+				}
+				temp.get(cbxRules.getSelectedIndex()).removeDeletingChildren();
+				project.getRules().remove(temp.remove(cbxRules.getSelectedIndex()));
+				project.getTables().get(0).redraw();
+				
+				for(int x = 0; x < project.getRules().size();x++){
+					
+				}
+				exitFrame();
 			}
 		});
 
@@ -563,6 +589,8 @@ public class frmRule extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				lblselected1.setVisible(true);
 				lblselected2.setVisible(false);
+				
+				btnRemoveRule.setVisible(false);
 
 				switch (cbxRuleChooser.getSelectedIndex()) {
 				case 0:
@@ -816,6 +844,8 @@ public class frmRule extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				lblselected1.setVisible(false);
 				lblselected2.setVisible(true);
+				
+				btnRemoveRule.setVisible(true);
 
 				// check if works allways
 				int selected = cbxRules.getSelectedIndex();
@@ -1760,4 +1790,5 @@ public class frmRule extends JFrame {
 	public void exitFrame() {
 		this.dispose();
 	}
+	
 }
