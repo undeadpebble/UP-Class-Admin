@@ -55,7 +55,21 @@ public class ScatterPlotFrame extends JFrame implements ActionListener {
 	 * Update all the values of the scatterplot
 	 */
 	public void update() {
+		XYSeriesCollection nuwedataset = new XYSeriesCollection();
+		XYSeries series = new XYSeries("Scatter");
 
+		for (int q = 0; q < diedata.size(); q++) {
+			try {
+				series.add(diedata.get(q).get(houerx).getMark(), diedata.get(q).get(houery).getMark());
+			} catch (AbsentException e1) {
+				series.add(0, 0);
+			}
+
+		}
+		nuweChart.setScatterArray(doensorteer(houerx, houery));
+		nuwedataset.addSeries(series);
+		chartpanel.getChart().getXYPlot().setDataset(nuwedataset);
+		nuweChart.setDatasetmain(nuwedataset);
 		nuweChart.updateSelectedvalues();
 
 	}
