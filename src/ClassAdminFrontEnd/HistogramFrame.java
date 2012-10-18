@@ -82,7 +82,10 @@ public class HistogramFrame extends JFrame implements ActionListener {
 		nuweChart.updateSelectedValues();
 	}
 
-	 
+	 public int getCurrentHouer()
+	 {
+		 return houerx;
+	 }
 	/**
 	 * @param project
 	 * Create the frame of the histogram
@@ -122,7 +125,7 @@ public class HistogramFrame extends JFrame implements ActionListener {
 		}
 
 		chart = nuweChart.createHistogram(plotTitle, xaxis, yaxis, nuweChart.createDataset(houerx));
-
+		
 		chartpanel = nuweChart.createPanel();
 
 

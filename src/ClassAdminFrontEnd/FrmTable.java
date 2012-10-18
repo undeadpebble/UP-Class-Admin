@@ -206,6 +206,7 @@ public class FrmTable extends JPanel {
 						data.get(tcl.getRow()).get(tcl.getColumn())
 								.getDetails()
 								.setValue((String) tcl.getNewValue());
+						
 					} else {
 						try {
 							if (Double.parseDouble((String) tcl.getNewValue()) >= 0
@@ -234,6 +235,7 @@ public class FrmTable extends JPanel {
 								}
 								tableModel.fireTableDataChanged();
 								table.repaint();
+								project.updatecharts();
 							} else {
 								table.getModel().setValueAt(tcl.getOldValue(),
 										tcl.getRow(), tcl.getColumn());
